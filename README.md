@@ -2,12 +2,13 @@
 
 Web: https://alejandrovicente97.github.io/finanzas-en-accion-vivienda/
 
-Cuatro calculadoras en una página:
+Cinco calculadoras en una página:
 
 1. **¿Cuánto puedo comprar?** Precio máximo según ahorros e ingresos, con ITP reducido por edad y primera vivienda y aval ICO.
 2. **Comparar hipotecas.** Coste real y TAE real de hasta 3 ofertas, incluida la trampa de los seguros vinculados que el banco sube cada año.
 3. **¿Comprar o alquilar?** Patrimonio año a año en cada caso.
-4. **Qué ofrecen los bancos.** Condiciones públicas a 30/09/2026, ordenadas con tus datos.
+4. **Qué ofrecen los bancos.** Condiciones públicas, actualizadas cada semana y ordenadas con tus datos.
+5. **Invertir para alquilar.** Rentabilidad bruta, neta, de tu dinero y total (TIR) de un piso en alquiler, con IRPF simplificado y precio máximo para tu objetivo.
 
 Descarga de informe en PDF.
 
