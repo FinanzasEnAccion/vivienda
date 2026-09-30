@@ -28,6 +28,7 @@
   --bg:#EEF2EF; --card:#FFFFFF; --ink:#10261E; --muted:#5B6E66; --line:#DCE5DF; --field:#F4F7F4;
   --accent:#0B3D2E; --accent-soft:#E2EFE8; --on-accent:#FFFFFF;
   --c1:#1F6E54; --c2:#E0A030; --c3:#9AA8A0; --c4:#D9822B; --c5:#8C6BB8;
+  --in-bg:#EEF8F2; --in-line:#8FCFAE; --in-field:#FFFFFF; --in-focus:#1E8A5A;
   --good:#1E8A5A; --good-soft:#E0F3E9; --bad:#C2413A; --bad-soft:#FBE7E5; --warn:#A8690F; --warn-soft:#FDF1DC;
   --shadow:0 1px 2px rgba(16,38,30,.05),0 8px 24px rgba(16,38,30,.07);
   --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
@@ -38,12 +39,14 @@
   --bg:#0B1713; --card:#13231D; --ink:#E6EEE9; --muted:#93A69D; --line:#243A31; --field:#1A2D26;
   --accent:#7DD3A8; --accent-soft:#1B3A2E; --on-accent:#0B1713;
   --c1:#5FC196; --c2:#E6B24E; --c3:#71817A; --c4:#EE9A4A; --c5:#B79BE0;
+  --in-bg:#12291F; --in-line:#3C7A5E; --in-field:#0D1B16; --in-focus:#7DD3A8;
   --good:#5FC196; --good-soft:#173628; --bad:#EE7A72; --bad-soft:#3E201E; --warn:#E6B24E; --warn-soft:#3A2E17;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0B1713; --card:#13231D; --ink:#E6EEE9; --muted:#93A69D; --line:#243A31; --field:#1A2D26;
   --accent:#7DD3A8; --accent-soft:#1B3A2E; --on-accent:#0B1713;
   --c1:#5FC196; --c2:#E6B24E; --c3:#71817A; --c4:#EE9A4A; --c5:#B79BE0;
+  --in-bg:#12291F; --in-line:#3C7A5E; --in-field:#0D1B16; --in-focus:#7DD3A8;
   --good:#5FC196; --good-soft:#173628; --bad:#EE7A72; --bad-soft:#3E201E; --warn:#E6B24E; --warn-soft:#3A2E17;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
 
@@ -322,6 +325,31 @@ tr+tr td{border-top:1px solid var(--line)}
 .addc{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;white-space:nowrap}
 .addc:hover{border-color:var(--accent);color:var(--accent)}
 @media (max-width:800px){.tblwrap.mkt{overflow-x:auto}}
+
+/* Dónde se meten los datos */
+.inp{background:var(--in-field)!important;border:1.5px solid var(--in-line)!important}
+.inp:focus-within{border-color:var(--in-focus)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--in-focus) 18%,transparent)}
+.incard{background:var(--in-bg)!important}
+.inhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.inhead svg{width:18px;height:18px;color:var(--in-focus);flex:none}
+.inhead b{font-family:var(--f-display);font-size:15px}
+.inhead .hint{font-size:12px}
+.start{margin-left:auto;background:var(--in-focus);color:var(--on-accent);font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--in-focus) 45%,transparent)}50%{box-shadow:0 0 0 7px transparent}}
+@media (prefers-reduced-motion:reduce){.start{animation:none}}
+.top2 .common{background:var(--in-bg);border-radius:14px;padding:10px 12px}
+.src-line{font-size:11.5px;color:var(--muted)}
+.src-line a,.mkt a.src{color:var(--accent);font-weight:600}
+.mkt a.src{display:block;font-size:11px;font-weight:500;margin-top:2px;text-decoration:none}
+.mkt a.src:hover{text-decoration:underline}
+
+.vks{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.vk{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 6px;border-radius:7px;background:var(--warn-soft);color:var(--warn);font-size:11.5px;font-weight:600;white-space:nowrap}
+.vk svg{width:15px;height:15px}
+.vk.none{background:var(--good-soft);color:var(--good);padding:0 9px}
+.vkn{font-size:11px;color:var(--muted);margin-left:2px}
+.vkn::before{content:"· "}
+.vkn::after{content:" productos"}
 /* ===== Una pantalla (escritorio): nada de scroll de página; cada tarjeta se desplaza por dentro ===== */
 .band-in{grid-template-columns:auto minmax(0,1fr) auto;align-items:end;padding-block:10px 0;gap:10px 22px}
 .idrow{align-self:center;padding-bottom:8px;flex-wrap:nowrap}
@@ -331,6 +359,7 @@ tr+tr td{border-top:1px solid var(--line)}
 .htools{display:flex;gap:8px;align-items:center;align-self:center;padding-bottom:8px}
 .hbtn{border:1px solid rgba(240,236,224,.28);background:transparent;color:var(--brand-ink);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;white-space:nowrap}
 .hbtn:hover{border-color:var(--mint);color:var(--mint)}
+.xh{display:none}.xbtn{padding:8px 10px}
 .hbtn.pdf{background:var(--mint);border-color:var(--mint);color:#0B3D2E}
 .hbtn.pdf:hover{background:#9BE2BD;color:#0B3D2E}
 .hbtn[disabled]{opacity:.6;cursor:progress}
@@ -387,7 +416,7 @@ tr+tr td{border-top:1px solid var(--line)}
   <div class="band-in">
     <div class="idrow">
       <img class="logo" alt="Logo Finanzas en Acción" src="data:image/png;base64,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">
-      <div class="idtxt"><h1>Finanzas en Acción</h1><p>Calculadoras de vivienda</p></div>
+      <div class="idtxt"><h1>Finanzas en Acción</h1><p>Calculadoras de vivienda · @BuscandolaLF</p></div>
     </div>
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" data-tab="cuanto"><b>1</b><span class="tl">¿Cuánto puedo comprar?</span><span class="ts">¿Cuánto puedo comprar?</span></button>
@@ -396,10 +425,10 @@ tr+tr td{border-top:1px solid var(--line)}
       <button class="tab" role="tab" data-tab="bancos"><b>4</b><span class="tl">Qué ofrecen los bancos</span><span class="ts">Bancos hoy</span></button>
     </nav>
     <div class="htools">
-      <button class="hbtn pdf" id="btnPdf" hidden>Descargar informe</button>
+      <button class="hbtn pdf" id="btnPdf" hidden title="Descargar un informe en PDF con tus datos">Informe PDF</button>
       <button class="hbtn" id="btnCopy" title="Copiar un resumen para compartir">Copiar</button>
       <button class="hbtn" id="btnReset" title="Volver a los datos de ejemplo">Reiniciar</button>
-      <a class="xbtn" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.9 2.3h7l4.8 6.4 5.5-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>@BuscandolaLF</a>
+      <a class="xbtn" title="Sígueme en X: @BuscandolaLF" aria-label="Sígueme en X: @BuscandolaLF" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.9 2.3h7l4.8 6.4 5.5-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg><span class="xh">@BuscandolaLF</span></a>
     </div>
   </div>
 </header>
@@ -408,14 +437,15 @@ tr+tr td{border-top:1px solid var(--line)}
   <!-- 1 -->
   <section class="pane" id="p-cuanto" role="tabpanel">
     <div class="cols">
-      <div class="card scroll">
+      <div class="card scroll incard">
+        <div class="inhead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><b>Tus datos</b><span class="hint">cambia cualquier casilla</span><span class="start" hidden>Empieza aquí</span></div>
         <div class="grp"><div class="gtitle">Tú</div><div class="g3" id="g1a"></div><div class="checks" id="g1chk"></div></div>
         <div class="grp"><div class="gtitle">La compra y la hipoteca</div><div id="g1b" class="grp" style="gap:10px"></div></div>
       </div>
       <div class="right1">
         <div class="card hero" id="r1hero"></div>
         <div class="card scroll"><h2>Qué te frena antes</h2><div class="limits" id="r1lim"></div><h2 id="r1useT" style="margin-top:18px">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div></div>
-        <div class="card scroll"><h2>Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div></div>
+        <div class="card scroll"><h2>Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px">Fuentes: <a href="https://hipotips.com/wp-content/uploads/2026/01/Tabla-oficial-de-ITP-por-CCAA-2026-tipos-generales-y-reducidos-.pdf" target="_blank" rel="noopener">tabla ITP 2026 por comunidades (Hipotips)</a> · <a href="https://www.inmofiscal.com/itp-comunidades-autonomas" target="_blank" rel="noopener">InmoFiscal</a> · aval ICO: <a href="https://www.ico.es/en/linea-avales-hipoteca-primera-vivienda" target="_blank" rel="noopener">ICO</a>, <a href="https://www.merca2.es/2026/06/25/avales-ico-2026-criterios-jovenes-2404920/" target="_blank" rel="noopener">Merca2</a></div></div>
       </div>
     </div>
   </section>
@@ -429,7 +459,8 @@ tr+tr td{border-top:1px solid var(--line)}
   <!-- 3 -->
   <section class="pane" id="p-alquilar" role="tabpanel" hidden>
     <div class="cols">
-      <div class="card scroll">
+      <div class="card scroll incard">
+        <div class="inhead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><b>Tus datos</b><span class="hint">cambia cualquier casilla</span><span class="start" hidden>Empieza aquí</span></div>
         <div class="grp"><div class="gtitle">La vivienda</div><div class="g3" id="g3a"></div></div>
         <div class="grp"><div class="gtitle">Alquiler y gastos de propietario</div><div class="g3" id="g3b"></div></div>
         <div class="grp"><div class="gtitle">Lo que supones del futuro <span class="tag">supuestos</span></div><div class="g3" id="g3d"></div></div>
@@ -472,6 +503,7 @@ tr+tr td{border-top:1px solid var(--line)}
 <script>
 (function(){
 const $=id=>document.getElementById(id);
+const DATA0={"version": 1, "actualizado": "2026-09-30", "fecha": "30 de septiembre de 2026", "mercado": {"eur": 3.247, "eurAgo": 2.954, "eurAnt": 2.172, "ine": 3.01, "ineMes": "julio de 2026", "ineFija": 3.03, "ineVar": 2.97, "bce": 2.5, "fuentes": {"eur": "https://www.euribordiario.es/noticias/euribor-30-septiembre-2026-baja-media-3247", "ine": "https://www.infobae.com/espana/agencias/2026/09/28/las-hipotecas-para-vivienda-ceden-35-en-julio-y-sufren-mayor-caida-desde-junio-de-2024/", "bce": "https://www.infobae.com/espana/2026/09/11/depositos-un-18-mas-rentables-en-un-ano-e-hipotecas-un-10-mas-caras-quien-gana-y-quien-pierde-con-la-subida-de-tipos-del-bce/", "cambios": "https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/"}, "ctx": ["Los bancos están subiendo las fijas (ING, Bankinter, BBVA y Santander este año).", "El Euríbor está en máximos de dos años: las variables salen caras tras el primer año.", "Con el Euríbor por encima del 3 %, una fija por debajo del 2,6 % protege tanto como una variable."], "fuenteNombres": {"eur": "Euribordiario", "ine": "INE vía Infobae", "bce": "Infobae", "cambios": "HelpMyCash"}, "eurMes": "septiembre de 2026", "eurAgoMes": "agosto de 2026", "eurAntMes": "septiembre de 2025", "bceCorto": "subió en septiembre", "bceNota": "El BCE subió el tipo 0,25 puntos, hasta el 2,5 %, el 11 de septiembre de 2026: la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %."}, "ofertas": [{"b": "Ibercaja", "p": "Hipoteca Vamos Fija", "t": "fija", "tin": 2.55, "tinS": 3.55, "tae": "3,49 %", "ltv": 80, "pz": 25, "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguro de hogar, seguro de vida, plan de inversión ≥ 75 €/mes", "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)", "f": "https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/", "d": "28/09/2026"}, {"b": "Banco Sabadell", "p": "Hipoteca Fija Bonificada", "t": "fija", "tin": 2.75, "tinS": 3.75, "tae": "3,58 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida y seguro de protección de pagos", "c": "Sin apertura. Amortización 2 % los 10 primeros años, 1,5 % después", "n": "Condiciones negociables según perfil", "f": "https://www.helpmycash.com/hipotecas/sabadell/hipoteca-fija-bonificada/", "d": "01/09/2026"}, {"b": "Openbank", "p": "Hipoteca Open Fija", "t": "fija", "tin": 2.8, "tinS": 3.3, "tae": "3,41 %", "ltv": 80, "pz": 30, "v": "Ingresos ≥ 900 €/mes (1.800 € con dos titulares), seguro de hogar; seguro de vida opcional", "c": "Sin apertura ni amortización parcial", "n": "Solo online. 2,80 % hasta 15 años; a 30 años 2,83-2,90 %", "f": "https://www.openbank.es/hipoteca-fija", "d": "30/09/2026"}, {"b": "CaixaBank", "p": "CasaFácil Fijo", "t": "fija", "tin": 2.85, "tinS": 3.85, "tae": "4,26 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 600 €/mes, recibos, tarjeta, seguro de vida, seguro de hogar, alarma", "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)", "n": "Otras fuentes dan 2,80 %", "f": "https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/", "d": "28/09/2026"}, {"b": "BBVA", "p": "Hipoteca Fija", "t": "fija", "tin": 2.95, "tinS": 3.95, "tae": "3,93 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 600 €/mes, seguro de hogar, seguro de vida", "c": "Sin apertura. El banco paga notaría, gestoría y registro", "n": "2,85 % a 15 años", "f": "https://www.helpmycash.com/hipotecas/bbva/hipoteca-fija/", "d": "08/09/2026"}, {"b": "MyInvestor", "p": "Hipoteca Fija", "t": "fija", "tin": 3.4, "tinS": 3.4, "tae": "3,61 %", "ltv": 80, "pz": 30, "v": "Ninguna", "c": "Apertura 1 %", "n": "Ingresos ≥ 4.000 €/mes netos; préstamo desde 100.000 €", "f": "https://myinvestor.es/hipotecas/hipoteca-fija/", "d": "30/09/2026"}, {"b": "Banco Sabadell", "p": "Hipoteca Mixta", "t": "mixta", "tin": 1.8, "tinS": 2.7, "anos": 3, "dif": 0.7, "difS": 1.6, "tae": "3,72 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida", "c": "Amortización 2 % en el tramo fijo", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Pibank", "p": "Hipoteca Pibank Mixta", "t": "mixta", "tin": 1.99, "tinS": 1.99, "anos": 4, "dif": 0.68, "difS": 0.68, "tae": "3,40 %", "ltv": 80, "pz": 35, "v": "Ninguna", "c": "Sin comisiones", "n": "Las fuentes no coinciden en el TIN fijo (1,60 % o 1,99 %)", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Ibercaja", "p": "Hipoteca Vamos Mixta 5", "t": "mixta", "tin": 2, "tinS": 3, "anos": 5, "dif": 0.6, "difS": 1.6, "tae": "3,86 %", "ltv": 80, "pz": 25, "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguros, plan de ahorro", "c": "Amortización 2 %", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Banco Santander", "p": "Hipoteca Mixta", "t": "mixta", "tin": 2.34, "tinS": 3.34, "anos": 5.5, "dif": 0.74, "difS": 1.74, "tae": "3,82 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 1.000 €/mes, seguro de vida y de hogar (≥ 300 €/año cada uno), Bizum o tarjeta", "c": "Sin apertura. Amortización 2 % en el tramo fijo", "n": "Tramo fijo de 66 meses", "f": "https://www.helpmycash.com/hipotecas/santander/hipoteca-mixta-santander/", "d": "03/09/2026"}, {"b": "ING", "p": "Naranja Mixta", "t": "mixta", "tin": 3.45, "tinS": 3.95, "anos": 5, "dif": 1.04, "difS": 1.54, "tae": "4,49 %", "ltv": 80, "pz": 40, "v": "Nómina o saldo mínimo, seguro de hogar, seguro de vida", "c": "Amortización total 2 %", "n": "ING subió precios el 14/09/2026", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Banco Sabadell", "p": "Hipoteca Variable", "t": "variable", "tin": 1.5, "anos": 1, "dif": 0.5, "difS": 1.5, "tae": "4,12 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida, seguro de protección de pagos", "c": "Sin apertura", "n": "1,50 % el primer año", "f": "https://www.helpmycash.com/hipotecas/hipoteca-variable/", "d": "28/09/2026"}, {"b": "Unicaja", "p": "Hipoteca Variable", "t": "variable", "tin": 1.9, "anos": 1, "dif": 0.55, "difS": 1.55, "tae": "4,33 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 2.000 €, recibos, tarjeta, seguros de hogar y vida, plan de pensiones", "c": "Apertura 0,15 %. Amortización 0,25 %", "n": "Otras fuentes dan 2,30 % el primer año", "f": "https://www.kelisto.es/hipotecas/bancos/unicaja", "d": "28/09/2026"}, {"b": "Kutxabank", "p": "Hipoteca Variable", "t": "variable", "tin": 2, "anos": 1, "dif": 0.49, "difS": 1.49, "tae": "3,82 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 3.000 €/mes, seguro de hogar, plan de pensiones ≥ 2.400 €/año", "c": "Sin apertura. Amortización 0,15 % los 5 primeros años", "n": "Versión joven: 1,90 % el primer año", "f": "https://www.kelisto.es/hipotecas/bancos/kutxabank", "d": "28/09/2026"}, {"b": "Bankinter", "p": "Hipoteca Variable", "t": "variable", "tin": 2.3, "anos": 1, "dif": 0.5, "difS": 1.8, "tae": "3,82 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida, plan de pensiones", "c": "Apertura 500 €. Amortización 0,15 % los 5 primeros años", "n": "Las fuentes no coinciden en el periodo inicial", "f": "https://www.helpmycash.com/mejores-hipotecas/", "d": "28/09/2026"}]};
 const KEY='fea-vivienda-v3';
 
 /* ---------------------------------------------------------------
@@ -507,7 +539,7 @@ const ICO_MAX_PRECIO=325000;
 const EXAMPLE={
   v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30},
   a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,esfuerzo:35},
-  h:{eur:3.25,offers:[
+  h:{eur:Math.round(DATA0.mercado.eur*100)/100,offers:[
     {nombre:'Banco A · fija bonificada',tipo:'fija',tin:3.10,anos:1,dif:0.60,apertura:0,prods:[
       {n:'Nómina + tarjeta',b:0.20,c:0,s:0,m:0,hasta:30,on:true},
       {n:'Seguro de hogar',b:0.10,c:350,s:2,m:220,hasta:30,on:true},
@@ -560,6 +592,9 @@ $('g3a').classList.add('wide1');$('g3a').innerHTML=F('v.precio','Precio','€','
 $('g3b').innerHTML=F('r.alquiler','Alquiler/mes','€','eur')+F('r.ibi','IBI/año','€','eur')+F('r.comunidad','Comunidad/mes','€','eur')+F('r.seguro','Seguro hogar/año','€','eur')+F('r.mant','Mantenimiento','% valor')+F('r.ipc','IPC','%');
 $('g3d').innerHTML=F('r.reval','Revalorización','%/año')+F('r.rent','Rentabilidad','%/año');
 
+let touched=false;try{touched=localStorage.getItem('fea-touched')==='1'}catch(e){}
+function markTouched(){if(touched)return;touched=true;try{localStorage.setItem('fea-touched','1')}catch(e){}document.querySelectorAll('.start').forEach(x=>x.hidden=true)}
+document.addEventListener('input',()=>markTouched(),true);
 document.addEventListener('input',e=>{
   const el=e.target,b=el.dataset.bind;if(!b)return;
   let v=b==='v.ccaa'?el.value:el.dataset.fmt==='eur'?pEur(el.value):pDec(el.value);
@@ -1059,27 +1094,50 @@ function render3(){
 /* =========================================================
    4 · QUÉ OFRECEN LOS BANCOS (datos de mercado, 30/09/2026)
    ========================================================= */
-const MKT_FECHA='30 de septiembre de 2026';
-const MKT={eur:3.247,eurAgo:2.954,eurAnt:2.172,ine:3.01,ineMes:'julio de 2026',ineFija:3.03,ineVar:2.97,bce:2.5,
- fuentes:{eur:'https://www.euribordiario.es/noticias/euribor-30-septiembre-2026-baja-media-3247',ine:'https://www.infobae.com/espana/agencias/2026/09/28/las-hipotecas-para-vivienda-ceden-35-en-julio-y-sufren-mayor-caida-desde-junio-de-2024/',bce:'https://www.infobae.com/espana/2026/09/11/depositos-un-18-mas-rentables-en-un-ano-e-hipotecas-un-10-mas-caras-quien-gana-y-quien-pierde-con-la-subida-de-tipos-del-bce/',cambios:'https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/'}};
-const HMC_F='https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/',HMC_M='https://www.helpmycash.com/hipotecas/hipotecas-mixtas/',HMC_V='https://www.helpmycash.com/hipotecas/hipoteca-variable/';
-const OFF=[
- {b:'Ibercaja',p:'Hipoteca Vamos Fija',t:'fija',tin:2.55,tinS:3.55,tae:'3,49 %',ltv:80,pz:25,v:'Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguro de hogar, seguro de vida, plan de inversión ≥ 75 €/mes',c:'Sin apertura. Amortización 2 % (1,5 % desde el año 11)',f:HMC_F,d:'28/09/2026'},
- {b:'Banco Sabadell',p:'Hipoteca Fija Bonificada',t:'fija',tin:2.75,tinS:3.75,tae:'3,58 %',ltv:80,pz:30,v:'Nómina, seguro de hogar, seguro de vida y seguro de protección de pagos',c:'Sin apertura. Amortización 2 % los 10 primeros años, 1,5 % después',n:'Condiciones negociables según perfil',f:'https://www.helpmycash.com/hipotecas/sabadell/hipoteca-fija-bonificada/',d:'01/09/2026'},
- {b:'Openbank',p:'Hipoteca Open Fija',t:'fija',tin:2.80,tinS:3.30,tae:'3,41 %',ltv:80,pz:30,v:'Ingresos ≥ 900 €/mes (1.800 € con dos titulares), seguro de hogar; seguro de vida opcional',c:'Sin apertura ni amortización parcial',n:'Solo online. 2,80 % hasta 15 años; a 30 años 2,83-2,90 %',f:'https://www.openbank.es/hipoteca-fija',d:'30/09/2026'},
- {b:'CaixaBank',p:'CasaFácil Fijo',t:'fija',tin:2.85,tinS:3.85,tae:'4,26 %',ltv:80,pz:30,v:'Nómina ≥ 600 €/mes, recibos, tarjeta, seguro de vida, seguro de hogar, alarma',c:'Sin apertura. Amortización 2 % (1,5 % desde el año 11)',n:'Otras fuentes dan 2,80 %',f:HMC_F,d:'28/09/2026'},
- {b:'BBVA',p:'Hipoteca Fija',t:'fija',tin:2.95,tinS:3.95,tae:'3,93 %',ltv:80,pz:30,v:'Nómina ≥ 600 €/mes, seguro de hogar, seguro de vida',c:'Sin apertura. El banco paga notaría, gestoría y registro',n:'2,85 % a 15 años',f:'https://www.helpmycash.com/hipotecas/bbva/hipoteca-fija/',d:'08/09/2026'},
- {b:'MyInvestor',p:'Hipoteca Fija',t:'fija',tin:3.40,tinS:3.40,tae:'3,61 %',ltv:80,pz:30,v:'Ninguna',c:'Apertura 1 %',n:'Ingresos ≥ 4.000 €/mes netos; préstamo desde 100.000 €',f:'https://myinvestor.es/hipotecas/hipoteca-fija/',d:'30/09/2026'},
- {b:'Banco Sabadell',p:'Hipoteca Mixta',t:'mixta',tin:1.80,tinS:2.70,anos:3,dif:0.70,difS:1.60,tae:'3,72 %',ltv:80,pz:30,v:'Nómina, seguro de hogar, seguro de vida',c:'Amortización 2 % en el tramo fijo',f:HMC_M,d:'14/09/2026'},
- {b:'Pibank',p:'Hipoteca Pibank Mixta',t:'mixta',tin:1.99,tinS:1.99,anos:4,dif:0.68,difS:0.68,tae:'3,40 %',ltv:80,pz:35,v:'Ninguna',c:'Sin comisiones',n:'Las fuentes no coinciden en el TIN fijo (1,60 % o 1,99 %)',f:HMC_M,d:'14/09/2026'},
- {b:'Ibercaja',p:'Hipoteca Vamos Mixta 5',t:'mixta',tin:2.00,tinS:3.00,anos:5,dif:0.60,difS:1.60,tae:'3,86 %',ltv:80,pz:25,v:'Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguros, plan de ahorro',c:'Amortización 2 %',f:HMC_M,d:'14/09/2026'},
- {b:'Banco Santander',p:'Hipoteca Mixta',t:'mixta',tin:2.34,tinS:3.34,anos:5.5,dif:0.74,difS:1.74,tae:'3,82 %',ltv:80,pz:30,v:'Nómina ≥ 1.000 €/mes, seguro de vida y de hogar (≥ 300 €/año cada uno), Bizum o tarjeta',c:'Sin apertura. Amortización 2 % en el tramo fijo',n:'Tramo fijo de 66 meses',f:'https://www.helpmycash.com/hipotecas/santander/hipoteca-mixta-santander/',d:'03/09/2026'},
- {b:'ING',p:'Naranja Mixta',t:'mixta',tin:3.45,tinS:3.95,anos:5,dif:1.04,difS:1.54,tae:'4,49 %',ltv:80,pz:40,v:'Nómina o saldo mínimo, seguro de hogar, seguro de vida',c:'Amortización total 2 %',n:'ING subió precios el 14/09/2026',f:HMC_M,d:'14/09/2026'},
- {b:'Banco Sabadell',p:'Hipoteca Variable',t:'variable',tin:1.50,anos:1,dif:0.50,difS:1.50,tae:'4,12 %',ltv:80,pz:30,v:'Nómina, seguro de hogar, seguro de vida, seguro de protección de pagos',c:'Sin apertura',n:'1,50 % el primer año',f:HMC_V,d:'28/09/2026'},
- {b:'Unicaja',p:'Hipoteca Variable',t:'variable',tin:1.90,anos:1,dif:0.55,difS:1.55,tae:'4,33 %',ltv:80,pz:30,v:'Nómina ≥ 2.000 €, recibos, tarjeta, seguros de hogar y vida, plan de pensiones',c:'Apertura 0,15 %. Amortización 0,25 %',n:'Otras fuentes dan 2,30 % el primer año',f:'https://www.kelisto.es/hipotecas/bancos/unicaja',d:'28/09/2026'},
- {b:'Kutxabank',p:'Hipoteca Variable',t:'variable',tin:2.00,anos:1,dif:0.49,difS:1.49,tae:'3,82 %',ltv:80,pz:30,v:'Nómina ≥ 3.000 €/mes, seguro de hogar, plan de pensiones ≥ 2.400 €/año',c:'Sin apertura. Amortización 0,15 % los 5 primeros años',n:'Versión joven: 1,90 % el primer año',f:'https://www.kelisto.es/hipotecas/bancos/kutxabank',d:'28/09/2026'},
- {b:'Bankinter',p:'Hipoteca Variable',t:'variable',tin:2.30,anos:1,dif:0.50,difS:1.80,tae:'3,82 %',ltv:80,pz:30,v:'Nómina, seguro de hogar, seguro de vida, plan de pensiones',c:'Apertura 500 €. Amortización 0,15 % los 5 primeros años',n:'Las fuentes no coinciden en el periodo inicial',f:'https://www.helpmycash.com/mejores-hipotecas/',d:'28/09/2026'}
-];
+let MKT_FECHA=DATA0.fecha,MKT=DATA0.mercado,OFF=DATA0.ofertas;
+/* Los datos de mercado viven en data.json: en la web se actualizan solos cada semana; aquí va una copia para funcionar sin conexión */
+function applyData(d){try{
+  const m=d&&d.mercado,o=d&&d.ofertas;
+  if(!m||typeof m.eur!=='number'||m.eur<-1||m.eur>10||!Array.isArray(o)||o.length<3)return false;
+  if(!o.every(x=>x&&x.b&&['fija','mixta','variable'].includes(x.t)&&typeof x.tin==='number'&&x.tin>0&&x.tin<15))return false;
+  const prev=Math.round(MKT.eur*100)/100;MKT_FECHA=d.fecha||MKT_FECHA;MKT=m;OFF=o;
+  if(Math.abs(S.h.eur-prev)<1e-9)S.h.eur=Math.round(m.eur*100)/100; // si no lo habías cambiado, sigue al Euríbor real
+  return true}catch(e){return false}}
+
+/* Vinculaciones en iconos: se leen del texto de cada oferta (o de x.vk si viene en los datos) */
+const VK_I={
+ nomina:'<path d="M3 7h18v10H3z"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/>',
+ tarjeta:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/>',
+ recibos:'<path d="M7 3h10v18l-2.5-1.5L12 21l-2.5-1.5L7 21z"/><path d="M10 8h4M10 12h4"/>',
+ hogar:'<path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/>',
+ vida:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+ pension:'<path d="M4 19h16"/><path d="M7 16V11M12 16V7M17 16v-6"/>',
+ proteccion:'<path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/>',
+ alarma:'<path d="M6 17V11a6 6 0 0 1 12 0v6"/><path d="M4 17h16M10 20h4"/>',
+ bizum:'<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/>',
+ saldo:'<path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/>'
+};
+const VK_L={nomina:'Nómina',tarjeta:'Tarjeta',recibos:'Recibos',hogar:'Seguro hogar',vida:'Seguro vida',pension:'Plan',proteccion:'Protección pagos',alarma:'Alarma',bizum:'Bizum',saldo:'Saldo mínimo'};
+function vkOf(x){
+  if(Array.isArray(x.vk))return x.vk;
+  const t=(x.v||'').toLowerCase(),out=[];
+  if(/^ninguna/.test(t))return [];
+  const m=(x.v||'').match(/(?:N[óo]mina|Ingresos)[^,;]*?≥\s*([\d\.]+)\s*€/i);
+  if(/n[óo]mina|ingresos|pensi[óo]n domic/.test(t))out.push({k:'nomina',x:m?`≥ ${m[1]} €`:''});
+  if(/tarjeta/.test(t))out.push({k:'tarjeta'});
+  if(/recibos/.test(t))out.push({k:'recibos'});
+  if(/hogar|seguros?(?! de vida)/.test(t)&&/hogar|seguros/.test(t))out.push({k:'hogar'});
+  if(/vida|seguros/.test(t))out.push({k:'vida',x:/vida opcional/.test(t)?'opcional':''});
+  if(/pensiones|plan de (ahorro|inversi)/.test(t))out.push({k:'pension',x:/inversi/.test(t)?'de inversión':/ahorro/.test(t)?'de ahorro':'de pensiones'});
+  if(/protecci[óo]n de pagos/.test(t))out.push({k:'proteccion'});
+  if(/alarma/.test(t))out.push({k:'alarma'});
+  if(/bizum/.test(t))out.push({k:'bizum'});
+  if(/saldo m/.test(t))out.push({k:'saldo'});
+  return out;
+}
+function vkHtml(x,full){const L=vkOf(x);
+  if(!L.length)return `<span class="vk none">Sin vinculaciones</span>`;
+  return `<span class="vks">${L.map(v=>`<span class="vk" title="${VK_L[v.k]}${v.x?' '+v.x:''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${VK_I[v.k]}</svg>${full||v.k==='nomina'?`<span>${VK_L[v.k]}${v.x?' '+v.x:''}</span>`:''}</span>`).join('')}<span class="vkn">${L.length}</span></span>`}
 function mcalc(x){
   const keep=S.v.plazo,years=Math.min(S.v.plazo,x.pz||S.v.plazo);S.v.plazo=years;
   const o={tipo:x.t,tin:x.tin,anos:x.t==='fija'?1:x.anos,dif:x.dif||0,apertura:0,prods:[]};
@@ -1092,21 +1150,20 @@ let MF='todas',MLAST=[];
 function render4(){
   const P=hipoteca();
   $('m4kpis').innerHTML=`
-    <button class="kpi" data-x="m_eur"><small>Euríbor 12 meses · septiembre</small><strong class="num" style="color:var(--bad)">${pct(MKT.eur,3)}</strong><em>▲ desde ${pct(MKT.eurAnt,2)} hace un año</em></button>
+    <button class="kpi" data-x="m_eur"><small>Euríbor 12 meses · ${esc(MKT.eurMes||'')}</small><strong class="num" style="color:${MKT.eur>MKT.eurAnt?'var(--bad)':'var(--good)'}">${pct(MKT.eur,3)}</strong><em>${MKT.eur>MKT.eurAnt?'▲':'▼'} desde ${pct(MKT.eurAnt,2)} hace un año · ${esc((MKT.fuenteNombres||{}).eur||'')}</em></button>
     <button class="kpi" data-x="m_ine"><small>Tipo medio firmado (INE, ${MKT.ineMes})</small><strong class="num">${pct(MKT.ine)}</strong><em>fijas ${pct(MKT.ineFija)} · variables ${pct(MKT.ineVar)}</em></button>
-    <button class="kpi" data-x="m_bce"><small>Tipo del BCE</small><strong class="num">${pct(MKT.bce,1)}</strong><em>subió en septiembre</em></button>`;
-  $('m4ctx').innerHTML=`<div><b>Qué está pasando</b> · datos a ${MKT_FECHA}</div><ul>
-    <li>Los bancos están <b>subiendo las fijas</b> (ING, Bankinter, BBVA, Santander este año).</li>
-    <li>El Euríbor está en <b>máximos de dos años</b>: las variables salen caras tras el primer año.</li>
-    <li>Con el Euríbor por encima del 3 %, una fija por debajo del 2,6 % protege tanto como una variable.</li></ul>`;
+    <button class="kpi" data-x="m_bce"><small>Tipo del BCE</small><strong class="num">${pct(MKT.bce,1)}</strong><em>${esc(MKT.bceCorto||'')}</em></button>`;
+  const FN=MKT.fuenteNombres||{},lk=(k,t)=>MKT.fuentes&&MKT.fuentes[k]?`<a href="${MKT.fuentes[k]}" target="_blank" rel="noopener">${esc(t||FN[k]||k)}</a>`:'';
+  $('m4ctx').innerHTML=`<div><b>Qué está pasando</b> · datos a ${esc(MKT_FECHA)}</div><ul>${(MKT.ctx||[]).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+    <div class="src-line">Fuentes: Euríbor ${lk('eur')} · tipo medio ${lk('ine')} · BCE ${lk('bce')} · ofertas: HelpMyCash, Kelisto y webs de los bancos (enlace en cada fila). Se revisan cada semana.</div>`;
   $('m4filter').innerHTML=[['todas','Todas'],['fija','Fijas'],['mixta','Mixtas'],['variable','Variables']].map(([k,l])=>`<button data-mf="${k}" class="${MF===k?'on':''}">${l}</button>`).join('');
   $('m4hint').textContent=P>0?`Cuotas calculadas para tu hipoteca de ${eur(P)} a ${anos(S.v.plazo)}, con el tipo bonificado y el Euríbor a ${pct(S.h.eur)} cuando toca revisar. Pincha una fila para ver el detalle.`:'Con una entrada del 100 % no hay hipoteca que calcular.';
   const rows=OFF.map((x,i)=>({x,i,c:P>0?mcalc(x):null})).filter(r=>MF==='todas'||r.x.t===MF);
   if(P>0)rows.sort((a,b)=>a.c.ef-b.c.ef);
   MLAST=rows;
-  $('m4table').innerHTML=`<table><thead><tr><th>Banco</th><th>Tipo</th><th>TIN bonificado</th><th>Después</th><th>TAE</th><th>Tu cuota</th><th>Coste medio</th><th>Intereses totales</th><th>Vinculaciones que piden</th><th></th></tr></thead><tbody>
+  $('m4table').innerHTML=`<table><thead><tr><th>Banco</th><th>Tipo</th><th>TIN bonificado</th><th>Después</th><th>TAE</th><th>Tu cuota</th><th>Coste medio</th><th>Intereses totales</th><th>Lo que te piden</th><th></th></tr></thead><tbody>
     ${rows.map((r,k)=>{const x=r.x,c=r.c;return `<tr data-m="${r.i}" class="${k===0&&P>0?'best':''}">
-      <td class="bk">${esc(x.b)}<span class="pr">${esc(x.p)}</span></td>
+      <td class="bk">${esc(x.b)}<span class="pr">${esc(x.p)}</span><a class="src" href="${x.f}" target="_blank" rel="noopener">${esc(x.f.replace(/^https?:\/\/(www\.)?/,'').split('/')[0])} · ${esc(x.d)}</a></td>
       <td><span class="tp ${x.t}">${x.t[0].toUpperCase()+x.t.slice(1)}</span></td>
       <td class="num"><b>${pct(x.tin)}</b>${x.t==='fija'?'':x.t==='mixta'?` · ${String(x.anos).replace('.',',')} años`:' · 1.er año'}${x.tinS&&x.tinS>x.tin&&x.t!=='variable'?`<span class="pr">sin bonificar ${pct(x.tinS)}</span>`:''}</td>
       <td class="num">${x.t==='fija'?'—':`E + ${pct(x.dif)}`}</td>
@@ -1114,12 +1171,12 @@ function render4(){
       <td class="num">${c?`<b class="big">${eur(c.cuota)}</b>${c.cuota2?`<span class="pr">${eur(c.cuota2)} desde el año ${c.desde}</span>`:''}${x.pz<S.v.plazo?`<span class="pr" style="color:var(--warn)">plazo máx. ${x.pz} años</span>`:''}`:'—'}</td>
       <td class="num">${c?`<b>${pct(c.ef)}</b>`:'—'}</td>
       <td class="num">${c?eur(c.int):'—'}${c&&x.pz<S.v.plazo?`<span class="pr">a ${x.pz} años</span>`:''}</td>
-      <td class="vc">${esc(x.v)}</td>
+      <td class="vc" title="${esc(x.v)}">${vkHtml(x)}</td>
       <td><button class="addc" data-madd="${r.i}" title="Llevar esta oferta al comparador">Comparar →</button></td></tr>`}).join('')}</tbody></table>
     <p class="hint" style="margin-top:10px">Ordenadas por coste medio: el tipo que pagas de media en toda la vida del préstamo, contando el Euríbor que supones cuando toca revisar. Sirve para comparar fijas, mixtas y variables entre sí. No incluyen el coste de las vinculaciones: llévalas al comparador para verlo. Condiciones publicadas a ${MKT_FECHA}; cambian a menudo y dependen de tu perfil, confírmalas con el banco.</p>`;
-  X.m_eur=()=>modal('Euríbor a 12 meses',`<div class="steps">${step('Septiembre 2026 (media mensual)',pct(MKT.eur,3),'tot')}${step('Agosto 2026',pct(MKT.eurAgo,3))}${step('Septiembre 2025',pct(MKT.eurAnt,3))}</div><p>Es el índice al que se revisan las mixtas (tras el tramo fijo) y las variables. En las calculadoras se usa el Euríbor que supones en la pestaña 2 (${pct(S.h.eur)}).</p><p class="hint">Fuente: <a href="${MKT.fuentes.eur}" target="_blank" rel="noopener">Euribordiario</a></p>`);
+  X.m_eur=()=>modal('Euríbor a 12 meses',`<div class="steps">${step(esc(MKT.eurMes||'')+' (media mensual)',pct(MKT.eur,3),'tot')}${step(esc(MKT.eurAgoMes||'Mes anterior'),pct(MKT.eurAgo,3))}${step(esc(MKT.eurAntMes||'Hace un año'),pct(MKT.eurAnt,3))}</div><p>Es el índice al que se revisan las mixtas (tras el tramo fijo) y las variables. En las calculadoras se usa el Euríbor que supones en la pestaña 2 (${pct(S.h.eur)}).</p><p class="hint">Fuente: <a href="${MKT.fuentes.eur}" target="_blank" rel="noopener">Euribordiario</a></p>`);
   X.m_ine=()=>modal('Tipo medio de las hipotecas firmadas',`<div class="steps">${step('Todas',pct(MKT.ine),'tot')}${step('Tipo fijo (62 % de las firmas)',pct(MKT.ineFija))}${step('Tipo variable',pct(MKT.ineVar))}</div><p>Es lo que se firmó de media en ${MKT.ineMes}. Si te ofrecen bastante más, negocia o compara.</p><p class="hint">Fuente: INE, Estadística de Hipotecas, vía <a href="${MKT.fuentes.ine}" target="_blank" rel="noopener">Infobae</a></p>`);
-  X.m_bce=()=>modal('Tipo de interés del BCE',`<p>El BCE subió el tipo 0,25 puntos, hasta el 2,5 %, el 11 de septiembre de 2026: la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %.</p><p class="hint">Fuentes: <a href="${MKT.fuentes.bce}" target="_blank" rel="noopener">Infobae</a> · <a href="${MKT.fuentes.cambios}" target="_blank" rel="noopener">HelpMyCash</a></p>`);
+  X.m_bce=()=>modal('Tipo de interés del BCE',`<p>${esc(MKT.bceNota||'')}</p><p class="hint">Fuentes: <a href="${MKT.fuentes.bce}" target="_blank" rel="noopener">Infobae</a> · <a href="${MKT.fuentes.cambios}" target="_blank" rel="noopener">HelpMyCash</a></p>`);
   return rows;
 }
 function mDetail(i){const x=OFF[i],c=hipoteca()>0?mcalc(x):null;
@@ -1133,7 +1190,7 @@ function mDetail(i){const x=OFF[i],c=hipoteca()>0?mcalc(x):null;
       ${c?step(`Tu cuota (${eur(hipoteca())} a ${anos(c.years)})`,eur2(c.cuota)+(c.cuota2?` → ${eur2(c.cuota2)} desde el año ${c.desde}`:''),'tot'):''}
       ${c?step('Coste medio en toda la vida del préstamo',pct(c.ef),'tot'):''}${c?step('Intereses totales',eur(c.int)):''}
     </div>
-    <h4>Vinculaciones para el tipo bonificado</h4><p>${esc(x.v)}</p>
+    <h4>Vinculaciones para el tipo bonificado</h4><div style="margin:6px 0 8px">${vkHtml(x,true)}</div><p class="hint">${esc(x.v)}</p>
     <h4>Comisiones</h4><p>${esc(x.c||'No publicadas')}</p>
     ${x.n?`<p class="note">${esc(x.n)}</p>`:''}
     <p class="hint">Fuente: <a href="${x.f}" target="_blank" rel="noopener">${esc(x.f.replace(/^https?:\/\/(www\.)?/,'').split('/')[0])}</a> · actualizada el ${x.d}</p>
@@ -1147,7 +1204,7 @@ function mAdd(i){const x=OFF[i];
 document.addEventListener('click',e=>{
   const f=e.target.closest('[data-mf]');if(f){MF=f.dataset.mf;render4();fitSoon();return}
   const a=e.target.closest('[data-madd]');if(a){e.stopPropagation();mAdd(+a.dataset.madd);return}
-  const r=e.target.closest('tr[data-m]');if(r)mDetail(+r.dataset.m);
+  if(e.target.closest('a'))return;const r=e.target.closest('tr[data-m]');if(r)mDetail(+r.dataset.m);
 });
 
 /* ---------- bróker ---------- */
@@ -1293,6 +1350,8 @@ function buildPdf(){
     finally{b.disabled=false;b.textContent=txt;fitSoon()}}})();
 window.__buildPdf=async()=>{await libs();return buildPdf()};
 
+if(!window.claude&&/^https?:$/.test(location.protocol)){fetch('data.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(d&&applyData(d)){save();refresh()}}).catch(()=>{})}
+if(!touched)document.querySelectorAll('.start').forEach(x=>x.hidden=false);
 renderOffers();refresh();
 const h=(location.hash||'').slice(1);showTab(['cuanto','hipotecas','alquilar','bancos'].includes(h)?h:(S.tab||'cuanto'));
 window.__FEA={S:()=>S,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala};
