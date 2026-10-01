@@ -152,7 +152,9 @@
    "f": "https://myinvestor.es/hipotecas/hipoteca-fija/",
    "d": "30/09/2026",
    "ingMin": 4000,
-   "ingReq": "acceso"
+   "ingReq": "acceso",
+   "apPct": 1,
+   "minImp": 100000
   },
   {
    "b": "Banco Sabadell",
@@ -280,7 +282,8 @@
    "f": "https://www.kelisto.es/hipotecas/bancos/unicaja",
    "d": "28/09/2026",
    "ingMin": 2000,
-   "ingReq": "bonif"
+   "ingReq": "bonif",
+   "apPct": 0.15
   },
   {
    "b": "Kutxabank",
@@ -316,7 +319,8 @@
    "c": "Apertura 500 €. Amortización 0,15 % los 5 primeros años",
    "n": "Las fuentes no coinciden en el periodo inicial",
    "f": "https://www.helpmycash.com/mejores-hipotecas/",
-   "d": "28/09/2026"
+   "d": "28/09/2026",
+   "apEur": 500
   }
  ]
 }

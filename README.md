@@ -14,6 +14,6 @@ Descarga de informe en PDF.
 
 ## Datos de mercado
 
-`data.json` guarda el Euríbor, el tipo medio del INE, el tipo del BCE y las ofertas de los bancos, cada una con su fuente y fecha, los ingresos mínimos que piden (`ingMin`, `ingMin2`, `ingReq`) y el TIN según el plazo cuando cambia (`tramos`). Una tarea programada lo revisa cada semana y lo actualiza; la página lo lee al abrirse y, si no puede, usa la copia que lleva dentro. Cálculos orientativos: no son asesoramiento financiero ni fiscal.
+`data.json` guarda el Euríbor, el tipo medio del INE, el tipo del BCE y las ofertas de los bancos, cada una con su fuente y fecha, los ingresos mínimos que piden (`ingMin`, `ingMin2`, `ingReq`), el préstamo mínimo (`minImp`), la comisión de apertura (`apPct` o `apEur`) y el TIN según el plazo cuando cambia (`tramos`). Una tarea programada lo revisa cada semana y lo actualiza; la página lo lee al abrirse y, si no puede, usa la copia que lleva dentro. Cálculos orientativos: no son asesoramiento financiero ni fiscal.
 
 Por [@BuscandolaLF](https://x.com/BuscandolaLF).
