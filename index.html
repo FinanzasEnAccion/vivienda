@@ -564,6 +564,15 @@ html.m .mres i{grid-column:2;grid-row:1}
 .toast .undo{margin-left:10px;border:0;background:var(--mint);color:#0B3D2E;border-radius:999px;padding:3px 10px;font-weight:700;font-size:12.5px}
 .stress .btn{margin-left:6px;padding:3px 10px;font-size:12px}
 .ingw .btn{margin-left:6px;padding:3px 10px;font-size:12px}
+.lk{flex:none;width:17px;height:17px;border:0;border-radius:5px;padding:2px;background:var(--good-soft);color:var(--good);display:inline-grid;place-items:center;cursor:pointer}
+.lk svg{width:12px;height:12px}
+.lk.off{background:var(--warn-soft);color:var(--warn)}
+.lkhint{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.lnkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:700;font-size:12px;text-decoration:underline;cursor:pointer}
+.inp .unit{flex:none;border:1px dashed var(--in-line);background:var(--in-bg);color:var(--in-focus);border-radius:7px;padding:1px 6px;font-size:11.5px;font-weight:800;margin-left:4px;cursor:pointer;line-height:1.4}
+.inp .unit:hover{background:var(--in-focus);color:var(--on-accent)}
+html.m .lk{width:24px;height:24px}html.m .lk svg{width:15px;height:15px}
+html.m .inp .unit{padding:4px 10px;font-size:14px}
 </style>
 
 <header class="band">
@@ -633,7 +642,7 @@ html.m .mres i{grid-column:2;grid-row:1}
   <section class="pane" id="p-invertir" role="tabpanel" hidden>
     <div class="cols">
       <div class="card scroll incard">
-        <div class="inhead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><b>El piso</b><span class="hint">cambia cualquier casilla</span></div>
+        <div class="inhead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><b>El piso</b><span class="hint lkhint" id="lkhint"></span></div>
         <div class="grp"><div class="gtitle">Compra</div><div class="g3 wide1" id="g5a"></div></div>
         <div class="grp"><div class="gtitle">Hipoteca</div><div class="g3" id="g5b"></div></div>
         <div class="grp"><div class="gtitle">Alquiler y gastos al año</div><div class="g3 wide1" id="g5c"></div></div>
@@ -733,7 +742,7 @@ const PLUSV_TIPO=30; // tipo máximo de la plusvalía municipal: se usa como est
 const RED_OPC=[[50,'50 % · general'],[60,'60 % · contrato anterior al 26/05/2023, u obras de rehabilitación en los 2 años anteriores'],[70,'70 % · vivienda asequible o alquiler a una Administración; en zona tensionada, también inquilino de 18 a 35 años en el primer alquiler de la vivienda'],[90,'90 % · zona tensionada: bajas la renta más de un 5 % respecto al contrato anterior']];
 
 const EXAMPLE={
-  v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30,tasacion:0,ico:false},
+  v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,entUnit:'pct',entradaEur:42000,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30,tasacion:0,ico:false},
   a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false},
   h:{eur:Math.round(DATA0.mercado.eur*100)/100,offers:[
     {nombre:'Banco A · fija bonificada',tipo:'fija',tin:3.10,anos:1,dif:0.60,apertura:0,prods:[
@@ -749,6 +758,8 @@ const EXAMPLE={
       {n:'Seguro de vida',b:0.15,c:380,s:4,m:190,hasta:30,on:false}]}]},
   i:{precio:120000,reforma:6000,fin:70,tin:3.2,plazo:25,alquiler:750,vacio:1,ibi:250,comunidad:50,seguro:320,mant:450,gestion:0,irpf:30,reduccion:50,constr:60,objetivo:5,anos:10,ccaa:'Asturias',nueva:false,tensionada:false},
   r:{alquiler:850,ipc:2.5,reval:2.5,rent:5,horizonte:15,ibi:350,comunidad:60,seguro:250,mant:0.5,venta:3,reinvierte:true},
+  lk:{'i.ccaa':true,'i.nueva':true,'i.precio':true,'i.tin':true,'i.plazo':true,'i.alquiler':true,'i.ibi':true,'i.comunidad':true,'i.mant':true},
+  iTouched:false,
   tab:'cuanto'
 };
 const clone=o=>JSON.parse(JSON.stringify(o));
@@ -758,7 +769,9 @@ function merge(base,x){if(Array.isArray(base))return Array.isArray(x)?x:base;if(
 function sane(st){st.h.offers=(st.h.offers||[]).filter(o=>o&&Array.isArray(o.prods)).map(o=>merge(EXAMPLE.h.offers[0],o)).map(o=>{o.prods=o.prods.map(p=>merge({n:'Producto',b:0,c:0,s:0,m:0,hasta:30,on:true},p));return o});if(!st.h.offers.length)st.h.offers=clone(EXAMPLE.h.offers);
   if(!RED_OPC.some(r=>r[0]===st.i.reduccion))st.i.reduccion=50;if(!st.i.tensionada&&st.i.reduccion>70)st.i.reduccion=50;
   if(!ITP[st.i.ccaa])st.i.ccaa=ITP[st.v.ccaa]?st.v.ccaa:'Asturias';st.a.esfuerzo=Math.min(ESF_BANCO,st.a.esfuerzo);st.a.titulares=Math.max(1,Math.min(4,Math.round(st.a.titulares)||1));return st}
-let S;try{const L=load();S=L?sane(merge(EXAMPLE,L)):clone(EXAMPLE);if(L&&L.i&&!('ccaa' in L.i)&&L.v&&ITP[L.v.ccaa])S.i.ccaa=L.v.ccaa}catch(e){S=clone(EXAMPLE)}
+let S;try{const L=load();S=L?sane(merge(EXAMPLE,L)):clone(EXAMPLE);if(L&&L.i&&!('ccaa' in L.i)&&L.v&&ITP[L.v.ccaa])S.i.ccaa=L.v.ccaa;
+  if(L&&!L.lk&&L.i)Object.keys(S.lk).forEach(k=>{const f=k.slice(2);if(f in L.i&&L.i[f]!==EXAMPLE.i[f]&&f!=='ccaa'){S.lk[k]=false;S.iTouched=true}});
+  if(L&&L.v&&!('entradaEur' in L.v))S.v.entradaEur=Math.round(S.v.precio*S.v.entrada/100)}catch(e){S=clone(EXAMPLE)}
 
 /* formato */
 const NF={};const nf=d=>NF[d]||(NF[d]=new Intl.NumberFormat('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d,useGrouping:'always'}));
@@ -788,7 +801,7 @@ const DEF={
  ahorroMes:['Ahorras al mes','Lo que consigues guardar cada mes. Sirve para calcular cuánto tardas en reunir lo que te falta.'],
  brutos:['Ingresos brutos al año','Lo que ganas al año antes de impuestos, por cada titular. El aval ICO pone un tope de 37.800 € por persona, que sube hasta 63.000 € en las provincias más caras y 2.520 € más por cada hijo menor.'],
  patrimonio:['Patrimonio','Lo que tienes menos lo que debes, por titular: ahorros, inversiones y otros inmuebles. El aval ICO pide no pasar de 150.000 € por persona.'],
- entrada:['Entrada','La parte del precio que pagas con tus ahorros. El banco suele financiar el 80 % del menor entre precio y tasación, así que la entrada mínima suele ser el 20 %. Con aval ICO puede ser del 0 %.'],
+ entrada:['Entrada','Pulsa el % o el € de la casilla para escribirla en porcentaje o en euros. Es la parte del precio que pagas con tus ahorros. El banco suele financiar el 80 % del menor entre precio y tasación, así que la entrada mínima suele ser el 20 %. Con aval ICO puede ser del 0 %.'],
  tasacion:['Tasación','El valor que da el tasador homologado que encarga el banco. Si sale por debajo del precio, el banco presta sobre la tasación y necesitas más entrada. Déjalo vacío si crees que tasará al precio.'],
  tin:['TIN','Tipo de interés nominal: el interés que paga el préstamo cada año, sin comisiones ni seguros. Con él se calcula la cuota.'],
  tinsin:['TIN sin bonificar','El tipo que te queda si no contratas nada con el banco: el más alto de la oferta. Ejemplo: si te ofrecen un 2,50 % con nómina (rebaja de 0,30) y seguros (rebaja de 0,30), pon aquí 3,10 % y añade cada rebaja abajo, en Vinculaciones.'],
@@ -819,8 +832,21 @@ const DEF={
 };
 const Q=k=>DEF[k]?`<button type="button" class="q" data-def="${k}" title="${esc(DEF[k][1])}" aria-label="Qué es: ${esc(DEF[k][0])}">?</button>`:'';
 document.addEventListener('click',e=>{const q=e.target.closest('[data-def]');if(!q)return;e.preventDefault();e.stopPropagation();const d=DEF[q.dataset.def];modal(d[0],`<p>${esc(d[1])}</p>`)},true);
-function F(bind,label,unit,fmt='dec',extra='',q='',ph=''){const id='in'+(uid++);return `<div class="fld"><label for="${id}"><span class="lt">${label}</span>${Q(q)}${extra}</label><div class="inp"><input id="${id}" data-bind="${bind}" data-fmt="${fmt}" inputmode="decimal"${ph?` placeholder="${ph}" data-zero="1"`:''}><span>${unit}</span></div></div>`}
-function CCAA(bind='v.ccaa',label='Comunidad autónoma'){const id='in'+(uid++);return `<div class="fld"><label for="${id}"><span class="lt">${label}</span></label><div class="inp"><select id="${id}" data-bind="${bind}">${Object.keys(ITP).map(k=>`<option>${k}</option>`).join('')}</select></div></div>`}
+/* Datos que Invertir toma de las otras pestañas mientras no los cambies allí */
+const LINKS={
+ 'i.ccaa':['Mi presupuesto',()=>S.v.ccaa],'i.nueva':['Mi presupuesto',()=>S.v.nueva],'i.precio':['Mi presupuesto',()=>S.v.precio],
+ 'i.tin':['Mi presupuesto',()=>S.v.tin],'i.plazo':['Mi presupuesto',()=>S.v.plazo],
+ 'i.alquiler':['Comprar o alquilar',()=>S.r.alquiler],'i.ibi':['Comprar o alquilar',()=>S.r.ibi],'i.comunidad':['Comprar o alquilar',()=>S.r.comunidad],
+ 'i.mant':['Comprar o alquilar',()=>Math.round(S.i.precio*S.r.mant/100)]};
+/* Entrada en % o en €: se guarda en las dos unidades y manda la que elegiste */
+const entSync=()=>{S.v.entradaEur=Math.round(S.v.precio*S.v.entrada/100)};
+function syncAll(){
+  if(S.v.entUnit==='eur'){S.v.entradaEur=Math.min(S.v.entradaEur,S.v.precio);S.v.entrada=S.v.precio>0?S.v.entradaEur/S.v.precio*100:0}else entSync();
+  for(const k in LINKS)if(S.lk[k]!==false)set(k,LINKS[k][1]());
+}
+const LK=b=>LINKS[b]?`<button type="button" class="lk" data-lk="${b}"></button>`:'';
+function F(bind,label,unit,fmt='dec',extra='',q='',ph=''){const id='in'+(uid++);const u=bind==='v.entrada'?`<button type="button" class="unit" data-unit="1" title="Cambiar entre % y euros">%</button>`:`<span>${unit}</span>`;return `<div class="fld"><label for="${id}"><span class="lt">${label}</span>${Q(q)}${LK(bind)}${extra}</label><div class="inp"><input id="${id}" data-bind="${bind}" data-fmt="${fmt}" inputmode="decimal"${ph?` placeholder="${ph}" data-zero="1"`:''}>${u}</div></div>`}
+function CCAA(bind='v.ccaa',label='Comunidad autónoma'){const id='in'+(uid++);return `<div class="fld"><label for="${id}"><span class="lt">${label}</span>${LK(bind)}</label><div class="inp"><select id="${id}" data-bind="${bind}">${Object.keys(ITP).map(k=>`<option>${k}</option>`).join('')}</select></div></div>`}
 const SW=(bind,label,q='')=>`<span class="chkw"><button class="chk" data-sw="${bind}" role="switch"><span class="sw"></span><span>${label}</span></button>${Q(q)}</span>`;
 const NUEVA=`<div class="seg-ctl" role="group" aria-label="Tipo de vivienda"><button data-nueva="0">Segunda mano</button><button data-nueva="1">Obra nueva</button></div>`;
 const NUEVA_I=`<div class="seg-ctl" role="group" aria-label="Tipo de piso"><button data-inueva="0">Segunda mano</button><button data-inueva="1">Obra nueva</button></div>`;
@@ -832,9 +858,9 @@ $('g1chk').innerHTML=SW('v.primera','Primera vivienda')+SW('v.rural','Municipio 
 $('g1ico').innerHTML=F('a.brutos','Ingresos brutos/año','€ por titular','eur','','brutos')+F('a.patrimonio','Patrimonio','€ por titular','eur','','patrimonio');
 $('g1b').innerHTML=NUEVA+`<div class="g3 wide1"><div style="grid-column:span 2">${CCAA()}</div>${F('v.plazo','Plazo','años','int','','plazo')}${F('v.precio','Precio','€','eur')}${F('v.entrada','Entrada','%','dec','','entrada')}${F('v.tin','TIN estimado','%','dec','','tin')}${F('v.tasacion','Tasación','€','eur','','tasacion','= precio')}${F('v.notaria','Notaría','%','dec','','notaria')}${F('v.comision','Comisión','%','dec','','comision')}${F('v.fijos','Tasación y fijos','€','eur','','fijos')}</div>`;
 $('g2').innerHTML=F('v.precio','Precio','€','eur')+F('v.entrada','Entrada','%','dec','','entrada')+`<div class="fld"><label>Hipoteca</label><button class="derived num" id="h_imp" data-x="himp"></button></div>`+F('v.plazo','Plazo','años','int','','plazo')+F('h.eur','Euríbor','%','dec','<span class="tag">supuesto</span>','eur')+F('r.ipc','IPC','%','dec','<span class="tag">supuesto</span>','ipc');
-$('g5a').innerHTML=`<div style="grid-column:1 / -1">${NUEVA_I}</div><div style="grid-column:span 2">${CCAA('i.ccaa','Comunidad del piso')}</div>`+F('i.precio','Precio','€','eur')+F('i.reforma','Reforma','€','eur')+`<div class="fld" style="grid-column:span 2"><label>Impuestos y gastos de compra</label><button class="derived num" style="font-size:14px" data-x="i_compra" id="i_gastos"></button></div>`;
+$('g5a').innerHTML=`<div style="grid-column:1 / -1;display:flex;gap:6px;align-items:center"><div style="flex:1">${NUEVA_I}</div>${LK('i.nueva')}</div><div style="grid-column:span 2">${CCAA('i.ccaa','Comunidad del piso')}</div>`+F('i.precio','Precio','€','eur')+F('i.reforma','Reforma','€','eur')+`<div class="fld" style="grid-column:span 2"><label>Impuestos y gastos de compra</label><button class="derived num" style="font-size:14px" data-x="i_compra" id="i_gastos"></button></div>`;
 $('g5b').innerHTML=F('i.fin','Financiación','%','dec','','fin')+F('i.tin','TIN','%','dec','','tin')+F('i.plazo','Plazo','años','int');
-$('g5c').innerHTML=F('i.alquiler','Alquiler','€/mes','eur')+F('i.vacio','Meses vacío','al año','dec','','vacio')+F('i.ibi','IBI','€/año','eur')+F('i.comunidad','Comunidad','€/mes','eur')+F('i.seguro','Seguros','€/año','eur')+F('i.gestion','Agencia','% alquiler','dec','','gestion')+F('i.mant','Mantenimiento','€/año','eur','','mant');
+$('g5c').innerHTML=F('i.alquiler','Alquiler','€/mes','eur')+F('i.vacio','Meses vacío','al año','dec','','vacio')+F('i.ibi','IBI','€/año','eur')+F('i.comunidad','Comunidad','€/mes','eur')+F('i.seguro','Seguros','€/año','eur')+F('i.gestion','Agencia','% alquiler','dec','','gestion')+F('i.mant','Reparaciones','€/año','eur','','mant');
 $('g5chk').innerHTML=SW('i.tensionada','Zona tensionada','tensionada');
 $('g5d').innerHTML=F('i.irpf','Tu tipo IRPF','%','dec','','irpf')+REDSEL()+F('i.constr','Construcción','% del valor','dec','','constr')+F('i.objetivo','Objetivo','% neto','dec','','objetivo')+F('i.anos','Vender en','años','int');
 $('g3a').classList.add('wide1');$('g3a').innerHTML=F('v.precio','Precio','€','eur')+F('v.entrada','Entrada','%','dec','','entrada')+F('v.tin','TIN','%','dec','','tin')+F('v.plazo','Plazo','años','int','','plazo')+F('r.horizonte','Te quedas','años','int','','horizonte')+F('r.venta','Al vender','% gastos','dec','','venta');
@@ -846,6 +872,8 @@ function markTouched(){if(touched)return;touched=true;try{localStorage.setItem('
 document.addEventListener('input',()=>markTouched(),true);
 document.addEventListener('input',e=>{
   const el=e.target,b=el.dataset.bind;if(!b)return;
+  if(LINKS[b])S.lk[b]=false;if(b.startsWith('i.'))S.iTouched=true;
+  if(b==='v.entrada'&&S.v.entUnit==='eur'){S.v.entradaEur=Math.max(0,pEur(el.value));refresh(el);return}
   let v=el.tagName==='SELECT'?(el.dataset.fmt==='num'?+el.value:el.value):el.dataset.fmt==='eur'?pEur(el.value):pDec(el.value);
   if(el.dataset.fmt==='int')v=Math.round(v);
   if(typeof v==='number'&&b!=='r.reval')v=Math.max(0,v);
@@ -855,20 +883,33 @@ document.addEventListener('input',e=>{
 let plazo0=null;
 document.addEventListener('focusin',e=>{if(e.target.dataset&&e.target.dataset.bind==='v.plazo')plazo0=S.v.plazo});
 document.addEventListener('focusout',e=>{const el=e.target;if(el.dataset&&el.dataset.bind&&el.tagName==='INPUT'){
-  el.value=el.dataset.zero&&!get(el.dataset.bind)?'':fmtIn(get(el.dataset.bind),el.dataset.fmt);
+  el.value=dispVal(el);
   // los seguros que se mantenían todo el plazo siguen al nuevo plazo; los que tenían años concretos no se tocan
   if(el.dataset.bind==='v.plazo'&&plazo0!=null&&plazo0!==S.v.plazo){const o0=plazo0;S.h.offers.forEach(o=>o.prods.forEach(p=>{if(p.hasta>=o0)p.hasta=S.v.plazo}));plazo0=null;renderOffers();refresh()}}});
 document.addEventListener('click',e=>{
   const n=e.target.closest('[data-nueva]');if(n){S.v.nueva=n.dataset.nueva==='1';refresh();return}
-  const ni=e.target.closest('[data-inueva]');if(ni){S.i.nueva=ni.dataset.inueva==='1';refresh();return}
+  const ni=e.target.closest('[data-inueva]');if(ni){S.i.nueva=ni.dataset.inueva==='1';S.lk['i.nueva']=false;S.iTouched=true;refresh();return}
+  const un=e.target.closest('[data-unit]');if(un){e.preventDefault();S.v.entUnit=S.v.entUnit==='eur'?'pct':'eur';entSync();refresh();toast(S.v.entUnit==='eur'?'Entrada en euros':'Entrada en porcentaje');return}
+  const lk=e.target.closest('[data-lk]');if(lk){e.preventDefault();const k=lk.dataset.lk,src=LINKS[k][0];
+    if(S.lk[k]===false){S.lk[k]=true;refresh();toast(`Vuelve a usar el dato de «${src}»`)}else toast(`Viene de «${src}». Si lo cambias aquí, deja de seguirlo`);return}
+  const la=e.target.closest('[data-lkall]');if(la){Object.keys(LINKS).forEach(k=>S.lk[k]=true);refresh();toast('Invertir vuelve a usar los datos de tus otras pestañas');return}
   const s=e.target.closest('[data-sw]');if(s){const k=s.dataset.sw;set(k,!get(k));
-    if(k==='v.ico'){if(S.v.ico){const ii=icoInfo(S.v.precio);if(ii.ok&&S.v.entrada>0){S.v.entrada=0;toast('Entrada al 0 %: el aval cubre hasta el 20 % que el banco no financia')}else if(!ii.ok)toast('Con estos datos no cumples el aval: mira los requisitos')}else if(S.v.entrada<20){S.v.entrada=20;toast('Sin aval: entrada mínima del 20 %')}}
+    if(k==='v.ico'){if(S.v.ico){const ii=icoInfo(S.v.precio);if(ii.ok&&S.v.entrada>0){S.v.entrada=0;entSync();toast('Entrada al 0 %: el aval cubre hasta el 20 % que el banco no financia')}else if(!ii.ok)toast('Con estos datos no cumples el aval: mira los requisitos')}else if(S.v.entrada<20){S.v.entrada=20;entSync();toast('Sin aval: entrada mínima del 20 %')}}
     if(k==='i.tensionada'&&!S.i.tensionada&&S.i.reduccion>70){S.i.reduccion=50;toast('Fuera de zona tensionada la reducción vuelve al 50 %')}
     refresh()}
 });
+/* Valor que se enseña en cada casilla */
+function dispVal(el){const b=el.dataset.bind,v=get(b);
+  if(b==='v.entrada')return S.v.entUnit==='eur'?nf(0).format(S.v.entradaEur):String(Math.round(v*100)/100).replace('.',',');
+  return el.dataset.zero&&!v?'':fmtIn(v,el.dataset.fmt)}
 function fillBound(skip){
   const rs=document.querySelector('[data-bind="i.reduccion"]');if(rs&&rs.dataset.k!==String(S.i.tensionada))rs.dataset.k=String(S.i.tensionada),rs.innerHTML=RED_OPC.filter(r=>S.i.tensionada||r[0]<=70).map(r=>`<option value="${r[0]}">${r[1]}</option>`).join('');
-  document.querySelectorAll('[data-bind]').forEach(el=>{if(el===skip)return;const v=get(el.dataset.bind);el.value=el.tagName==='SELECT'?String(v):el.dataset.zero&&!v?'':fmtIn(v,el.dataset.fmt)});
+  document.querySelectorAll('[data-bind]').forEach(el=>{if(el===skip)return;el.value=el.tagName==='SELECT'?String(get(el.dataset.bind)):dispVal(el)});
+  document.querySelectorAll('[data-unit]').forEach(b=>{b.textContent=S.v.entUnit==='eur'?'€':'%'});
+  document.querySelectorAll('[data-lk]').forEach(b=>{const k=b.dataset.lk,on=S.lk[k]!==false,src=LINKS[k][0];b.classList.toggle('off',!on);
+    b.innerHTML=on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>';
+    b.title=on?`Viene de «${src}». Si lo cambias aquí, deja de seguirlo`:`Lo has cambiado aquí. Pulsa para volver a usar el dato de «${src}»`;b.setAttribute('aria-label',b.title)});
+  const lh=$('lkhint');if(lh){const off=Object.keys(LINKS).filter(k=>S.lk[k]===false).length;lh.innerHTML=`<span class="lk" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span> viene de tus otras pestañas${off?` · <button type="button" class="lnkbtn" data-lkall="1">volver a igualar todo</button>`:''}`}
   document.querySelectorAll('[data-nueva]').forEach(b=>b.classList.toggle('on',(b.dataset.nueva==='1')===!!S.v.nueva));
   document.querySelectorAll('[data-inueva]').forEach(b=>b.classList.toggle('on',(b.dataset.inueva==='1')===!!S.i.nueva));
   document.querySelectorAll('[data-sw]').forEach(b=>{const on=!!get(b.dataset.sw);b.querySelector('.sw').classList.toggle('on',on);b.setAttribute('aria-checked',on)});
@@ -1095,8 +1136,8 @@ document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b||b.closest('.offer'))return;
   const a=b.dataset.act;
   if(a==='usemax'){const R=calc1(),P=Math.floor(R.max/1000)*1000;S.v.precio=P;const need=P>0?Math.ceil(Math.max(0,P-R.hipMax)/P*1000)/10:0;
-    if(need>S.v.entrada){S.v.entrada=need;toast(`Precio aplicado y entrada subida al ${String(need).replace('.',',')} % para que la cuota te cuadre`)}else toast('Precio aplicado a las tres calculadoras');refresh()}
-  if(a==='icoOn'){S.v.ico=true;if(icoInfo(S.v.precio).ok)S.v.entrada=0;refresh();toast(S.v.entrada===0?'Aval ICO activado: entrada al 0 %. Pon tus ingresos brutos y tu patrimonio':'Aval ICO activado, pero esta vivienda no lo cumple: mira los requisitos')}
+    if(need>S.v.entrada){S.v.entrada=need;entSync();toast(`Precio aplicado y entrada subida al ${String(need).replace('.',',')} % para que la cuota te cuadre`)}else toast('Precio aplicado a las tres calculadoras');refresh()}
+  if(a==='icoOn'){S.v.ico=true;if(icoInfo(S.v.precio).ok){S.v.entrada=0;entSync()}refresh();toast(S.v.entrada===0?'Aval ICO activado: entrada al 0 %. Pon tus ingresos brutos y tu patrimonio':'Aval ICO activado, pero esta vivienda no lo cumple: mira los requisitos')}
   if(a==='plazoB'){const p=Math.max(1,EDAD_FIN-S.v.edad);plazo0=S.v.plazo;S.v.plazo=p;S.h.offers.forEach(o=>o.prods.forEach(q=>{if(q.hasta>=plazo0)q.hasta=p}));plazo0=null;renderOffers();refresh();toast('Plazo de '+anos(p))}
   if(a==='rebajaOn'){S.v.rebaja=true;refresh()}
   if(a==='rebajaTog'){S.v.rebaja=!S.v.rebaja;refresh();X.itp()}
@@ -1732,7 +1773,7 @@ $('btnMode').onclick=()=>{const m=document.documentElement.classList.contains('m
 
 /* ---------- orquestación ---------- */
 let LAST={};
-function refresh(skip){fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();renderBroker();renderMres();fitSoon()}
+function refresh(skip){syncAll();fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();renderBroker();renderMres();fitSoon()}
 /* Barra de resultado fija en el móvil: el número clave de la pestaña siempre a la vista mientras rellenas datos */
 function renderMres(){const b=$('mres');if(!b)return;const t=S.tab;let h='';
   if(t==='cuanto'&&LAST.r1){const R=LAST.r1;h=`<span>Puedes comprar hasta</span><b class="num">${eur(R.max)}</b><i class="${R.ok?'good':'bad'}">${R.ok?'La que miras te llega':'La que miras no te llega'}</i>`}
@@ -1867,7 +1908,7 @@ function buildPdf(){
   const step=R3.H>15?Math.ceil(R3.H/15):1;
   TABLE(['Año','Valor casa','Deuda','Comprando','Alquilando','Diferencia'],R3.Y.slice(1).filter(q=>q.y%step===0||q.y===R3.H).map(q=>[q.y,eur(q.valor),eur(q.deuda),eur(q.compra),eur(q.alq),(q.compra>=q.alq?'+':'-')+eur(Math.abs(q.compra-q.alq))]),{cols:{1:{halign:'right'},2:{halign:'right'},3:{halign:'right'},4:{halign:'right'},5:{halign:'right',fontStyle:'bold'}}});
 
-  const K5=inv(),usaInv=S.tab==='invertir'||JSON.stringify(S.i)!==JSON.stringify(EXAMPLE.i);let sec=4;
+  const K5=inv(),usaInv=S.tab==='invertir'||S.iTouched;let sec=4;
   if(usaInv){
   if(y>215){doc.addPage();y=20}else y+=2;
   H1(sec++,'Invertir para alquilar');
