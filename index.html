@@ -573,6 +573,18 @@ html.m .mres i{grid-column:2;grid-row:1}
 .inp .unit:hover{background:var(--in-focus);color:var(--on-accent)}
 html.m .lk{width:24px;height:24px}html.m .lk svg{width:15px;height:15px}
 html.m .inp .unit{padding:4px 10px;font-size:14px}
+.cc-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cc-head .seg-ctl{min-width:260px}
+html.web .costbox{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+.costbox{display:grid;gap:10px;align-content:start}
+.ct-big{display:grid;gap:2px}.ct-big span{font-size:12.5px;color:var(--muted)}.ct-big em{font-style:normal;font-size:12px;color:var(--muted)}
+.ct-big .big{font-size:clamp(26px,2.8vw,36px)}
+.ct-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px}
+.ct-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:center;border:0;background:var(--field);border-radius:10px;padding:7px 10px;text-align:left;font-size:12.5px}
+.ct-row:hover,.ct-h:hover{background:var(--accent-soft)}
+.ct-row i{width:12px;height:12px;border-radius:3px}
+.ct-h{border:0;background:var(--field);border-radius:10px;padding:8px 12px;text-align:left;font-size:12.5px;color:var(--muted)}.ct-h b{color:var(--ink)}
+html.m .cc-head .seg-ctl{min-width:0;width:100%}
 </style>
 
 <header class="band">
@@ -633,7 +645,8 @@ html.m .inp .unit{padding:4px 10px;font-size:14px}
       <div class="right3">
         <div class="card hero" id="r3hero"></div>
         <div class="kpis" id="r3kpis"></div>
-        <div class="card chartcard"><h2>Tu patrimonio en cada caso</h2><div class="chartbox" id="r3chart"></div><div class="legend" id="r3legend"></div></div>
+        <div class="card chartcard"><div class="cc-head"><h2 id="r3title">Tu patrimonio en cada caso</h2><div class="seg-ctl sm" role="group" aria-label="Qué ver"><button data-v3="coste">Coste de la casa</button><button data-v3="pat">Comprar o alquilar</button></div></div>
+          <div class="chartbox" id="r3chart"></div><div class="legend" id="r3legend"></div><div class="costbox" id="r3cost" hidden></div></div>
       </div>
     </div>
   </section>
@@ -759,7 +772,7 @@ const EXAMPLE={
   i:{precio:120000,reforma:6000,fin:70,tin:3.2,plazo:25,alquiler:750,vacio:1,ibi:250,comunidad:50,seguro:320,mant:450,gestion:0,irpf:30,reduccion:50,constr:60,objetivo:5,anos:10,ccaa:'Asturias',nueva:false,tensionada:false},
   r:{alquiler:850,ipc:2.5,reval:2.5,rent:5,horizonte:15,ibi:350,comunidad:60,seguro:250,mant:0.5,venta:3,reinvierte:true},
   lk:{'i.ccaa':true,'i.nueva':true,'i.precio':true,'i.tin':true,'i.plazo':true,'i.alquiler':true,'i.ibi':true,'i.comunidad':true,'i.mant':true},
-  iTouched:false,
+  iTouched:false,v3:'coste',
   tab:'cuanto'
 };
 const clone=o=>JSON.parse(JSON.stringify(o));
@@ -887,6 +900,7 @@ document.addEventListener('focusout',e=>{const el=e.target;if(el.dataset&&el.dat
   // los seguros que se mantenían todo el plazo siguen al nuevo plazo; los que tenían años concretos no se tocan
   if(el.dataset.bind==='v.plazo'&&plazo0!=null&&plazo0!==S.v.plazo){const o0=plazo0;S.h.offers.forEach(o=>o.prods.forEach(p=>{if(p.hasta>=o0)p.hasta=S.v.plazo}));plazo0=null;renderOffers();refresh()}}});
 document.addEventListener('click',e=>{
+  const v3=e.target.closest('[data-v3]');if(v3){S.v3=v3.dataset.v3;refresh();return}
   const n=e.target.closest('[data-nueva]');if(n){S.v.nueva=n.dataset.nueva==='1';refresh();return}
   const ni=e.target.closest('[data-inueva]');if(ni){S.i.nueva=ni.dataset.inueva==='1';S.lk['i.nueva']=false;S.iTouched=true;refresh();return}
   const un=e.target.closest('[data-unit]');if(un){e.preventDefault();S.v.entUnit=S.v.entUnit==='eur'?'pct':'eur';entSync();refresh();toast(S.v.entUnit==='eur'?'Entrada en euros':'Entrada en porcentaje');return}
@@ -1432,6 +1446,16 @@ function calc3(ov={}){
   const irrec={int:yr[0]?yr[0].int:0,gastos:g1,oport:inicial*rent/100,reval:P*rv};
   return {H,P,c,inicial,L,cuota,Y,yr,end,dif,be,irrec,alq1:S.r.alquiler,gastosMes1:g1/12,apA,apC};
 }
+/* Lo que te cuesta la casa en Yrs años: precio pagado, impuestos y gastos de compra, intereses y gastos de propietario */
+function costeCasa(Yrs){
+  const P=S.v.precio,c=compraCostes(P),L=hipoteca(),n=Math.round(S.v.plazo*12),r=S.v.tin/1200,cuota=cuotaFor(L,S.v.tin,S.v.plazo),g=S.r.ipc/100,rv=S.r.reval/100;
+  let B=L,int=0,cap=0,ibi=0,com=0,seg=0,mant=0,cuotas=0;
+  for(let m=1;m<=Yrs*12;m++){const y=Math.ceil(m/12)-1,f=Math.pow(1+g,y),valor=P*Math.pow(1+rv,m/12);
+    if(m<=n&&B>0.005){const i=B*r,pay=Math.min(cuota,B+i);int+=i;cap+=pay-i;cuotas+=pay;B=Math.max(0,B-(pay-i))}
+    ibi+=S.r.ibi*f/12;com+=S.r.comunidad*f;seg+=S.r.seguro*f/12;mant+=valor*S.r.mant/1200}
+  const compra=c.imp+c.not+c.com+c.fijos,propio=ibi+com+seg+mant;
+  return {Yrs,P,c,entrada:c.entrada,compra,L,cuota,cuotas,int,cap,deuda:B,ibi,com,seg,mant,propio,pagado:c.entrada+compra+cuotas+propio,total:c.entrada+compra+cap+int+propio+B,valor:P*Math.pow(1+rv,Yrs)};
+}
 /* Revalorización anual a partir de la cual comprar gana al final del horizonte */
 function revalEquilibrio(){const f=x=>calc3({reval:x}).dif;if(f(-10)>=0)return -Infinity;if(f(20)<0)return Infinity;let lo=-10,hi=20;for(let k=0;k<40;k++){const m=(lo+hi)/2;if(f(m)>=0)hi=m;else lo=m}return hi}
 function chart3(R,W,Hh){
@@ -1465,7 +1489,25 @@ function render3(){
     ${R.c.im.usa?`<button class="pill good" data-x="itp">Con ITP reducido</button>`:''}
     ${LAST.r1&&!LAST.r1.ok?`<button class="pill bad" data-gotab="cuanto">Ojo: en «Mi presupuesto» esta compra no te llega</button>`:''}</div>`;
   $('r3legend').innerHTML=`<span><i style="background:var(--c1)"></i>Comprando: casa neta de venta − deuda + lo invertido</span><span><i style="background:var(--c4)"></i>Alquilando: dinero de la compra invertido + ahorro mensual</span><span>Pincha el gráfico para ver el año a año</span>`;
-  drawChart3(R);
+  // dos vistas: lo que te cuesta la casa / patrimonio comprando o alquilando
+  const v3=S.v3==='pat'?'pat':'coste';
+  document.querySelectorAll('[data-v3]').forEach(b=>b.classList.toggle('on',b.dataset.v3===v3));
+  $('r3chart').hidden=v3!=='pat';$('r3legend').hidden=v3!=='pat';$('r3cost').hidden=v3==='pat';
+  $('r3title').textContent=v3==='pat'?'Tu patrimonio en cada caso':'Lo que te cuesta la casa';
+  const CT=costeCasa(Math.max(1,Math.round(S.v.plazo))),CH=costeCasa(R.H);R.CT=CT;R.CH=CH;
+  const parts=[['Precio de la vivienda',CT.P,'var(--c1)','cPre'],[CT.c.im.nombre+', notaría y gastos de compra',CT.compra,'var(--c4)','cCom'],['Intereses de la hipoteca',CT.int,'var(--c2)','cInt'],['IBI, comunidad y seguro',CT.ibi+CT.com+CT.seg,'var(--c3)','cProp'],['Mantenimiento',CT.mant,'var(--c5)','cProp']];
+  $('r3cost').innerHTML=`<div class="ct-big"><span>La de <b class="num">${eur(CT.P)}</b> te cuesta, hasta terminar de pagarla en ${anos(CT.Yrs)}</span><button class="big num" data-x="cTot">${eur(CT.total)}</button><em>${eur(CT.total/(CT.Yrs*12))} al mes de media · ${nf(2).format(CT.total/CT.P)} € por cada euro del precio</em></div>
+    <div class="stackbar">${parts.map(p=>`<button data-x="${p[3]}" title="${p[0]} ${eur(p[1])}" aria-label="${p[0]} ${eur(p[1])}" style="flex:${Math.max(0,p[1])};background:${p[2]}"></button>`).join('')}</div>
+    <div class="ct-rows">${parts.map(p=>`<button class="ct-row" data-x="${p[3]}"><i style="background:${p[2]}"></i><span>${p[0]}</span><b class="num">${eur(p[1])}</b></button>`).join('')}</div>
+    <button class="ct-h" data-x="cHor"><span>En los <b>${anos(R.H)}</b> que piensas vivir en ella pagas <b class="num">${eur(CH.pagado)}</b>${CH.deuda>1?` y aún debes <b class="num">${eur(CH.deuda)}</b>`:''}. La casa valdría entonces <b class="num">${eur(CH.valor)}</b>.</span></button>`;
+  if(v3==='pat')drawChart3(R);
+  const stp=(C)=>`<div class="steps">${step('Precio (entrada + capital que devuelves)',eur(C.entrada+C.cap+C.deuda))}${step(C.c.im.nombre+' ('+pct(C.c.im.tipoEf)+'), notaría, comisión y fijos',eur(C.compra))}${step(`Intereses: hipoteca de ${eur(C.L)} al ${pct(S.v.tin)}`,eur(C.int))}${step(`IBI (${eur(S.r.ibi)}/año), comunidad (${eur(S.r.comunidad)}/mes) y seguro (${eur(S.r.seguro)}/año), subiendo con el IPC`,eur(C.ibi+C.com+C.seg))}${step(`Mantenimiento: ${pct(S.r.mant,1)} del valor cada año`,eur(C.mant))}${step('Total',eur(C.total),'tot')}</div>`;
+  X.cTot=()=>modal('Lo que te cuesta la casa',`<p>Todo lo que pagas por la vivienda hasta terminar la hipoteca en ${anos(CT.Yrs)}, no solo el precio.</p>${stp(CT)}<p class="note">No incluye los seguros vinculados del banco (míralos en «Comparar») ni lo que valdrá la casa al final, que es tuya: ${eur(CT.valor)} si sube un ${pct(S.r.reval,1)} al año.</p>`);
+  X.cPre=()=>modal('Precio de la vivienda',`<div class="steps">${step('Entrada que pones al comprar',eur(CT.entrada))}${step('Capital que devuelves con las cuotas',eur(CT.cap+CT.deuda))}${step('Precio',eur(CT.P),'tot')}</div><p>Es la parte que no se pierde: se convierte en tu casa.</p>`);
+  X.cCom=X.itp;
+  X.cInt=()=>modal('Intereses de la hipoteca',`<div class="steps">${step('Hipoteca',eur(CT.L))}${step('Cuota',eur2(CT.cuota)+'/mes')}${step('Cuotas en '+anos(CT.Yrs),eur(CT.cuotas))}${step('− Capital devuelto',eur(CT.cap))}${step('Intereses',eur(CT.int),'tot')}</div><p class="note">Con el TIN de ${pct(S.v.tin)}. Para ofertas reales con seguros y comisiones, usa «Comparar».</p>`);
+  X.cProp=()=>modal('Gastos de propietario',`<p>Lo que paga cualquier propietario cada año, subiendo con el IPC (${pctS(S.r.ipc)}):</p><div class="steps">${step('IBI',eur(CT.ibi))}${step('Comunidad',eur(CT.com))}${step('Seguro de hogar',eur(CT.seg))}${step('Mantenimiento',eur(CT.mant))}${step('Total en '+anos(CT.Yrs),eur(CT.propio),'tot')}</div>`);
+  X.cHor=()=>modal(`En los ${anos(R.H)} que vives en ella`,`<div class="steps">${step('Entrada',eur(CH.entrada))}${step('Impuestos y gastos de compra',eur(CH.compra))}${step('Cuotas de la hipoteca',eur(CH.cuotas))}${step('IBI, comunidad, seguro y mantenimiento',eur(CH.propio))}${step('Pagas en total',eur(CH.pagado),'tot')}${step('Hipoteca que aún debes',eur(CH.deuda))}${step('Valor de la casa entonces',eur(CH.valor))}</div><p class="note">Para comparar con alquilar, cambia a «Comprar o alquilar»: ahí se cuenta también lo que ganaría tu dinero invertido.</p>`);
   $('r3kpis').innerHTML=`
     <button class="kpi card" data-x="mes3"><small>Pago mensual comprando</small><strong class="num">${eur(R.cuota+R.gastosMes1)}</strong><em>cuota ${eur(R.cuota)} + gastos ${eur(R.gastosMes1)}</em></button>
     <button class="kpi card" data-x="mes3"><small>Pago mensual alquilando</small><strong class="num">${eur(R.alq1)}</strong><em>el primer año</em></button>
@@ -1785,7 +1827,7 @@ try{const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.target.closest('.
 $('mres').onclick=()=>{const hero=document.querySelector('.pane:not([hidden]) .hero');if(hero)hero.scrollIntoView({behavior:'smooth',block:'start'})};
 /* Encaje en pantalla: si algo no cabe, se reduce la escala hasta un mínimo legible; por debajo, la tarjeta se desplaza por dentro */
 const ONE=matchMedia('(min-width:801px) and (min-height:540px)');let fitT=null,Z=1;
-function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .scroll, .pane:not([hidden]) .offer').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
+function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .scroll, .pane:not([hidden]) .offer, .pane:not([hidden]) .costbox:not([hidden])').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
 function fit(){const root=document.documentElement;if(!ONE.matches||root.classList.contains('m')){root.style.zoom='';Z=1;return}
   root.style.zoom=1;let z=1;if(need()<0.999){let lo=0.78,hi=1;root.style.zoom=lo;if(need()>=0.999){for(let k=0;k<7;k++){const m=(lo+hi)/2;root.style.zoom=m;if(need()>=0.999)lo=m;else hi=m}}z=lo;root.style.zoom=z}
   Z=z;if(LAST.r3)drawChart3(LAST.r3,false)}
@@ -1889,6 +1931,8 @@ function buildPdf(){
   if(y>190){doc.addPage();y=20}else y+=2;
   H1(3,'¿Comprar o alquilar?');
   BIG(`Si vives ${anos(R3.H)} en la vivienda`,R3.dif>=0?'Te compensa comprar':'Te compensa alquilar',`${R3.dif>=0?'Comprar':'Alquilar'} te deja ${eur(Math.abs(R3.dif))} más`+(R3.be?` · comprar gana desde el año ${R3.be}`:''));
+  {const CT=costeCasa(Math.max(1,Math.round(S.v.plazo)));P(`Lo que te cuesta la casa de ${eur(CT.P)} hasta terminar de pagarla en ${anos(CT.Yrs)}: ${eur(CT.total)} (${eur(CT.total/(CT.Yrs*12))} al mes de media).`,9.5,INK,true);
+    TABLE(['Concepto','Importe'],[['Precio de la vivienda',eur(CT.P)],[CT.c.im.nombre+', notaría y gastos de compra',eur(CT.compra)],['Intereses de la hipoteca',eur(CT.int)],['IBI, comunidad y seguro',eur(CT.ibi+CT.com+CT.seg)],['Mantenimiento',eur(CT.mant)],['Total',eur(CT.total)]],{cols:{1:{halign:'right',fontStyle:'bold'}}})}
   TABLE(['Supuestos','','',''],[
     ['Alquiler al mes',eur(S.r.alquiler),'IPC (sube alquiler y gastos)',pctS(S.r.ipc)],
     ['IBI · comunidad · seguro',`${eur(S.r.ibi)}/año · ${eur(S.r.comunidad)}/mes · ${eur(S.r.seguro)}/año`,'Mantenimiento',pctS(S.r.mant)+' del valor'],
