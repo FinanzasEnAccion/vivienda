@@ -591,6 +591,38 @@ html.web .costbox{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
 html.m .ct-tog i{width:20px;height:20px}html.m .ct-row{padding:8px 10px}
 .ct-h{border:0;background:var(--field);border-radius:10px;padding:8px 12px;text-align:left;font-size:12.5px;color:var(--muted)}.ct-h b{color:var(--ink)}
 html.m .cc-head .seg-ctl{min-width:0;width:100%}
+.pname .pd b{font-weight:600}.pname .pd b.neg{color:var(--bad)}.pname .pd b.pos{color:var(--good)}
+.stress.cuo{background:var(--accent-soft)}.stress.cuo b{color:var(--accent)}
+.stp-w{padding:0 4px!important}
+.stp{flex:none;width:22px;height:22px;border:0;border-radius:6px;background:var(--in-bg);color:var(--in-focus);font-weight:800;font-size:15px;line-height:1;padding:0;display:grid;place-items:center}
+.stp:hover{background:var(--in-focus);color:var(--on-accent)}
+.stp-w input{text-align:center}
+.needrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.nd{border:0;border-radius:12px;padding:9px 11px;text-align:left;display:grid;gap:1px}
+.nd small{font-size:11.5px;color:var(--muted)}.nd b{font-family:var(--f-display);font-size:17px}.nd em{font-style:normal;font-size:11.5px;color:var(--muted)}
+.nd.good{background:var(--good-soft)}.nd.good b{color:var(--good)}.nd.bad{background:var(--bad-soft)}.nd.bad b{color:var(--bad)}
+.pz-t{display:grid;gap:4px}
+.pz-h,.pz-r{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr 1fr 1fr;gap:8px;align-items:center;font-size:12.5px}
+.pz-h{font-size:11px;color:var(--muted);padding:0 10px}.pz-h span:not(:first-child),.pz-r>:not(:first-child){text-align:right}
+.pz-r{border:0;background:var(--field);border-radius:10px;padding:7px 10px;text-align:left}
+.pz-r:hover{background:var(--accent-soft)}.pz-r.on{box-shadow:inset 0 0 0 2px var(--good);background:var(--good-soft)}
+.pz-w{font-style:normal;font-size:10.5px;color:var(--warn);display:block}
+html.m .stp{width:34px;height:34px;font-size:18px}html.m .pz-r{padding:10px 12px}
+.ct-years{flex-wrap:wrap;height:auto!important}
+html.m .ct-years{display:grid;grid-template-columns:1fr 1fr}
+.ct-vs{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 10px;align-items:center;border:0;background:var(--field);border-radius:12px;padding:10px 12px;text-align:left;font-size:12.5px}
+.ct-vs:hover{background:var(--accent-soft)}
+.vs-l{font-weight:600}.vs-t{height:14px;background:var(--card);border-radius:5px;overflow:hidden}.vs-t i{display:block;height:100%;border-radius:5px}
+.ct-vs em{grid-column:1 / -1;font-style:normal;font-size:11.5px;color:var(--muted)}
+.chips{display:inline-flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--muted)}
+.chip.on{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.g3.dim{opacity:.4;pointer-events:none}
+.cs-save{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.cs-save .inp{flex:1;min-width:200px}
+.cs-t{max-height:none}.cs-t td,.cs-t th{white-space:normal;text-align:left;vertical-align:top}.cs-t td:first-child{color:var(--muted);font-weight:600}
+.cs-t td.bestc{background:var(--good-soft);font-weight:700}
+.cs-t .btn{padding:4px 10px;font-size:12px;margin:2px 0}
+html.m .chip{padding:9px 13px;font-size:13px}
 </style>
 
 <header class="band">
@@ -609,7 +641,8 @@ html.m .cc-head .seg-ctl{min-width:0;width:100%}
     <div class="htools">
       <button class="hbtn modebtn" id="btnMode" title="Cambiar entre versión web y versión móvil"></button>
       <button class="hbtn pdf" id="btnPdf" hidden title="Descargar un informe en PDF con tus datos"><span class="pdfw">Informe </span>PDF</button>
-      <button class="hbtn" id="btnCopy" title="Copiar un resumen para compartir">Copiar</button>
+      <button class="hbtn" id="btnCasos" title="Guardar casos y compararlos">Mis casos</button>
+      <button class="hbtn" id="btnCopy" hidden title="Copiar un resumen para compartir">Copiar</button>
       <button class="hbtn" id="btnReset" title="Volver a los datos de ejemplo">Reiniciar</button>
       <a class="xbtn" title="Sígueme en X: @BuscandolaLF" aria-label="Sígueme en X: @BuscandolaLF" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.9 2.3h7l4.8 6.4 5.5-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg><span class="xh">@BuscandolaLF</span></a>
     </div>
@@ -627,8 +660,8 @@ html.m .cc-head .seg-ctl{min-width:0;width:100%}
       </div>
       <div class="right1">
         <div class="card hero" id="r1hero"></div>
-        <div class="card scroll"><h2>Qué te frena antes</h2><div class="limits" id="r1lim"></div><h2 style="margin-top:18px">Lo que mira el banco</h2><div class="bk-list" id="r1bank"></div><h2 id="r1useT" style="margin-top:18px">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div></div>
-        <div class="card scroll"><h2>Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px">Fuentes: <a href="https://hipotips.com/wp-content/uploads/2026/01/Tabla-oficial-de-ITP-por-CCAA-2026-tipos-generales-y-reducidos-.pdf" target="_blank" rel="noopener">tabla ITP 2026 por comunidades (Hipotips)</a> · <a href="https://www.inmofiscal.com/itp-comunidades-autonomas" target="_blank" rel="noopener">InmoFiscal</a> · aval ICO: <a href="https://www.ico.es/en/linea-avales-hipoteca-primera-vivienda" target="_blank" rel="noopener">ICO</a>, <a href="https://www.merca2.es/2026/06/25/avales-ico-2026-criterios-jovenes-2404920/" target="_blank" rel="noopener">Merca2</a></div></div>
+        <div class="card scroll"><h2>Qué te frena antes</h2><div class="limits" id="r1lim"></div><h2 style="margin-top:18px">Lo que mira el banco</h2><div class="bk-list" id="r1bank"></div><h2 style="margin-top:18px">Según el plazo</h2><div id="r1plazo"></div></div>
+        <div class="card scroll"><h2 id="r1useT">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div><h2 style="margin-top:18px">Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px">Fuentes: <a href="https://hipotips.com/wp-content/uploads/2026/01/Tabla-oficial-de-ITP-por-CCAA-2026-tipos-generales-y-reducidos-.pdf" target="_blank" rel="noopener">tabla ITP 2026 por comunidades (Hipotips)</a> · <a href="https://www.inmofiscal.com/itp-comunidades-autonomas" target="_blank" rel="noopener">InmoFiscal</a> · aval ICO: <a href="https://www.ico.es/en/linea-avales-hipoteca-primera-vivienda" target="_blank" rel="noopener">ICO</a>, <a href="https://www.merca2.es/2026/06/25/avales-ico-2026-criterios-jovenes-2404920/" target="_blank" rel="noopener">Merca2</a></div></div>
       </div>
     </div>
   </section>
@@ -663,7 +696,7 @@ html.m .cc-head .seg-ctl{min-width:0;width:100%}
       <div class="card scroll incard">
         <div class="inhead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><b>El piso</b><span class="hint lkhint" id="lkhint"></span></div>
         <div class="grp"><div class="gtitle">Compra</div><div class="g3 wide1" id="g5a"></div></div>
-        <div class="grp"><div class="gtitle">Hipoteca</div><div class="g3" id="g5b"></div></div>
+        <div class="grp"><div class="gtitle">Hipoteca</div><div class="checks" id="g5bchk"></div><div class="g3" id="g5b"></div></div>
         <div class="grp"><div class="gtitle">Alquiler y gastos al año</div><div class="g3 wide1" id="g5c"></div></div>
         <div class="grp"><div class="gtitle">Impuestos y objetivo</div><div class="checks" id="g5chk"></div><div class="g3" id="g5d"></div></div>
       </div>
@@ -682,7 +715,7 @@ html.m .cc-head .seg-ctl{min-width:0;width:100%}
       <div class="card mkt-ctx" id="m4ctx"></div>
     </div>
     <div class="card mkt-list">
-      <div class="mkt-head"><div class="seg-ctl sm" id="m4filter" role="group" aria-label="Tipo"></div><span class="hint" id="m4hint"></span></div>
+      <div class="mkt-head"><div class="seg-ctl sm" id="m4filter" role="group" aria-label="Tipo"></div><span class="chips" id="m4chips"></span><span class="hint" id="m4hint"></span></div>
       <div class="tblwrap mkt" id="m4table"></div>
     </div>
   </section>
@@ -775,10 +808,10 @@ const EXAMPLE={
       {n:'Nómina',b:0.20,c:0,s:0,m:0,hasta:30,on:true},
       {n:'Seguro de hogar',b:0.15,c:320,s:2,m:220,hasta:30,on:true},
       {n:'Seguro de vida',b:0.15,c:380,s:4,m:190,hasta:30,on:false}]}]},
-  i:{precio:120000,reforma:6000,fin:70,tin:3.2,plazo:25,alquiler:750,vacio:1,ibi:250,comunidad:50,seguro:320,mant:450,gestion:0,irpf:30,reduccion:50,constr:60,objetivo:5,anos:10,ccaa:'Asturias',nueva:false,tensionada:false},
+  i:{precio:120000,reforma:6000,fin:70,tin:3.2,plazo:25,alquiler:750,vacio:1,ibi:250,comunidad:50,seguro:320,mant:450,gestion:0,irpf:30,reduccion:50,constr:60,objetivo:5,anos:10,ccaa:'Asturias',nueva:false,tensionada:false,contado:false},
   r:{alquiler:850,ipc:2.5,reval:2.5,rent:5,horizonte:15,ibi:350,comunidad:60,seguro:250,mant:0.5,venta:3,reinvierte:true},
   lk:{'i.ccaa':true,'i.nueva':true,'i.precio':true,'i.tin':true,'i.plazo':true,'i.alquiler':true,'i.ibi':true,'i.comunidad':true,'i.mant':true},
-  iTouched:false,v3:'coste',ct:{pre:true,com:true,int:true,prop:true,mant:true},
+  iTouched:false,v3:'coste',ctY:0,mf2:{dan:false,sinv:false},ct:{pre:true,com:true,int:true,prop:true,mant:true},
   tab:'cuanto'
 };
 const clone=o=>JSON.parse(JSON.stringify(o));
@@ -864,7 +897,8 @@ function syncAll(){
   for(const k in LINKS)if(S.lk[k]!==false)set(k,LINKS[k][1]());
 }
 const LK=b=>LINKS[b]?`<button type="button" class="lk" data-lk="${b}"></button>`:'';
-function F(bind,label,unit,fmt='dec',extra='',q='',ph=''){const id='in'+(uid++);const u=bind==='v.entrada'?`<button type="button" class="unit" data-unit="1" title="Cambiar entre % y euros">%</button>`:`<span>${unit}</span>`;return `<div class="fld"><label for="${id}"><span class="lt">${label}</span>${Q(q)}${LK(bind)}${extra}</label><div class="inp"><input id="${id}" data-bind="${bind}" data-fmt="${fmt}" inputmode="decimal"${ph?` placeholder="${ph}" data-zero="1"`:''}>${u}</div></div>`}
+function F(bind,label,unit,fmt='dec',extra='',q='',ph=''){const id='in'+(uid++);const u=bind==='v.entrada'?`<button type="button" class="unit" data-unit="1" title="Cambiar entre % y euros">%</button>`:`<span>${unit}</span>`;
+  const st=bind==='v.precio';return `<div class="fld"><label for="${id}"><span class="lt">${label}</span>${Q(q)}${LK(bind)}${extra}</label><div class="inp${st?' stp-w':''}">${st?'<button type="button" class="stp" data-step="-10000" title="10.000 € menos" aria-label="10.000 € menos">−</button>':''}<input id="${id}" data-bind="${bind}" data-fmt="${fmt}" inputmode="decimal"${ph?` placeholder="${ph}" data-zero="1"`:''}>${u}${st?'<button type="button" class="stp" data-step="10000" title="10.000 € más" aria-label="10.000 € más">+</button>':''}</div></div>`}
 function CCAA(bind='v.ccaa',label='Comunidad autónoma'){const id='in'+(uid++);return `<div class="fld"><label for="${id}"><span class="lt">${label}</span>${LK(bind)}</label><div class="inp"><select id="${id}" data-bind="${bind}">${Object.keys(ITP).map(k=>`<option>${k}</option>`).join('')}</select></div></div>`}
 const SW=(bind,label,q='')=>`<span class="chkw"><button class="chk" data-sw="${bind}" role="switch"><span class="sw"></span><span>${label}</span></button>${Q(q)}</span>`;
 const NUEVA=`<div class="seg-ctl" role="group" aria-label="Tipo de vivienda"><button data-nueva="0">Segunda mano</button><button data-nueva="1">Obra nueva</button></div>`;
@@ -875,14 +909,14 @@ const REDSEL=()=>{const id='in'+(uid++);return `<div class="fld" style="grid-col
 $('g1a').className='g2';$('g1a').innerHTML=F('a.ahorros','Ahorros','€','eur','','ahorros')+F('a.colchon','Colchón','€','eur','','colchon')+F('a.ingresos','Ingresos netos','€/mes','eur','','ingresos')+F('a.deudas','Otras cuotas','€/mes','eur','','deudas')+F('a.esfuerzo','Máximo para cuotas','% ingresos','dec','','esf')+F('a.titulares','Titulares','personas','int','','titulares')+F('a.ahorroMes','Ahorras al mes','€','eur','','ahorroMes')+F('v.edad','Edad','años','int');
 $('g1chk').innerHTML=SW('v.primera','Primera vivienda')+SW('v.rural','Municipio pequeño')+SW('v.ico','Uso el aval ICO');
 $('g1ico').innerHTML=F('a.brutos','Ingresos brutos/año','€ por titular','eur','','brutos')+F('a.patrimonio','Patrimonio','€ por titular','eur','','patrimonio');
-$('g1b').innerHTML=NUEVA+`<div class="g3 wide1"><div style="grid-column:span 2">${CCAA()}</div>${F('v.plazo','Plazo','años','int','','plazo')}${F('v.precio','Precio','€','eur')}${F('v.entrada','Entrada','%','dec','','entrada')}${F('v.tin','TIN estimado','%','dec','','tin')}${F('v.tasacion','Tasación','€','eur','','tasacion','= precio')}${F('v.notaria','Notaría','%','dec','','notaria')}${F('v.comision','Comisión','%','dec','','comision')}${F('v.fijos','Tasación y fijos','€','eur','','fijos')}</div>`;
+$('g1b').innerHTML=NUEVA+`<div class="g3 wide1"><div style="grid-column:span 2">${CCAA()}</div>${F('v.plazo','Plazo','años','int','','plazo')}<div style="grid-column:span 2">${F('v.precio','Precio','€','eur')}</div>${F('v.entrada','Entrada','%','dec','','entrada')}${F('v.tin','TIN estimado','%','dec','','tin')}${F('v.tasacion','Tasación','€','eur','','tasacion','= precio')}${F('v.notaria','Notaría','%','dec','','notaria')}${F('v.comision','Comisión','%','dec','','comision')}${F('v.fijos','Tasación y fijos','€','eur','','fijos')}</div>`;
 $('g2').innerHTML=F('v.precio','Precio','€','eur')+F('v.entrada','Entrada','%','dec','','entrada')+`<div class="fld"><label>Hipoteca</label><button class="derived num" id="h_imp" data-x="himp"></button></div>`+F('v.plazo','Plazo','años','int','','plazo')+F('h.eur','Euríbor','%','dec','<span class="tag">supuesto</span>','eur')+F('r.ipc','IPC','%','dec','<span class="tag">supuesto</span>','ipc');
 $('g5a').innerHTML=`<div style="grid-column:1 / -1;display:flex;gap:6px;align-items:center"><div style="flex:1">${NUEVA_I}</div>${LK('i.nueva')}</div><div style="grid-column:span 2">${CCAA('i.ccaa','Comunidad del piso')}</div>`+F('i.precio','Precio','€','eur')+F('i.reforma','Reforma','€','eur')+`<div class="fld" style="grid-column:span 2"><label>Impuestos y gastos de compra</label><button class="derived num" style="font-size:14px" data-x="i_compra" id="i_gastos"></button></div>`;
 $('g5b').innerHTML=F('i.fin','Financiación','%','dec','','fin')+F('i.tin','TIN','%','dec','','tin')+F('i.plazo','Plazo','años','int');
 $('g5c').innerHTML=F('i.alquiler','Alquiler','€/mes','eur')+F('i.vacio','Meses vacío','al año','dec','','vacio')+F('i.ibi','IBI','€/año','eur')+F('i.comunidad','Comunidad','€/mes','eur')+F('i.seguro','Seguros','€/año','eur')+F('i.gestion','Agencia','% alquiler','dec','','gestion')+F('i.mant','Reparaciones','€/año','eur','','mant');
-$('g5chk').innerHTML=SW('i.tensionada','Zona tensionada','tensionada');
+$('g5chk').innerHTML=SW('i.tensionada','Zona tensionada','tensionada');$('g5bchk').innerHTML=SW('i.contado','Lo compro al contado, sin hipoteca');
 $('g5d').innerHTML=F('i.irpf','Tu tipo IRPF','%','dec','','irpf')+REDSEL()+F('i.constr','Construcción','% del valor','dec','','constr')+F('i.objetivo','Objetivo','% neto','dec','','objetivo')+F('i.anos','Vender en','años','int');
-$('g3a').classList.add('wide1');$('g3a').innerHTML=F('v.precio','Precio','€','eur')+F('v.entrada','Entrada','%','dec','','entrada')+F('v.tin','TIN','%','dec','','tin')+F('v.plazo','Plazo','años','int','','plazo')+F('r.horizonte','Te quedas','años','int','','horizonte')+F('r.venta','Al vender','% gastos','dec','','venta');
+$('g3a').classList.add('wide1');$('g3a').innerHTML=`<div style="grid-column:span 2">${F('v.precio','Precio','€','eur')}</div>`+F('v.entrada','Entrada','%','dec','','entrada')+F('v.tin','TIN','%','dec','','tin')+F('v.plazo','Plazo','años','int','','plazo')+F('r.horizonte','Te quedas','años','int','','horizonte')+F('r.venta','Al vender','% gastos','dec','','venta');
 $('g3b').innerHTML=F('r.alquiler','Alquiler/mes','€','eur')+F('r.ibi','IBI/año','€','eur')+F('r.comunidad','Comunidad/mes','€','eur')+F('r.seguro','Seguro hogar/año','€','eur')+F('r.mant','Mantenimiento','% valor')+F('r.ipc','IPC','%','dec','','ipc');
 $('g3d').innerHTML=F('r.reval','Revalorización','%/año','dec','','reval')+F('r.rent','Rentabilidad','%/año','dec','','rent');$('g3chk').innerHTML=SW('r.reinvierte','Si vendo, compro otra vivienda habitual','reinv');
 
@@ -906,7 +940,10 @@ document.addEventListener('focusout',e=>{const el=e.target;if(el.dataset&&el.dat
   // los seguros que se mantenían todo el plazo siguen al nuevo plazo; los que tenían años concretos no se tocan
   if(el.dataset.bind==='v.plazo'&&plazo0!=null&&plazo0!==S.v.plazo){const o0=plazo0;S.h.offers.forEach(o=>o.prods.forEach(p=>{if(p.hasta>=o0)p.hasta=S.v.plazo}));plazo0=null;renderOffers();refresh()}}});
 document.addEventListener('click',e=>{
+  const sp=e.target.closest('[data-step]');if(sp){e.preventDefault();S.v.precio=Math.max(0,Math.round((S.v.precio+ +sp.dataset.step)/1000)*1000);refresh();toast('Precio: '+eur(S.v.precio));return}
+  const pz=e.target.closest('[data-plazo]');if(pz){const p=+pz.dataset.plazo,o0=S.v.plazo;S.v.plazo=p;S.h.offers.forEach(o=>o.prods.forEach(q=>{if(q.hasta>=o0)q.hasta=p}));renderOffers();refresh();toast('Plazo de '+anos(p));return}
   const v3=e.target.closest('[data-v3]');if(v3){S.v3=v3.dataset.v3;refresh();return}
+  const cty=e.target.closest('[data-cty]');if(cty){S.ctY=+cty.dataset.cty;refresh();return}
   const ct=e.target.closest('[data-ct]');if(ct){const k=ct.dataset.ct;S.ct[k]=S.ct[k]===false;refresh();return}
   const n=e.target.closest('[data-nueva]');if(n){S.v.nueva=n.dataset.nueva==='1';refresh();return}
   const ni=e.target.closest('[data-inueva]');if(ni){S.i.nueva=ni.dataset.inueva==='1';S.lk['i.nueva']=false;S.iTouched=true;refresh();return}
@@ -1038,7 +1075,8 @@ function calc1(){
   const okB=chk.esf&&chk.resto&&chk.plazo,falta=nd-S.a.ahorros,disp=S.a.ahorros-S.a.colchon;
   const gastos=c.imp+c.not+c.com+c.fijos,entradaHoy=P>0?Math.max(0,Math.min(100,(disp-gastos)/P*100)):0;
   const meses=falta>0&&S.a.ahorroMes>0?Math.ceil(falta/S.a.ahorroMes):null;
-  return {e:eEf/100,eEf,porAhorros,cuotaMax,cuotaEsf,cuotaRes,limCuota,plazoB,hipMax,porIngresos,soloIng,icoIng,max,entMax,extraMax,gMax:gastosP(max),bind,P,tas,c,need:nd,hip,cuota,esfuerzo,falta,disp,
+  const ingEsf=(cuota+S.a.deudas)/(S.a.esfuerzo/100),ingRes=cuota+S.a.deudas+RESID*S.a.titulares,ingNec=Math.max(ingEsf,ingRes);
+  return {ingEsf,ingRes,ingNec,e:eEf/100,eEf,porAhorros,cuotaMax,cuotaEsf,cuotaRes,limCuota,plazoB,hipMax,porIngresos,soloIng,icoIng,max,entMax,extraMax,gMax:gastosP(max),bind,P,tas,c,need:nd,hip,cuota,esfuerzo,falta,disp,
     em,ico,ltv,resto,cuotaE,esfE,chk,okB,ok:falta<=0&&okB,gastos,entradaHoy,meses};
 }
 function render1(){
@@ -1104,7 +1142,15 @@ function render1(){
   $('r1useT').textContent=`Lo que necesitas para la de ${eur(R.P)}`;
   $('r1use').innerHTML=`<div style="position:relative"><div class="stackbar">${parts.map(p=>`<button data-x="miras" title="${p[0]} ${eur(p[1])}" aria-label="${p[0]} ${eur(p[1])}" style="flex:none;width:${(p[1]/base*100).toFixed(2)}%;background:${p[2]}"></button>`).join('')}</div>
     <div style="position:absolute;top:-5px;bottom:-5px;left:${Math.min(99.7,S.a.ahorros/base*100).toFixed(2)}%;width:3px;border-radius:2px;background:var(--ink)"></div></div>
-    <div class="legend">${parts.map(p=>`<span><i style="background:${p[2]}"></i>${p[0]} <b class="num">${eur(p[1])}</b></span>`).join('')}<span><i style="background:var(--ink);width:3px"></i>Tus ahorros <b class="num">${eur(S.a.ahorros)}</b></span></div>`;
+    <div class="legend">${parts.map(p=>`<span><i style="background:${p[2]}"></i>${p[0]} <b class="num">${eur(p[1])}</b></span>`).join('')}<span><i style="background:var(--ink);width:3px"></i>Tus ahorros <b class="num">${eur(S.a.ahorros)}</b></span></div>
+    <div class="needrow"><button class="nd ${okA?'good':'bad'}" data-x="miras"><small>Ahorros que hacen falta</small><b class="num">${eur(R.need)}</b><em>tienes ${eur(S.a.ahorros)}</em></button>
+    <button class="nd ${R.ingNec<=S.a.ingresos?'good':'bad'}" data-x="ingNec"><small>Ingresos netos que hacen falta</small><b class="num">${eur(R.ingNec)}/mes</b><em>tienes ${eur(S.a.ingresos)}</em></button></div>`;
+  // según el plazo
+  const pzs=[...new Set([20,25,30,35,S.v.plazo])].filter(n=>n>=5&&n<=40).sort((a,b)=>a-b);
+  $('r1plazo').innerHTML=`<div class="pz-t"><div class="pz-h"><span>Plazo</span><span>Cuota</span><span>De tus ingresos</span><span>Intereses</span></div>${pzs.map(n=>{const q=cuotaFor(R.hip,S.v.tin,n),e=S.a.ingresos>0?(q+S.a.deudas)/S.a.ingresos*100:I,it=q*n*12-R.hip,viejo=S.v.edad+n>EDAD_FIN;
+    return `<button class="pz-r${n===S.v.plazo?' on':''}" data-plazo="${n}" title="${n===S.v.plazo?'Es el plazo que tienes':'Usar '+anos(n)}"><span>${anos(n)}${viejo?` <i class="pz-w">acabas a los ${S.v.edad+n}</i>`:''}</span><b class="num">${eur(q)}</b><span class="num" style="color:${e>S.a.esfuerzo?'var(--bad)':'var(--good)'}">${isFinite(e)?pct(e,0):'—'}</span><span class="num">${eur(it)}</span></button>`}).join('')}</div>
+    <p class="hint" style="margin:6px 0 0">Más años: cuota más baja, pero muchos más intereses. Pincha una fila para usar ese plazo.</p>`;
+  X.ingNec=()=>modal('Ingresos que hacen falta',`<div class="steps">${step('Cuota de la hipoteca',eur(R.cuota))}${step('+ Otras cuotas',eur(S.a.deudas))}${step(`Para que no pase del ${pctS(S.a.esfuerzo)} de tus ingresos`,eur(R.ingEsf)+'/mes')}${step(`Para que os queden ${eur(RESID)} por titular`,eur(R.ingRes)+'/mes')}${step('Ingresos netos que hacen falta (el mayor)',eur(R.ingNec)+'/mes','tot')}${step('Los tuyos',eur(S.a.ingresos)+'/mes')}</div>`);
 
   X.max=()=>modal('Precio máximo',`<p>Es el menor de dos topes: el que marcan tus ahorros y el que marca tu sueldo.</p>
     <div class="steps">${step('Tope por ahorros',eur(R.porAhorros))}${step('Tope por ingresos',isFinite(R.porIngresos)?eur(R.porIngresos):'sin tope')}${step('Precio máximo (el menor)',eur(R.max),'tot')}</div>
@@ -1253,7 +1299,7 @@ function renderOffers(){
         ${o.prods.map((p,j)=>`
         <div class="prow ${p.on?'':'off'}" data-j="${j}">
           <button class="sw ${p.on?'on':''}" data-act="tog" role="switch" aria-checked="${p.on}" aria-label="Contratar ${esc(p.n)}"></button>
-          <button class="pname" data-act="exp" data-what="prod" data-j="${j}"><span class="pn">${esc(p.n)}</span><span class="pd">−${dv(p.b)} % · ${p.c?eur(p.c)+'/año':'gratis'}${p.on&&p.hasta<S.v.plazo?' · '+anos(p.hasta):''}</span></button>
+          <button class="pname" data-act="exp" data-what="prod" data-j="${j}"><span class="pn">${esc(p.n)}</span><span class="pd">${(()=>{const ah=hipoteca()*p.b/1200,ex=(p.c-p.m)/12;return `ahorra ${eur(ah)}/mes · ${p.c?ex>0.5?`<b class="${ex>ah?'neg':'pos'}">pagas ${eur(ex)}/mes de más</b>`:'mismo precio que fuera':'gratis'}`})()}${p.on&&p.hasta<S.v.plazo?' · '+anos(p.hasta):''}</span></button>
           <button class="dot" data-act="exp" data-what="prod" data-j="${j}"></button>
         </div>`).join('')}
       </div>`;
@@ -1313,7 +1359,19 @@ function render2(){
   // prueba de estrés: Euríbor 2 puntos más alto en las que revisan
   const e0=S.h.eur;S.h.eur=e0+ESTRES;const ST=S.h.offers.map((o,i)=>o.tipo==='fija'?null:sim(o,AN[i].H));S.h.eur=e0;
   const edadTxt=S.v.edad+S.v.plazo>EDAD_FIN?`<div class="stress"><b>Ojo con el plazo:</b> con ${S.v.edad} años terminarías de pagar a los ${S.v.edad+S.v.plazo}; la mayoría de bancos solo llegan a los ${EDAD_FIN}. <button class="btn" data-act="plazoB">Usar ${anos(Math.max(1,EDAD_FIN-S.v.edad))}</button></div>`:'';
-  const stressTxt=edadTxt+(ST.some(Boolean)?`<button class="stress" data-x="stress2"><b>Si el Euríbor sube ${ESTRES} puntos:</b> ${S.h.offers.map((o,i)=>ST[i]?`${esc(o.nombre)} +${eur(ST[i].total-AN[i].cur.total)} (cuota ${eur(Math.max(...ST[i].tramos.map(t=>t.cuota)))})`:'').filter(Boolean).join(' · ')}${S.h.offers.some(o=>o.tipo==='fija')?' · las fijas no cambian':''}</button>`:'');
+  const cuotasBtn=`<button class="stress cuo" data-x="cuotas2"><b>Cuota de cada oferta año a año</b> · mira cuándo sube</button>`;
+  X.cuotas2=()=>{const W=640,Hh=260,pl=56,pr=14,pt=14,pb=28,n=S.v.plazo,cols=['var(--c1)','var(--c4)','var(--c5)'];
+    const ser=AN.map((a,i)=>a.cur.years.map(y=>y.cuota/12)),mx=Math.max(...ser.flat(),1),mn=Math.min(...ser.flat().filter(v=>v>0),mx);
+    const st=niceStep((mx-mn*0.8)/4),top=Math.ceil(mx/st)*st,bot=Math.max(0,Math.floor(mn*0.8/st)*st);
+    const xs=k=>pl+(W-pl-pr)*k/Math.max(1,n-1),ys=v=>pt+(Hh-pt-pb)*(1-(v-bot)/(top-bot||1));
+    let g='';for(let v=bot;v<=top+1e-9;v+=st)g+=`<line x1="${pl}" x2="${W-pr}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${pl-6}" y="${ys(v)+4}" text-anchor="end">${nf(0).format(v)}</text>`;
+    const ev=n>20?5:n>10?2:1;for(let k=0;k<n;k+=ev)g+=`<text x="${xs(k)}" y="${Hh-8}" text-anchor="middle">${k+1}</text>`;
+    const lines=ser.map((s,i)=>`<path d="${s.map((v,k)=>(k?'L':'M')+xs(k).toFixed(1)+' '+ys(v).toFixed(1)).join(' ')}" fill="none" stroke="${cols[i]}" stroke-width="3" stroke-linejoin="round"/>`).join('');
+    modal('Cuota de cada oferta año a año',`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Cuota mensual de cada oferta por año">${g}${lines}</svg>
+      <div class="legend">${S.h.offers.map((o,i)=>`<span><i style="background:${cols[i]}"></i>${esc(o.nombre)}</span>`).join('')}<span>Abajo: año de hipoteca · cuota media al mes</span></div>
+      <div class="tblwrap" style="margin-top:10px"><table><thead><tr><th>Año</th>${S.h.offers.map(o=>`<th>${esc(o.nombre)}</th>`).join('')}</tr></thead><tbody>${ser[0].map((_,k)=>`<tr><td>${k+1}</td>${ser.map(s=>`<td>${eur(s[k]||0)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <p class="note">Con el Euríbor que supones (${pct(S.h.eur)}). La cuota sube cuando acaba el tramo fijo de una mixta o cuando cancelas un seguro y pierdes su rebaja.</p>`)};
+  const stressTxt=cuotasBtn+edadTxt+(ST.some(Boolean)?`<button class="stress" data-x="stress2"><b>Si el Euríbor sube ${ESTRES} puntos:</b> ${S.h.offers.map((o,i)=>ST[i]?`${esc(o.nombre)} +${eur(ST[i].total-AN[i].cur.total)} (cuota ${eur(Math.max(...ST[i].tramos.map(t=>t.cuota)))})`:'').filter(Boolean).join(' · ')}${S.h.offers.some(o=>o.tipo==='fija')?' · las fijas no cambian':''}</button>`:'');
   X.stress2=()=>modal(`Si el Euríbor sube ${ESTRES} puntos`,`<p>Mismas ofertas con el Euríbor en ${pct(e0+ESTRES)} en vez de ${pct(e0)} desde la primera revisión.</p><div class="steps">${S.h.offers.map((o,i)=>ST[i]?step(`${esc(o.nombre)}: coste real ${eur(AN[i].cur.total)} → ${eur(ST[i].total)}`,'+'+eur(ST[i].total-AN[i].cur.total)):step(esc(o.nombre)+' (fija)','sin cambios')).join('')}</div><p class="note">Una fija te protege de este escenario; una variable o una mixta te deja pagar menos si el Euríbor baja.</p>`);
   const v=$('verdict'),rows=AN.map((a,i)=>({i,n:S.h.offers[i].nombre,c:a.cur})),max=Math.max(...rows.map(r=>r.c.total))||1,sorted=[...rows].sort((x,y)=>x.c.total-y.c.total);
   let head;
@@ -1501,23 +1559,33 @@ function render3(){
   document.querySelectorAll('[data-v3]').forEach(b=>b.classList.toggle('on',b.dataset.v3===v3));
   $('r3chart').hidden=v3!=='pat';$('r3legend').hidden=v3!=='pat';$('r3cost').hidden=v3==='pat';
   $('r3title').textContent=v3==='pat'?'Tu patrimonio en cada caso':'Lo que te cuesta la casa';
-  const CT=costeCasa(Math.max(1,Math.round(S.v.plazo))),CH=costeCasa(R.H);R.CT=CT;R.CH=CH;
+  const full=Math.max(1,Math.round(S.v.plazo)),yOpts=[...new Set([5,10,R.H].filter(y=>y>0&&y<full))].sort((a,b)=>a-b);
+  const yy=S.ctY>0&&S.ctY<full?S.ctY:full,fin=yy>=full;
+  const CT=costeCasa(full),CY=fin?CT:costeCasa(yy),CH=costeCasa(R.H);R.CT=CT;R.CH=CH;R.CY=CY;
   // cada concepto se puede quitar del total (por ejemplo, verla sin intereses)
-  const parts=[['pre','Precio de la vivienda','precio',CT.P,'var(--c1)','cPre'],['com',CT.c.im.nombre+', notaría y gastos de compra','gastos de compra',CT.compra,'var(--c4)','cCom'],['int','Intereses de la hipoteca','intereses',CT.int,'var(--c2)','cInt'],['prop','IBI, comunidad y seguro','IBI, comunidad y seguro',CT.ibi+CT.com+CT.seg,'var(--c3)','cProp'],['mant','Mantenimiento','mantenimiento',CT.mant,'var(--c5)','cProp']];
+  const parts=[fin?['pre','Precio de la vivienda','precio',CY.P,'var(--c1)','cPre']:['pre','Entrada y capital devuelto','entrada y capital',CY.entrada+CY.cap,'var(--c1)','cPre'],['com',CY.c.im.nombre+', notaría y gastos de compra','gastos de compra',CY.compra,'var(--c4)','cCom'],['int','Intereses de la hipoteca','intereses',CY.int,'var(--c2)','cInt'],['prop','IBI, comunidad y seguro','IBI, comunidad y seguro',CY.ibi+CY.com+CY.seg,'var(--c3)','cProp'],['mant','Mantenimiento','mantenimiento',CY.mant,'var(--c5)','cProp']];
   const onP=parts.filter(p=>S.ct[p[0]]!==false),offP=parts.filter(p=>S.ct[p[0]]===false),totSel=onP.reduce((s,p)=>s+p[3],0);R.ctSel=totSel;
-  X.ctOff=offP.map(p=>p[2]);
-  $('r3cost').innerHTML=`<div class="ct-big"><span>La de <b class="num">${eur(CT.P)}</b> te cuesta, hasta terminar de pagarla en ${anos(CT.Yrs)}${offP.length?`, <b>sin ${yList(offP.map(p=>p[2]))}</b>`:''}</span><button class="big num" data-x="cTot">${eur(totSel)}</button><em>${eur(totSel/(CT.Yrs*12))} al mes de media${S.ct.pre!==false?` · ${nf(2).format(totSel/CT.P)} € por cada euro del precio`:''}${offP.length?` · todo junto: ${eur(CT.total)}`:''}</em></div>
+  // el alquiler de esos mismos años, subiendo con el IPC
+  let alqY=0;for(let y=0;y<yy;y++)alqY+=S.r.alquiler*12*Math.pow(1+S.r.ipc/100,y);R.alqY=alqY;
+  const mxB=Math.max(totSel,alqY)||1;
+  $('r3cost').innerHTML=`<div class="seg-ctl sm ct-years" role="group" aria-label="Hasta qué año">${yOpts.map(y=>`<button data-cty="${y}" class="${y===yy?'on':''}">${y===R.H?anos(y)+' (los que vives)':anos(y)}</button>`).join('')}<button data-cty="0" class="${fin?'on':''}">Hasta el final (${full})</button></div>
+    <div class="ct-big"><span>${fin?`La de <b class="num">${eur(CY.P)}</b> te cuesta, hasta terminar de pagarla en ${anos(full)}`:`En los primeros <b>${anos(yy)}</b>, la de <b class="num">${eur(CY.P)}</b> te cuesta`}${offP.length?`, <b>sin ${yList(offP.map(p=>p[2]))}</b>`:''}</span><button class="big num" data-x="cTot">${eur(totSel)}</button><em>${eur(totSel/(yy*12))} al mes de media${fin&&S.ct.pre!==false?` · ${nf(2).format(totSel/CY.P)} € por cada euro del precio`:''}${offP.length?` · todo junto: ${eur(parts.reduce((s,p)=>s+p[3],0))}`:''}</em></div>
     <div class="stackbar">${onP.map(p=>`<button data-x="${p[5]}" title="${p[1]} ${eur(p[3])}" aria-label="${p[1]} ${eur(p[3])}" style="flex:${Math.max(0,p[3])};background:${p[4]}"></button>`).join('')}</div>
     <div class="ct-rows">${parts.map(p=>{const on=S.ct[p[0]]!==false;return `<div class="ct-row${on?'':' off'}"><button class="ct-tog" data-ct="${p[0]}" role="switch" aria-checked="${on}" title="${on?'Quitar del total':'Sumar al total'}"><i style="background:${on?p[4]:'transparent'};border-color:${p[4]}">${on?'✓':''}</i><span>${p[1]}</span></button><button class="ct-val num" data-x="${p[5]}" title="Ver el cálculo">${eur(p[3])}</button></div>`}).join('')}</div>
     <p class="hint" style="margin:0">Marca o desmarca cada concepto para sumarlo o quitarlo del total. Pincha el importe para ver el cálculo.</p>
-    <button class="ct-h" data-x="cHor"><span>En los <b>${anos(R.H)}</b> que piensas vivir en ella pagas <b class="num">${eur(CH.pagado)}</b>${CH.deuda>1?` y aún debes <b class="num">${eur(CH.deuda)}</b>`:''}. La casa valdría entonces <b class="num">${eur(CH.valor)}</b>.</span></button>`;
+    <button class="ct-vs" data-x="cVs"><span class="vs-l">Comprando</span><span class="vs-t"><i style="width:${(totSel/mxB*100).toFixed(1)}%;background:var(--c1)"></i></span><b class="num">${eur(totSel)}</b>
+      <span class="vs-l">Alquilando</span><span class="vs-t"><i style="width:${(alqY/mxB*100).toFixed(1)}%;background:var(--c4)"></i></span><b class="num">${eur(alqY)}</b>
+      <em>Alquiler de ${eur(S.r.alquiler)}/mes durante ${anos(yy)}, subiendo con el IPC. Comprando, al final la casa es tuya: valdría ${eur(CY.valor)}${CY.deuda>1?` y aún deberías ${eur(CY.deuda)}`:''}.</em></button>`;
+  X.cVs=()=>modal(`Comprar o alquilar en ${anos(yy)}: lo que pagas`,`<div class="steps">${step('Comprando (con lo que tienes marcado)',eur(totSel))}${step(`Alquilando: ${eur(S.r.alquiler)}/mes subiendo un ${pctS(S.r.ipc)} al año`,eur(alqY))}${step(totSel<=alqY?'Comprar te cuesta menos':'Alquilar te cuesta menos',eur(Math.abs(alqY-totSel)),'tot')}</div>
+    <div class="steps">${step('Valor de la casa al final',eur(CY.valor))}${step('Hipoteca pendiente',eur(CY.deuda))}${step('Lo que es tuyo al final si compras',eur(CY.valor-CY.deuda),'tot')}</div>
+    <p class="note">Aquí se compara solo lo que sale de tu bolsillo. Para una comparación completa, que cuenta también lo que ganaría tu dinero invertido si alquilas, cambia a «Comprar o alquilar».</p>`);
   if(v3==='pat')drawChart3(R);
   const stp=(C)=>`<div class="steps">${step('Precio (entrada + capital que devuelves)',eur(C.entrada+C.cap+C.deuda))}${step(C.c.im.nombre+' ('+pct(C.c.im.tipoEf)+'), notaría, comisión y fijos',eur(C.compra))}${step(`Intereses: hipoteca de ${eur(C.L)} al ${pct(S.v.tin)}`,eur(C.int))}${step(`IBI (${eur(S.r.ibi)}/año), comunidad (${eur(S.r.comunidad)}/mes) y seguro (${eur(S.r.seguro)}/año), subiendo con el IPC`,eur(C.ibi+C.com+C.seg))}${step(`Mantenimiento: ${pct(S.r.mant,1)} del valor cada año`,eur(C.mant))}${step('Total',eur(C.total),'tot')}</div>`;
-  X.cTot=()=>modal('Lo que te cuesta la casa',`<p>Todo lo que pagas por la vivienda hasta terminar la hipoteca en ${anos(CT.Yrs)}, no solo el precio.</p>${stp(CT)}${offP.length?`<div class="steps">${offP.map(p=>step('− '+p[1]+' (desmarcado)',eur(p[3]))).join('')}${step('Total con lo que has marcado',eur(totSel),'tot')}</div>`:''}<p class="note">No incluye los seguros vinculados del banco (míralos en «Comparar») ni lo que valdrá la casa al final, que es tuya: ${eur(CT.valor)} si sube un ${pct(S.r.reval,1)} al año.</p>`);
-  X.cPre=()=>modal('Precio de la vivienda',`<div class="steps">${step('Entrada que pones al comprar',eur(CT.entrada))}${step('Capital que devuelves con las cuotas',eur(CT.cap+CT.deuda))}${step('Precio',eur(CT.P),'tot')}</div><p>Es la parte que no se pierde: se convierte en tu casa.</p>`);
+  X.cTot=()=>modal('Lo que te cuesta la casa',`<p>Todo lo que pagas por la vivienda ${fin?`hasta terminar la hipoteca en ${anos(full)}`:`en los primeros ${anos(yy)}`}, no solo el precio.</p>${stp(CY)}${offP.length?`<div class="steps">${offP.map(p=>step('− '+p[1]+' (desmarcado)',eur(p[3]))).join('')}${step('Total con lo que has marcado',eur(totSel),'tot')}</div>`:''}<p class="note">No incluye los seguros vinculados del banco (míralos en «Comparar») ni lo que valdrá la casa al final, que es tuya: ${eur(CY.valor)} si sube un ${pct(S.r.reval,1)} al año.</p>`);
+  X.cPre=()=>modal(fin?'Precio de la vivienda':'Entrada y capital devuelto',`<div class="steps">${step('Entrada que pones al comprar',eur(CY.entrada))}${step('Capital que devuelves con las cuotas'+(fin?'':' en '+anos(yy)),eur(CY.cap))}${step(fin?'Precio':'Total',eur(CY.entrada+CY.cap),'tot')}${fin?'':step('Hipoteca que aún debes',eur(CY.deuda))}</div><p>Es la parte que no se pierde: se convierte en tu casa.</p>`);
   X.cCom=X.itp;
-  X.cInt=()=>modal('Intereses de la hipoteca',`<div class="steps">${step('Hipoteca',eur(CT.L))}${step('Cuota',eur2(CT.cuota)+'/mes')}${step('Cuotas en '+anos(CT.Yrs),eur(CT.cuotas))}${step('− Capital devuelto',eur(CT.cap))}${step('Intereses',eur(CT.int),'tot')}</div><p class="note">Con el TIN de ${pct(S.v.tin)}. Para ofertas reales con seguros y comisiones, usa «Comparar».</p>`);
-  X.cProp=()=>modal('Gastos de propietario',`<p>Lo que paga cualquier propietario cada año, subiendo con el IPC (${pctS(S.r.ipc)}):</p><div class="steps">${step('IBI',eur(CT.ibi))}${step('Comunidad',eur(CT.com))}${step('Seguro de hogar',eur(CT.seg))}${step('Mantenimiento',eur(CT.mant))}${step('Total en '+anos(CT.Yrs),eur(CT.propio),'tot')}</div>`);
+  X.cInt=()=>modal('Intereses de la hipoteca',`<div class="steps">${step('Hipoteca',eur(CY.L))}${step('Cuota',eur2(CY.cuota)+'/mes')}${step('Cuotas en '+anos(CY.Yrs),eur(CY.cuotas))}${step('− Capital devuelto',eur(CY.cap))}${step('Intereses',eur(CY.int),'tot')}</div><p class="note">Con el TIN de ${pct(S.v.tin)}. Para ofertas reales con seguros y comisiones, usa «Comparar».</p>`);
+  X.cProp=()=>modal('Gastos de propietario',`<p>Lo que paga cualquier propietario cada año, subiendo con el IPC (${pctS(S.r.ipc)}):</p><div class="steps">${step('IBI',eur(CY.ibi))}${step('Comunidad',eur(CY.com))}${step('Seguro de hogar',eur(CY.seg))}${step('Mantenimiento',eur(CY.mant))}${step('Total en '+anos(CY.Yrs),eur(CY.propio),'tot')}</div>`);
   X.cHor=()=>modal(`En los ${anos(R.H)} que vives en ella`,`<div class="steps">${step('Entrada',eur(CH.entrada))}${step('Impuestos y gastos de compra',eur(CH.compra))}${step('Cuotas de la hipoteca',eur(CH.cuotas))}${step('IBI, comunidad, seguro y mantenimiento',eur(CH.propio))}${step('Pagas en total',eur(CH.pagado),'tot')}${step('Hipoteca que aún debes',eur(CH.deuda))}${step('Valor de la casa entonces',eur(CH.valor))}</div><p class="note">Para comparar con alquilar, cambia a «Comprar o alquilar»: ahí se cuenta también lo que ganaría tu dinero invertido.</p>`);
   $('r3kpis').innerHTML=`
     <button class="kpi card" data-x="mes3"><small>Pago mensual comprando</small><strong class="num">${eur(R.cuota+R.gastosMes1)}</strong><em>cuota ${eur(R.cuota)} + gastos ${eur(R.gastosMes1)}</em></button>
@@ -1624,6 +1692,10 @@ function render4(){
   $('m4hint').textContent=P>0?`Cuotas calculadas para tu hipoteca de ${eur(P)} a ${anos(S.v.plazo)}, con el tipo bonificado y el Euríbor a ${pct(S.h.eur)} cuando toca revisar. Pincha una fila para ver el detalle.`:'Con una entrada del 100 % no hay hipoteca que calcular.';
   const rows=OFF.map((x,i)=>({x,i,c:P>0?mcalc(x):null})).filter(r=>MF==='todas'||r.x.t===MF);
   if(P>0)rows.sort((a,b)=>(a.c.noAcc-b.c.noAcc)||(a.c.ef-b.c.ef));
+  const nAll=rows.length;
+  if(P>0&&S.mf2.dan)for(let k=rows.length-1;k>=0;k--)if(rows[k].c.noAcc||rows[k].c.ltvKo)rows.splice(k,1);
+  if(S.mf2.sinv)for(let k=rows.length-1;k>=0;k--)if(vkOf(rows[k].x).length)rows.splice(k,1);
+  $('m4chips').innerHTML=[['dan','Solo las que me darían'],['sinv','Sin vinculaciones']].map(([k,l])=>`<button class="chip${S.mf2[k]?' on':''}" data-mf2="${k}" role="switch" aria-checked="${!!S.mf2[k]}">${S.mf2[k]?'✓ ':''}${l}</button>`).join('')+(rows.length<nAll?`<span class="hint">${rows.length} de ${nAll}</span>`:'');
   MLAST=rows;const edadKo=S.v.edad+S.v.plazo>EDAD_FIN;
   $('m4table').innerHTML=`<table><thead><tr><th>Banco</th><th>Tipo</th><th>TIN bonificado</th><th>Después</th><th>TAE</th><th>Tu cuota</th><th>Coste comparado</th><th>Intereses totales</th><th>Lo que te piden</th><th></th></tr></thead><tbody>
     ${rows.map((r,k)=>{const x=r.x,c=r.c;return `<tr data-m="${r.i}" class="${k===0&&P>0&&!c.noAcc?'best':''}${c&&c.noAcc?' noacc':''}">
@@ -1671,6 +1743,7 @@ function mAdd(i){const x=OFF[i],tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo)
   ov.hidden=true;renderOffers();refresh();showTab('hipotecas');toast(`${x.b} añadido al comparador. Pon el precio de sus seguros para ver el coste real.`)}
 document.addEventListener('click',e=>{
   const f=e.target.closest('[data-mf]');if(f){MF=f.dataset.mf;render4();fitSoon();return}
+  const f2=e.target.closest('[data-mf2]');if(f2){const k=f2.dataset.mf2;S.mf2[k]=!S.mf2[k];save();render4();fitSoon();return}
   const a=e.target.closest('[data-madd]');if(a){e.stopPropagation();mAdd(+a.dataset.madd);return}
   if(e.target.closest('a'))return;const r=e.target.closest('tr[data-m]');if(r)mDetail(+r.dataset.m);
 });
@@ -1696,7 +1769,7 @@ function inv(o={}){
   const not=P*S.v.notaria/100,com=P*S.v.comision/100,fij=S.v.fijos;
   const T=P+imp+not+com+fij+I.reforma;
   const tin=o.tin!=null?o.tin:I.tin,alq=o.alquiler!=null?o.alquiler:I.alquiler,vacio=o.vacio!=null?o.vacio:I.vacio;
-  const L=P*I.fin/100,cuota=cuotaFor(L,tin,I.plazo),A=T-L;
+  const L=I.contado?0:P*I.fin/100,cuota=cuotaFor(L,tin,I.plazo),A=T-L;
   const bruto=alq*12,R=alq*Math.max(0,12-vacio),gest=R*I.gestion/100;
   const G=I.ibi+I.comunidad*12+I.seguro+I.mant+gest,NOI=R-G;
   const amortBase=(P+imp+not+com+fij)*I.constr/100+I.reforma,amortF=amortBase*0.03;
@@ -1725,7 +1798,7 @@ function render5(){
   const I=S.i,K=inv(),alt=S.r.rent;
   // la alternativa también paga IRPF al venderla: se compara la TIR (tras impuestos) con la alternativa tras impuestos
   const altNet=(()=>{const A=Math.max(1,K.A),fin=A*Math.pow(1+alt/100,K.N),net=fin-taxAhorro(fin-A);return (Math.pow(net/A,1/K.N)-1)*100})();K.altNet=altNet;
-  $('i_gastos').textContent=eur(K.imp+K.not+K.com+K.fij);
+  $('i_gastos').textContent=eur(K.imp+K.not+K.com+K.fij);$('g5b').classList.toggle('dim',!!I.contado);
   const good=K.netaPct>=I.objetivo,cajaPos=K.caja>=0;
   $('r5hero').innerHTML=`<div class="eyebrow">Rentabilidad neta del piso (antes de hipoteca e impuestos)</div>
     <button class="big num" data-x="i_neta" style="color:${good?'var(--good)':'var(--ink)'}">${pct(K.netaPct)}</button>
@@ -1766,7 +1839,7 @@ function render5(){
     <div class="stress-t">${ST.map(([n,k],ix)=>`<button class="st-row" data-x="i_stress"><span>${n}</span><b class="num" style="color:${k.caja>=0?'var(--good)':'var(--bad)'}">${k.caja>=0?'+':'−'}${eur(Math.abs(k.caja)/12)} al mes</b>${ix?`<em class="num">${k.caja-K.caja>=0?'+':'−'}${eur(Math.abs(k.caja-K.caja))} al año</em>`:'<em>caja del primer año</em>'}</button>`).join('')}</div>
     <p class="hint" style="margin-top:10px">Invertir no es vivienda habitual: aquí se aplica ${I.nueva?`el ${K.ind[1]} del ${pctS(K.ind[0])} y el AJD de ${esc(K.ccaa)} (${pctS(K.ajd)})`:`el ITP general de ${esc(K.ccaa)}, sin rebajas por edad`}, y los bancos suelen financiar un máximo del 60-70 %.${I.tensionada?' En zona tensionada, la renta de un contrato nuevo no puede pasar de la del contrato anterior.':''}</p>`;
   /* explicaciones */
-  X.i_compra=()=>modal('Lo que cuesta comprar el piso',`<div class="steps">${step('Precio',eur(K.P))}${step((I.nueva?`${K.ind[1]} ${pctS(K.ind[0])} y AJD ${pctS(K.ajd)}`:'ITP general '+esc(K.ccaa)),eur(K.imp))}${step('Notaría, registro y gestoría '+pctS(S.v.notaria),eur(K.not))}${step('Comisión inmobiliaria '+pctS(S.v.comision),eur(K.com))}${step('Tasación y otros fijos',eur(K.fij))}${step('Reforma',eur(I.reforma))}${step('Inversión total',eur(K.T),'tot')}${step('− Hipoteca ('+pctS(I.fin)+' del precio)',eur(K.L))}${step('Dinero que pones tú',eur(K.A),'tot')}</div><p class="hint">Notaría, comisión y fijos se comparten con «Mi presupuesto»; la comunidad del piso es la de esta pestaña.</p>`);
+  X.i_compra=()=>modal('Lo que cuesta comprar el piso',`<div class="steps">${step('Precio',eur(K.P))}${step((I.nueva?`${K.ind[1]} ${pctS(K.ind[0])} y AJD ${pctS(K.ajd)}`:'ITP general '+esc(K.ccaa)),eur(K.imp))}${step('Notaría, registro y gestoría '+pctS(S.v.notaria),eur(K.not))}${step('Comisión inmobiliaria '+pctS(S.v.comision),eur(K.com))}${step('Tasación y otros fijos',eur(K.fij))}${step('Reforma',eur(I.reforma))}${step('Inversión total',eur(K.T),'tot')}${step(I.contado?'Sin hipoteca: lo pagas al contado':'− Hipoteca ('+pctS(I.fin)+' del precio)',eur(K.L))}${step('Dinero que pones tú',eur(K.A),'tot')}</div><p class="hint">Notaría, comisión y fijos se comparten con «Mi presupuesto»; la comunidad del piso es la de esta pestaña.</p>`);
   X.i_bruta=()=>modal('Rentabilidad bruta',`<div class="steps">${step('Alquiler × 12',eur(K.bruto))}${step('÷ Precio',eur(K.P))}${step('Rentabilidad bruta (como la calculan los portales)',pct(K.brutaPct),'tot')}${step('Sobre la inversión total ('+eur(K.T)+', con impuestos, gastos y reforma)',pct(K.brutaTot))}</div><p>Es la que anuncian los portales: alquiler anual entre precio. No descuenta impuestos de compra, gastos ni meses vacío, así que siempre sale más alta que la real. Para decidir, mira la neta.</p>`);
   X.i_neta=()=>modal('Rentabilidad neta',`<div class="steps">${step('Alquiler cobrado ('+nf(1).format(12-I.vacio).replace(',0','')+' meses)',eur(K.R))}${step('− IBI',eur(I.ibi))}${step('− Comunidad',eur(I.comunidad*12))}${step('− Seguros de hogar e impago',eur(I.seguro))}${step('− Mantenimiento',eur(I.mant))}${I.gestion?step('− Gestión '+pctS(I.gestion),eur(K.gest)):''}${step('Beneficio del piso',eur(K.NOI),'tot')}${step('÷ Inversión total',eur(K.T))}${step('Rentabilidad neta',pct(K.netaPct),'tot')}</div><p>Mide lo que rinde el piso en sí, sin mirar cómo lo pagas. Sirve para comparar pisos entre sí y con otras inversiones.</p><p class="note">Deja algo para derramas y obras grandes de la comunidad: no son anuales, pero llegan. Mira «¿Y si algo sale mal?».</p>`);
   const y1=K.y1;
@@ -1838,7 +1911,7 @@ try{const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.target.closest('.
 $('mres').onclick=()=>{const hero=document.querySelector('.pane:not([hidden]) .hero');if(hero)hero.scrollIntoView({behavior:'smooth',block:'start'})};
 /* Encaje en pantalla: si algo no cabe, se reduce la escala hasta un mínimo legible; por debajo, la tarjeta se desplaza por dentro */
 const ONE=matchMedia('(min-width:801px) and (min-height:540px)');let fitT=null,Z=1;
-function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .scroll, .pane:not([hidden]) .offer, .pane:not([hidden]) .costbox:not([hidden])').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
+function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .incard, .pane:not([hidden]) .offer, .pane:not([hidden]) .costbox:not([hidden])').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
 function fit(){const root=document.documentElement;if(!ONE.matches||root.classList.contains('m')){root.style.zoom='';Z=1;return}
   root.style.zoom=1;let z=1;if(need()<0.999){let lo=0.78,hi=1;root.style.zoom=lo;if(need()>=0.999){for(let k=0;k<7;k++){const m=(lo+hi)/2;root.style.zoom=m;if(need()>=0.999)lo=m;else hi=m}}z=lo;root.style.zoom=z}
   Z=z;if(LAST.r3)drawChart3(LAST.r3,false)}
@@ -1862,6 +1935,38 @@ $('btnCopy').onclick=()=>{
   const fb=()=>modal('Copia este resumen',`<div class="formula" style="white-space:pre-wrap;user-select:all">${esc(txt)}</div>`);
   try{navigator.clipboard.writeText(txt).then(()=>toast('Resumen copiado'),fb)}catch(e){fb()}
 };
+
+/* ---------- mis casos: guardar hasta 4 escenarios y compararlos ---------- */
+const CASOS_KEY='fea-casos';
+const getCasos=()=>{try{return JSON.parse(localStorage.getItem(CASOS_KEY)||'[]')}catch(e){return []}};
+const setCasos=a=>{try{localStorage.setItem(CASOS_KEY,JSON.stringify(a));return true}catch(e){return false}};
+let CASOS_MEM=null;const casos=()=>CASOS_MEM||(CASOS_MEM=getCasos());
+function metricsFor(st){const keep=S;try{S=sane(merge(EXAMPLE,clone(st)));syncAll();
+  const r1=calc1(),r3=calc3(),ct=costeCasa(Math.max(1,Math.round(S.v.plazo))),k=inv();
+  return {precio:S.v.precio,ccaa:S.v.ccaa,nueva:S.v.nueva,entrada:S.v.precio*entradaEf()/100,ePct:entradaEf(),hip:r1.hip,cuota:r1.cuota,plazo:S.v.plazo,esf:r1.esfuerzo,ok:r1.ok,falta:r1.falta,max:r1.max,total:ct.total,dif:r3.dif,H:r3.H,neta:k.netaPct}}finally{S=keep;syncAll()}}
+function casosModal(){
+  const L=casos(),cols=[{n:'Lo que tienes ahora',st:S,now:true},...L.map((c,i)=>({n:c.n,st:c.st,i}))],M=cols.map(c=>metricsFor(c.st));
+  const best=(f,low)=>{const v=M.map(f);const b=low?Math.min(...v):Math.max(...v);return v.map(x=>cols.length>1&&Math.abs(x-b)<0.5)};
+  const bC=best(m=>m.cuota,true),bT=best(m=>m.total,true);
+  const row=(lab,f,hl)=>`<tr><td>${lab}</td>${M.map((m,i)=>`<td class="${hl&&hl[i]?'bestc':''}">${f(m)}</td>`).join('')}</tr>`;
+  modal('Mis casos',`<p>Guarda la vivienda que estás mirando y compárala con otras. Se guardan en este navegador.</p>
+    <div class="cs-save"><div class="inp"><input id="csName" maxlength="40" value="${esc((S.v.nueva?'Obra nueva':'Piso')+' de '+eur(S.v.precio)+' en '+S.v.ccaa)}" aria-label="Nombre del caso"></div><button class="btn solid" id="csSave"${L.length>=4?' disabled':''}>Guardar este caso</button><button class="btn" id="csCopy" title="Copia un resumen de la pestaña en la que estás">Copiar resumen</button></div>
+    ${L.length>=4?'<p class="hint">Puedes guardar hasta 4. Borra uno para guardar otro.</p>':''}
+    <div class="tblwrap cs-t"><table><thead><tr><th></th>${cols.map(c=>`<th>${esc(c.n)}</th>`).join('')}</tr></thead><tbody>
+      ${row('Precio',m=>eur(m.precio))}${row('Comunidad',m=>esc(m.ccaa)+(m.nueva?' · nueva':''))}${row('Entrada',m=>eur(m.entrada)+' · '+pct(m.ePct,0))}${row('Hipoteca',m=>eur(m.hip)+' a '+m.plazo+' años')}
+      ${row('Cuota al mes',m=>eur(m.cuota),bC)}${row('De tus ingresos',m=>isFinite(m.esf)?pct(m.esf,0):'—')}${row('¿Te llega?',m=>m.ok?'<b style="color:var(--good)">Sí</b>':`<b style="color:var(--bad)">No</b>${m.falta>0?' · faltan '+eur(m.falta):''}`)}
+      ${row('Lo que te cuesta la casa',m=>eur(m.total),bT)}${row('Comprar o alquilar',m=>`${m.dif>=0?'Comprar':'Alquilar'} +${eur(Math.abs(m.dif))} a ${m.H} años`)}${row('Rentabilidad neta si la alquilas',m=>pct(m.neta))}
+      <tr><td></td>${cols.map(c=>c.now?'<td></td>':`<td><button class="btn" data-csload="${c.i}">Cargar</button> <button class="btn" data-csdel="${c.i}">Borrar</button></td>`).join('')}</tr>
+    </tbody></table></div>
+    <p class="note">En verde, la mejor de cada fila. Al cargar un caso se ponen sus datos en todas las pestañas.</p>`);
+}
+$('btnCasos').onclick=casosModal;
+$('mBody').addEventListener('click',e=>{
+  if(e.target.id==='csCopy'){ov.hidden=true;$('btnCopy').click();return}
+  if(e.target.id==='csSave'){const L=casos();if(L.length>=4)return;const n=($('csName').value||'Caso '+(L.length+1)).trim();const st=clone(S);delete st.tab;L.push({n,st,d:Date.now()});setCasos(L);casosModal();toast('Caso guardado');return}
+  const ld=e.target.closest('[data-csload]');if(ld){const c=casos()[+ld.dataset.csload];if(!c)return;const prev=clone(S),t=S.tab;S=sane(merge(EXAMPLE,clone(c.st)));S.tab=t;ov.hidden=true;renderOffers();refresh();toast(`Cargado: ${c.n}`,()=>{S=prev;renderOffers();refresh()});return}
+  const dl=e.target.closest('[data-csdel]');if(dl){const L=casos();L.splice(+dl.dataset.csdel,1);setCasos(L);casosModal();toast('Caso borrado');return}
+});
 
 /* ---------- informe PDF ---------- */
 const LIBS=['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js'];
