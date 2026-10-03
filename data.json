@@ -1,5 +1,5 @@
 {
- "version": 2,
+ "version": 3,
  "actualizado": "2026-09-30",
  "fecha": "30 de septiembre de 2026",
  "mercado": {
@@ -12,18 +12,19 @@
   "ineVar": 2.97,
   "bce": 2.5,
   "fuentes": {
-   "eur": "https://www.euribordiario.es/noticias/euribor-30-septiembre-2026-baja-media-3247",
-   "ine": "https://www.infobae.com/espana/agencias/2026/09/28/las-hipotecas-para-vivienda-ceden-35-en-julio-y-sufren-mayor-caida-desde-junio-de-2024/",
+   "eur": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20519",
+   "ine": "https://www.ine.es/dyngs/INEbase/operacion.htm?c=Estadistica_C&cid=1254736170236&menu=ultiDatos&idp=1254735576757",
    "bce": "https://www.infobae.com/espana/2026/09/11/depositos-un-18-mas-rentables-en-un-ano-e-hipotecas-un-10-mas-caras-quien-gana-y-quien-pierde-con-la-subida-de-tipos-del-bce/",
-   "cambios": "https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/"
+   "cambios": "https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/",
+   "eurAgo": "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-18507"
   },
   "ctx": [
    "Los bancos están subiendo las fijas (ING, Bankinter, BBVA y Santander este año).",
    "El Euríbor está en máximos de dos años: las variables salen caras tras el primer año."
   ],
   "fuenteNombres": {
-   "eur": "Euribordiario",
-   "ine": "INE vía Infobae",
+   "eur": "Banco de España (BOE)",
+   "ine": "INE",
    "bce": "Infobae",
    "cambios": "HelpMyCash"
   },
@@ -31,7 +32,9 @@
   "eurAgoMes": "agosto de 2026",
   "eurAntMes": "septiembre de 2025",
   "bceCorto": "subió en septiembre",
-  "bceNota": "El BCE subió el tipo 0,25 puntos, hasta el 2,5 %, el 11 de septiembre de 2026: la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %."
+  "bceNota": "El BCE subió el tipo 0,25 puntos, hasta el 2,5 %, el 11 de septiembre de 2026: la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %.",
+  "eurOficial": "Resolución del Banco de España de 1 de octubre de 2026, publicada en el BOE",
+  "eurAgoOficial": "Resolución del Banco de España de 1 de septiembre de 2026, publicada en el BOE"
  },
  "ofertas": [
   {
