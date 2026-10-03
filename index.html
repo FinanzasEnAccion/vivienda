@@ -855,7 +855,7 @@ const RED_OPC=[[50,'50 % · general'],[60,'60 % · contrato anterior al 26/05/20
 
 const EXAMPLE={
   v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,entUnit:'pct',entradaEur:42000,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30,tasacion:0,ico:false},
-  a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,alqCobra:0,alqPct:70,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false},
+  a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,alqCobra:0,alqGastos:0,alqPct:70,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false},
   h:{eur:Math.round(DATA0.mercado.eur*100)/100,offers:[
     {nombre:'Banco A · fija bonificada',tipo:'fija',tin:3.10,anos:1,dif:0.60,apertura:0,prods:[
       {n:'Nómina + tarjeta',b:0.20,c:0,s:0,m:0,hasta:30,on:true},
@@ -909,9 +909,10 @@ const DEF={
  ahorros:['Ahorros','Todo el dinero que tienes disponible para la compra, incluido el colchón.'],
  colchon:['Colchón','Dinero que guardas para imprevistos y no usas en la compra. Lo normal es tener de 3 a 6 meses de gastos.'],
  ingresos:['Ingresos netos al mes','Lo que entra en la cuenta cada mes entre todos los que firmáis, después de impuestos. Si cobras pagas extra, repártelas entre 12.'],
- alqc:['Alquiler que cobras','Si tienes un piso alquilado, lo que cobras al mes. El banco suma una parte a tus ingresos. Si ese piso tiene hipoteca, pon su cuota en «Otras cuotas»: si no, el resultado sale mejor de lo real.'],
- alqp:['Parte del alquiler que cuenta el banco','Qué porcentaje del alquiler suma el banco a tus ingresos. Cada banco tiene su criterio, a menudo con el contrato y la declaración de la renta delante; el 70 % es una referencia orientativa. Pregúntalo en tu banco.'],
- deudas:['Otras cuotas','Lo que ya pagas cada mes por otros préstamos: coche, tarjetas, préstamos personales. El banco los suma a la cuota de la hipoteca.'],
+ alqc:['Cómo suma el banco tu alquiler','No suma lo que cobras. Primero le quita los gastos del piso (IBI, comunidad, seguro) y la cuota de su hipoteca, si la tiene. Al neto que queda le aplica un porcentaje, normalmente entre el 60 % y el 70 %, por si el piso se queda vacío o hay impagos. Ejemplo: cobras 800 €, pagas 150 € de gastos y 300 € de hipoteca de ese piso. Te quedan 350 € netos y, al 70 %, el banco suma 245 € a tus ingresos, no 800 €. Si los gastos y la hipoteca superan el alquiler, la diferencia cuenta como una deuda más. Solo cuenta si el alquiler aparece en tu declaración de la renta, y cada banco tiene su criterio.'],
+ alqg:['Gastos e hipoteca del piso alquilado','Lo que te cuesta al mes el piso que tienes alquilado: IBI, comunidad y seguro (repartidos entre 12) y la cuota de su hipoteca, si la tiene. No la pongas también en «Otras cuotas», o se restaría dos veces. El banco los resta del alquiler antes de aplicar su porcentaje.'],
+ alqp:['Parte del alquiler que cuenta el banco','Qué porcentaje del alquiler neto (después de gastos e hipoteca de ese piso) suma el banco a tus ingresos. Lo habitual está entre el 60 % y el 70 %; cada banco tiene su criterio y solo lo cuenta si está en tu declaración de la renta.'],
+ deudas:['Otras cuotas','No incluyas la hipoteca del piso que tienes alquilado: va en «Gastos e hipoteca de ese piso». Lo que ya pagas cada mes por otros préstamos: coche, tarjetas, préstamos personales. El banco los suma a la cuota de la hipoteca.'],
  esf:['Tasa de esfuerzo','La parte de tus ingresos netos que se va en cuotas de préstamos. Los bancos suelen pedir que no pase del 35 % y casi nunca aceptan más del 40 %.'],
  titulares:['Titulares','Las personas que firman la hipoteca. El banco quiere que a cada una le queden unos 900 € al mes después de pagar todas las cuotas.'],
  ahorroMes:['Ahorras al mes','Lo que consigues guardar cada mes. Sirve para calcular cuánto tardas en reunir lo que te falta.'],
@@ -970,7 +971,7 @@ const NUEVA_I=`<div class="seg-ctl" role="group" aria-label="Tipo de piso"><butt
 const LIM={'a.alqPct':[0,100],'m.anos':[1,40],'m.mes':[1,12],'m.comAm':[0,5],'m.tin':[0,15],'i.fin':[0,100],'i.vacio':[0,12],'i.plazo':[1,40],'i.anos':[1,40],'i.constr':[0,100],'i.irpf':[0,55],'i.gestion':[0,30],'v.notaria':[0,20],'v.comision':[0,20],'v.entrada':[0,100],'v.plazo':[1,40],'a.esfuerzo':[1,ESF_BANCO],'a.titulares':[1,4],'r.horizonte':[1,40],'v.edad':[18,99]};
 const REDSEL=()=>{const id='in'+(uid++);return `<div class="fld" style="grid-column:span 2"><label for="${id}"><span class="lt">Reducción del IRPF</span>${Q('reduccion')}</label><div class="inp"><select id="${id}" data-bind="i.reduccion" data-fmt="num"></select></div></div>`};
 
-$('g1a').className='g2';$('g1a').innerHTML=F('a.ahorros','Ahorros','€','eur','','ahorros')+F('a.colchon','Colchón','€','eur','','colchon')+F('a.ingresos','Ingresos netos','€/mes','eur','','ingresos')+F('a.deudas','Otras cuotas','€/mes','eur','','deudas')+F('a.alqCobra','Alquiler que cobras','€/mes','eur','','alqc')+F('a.alqPct','Parte que cuenta el banco','%','dec','','alqp')+F('a.esfuerzo','Máximo para cuotas','% ingresos','dec','','esf')+F('a.titulares','Titulares','personas','int','','titulares')+F('a.ahorroMes','Ahorras al mes','€','eur','','ahorroMes')+F('v.edad','Edad','años','int');
+$('g1a').className='g2';$('g1a').innerHTML=F('a.ahorros','Ahorros','€','eur','','ahorros')+F('a.colchon','Colchón','€','eur','','colchon')+F('a.ingresos','Ingresos netos','€/mes','eur','','ingresos')+F('a.deudas','Otras cuotas','€/mes','eur','','deudas')+F('a.alqCobra','Alquiler que cobras','€/mes','eur','','alqc')+F('a.alqGastos','Gastos e hipoteca de ese piso','€/mes','eur','','alqg')+F('a.alqPct','Parte que cuenta el banco','%','dec','','alqp')+F('a.esfuerzo','Máximo para cuotas','% ingresos','dec','','esf')+F('a.titulares','Titulares','personas','int','','titulares')+F('a.ahorroMes','Ahorras al mes','€','eur','','ahorroMes')+F('v.edad','Edad','años','int');
 $('g1chk').innerHTML=SW('v.primera','Primera vivienda')+SW('v.rural','Municipio pequeño')+SW('v.ico','Uso el aval ICO');
 /* modo rápido: solo ahorros, ingresos netos, comunidad y edad */
 const QUICK=['a.ahorros','a.ingresos','v.ccaa','v.edad'];
@@ -1092,9 +1093,14 @@ const tasa=()=>S.v.tasacion>0?S.v.tasacion:S.v.precio;
 const entradaEf=()=>Math.max(S.v.entrada,entradaMin(S.v.precio,tasa()).pct);
 const hipoteca=()=>S.v.precio*(1-entradaEf()/100);
 /* Ingresos que cuenta el banco: nómina neta + la parte del alquiler que cobras que computa */
-const alqB=()=>Math.max(0,S.a.alqCobra||0)*Math.max(0,Math.min(100,S.a.alqPct))/100;
+const alqNeto=()=>Math.max(0,S.a.alqCobra||0)-Math.max(0,S.a.alqGastos||0);
+const alqB=()=>Math.max(0,alqNeto())*Math.max(0,Math.min(100,S.a.alqPct))/100;
+/* si los gastos e hipoteca del piso alquilado superan el alquiler, la diferencia cuenta como una deuda más */
+const alqDeuda=()=>Math.max(0,-alqNeto());
 const ingB=()=>S.a.ingresos+alqB();
-const ingSt=(lab='Ingresos netos del hogar al mes')=>alqB()>0?step('Nómina neta al mes',eur(S.a.ingresos))+step(`+ Alquiler que cobras (${eur(S.a.alqCobra)}) × ${pctS(S.a.alqPct)} que cuenta el banco`,eur(alqB()))+step('Ingresos que cuenta el banco',eur(ingB()),'tot'):step(lab,eur(S.a.ingresos));
+const deudasB=()=>S.a.deudas+alqDeuda();
+const alqSt=()=>(S.a.alqCobra>0||S.a.alqGastos>0)?step('Alquiler que cobras',eur(S.a.alqCobra))+step('− Gastos e hipoteca de ese piso',eur(S.a.alqGastos))+step('Alquiler neto',eur(alqNeto())):'';
+const ingSt=(lab='Ingresos netos del hogar al mes')=>alqB()>0?step('Nómina neta al mes',eur(S.a.ingresos))+alqSt()+step(`+ Alquiler neto × ${pctS(S.a.alqPct)} que cuenta el banco`,eur(alqB()))+step('Ingresos que cuenta el banco',eur(ingB()),'tot'):step(lab,eur(S.a.ingresos));
 function cuotaFor(P,tinPct,years){const n=Math.round(years*12),r=tinPct/1200;return n<=0?0:r===0?P/n:P*r/(1-Math.pow(1+r,-n))}
 function pvFor(pay,tinPct,years){const n=Math.round(years*12),r=tinPct/1200;return r===0?pay*n:pay*(1-Math.pow(1+r,-n))/r}
 function compraCostes(P,ePct){const im=impuesto(P);return {entrada:P*(ePct!=null?ePct:P===S.v.precio?entradaEf():S.v.entrada)/100,imp:im.total,im,not:P*S.v.notaria/100,com:P*S.v.comision/100,fijos:S.v.fijos}}
@@ -1136,7 +1142,7 @@ function calc1(){
   const porAhorros=busca(P=>Emin(P)+gastosP(P)+S.a.colchon<=S.a.ahorros);
   // Tope por ingresos: cuota máxima por esfuerzo y por lo que os debe quedar para vivir, al plazo que daría el banco por edad
   const plazoB=Math.max(1,Math.min(S.v.plazo,EDAD_FIN-S.v.edad));
-  const cuotaEsf=ingB()*S.a.esfuerzo/100-S.a.deudas,cuotaRes=ingB()-S.a.deudas-RESID*S.a.titulares;
+  const cuotaEsf=ingB()*S.a.esfuerzo/100-deudasB(),cuotaRes=ingB()-deudasB()-RESID*S.a.titulares;
   const cuotaMax=Math.max(0,Math.min(cuotaEsf,cuotaRes)),limCuota=cuotaRes<cuotaEsf?'resto':'esfuerzo';
   const hipMax=pvFor(cuotaMax,S.v.tin,plazoB);
   // Las dos cosas a la vez: la hipoteca no pasa de hipMax, y lo que no presta el banco lo pones tú
@@ -1148,10 +1154,10 @@ function calc1(){
   const entMax=entradaJ(max),extraMax=Math.max(0,entMax-Emin(max)),icoIng=S.v.ico&&entradaMin(max,0).ico;
   // La vivienda que miras: se calcula con la entrada que de verdad te pedirían
   const P=S.v.precio,tas=tasa(),em=entradaMin(P,tas),eEf=entradaEf(),c=compraCostes(P),nd=sumC(c)+S.a.colchon,hip=hipoteca(),cuota=cuotaFor(hip,S.v.tin,S.v.plazo);
-  const esfuerzo=ingB()>0?(cuota+S.a.deudas)/ingB()*100:(cuota+S.a.deudas>0?I:0);
+  const esfuerzo=ingB()>0?(cuota+deudasB())/ingB()*100:(cuota+deudasB()>0?I:0);
   const ico=icoInfo(P),ltv=Math.min(P,tas)>0?hip/Math.min(P,tas)*100:0;
-  const resto=ingB()-S.a.deudas-cuota,cuotaE=cuotaFor(hip,S.v.tin+ESTRES,S.v.plazo);
-  const esfE=ingB()>0?(cuotaE+S.a.deudas)/ingB()*100:(cuotaE+S.a.deudas>0?I:0);
+  const resto=ingB()-deudasB()-cuota,cuotaE=cuotaFor(hip,S.v.tin+ESTRES,S.v.plazo);
+  const esfE=ingB()>0?(cuotaE+deudasB())/ingB()*100:(cuotaE+deudasB()>0?I:0);
   const chk={
     entrada:e0>=em.pct-1e-9,
     esf:esfuerzo<=S.a.esfuerzo+1e-9,
@@ -1161,7 +1167,7 @@ function calc1(){
   const okB=chk.esf&&chk.resto&&chk.plazo,falta=nd-S.a.ahorros,disp=S.a.ahorros-S.a.colchon;
   const gastos=c.imp+c.not+c.com+c.fijos,entradaHoy=P>0?Math.max(0,Math.min(100,(disp-gastos)/P*100)):0;
   const meses=falta>0&&S.a.ahorroMes>0?Math.ceil(falta/S.a.ahorroMes):null;
-  const ingEsf=(cuota+S.a.deudas)/(S.a.esfuerzo/100),ingRes=cuota+S.a.deudas+RESID*S.a.titulares,ingNec=Math.max(ingEsf,ingRes);
+  const ingEsf=(cuota+deudasB())/(S.a.esfuerzo/100),ingRes=cuota+deudasB()+RESID*S.a.titulares,ingNec=Math.max(ingEsf,ingRes);
   return {ingEsf,ingRes,ingNec,e:eEf/100,eEf,porAhorros,cuotaMax,cuotaEsf,cuotaRes,limCuota,plazoB,hipMax,porIngresos,soloIng,icoIng,max,entMax,extraMax,gMax:gastosP(max),bind,P,tas,c,need:nd,hip,cuota,esfuerzo,falta,disp,
     em,ico,ltv,resto,cuotaE,esfE,chk,okB,ok:falta<=0&&okB,gastos,entradaHoy,meses};
 }
@@ -1207,7 +1213,7 @@ function render1(){
     (R.max>0&&Math.floor(R.max/1000)*1000!==R.P?`<div class="alert neutral"><span>Tu precio máximo es <b class="num">${eur(R.max)}</b>. Úsalo como precio en las otras dos calculadoras.</span><button class="btn solid" data-act="usemax">Usar ${eur(Math.floor(R.max/1000)*1000)}</button></div>`:'')+
     `<div class="alert neutral"><span><b>Pasos y papeles.</b> Qué documentos te pedirá el banco y en qué orden va todo, de la reserva a la firma.</span><button class="btn" data-x="pasos">Ver la lista</button></div>`;
   {const inc=document.querySelector('#p-cuanto .incard');inc.classList.toggle('rapido',!!S.rapido);
-   $('qhint').innerHTML=S.rapido?`El resto usa valores habituales: entrada del ${pctS(S.v.entrada)}, TIN del ${pct(S.v.tin)} y ${anos(S.v.plazo)}.${S.a.deudas>0||alqB()>0?` Cuenta con ${[S.a.deudas>0?eur(S.a.deudas)+'/mes de otras cuotas':'',alqB()>0?eur(alqB())+'/mes de alquiler':''].filter(Boolean).join(' y ')}.`:''} <button type="button" class="lnkbtn" data-rapido="0">¿Pagas otros préstamos o cobras un alquiler? Añádelos</button>`:'';}
+   $('qhint').innerHTML=S.rapido?`El resto usa valores habituales: entrada del ${pctS(S.v.entrada)}, TIN del ${pct(S.v.tin)} y ${anos(S.v.plazo)}.${deudasB()>0||alqB()>0?` Cuenta con ${[deudasB()>0?eur(deudasB())+'/mes de otras cuotas':'',alqB()>0?eur(alqB())+'/mes de alquiler neto':''].filter(Boolean).join(' y ')}.`:''} <button type="button" class="lnkbtn" data-rapido="0">¿Pagas otros préstamos o cobras un alquiler? Añádelos</button>`:'';}
   $('g1ico').hidden=!S.v.ico;{const l=document.querySelector('#g1a [data-bind="v.edad"]');if(l){const t=l.closest('.fld').querySelector('.lt');t.textContent=S.a.titulares>1?'Edad del mayor':'Edad'}}
 
   const top=Math.max(R.porAhorros,isFinite(R.porIngresos)?R.porIngresos:0,R.P)*1.08||1;
@@ -1220,7 +1226,7 @@ function render1(){
   $('r1lim').innerHTML=lb('Por tus ahorros',R.porAhorros,'lAh',R.bind==='ahorros',1)+lb('Por tus ingresos',R.porIngresos,'lIn',R.bind==='ingresos')+
     `<div class="legend"><span><i style="background:var(--accent)"></i>El límite que manda</span><span><i style="background:var(--ink);width:3px"></i>La vivienda que miras</span></div>
     <div class="lim2">${limB(L35,'Límite habitual del banco · 35 % de tus ingresos','lim35')}${limB(L30,'Prudente · 30 % de tus ingresos','lim30')}</div>`;
-  const limX=(L,tit,txt)=>()=>modal(tit,`<div class="steps">${ingSt()}${step(`× ${L.e} %`,eur(ingB()*L.e/100))}${step('− Otras cuotas',eur(S.a.deudas))}${L.lim==='resto'?step(`Tope para que os queden ${eur(RESID)} por titular (manda este)`,eur(R.cuotaRes)):''}${step('Cuota máxima',eur(L.q)+'/mes','tot')}${step(`Vivienda máxima con tus ahorros y esa cuota (${pct(S.v.tin)}, ${anos(R.plazoB)})`,eur(L.max),'tot')}</div><p class="note">${txt} Tu cálculo usa el máximo que has puesto: ${pctS(S.a.esfuerzo)}.</p>`);
+  const limX=(L,tit,txt)=>()=>modal(tit,`<div class="steps">${ingSt()}${step(`× ${L.e} %`,eur(ingB()*L.e/100))}${step('− Otras cuotas'+(alqDeuda()>0?` (incluye ${eur(alqDeuda())} que el alquiler no cubre)`:''),eur(deudasB()))}${L.lim==='resto'?step(`Tope para que os queden ${eur(RESID)} por titular (manda este)`,eur(R.cuotaRes)):''}${step('Cuota máxima',eur(L.q)+'/mes','tot')}${step(`Vivienda máxima con tus ahorros y esa cuota (${pct(S.v.tin)}, ${anos(R.plazoB)})`,eur(L.max),'tot')}</div><p class="note">${txt} Tu cálculo usa el máximo que has puesto: ${pctS(S.a.esfuerzo)}.</p>`);
   X.lim35=limX(L35,'Límite habitual del banco: 35 %','La mayoría de bancos no aprueban cuotas que pasen del 35 % de los ingresos netos; alguno llega al 40 % con sueldos altos.');
   X.lim30=limX(L30,'Margen prudente: 30 %','Con un 30 % te queda margen para imprevistos, subidas del Euríbor o una bajada de ingresos.');
   // lo que mira el banco
@@ -1241,10 +1247,10 @@ function render1(){
     <button class="nd ${R.ingNec<=ingB()?'good':'bad'}" data-x="ingNec"><small>Ingresos netos que hacen falta</small><b class="num">${eur(R.ingNec)}/mes</b><em>tienes ${eur(ingB())}</em></button></div>`;
   // según el plazo
   const pzs=[...new Set([20,25,30,35,S.v.plazo])].filter(n=>n>=5&&n<=40).sort((a,b)=>a-b);
-  $('r1plazo').innerHTML=`<div class="pz-t"><div class="pz-h"><span>Plazo</span><span>Cuota</span><span>De tus ingresos</span><span>Intereses</span></div>${pzs.map(n=>{const q=cuotaFor(R.hip,S.v.tin,n),e=ingB()>0?(q+S.a.deudas)/ingB()*100:I,it=q*n*12-R.hip,viejo=S.v.edad+n>EDAD_FIN;
+  $('r1plazo').innerHTML=`<div class="pz-t"><div class="pz-h"><span>Plazo</span><span>Cuota</span><span>De tus ingresos</span><span>Intereses</span></div>${pzs.map(n=>{const q=cuotaFor(R.hip,S.v.tin,n),e=ingB()>0?(q+deudasB())/ingB()*100:I,it=q*n*12-R.hip,viejo=S.v.edad+n>EDAD_FIN;
     return `<button class="pz-r${n===S.v.plazo?' on':''}" data-plazo="${n}" title="${n===S.v.plazo?'Es el plazo que tienes':'Usar '+anos(n)}"><span>${anos(n)}${viejo?` <i class="pz-w">acabas a los ${S.v.edad+n}</i>`:''}</span><b class="num">${eur(q)}</b><span class="num" style="color:${e>S.a.esfuerzo?'var(--bad)':'var(--good)'}">${isFinite(e)?pct(e,0):'—'}</span><span class="num">${eur(it)}</span></button>`}).join('')}</div>
     <p class="hint" style="margin:6px 0 0">Más años: cuota más baja, pero muchos más intereses. Pincha una fila para usar ese plazo.</p>`;
-  X.ingNec=()=>modal('Ingresos que hacen falta',`<div class="steps">${step('Cuota de la hipoteca',eur(R.cuota))}${step('+ Otras cuotas',eur(S.a.deudas))}${step(`Para que no pase del ${pctS(S.a.esfuerzo)} de tus ingresos`,eur(R.ingEsf)+'/mes')}${step(`Para que os queden ${eur(RESID)} por titular`,eur(R.ingRes)+'/mes')}${step('Ingresos netos que hacen falta (el mayor)',eur(R.ingNec)+'/mes','tot')}${step('Los tuyos',eur(ingB())+'/mes')}</div>`);
+  X.ingNec=()=>modal('Ingresos que hacen falta',`<div class="steps">${step('Cuota de la hipoteca',eur(R.cuota))}${step('+ Otras cuotas'+(alqDeuda()>0?` (incluye ${eur(alqDeuda())} que el alquiler no cubre)`:''),eur(deudasB()))}${step(`Para que no pase del ${pctS(S.a.esfuerzo)} de tus ingresos`,eur(R.ingEsf)+'/mes')}${step(`Para que os queden ${eur(RESID)} por titular`,eur(R.ingRes)+'/mes')}${step('Ingresos netos que hacen falta (el mayor)',eur(R.ingNec)+'/mes','tot')}${step('Los tuyos',eur(ingB())+'/mes')}</div>`);
 
   X.max=()=>modal('Precio máximo',`<p>Es el menor de dos topes: el que marcan tus ahorros y el que marca tu sueldo.</p>
     <div class="steps">${step('Tope por ahorros',eur(R.porAhorros))}${step('Tope por ingresos',isFinite(R.porIngresos)?eur(R.porIngresos):'sin tope')}${step('Precio máximo (el menor)',eur(R.max),'tot')}</div>
@@ -1272,7 +1278,7 @@ function render1(){
   X.banco=()=>modal('Lo que mira el banco',`<p>Aunque tengas los ahorros, el banco solo aprueba la hipoteca si se cumplen sus criterios. Con tus datos falla:</p><ul>${!K.esf?`<li>Las cuotas: ${pct(R.esfuerzo,0)} de tus ingresos, por encima de tu máximo del ${pctS(S.a.esfuerzo)}.</li>`:''}${!K.resto?`<li>Lo que os queda para vivir: ${eur(R.resto)} al mes, menos de ${eur(RESID*S.a.titulares)}.</li>`:''}${!K.plazo?`<li>El plazo: terminarías de pagar a los ${S.v.edad+S.v.plazo} años.</li>`:''}</ul>`);
   X.bEnt=()=>modal('Entrada mínima',`<div class="steps">${step('Precio',eur(R.P))}${step('Tasación'+(S.v.tasacion>0?'':' (supuesta igual al precio)'),eur(R.tas))}${step(`El banco financia el ${pct(R.em.ltv*100,0)} del menor de los dos`,eur(R.em.ltv*Math.min(R.P,R.tas)))}${step('Entrada mínima',eur(R.em.eur)+' · '+pct(R.em.pct,0),'tot')}${step('La que has puesto',eur(R.P*S.v.entrada/100)+' · '+pctS(S.v.entrada))}${step('Con la que se calcula',eur(c.entrada)+' · '+pctS(R.eEf),'tot')}</div>
     <p>${K.entrada?'Tu entrada llega.':'Tu entrada no llega, así que todo se calcula con la mínima. Para bajarla: negocia el precio'+(R.ico.perfil&&!S.v.ico?' o activa el aval ICO si cumples.':'.')}</p><p class="note">Si la tasación sale por debajo del precio, la diferencia la pones tú. Por eso conviene pedir la tasación antes de firmar las arras, o poner en las arras una condición de financiación.</p>`);
-  X.bRes=()=>modal('Lo que os queda para vivir',`<div class="steps">${ingSt('Ingresos netos al mes')}${step('− Otras cuotas',eur(S.a.deudas))}${step('− Cuota de la hipoteca',eur(R.cuota))}${step('Os queda',eur(R.resto),'tot')}${step(`Mínimo habitual: ${eur(RESID)} × ${S.a.titulares} titular${S.a.titulares>1?'es':''}`,eur(RESID*S.a.titulares))}</div><p class="note">Es una referencia: cada banco usa la suya y suma más por cada hijo.</p>`);
+  X.bRes=()=>modal('Lo que os queda para vivir',`<div class="steps">${ingSt('Ingresos netos al mes')}${step('− Otras cuotas'+(alqDeuda()>0?` (incluye ${eur(alqDeuda())} que el alquiler no cubre)`:''),eur(deudasB()))}${step('− Cuota de la hipoteca',eur(R.cuota))}${step('Os queda',eur(R.resto),'tot')}${step(`Mínimo habitual: ${eur(RESID)} × ${S.a.titulares} titular${S.a.titulares>1?'es':''}`,eur(RESID*S.a.titulares))}</div><p class="note">Es una referencia: cada banco usa la suya y suma más por cada hijo.</p>`);
   X.bPlazo=()=>modal('Edad al terminar de pagar',`<div class="steps">${step('Tu edad',anos(S.v.edad))}${step('+ Plazo',anos(S.v.plazo))}${step('Terminas de pagar a los',anos(S.v.edad+S.v.plazo),'tot')}${step(`Plazo máximo para acabar antes de los ${EDAD_FIN}`,anos(Math.max(0,EDAD_FIN-S.v.edad)),'tot')}</div><p class="note">Algunos bancos llegan a los 80 años, pero lo habitual son 70 o 75. Si firmáis dos, cuenta la edad del mayor.</p>`);
   X.bEst=()=>modal(`Si el tipo sube ${ESTRES} puntos`,`<div class="steps">${step('Cuota con TIN '+pct(S.v.tin),eur(R.cuota))}${step('Cuota con TIN '+pct(S.v.tin+ESTRES),eur(R.cuotaE),'tot')}${step('Parte de tus ingresos',isFinite(R.esfE)?pct(R.esfE,0):'—','tot')}</div><p>Es la prueba de estrés que hacen muchos bancos con las variables y las mixtas: si el Euríbor sube, ¿podrías seguir pagando? ${K.estres?'Con tus datos, sí: no pasarías del 40 %.':'Con tus datos pasarías del 40 % de tus ingresos: con una fija estarías protegido.'}</p><p class="note">En una hipoteca fija la cuota no cambia, así que este riesgo no te afecta.</p>`);
   X.itp=()=>{const reg=im.reg;modal(S.v.nueva?im.ivaN+' y AJD de vivienda nueva':`ITP en ${S.v.ccaa}`,S.v.nueva?`<div class="steps">${step(im.ivaN+' '+pctS(im.ivaT)+' × '+eur(R.P),eur(im.iva))}${step(`AJD ${pctS(im.ajd)} en ${esc(S.v.ccaa)}`,eur(c.imp-im.iva))}${step('Total',eur(c.imp),'tot')}</div><p class="note">El AJD (actos jurídicos documentados) es el tipo general de 2026 de cada comunidad; algunas lo rebajan a jóvenes o familias numerosas. En Canarias se paga IGIC (7 %) y en Ceuta y Melilla IPSI (4 %) en vez de IVA; hay tipos reducidos para vivienda protegida. Las rebajas del ITP por edad no se aplican a estos impuestos.</p>`:
@@ -1291,7 +1297,7 @@ function render1(){
       = ${nf(0).format(R.hip)} × ${nf(6).format(S.v.tin/1200)} / (1 − (1 + ${nf(6).format(S.v.tin/1200)})^−${S.v.plazo*12})
       = ${eur2(R.cuota)}</div><p>Con un TIN estimado de ${pct(S.v.tin)}. Para comparar ofertas reales, usa la pestaña 2.</p><button class="btn" data-x="tabla1">Ver el cuadro de amortización</button>`);
   X.tabla1=()=>amortModal(R.hip,S.v.tin,S.v.plazo,`Hipoteca de la vivienda de ${eur(R.P)}`);
-  X.esf=()=>modal('Parte de tus ingresos',`<div class="steps">${step('Cuota hipoteca',eur(R.cuota))}${step('+ Otras cuotas',eur(S.a.deudas))}${ingSt().replace(/<span>(Ingresos que cuenta el banco|Ingresos netos del hogar al mes)<\/span>/,'<span>÷ $1</span>')}${step('Tasa de esfuerzo',isFinite(R.esfuerzo)?pct(R.esfuerzo,1):'—','tot')}</div><p class="note">Los bancos suelen pedir que no pase del 35 % y casi nunca aceptan más del 40 %.</p>`);
+  X.esf=()=>modal('Parte de tus ingresos',`<div class="steps">${step('Cuota hipoteca',eur(R.cuota))}${step('+ Otras cuotas'+(alqDeuda()>0?` (incluye ${eur(alqDeuda())} que el alquiler no cubre)`:''),eur(deudasB()))}${ingSt().replace(/<span>(Ingresos que cuenta el banco|Ingresos netos del hogar al mes)<\/span>/,'<span>÷ $1</span>')}${step('Tasa de esfuerzo',isFinite(R.esfuerzo)?pct(R.esfuerzo,1):'—','tot')}</div><p class="note">Los bancos suelen pedir que no pase del 35 % y casi nunca aceptan más del 40 %.</p>`);
   return R;
 }
 document.addEventListener('click',e=>{
@@ -2274,7 +2280,7 @@ function buildPdf(){
   BIG('Precio máximo de vivienda que puedes comprar hoy',eur(R1.max),'Te limitan '+(R1.bind==='ahorros'?'los ahorros':'los ingresos'));
   TABLE(['Tus datos','','',''],[
     ['Ahorros disponibles',eur(S.a.ahorros),'Colchón que no tocas',eur(S.a.colchon)],
-    ['Ingresos netos del hogar/mes',eur(S.a.ingresos)+(alqB()>0?` + ${eur(alqB())} de alquiler`:''),'Otras cuotas/mes',eur(S.a.deudas)],
+    ['Ingresos netos del hogar/mes',eur(S.a.ingresos)+(alqB()>0?` + ${eur(alqB())} de alquiler`:''),'Otras cuotas/mes',eur(deudasB())],
     ['Edad',S.v.edad+' años','Primera vivienda',S.v.primera?'Sí':'No'],
     ['Comunidad autónoma',S.v.ccaa,'Tipo de vivienda',S.v.nueva?'Obra nueva':'Segunda mano'],
     ['Entrada',pctS(entradaEf())+(entradaEf()>S.v.entrada?' (mínima del banco)':''),'TIN estimado y plazo',pct(S.v.tin)+' · '+anos(S.v.plazo)],
