@@ -1,7 +1,7 @@
 {
  "version": 3,
- "actualizado": "2026-09-30",
- "fecha": "30 de septiembre de 2026",
+ "actualizado": "2026-10-05",
+ "fecha": "5 de octubre de 2026",
  "mercado": {
   "eur": 3.247,
   "eurAgo": 2.954,
@@ -311,18 +311,18 @@
    "b": "Bankinter",
    "p": "Hipoteca Variable",
    "t": "variable",
-   "tin": 2.3,
-   "anos": 1,
+   "tin": 2.5,
+   "anos": 3,
    "dif": 0.5,
    "difS": 1.8,
-   "tae": "3,82 %",
+   "tae": "4,04 %",
    "ltv": 80,
    "pz": 30,
    "v": "Nómina, seguro de hogar, seguro de vida, plan de pensiones",
    "c": "Apertura 500 €. Amortización 0,15 % los 5 primeros años",
-   "n": "Las fuentes no coinciden en el periodo inicial",
+   "n": "2,50 % los 3 primeros años (3,80 % sin bonificar). Ficha FIPRE de 02/10/2026",
    "f": "https://www.helpmycash.com/mejores-hipotecas/",
-   "d": "28/09/2026",
+   "d": "02/10/2026",
    "apEur": 500
   }
  ]
