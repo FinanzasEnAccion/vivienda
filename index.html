@@ -666,6 +666,7 @@ html.m .hz button{min-width:44px;padding:8px 4px}
 .lim2{display:grid;gap:6px;margin-top:12px}
 .lim2 button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;border:0;background:var(--field);border-radius:12px;padding:9px 12px;text-align:left;font-size:12.5px;color:var(--ink)}
 .lim2 button:hover{background:var(--accent-soft)}.lim2 b{font-variant-numeric:tabular-nums}.lim2 em{grid-column:1 / -1;font-style:normal;color:var(--muted);font-size:11.5px}
+.uso-w{display:flex;gap:6px;align-items:center;width:100%}.uso-w .seg-ctl{flex:1;min-width:0}.uso{height:auto;align-items:stretch}.uso button{white-space:normal;line-height:1.15;padding:6px 4px;flex:1;min-width:0}
 .qmode{display:grid;gap:6px;margin:0 0 6px}.qmode .seg-ctl button{white-space:nowrap;flex:1}.qmode .hint{font-size:11.5px;margin:0}.qmode .hint:empty{display:none}
 .incard.rapido .fld.qx,.incard.rapido .qx{display:none}
 .met td{vertical-align:top;font-size:12.5px}.met td:first-child{font-weight:600;white-space:nowrap}.met td a{word-break:break-word}
@@ -918,6 +919,7 @@ const DEF={
  alqc:['Cómo suma el banco tu alquiler','No suma lo que cobras. Primero le quita los gastos del piso (IBI, comunidad, seguro) y la cuota de su hipoteca, si la tiene. Al neto que queda le aplica un porcentaje, normalmente entre el 60 % y el 70 %, por si el piso se queda vacío o hay impagos. Ejemplo: cobras 800 €, pagas 150 € de gastos y 300 € de hipoteca de ese piso. Te quedan 350 € netos y, al 70 %, el banco suma 245 € a tus ingresos, no 800 €. Si los gastos y la hipoteca superan el alquiler, la diferencia cuenta como una deuda más. Solo cuenta si el alquiler aparece en tu declaración de la renta, y cada banco tiene su criterio.'],
  alqg:['Gastos e hipoteca del piso alquilado','Lo que te cuesta al mes el piso que tienes alquilado: IBI, comunidad y seguro (repartidos entre 12) y la cuota de su hipoteca, si la tiene. No la pongas también en «Otras cuotas», o se restaría dos veces. El banco los resta del alquiler antes de aplicar su porcentaje.'],
  alqp:['Parte del alquiler que cuenta el banco','Qué porcentaje del alquiler neto (después de gastos e hipoteca de ese piso) suma el banco a tus ingresos. Lo habitual está entre el 60 % y el 70 %; cada banco tiene su criterio y solo lo cuenta si está en tu declaración de la renta.'],
+ uso:['Para qué es la vivienda','Primera casa: el banco suele financiar el 80 % y puedes tener ITP reducido y aval ICO si cumples los requisitos. Cambio de casa: vendes o dejas la tuya para vivir en otra; el banco financia el 80 %, pero no hay aval ICO ni las rebajas de ITP que piden primera vivienda. Segunda vivienda (o inversión): no va a ser tu casa habitual; el banco suele financiar como mucho el 70 % (algunos dan algo más con buen perfil), así que necesitas en torno al 30 % de entrada más un 10 % de impuestos y gastos, y no hay ITP reducido ni aval ICO.'],
  segunda:['Segunda vivienda o inversión','Si no va a ser tu casa habitual, el banco suele financiar como mucho el 70 % (algunos dan algo más con buen perfil). Necesitas en torno al 30 % de entrada más un 10 % de impuestos y gastos. Tampoco hay ITP reducido ni aval ICO, que son solo para vivienda habitual.'],
  deudas:['Otras cuotas','No incluyas la hipoteca del piso que tienes alquilado: va en «Gastos e hipoteca de ese piso». Lo que ya pagas cada mes por otros préstamos: coche, tarjetas, préstamos personales. El banco los suma a la cuota de la hipoteca.'],
  esf:['Tasa de esfuerzo','La parte de tus ingresos netos que se va en cuotas de préstamos. Los bancos suelen pedir que no pase del 35 % y casi nunca aceptan más del 40 %.'],
@@ -979,8 +981,8 @@ const LIM={'a.alqPct':[0,100],'m.anos':[1,40],'m.mes':[1,12],'m.comAm':[0,5],'m.
 const REDSEL=()=>{const id='in'+(uid++);return `<div class="fld" style="grid-column:span 2"><label for="${id}"><span class="lt">Reducción del IRPF</span>${Q('reduccion')}</label><div class="inp"><select id="${id}" data-bind="i.reduccion" data-fmt="num"></select></div></div>`};
 
 $('g1a').className='g2';$('g1a').innerHTML=F('a.ahorros','Ahorros','€','eur','','ahorros')+F('a.colchon','Colchón','€','eur','','colchon')+F('a.ingresos','Ingresos netos','€/mes','eur','','ingresos')+F('a.deudas','Otras cuotas','€/mes','eur','','deudas')+F('a.alqCobra','Alquiler que cobras','€/mes','eur','','alqc')+F('a.alqGastos','Gastos e hipoteca de ese piso','€/mes','eur','','alqg')+F('a.alqPct','Parte que cuenta el banco','%','dec','','alqp')+F('a.esfuerzo','Máximo para cuotas','% ingresos','dec','','esf')+F('a.titulares','Titulares','personas','int','','titulares')+F('a.ahorroMes','Ahorras al mes','€','eur','','ahorroMes')+F('v.edad','Edad','años','int');
-$('g1seg').innerHTML=SW('v.segunda','Segunda vivienda o inversión','segunda');
-$('g1chk').innerHTML=SW('v.primera','Primera vivienda')+SW('v.rural','Municipio pequeño')+SW('v.ico','Uso el aval ICO');
+$('g1seg').innerHTML=`<div class="uso-w"><div class="seg-ctl sm uso" role="group" aria-label="Para qué es la vivienda"><button data-uso="primera">Primera casa</button><button data-uso="cambio">Cambio de casa</button><button data-uso="segunda">Segunda vivienda</button></div>${Q('uso')}</div>`;
+$('g1chk').innerHTML=SW('v.rural','Municipio pequeño')+SW('v.ico','Uso el aval ICO');
 /* modo rápido: solo ahorros, ingresos netos, comunidad y edad */
 const QUICK=['a.ahorros','a.ingresos','v.ccaa','v.edad'];
 $('g1ico').innerHTML=F('a.brutos','Ingresos brutos/año','€ por titular','eur','','brutos')+F('a.patrimonio','Patrimonio','€ por titular','eur','','patrimonio');
@@ -1032,6 +1034,11 @@ document.addEventListener('click',e=>{
   const hz=e.target.closest('[data-hz]');if(hz){S.r.horizonte=+hz.dataset.hz;refresh();return}
   const ct=e.target.closest('[data-ct]');if(ct){const k=ct.dataset.ct;S.ct[k]=S.ct[k]===false;refresh();X.coste();return}
   const sn=e.target.closest('[data-sens]');if(sn){const [i,j]=sn.dataset.sens.split(':').map(Number);X.sens(i,j);return}
+  const us=e.target.closest('[data-uso]');if(us){const u=us.dataset.uso,eraSeg=S.v.segunda;S.v.primera=u==='primera';S.v.segunda=u==='segunda';if(u!=='primera')S.v.ico=false;track('uso',u);
+    if(S.v.segunda&&!eraSeg){if(S.v.entUnit!=='eur'&&S.v.entrada<100-LTV_SEG){S.v.entrada=100-LTV_SEG;entSync()}toast(`Segunda vivienda: el banco suele financiar el ${LTV_SEG} %, así que la entrada mínima es del ${100-LTV_SEG} %`)}
+    else if(!S.v.segunda&&eraSeg){if(S.v.entUnit!=='eur'&&S.v.entrada===100-LTV_SEG){S.v.entrada=20;entSync()}toast('Vivienda habitual: el banco suele financiar el 80 %')}
+    else toast(u==='primera'?'Primera casa: se miran el ITP reducido y el aval ICO':'Cambio de casa: sin aval ICO ni rebajas que piden primera vivienda');
+    refresh();return}
   const n=e.target.closest('[data-nueva]');if(n){S.v.nueva=n.dataset.nueva==='1';refresh();return}
   const mt=e.target.closest('[data-mtipo]');if(mt){S.m.tipo=mt.dataset.mtipo;S.mTouched=true;refresh();track('mi-hipoteca-tipo',S.m.tipo);return}
   const qm=e.target.closest('[data-rapido]');if(qm){S.rapido=qm.dataset.rapido==='1';refresh();fitSoon();track('modo',S.rapido?'rapido':'completo');return}
@@ -1041,7 +1048,6 @@ document.addEventListener('click',e=>{
     if(S.lk[k]===false){S.lk[k]=true;refresh();toast(`Vuelve a usar el dato de «${src}»`)}else toast(`Viene de «${src}». Si lo cambias aquí, deja de seguirlo`);return}
   const la=e.target.closest('[data-lkall]');if(la){Object.keys(LINKS).forEach(k=>S.lk[k]=true);refresh();toast('Invertir vuelve a usar los datos de tus otras pestañas');return}
   const s=e.target.closest('[data-sw]');if(s){const k=s.dataset.sw;set(k,!get(k));
-    if(k==='v.segunda'){track('segunda-vivienda',S.v.segunda?'si':'no');if(S.v.segunda){S.v.ico=false;S.v.primera=false;if(S.v.entUnit!=='eur'&&S.v.entrada<100-LTV_SEG){S.v.entrada=100-LTV_SEG;entSync()}toast(`Segunda vivienda: el banco suele financiar el ${LTV_SEG} %, así que la entrada mínima es del ${100-LTV_SEG} %`)}else{if(S.v.entUnit!=='eur'&&S.v.entrada===100-LTV_SEG){S.v.entrada=20;entSync()}toast('Vivienda habitual: el banco suele financiar el 80 %')}}
     if(k==='v.ico'){track('aval-ico',S.v.ico?'si':'no');if(S.v.ico){const ii=icoInfo(S.v.precio);if(ii.ok&&S.v.entrada>0){S.v.entrada=0;entSync();toast('Entrada al 0 %: el aval cubre hasta el 20 % que el banco no financia')}else if(!ii.ok)toast('Con estos datos no cumples el aval: mira los requisitos')}else if(S.v.entrada<20){S.v.entrada=20;entSync();toast('Sin aval: entrada mínima del 20 %')}}
     if(k==='i.tensionada'&&!S.i.tensionada&&S.i.reduccion>70){S.i.reduccion=50;toast('Fuera de zona tensionada la reducción vuelve al 50 %')}
     refresh()}
@@ -1060,6 +1066,7 @@ function fillBound(skip){
   const lh=$('lkhint');if(lh){const off=Object.keys(LINKS).filter(k=>S.lk[k]===false).length;lh.innerHTML=`<span class="lk" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span> viene de tus otras pestañas${off?` · <button type="button" class="lnkbtn" data-lkall="1">volver a igualar todo</button>`:''}`}
   document.querySelectorAll('[data-nueva]').forEach(b=>b.classList.toggle('on',(b.dataset.nueva==='1')===!!S.v.nueva));
   document.querySelectorAll('[data-inueva]').forEach(b=>b.classList.toggle('on',(b.dataset.inueva==='1')===!!S.i.nueva));
+  document.querySelectorAll('[data-uso]').forEach(b=>b.classList.toggle('on',b.dataset.uso===(S.v.segunda?'segunda':S.v.primera?'primera':'cambio')));
   document.querySelectorAll('[data-mtipo]').forEach(b=>b.classList.toggle('on',b.dataset.mtipo===S.m.tipo));
   document.querySelectorAll('[data-rapido]').forEach(b=>b.classList.toggle('on',(b.dataset.rapido==='1')===!!S.rapido));
   document.querySelectorAll('[data-sw]').forEach(b=>{const on=!!get(b.dataset.sw);b.querySelector('.sw').classList.toggle('on',on);b.setAttribute('aria-checked',on)});
