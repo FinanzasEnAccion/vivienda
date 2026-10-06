@@ -23,7 +23,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Vivienda FA">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
 <meta name="theme-color" content="#0B3D2E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;background:#EEF2EF}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -666,7 +666,8 @@ html.m .hz button{min-width:44px;padding:8px 4px}
 .lim2{display:grid;gap:6px;margin-top:12px}
 .lim2 button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;border:0;background:var(--field);border-radius:12px;padding:9px 12px;text-align:left;font-size:12.5px;color:var(--ink)}
 .lim2 button:hover{background:var(--accent-soft)}.lim2 b{font-variant-numeric:tabular-nums}.lim2 em{grid-column:1 / -1;font-style:normal;color:var(--muted);font-size:11.5px}
-.uso-w{display:flex;gap:6px;align-items:center;width:100%}.uso-w .seg-ctl{flex:1;min-width:0}.uso{height:auto;align-items:stretch}.uso button{white-space:normal;line-height:1.15;padding:6px 4px;flex:1;min-width:0}
+.uso-w{display:grid;gap:6px;width:100%}.uso-l{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.uso,html.m .uso,.seg-ctl.uso{height:auto!important;min-height:0;align-items:stretch}.uso button,html.m .uso button{display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;line-height:1.15;padding:6px 4px;flex:1 1 0;min-width:0;min-height:40px;font-size:13px}
 .qmode{display:grid;gap:6px;margin:0 0 6px}.qmode .seg-ctl button{white-space:nowrap;flex:1}.qmode .hint{font-size:11.5px;margin:0}.qmode .hint:empty{display:none}
 .incard.rapido .fld.qx,.incard.rapido .qx{display:none}
 .met td{vertical-align:top;font-size:12.5px}.met td:first-child{font-weight:600;white-space:nowrap}.met td a{word-break:break-word}
@@ -981,7 +982,7 @@ const LIM={'a.alqPct':[0,100],'m.anos':[1,40],'m.mes':[1,12],'m.comAm':[0,5],'m.
 const REDSEL=()=>{const id='in'+(uid++);return `<div class="fld" style="grid-column:span 2"><label for="${id}"><span class="lt">Reducción del IRPF</span>${Q('reduccion')}</label><div class="inp"><select id="${id}" data-bind="i.reduccion" data-fmt="num"></select></div></div>`};
 
 $('g1a').className='g2';$('g1a').innerHTML=F('a.ahorros','Ahorros','€','eur','','ahorros')+F('a.colchon','Colchón','€','eur','','colchon')+F('a.ingresos','Ingresos netos','€/mes','eur','','ingresos')+F('a.deudas','Otras cuotas','€/mes','eur','','deudas')+F('a.alqCobra','Alquiler que cobras','€/mes','eur','','alqc')+F('a.alqGastos','Gastos e hipoteca de ese piso','€/mes','eur','','alqg')+F('a.alqPct','Parte que cuenta el banco','%','dec','','alqp')+F('a.esfuerzo','Máximo para cuotas','% ingresos','dec','','esf')+F('a.titulares','Titulares','personas','int','','titulares')+F('a.ahorroMes','Ahorras al mes','€','eur','','ahorroMes')+F('v.edad','Edad','años','int');
-$('g1seg').innerHTML=`<div class="uso-w"><div class="seg-ctl sm uso" role="group" aria-label="Para qué es la vivienda"><button data-uso="primera">Primera casa</button><button data-uso="cambio">Cambio de casa</button><button data-uso="segunda">Segunda vivienda</button></div>${Q('uso')}</div>`;
+$('g1seg').innerHTML=`<div class="uso-w"><div class="uso-l"><span>¿Para qué es la vivienda?</span>${Q('uso')}</div><div class="seg-ctl sm uso" role="group" aria-label="Para qué es la vivienda"><button data-uso="primera">Primera casa</button><button data-uso="cambio">Cambio de casa</button><button data-uso="segunda">Segunda vivienda</button></div></div>`;
 $('g1chk').innerHTML=SW('v.rural','Municipio pequeño')+SW('v.ico','Uso el aval ICO');
 /* modo rápido: solo ahorros, ingresos netos, comunidad y edad */
 const QUICK=['a.ahorros','a.ingresos','v.ccaa','v.edad'];
