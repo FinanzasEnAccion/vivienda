@@ -667,6 +667,20 @@ html.m .hz button{min-width:44px;padding:8px 4px}
 .lim2 button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;border:0;background:var(--field);border-radius:12px;padding:9px 12px;text-align:left;font-size:12.5px;color:var(--ink)}
 .lim2 button:hover{background:var(--accent-soft)}.lim2 b{font-variant-numeric:tabular-nums}.lim2 em{grid-column:1 / -1;font-style:normal;color:var(--muted);font-size:11.5px}
 .ofaviso{display:flex;gap:10px 16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--warn-soft);border-radius:12px;padding:9px 12px;font-size:12.5px;margin-bottom:10px}.ofaviso span{flex:1 1 320px}.ofaviso a{white-space:nowrap;font-weight:700}
+html:not(.sencilla) .sen{display:none!important}html.m.sencilla .mnav{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.simple{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:16px;align-items:start}.s-left,.s-right{display:grid;gap:16px;min-width:0}
+@media (max-width:800px){.simple{grid-template-columns:1fr}}
+html.m .simple{grid-template-columns:1fr;gap:12px}html.m .s-left,html.m .s-right{display:contents}html.m .s-in{order:1}html.m .s-out{order:2}html.m .s-bk{order:3}html.m .s-alq{order:4}
+html.web .pane>.simple{height:100%;min-height:0;align-items:stretch}html.web .s-left,html.web .s-right{min-height:0;overflow:auto;align-content:start;scrollbar-width:thin;padding-bottom:2px}
+html.web .s-left>.card,html.web .s-right>.card{flex:none}
+.s-q{display:grid;gap:12px}.s-q .fld label .lt{font-size:14px;color:var(--ink);font-weight:600}.s-mas{display:grid;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.s-big{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,52px);line-height:1;border:0;background:none;padding:0;color:var(--ink);text-align:left}
+.s-sem{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;border-radius:999px;padding:6px 12px;border:0}.s-sem i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.s-sem.good{background:var(--good-soft);color:var(--good)}.s-sem.good i{background:var(--good)}.s-sem.warn{background:var(--warn-soft);color:var(--warn)}.s-sem.warn i{background:var(--warn)}.s-sem.bad{background:var(--bad-soft,#fde8e6);color:var(--bad)}.s-sem.bad i{background:var(--bad)}
+.s-lines{display:grid;gap:8px;margin-top:4px}.s-lines button{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border:0;background:var(--field);border-radius:12px;padding:12px 14px;text-align:left;font-size:14px;color:var(--ink)}.s-lines button:hover{background:var(--accent-soft)}.s-lines b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.s-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media (max-width:900px){.s-cards{grid-template-columns:1fr}}
+.s-card{display:grid;gap:4px;border:0;background:var(--field);border-radius:14px;padding:12px 14px;text-align:left;color:var(--ink)}.s-card:hover{background:var(--accent-soft)}.s-card small{color:var(--muted)}.s-card .sq{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.s-card .tp{justify-self:start}
+.s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd small{color:var(--muted);font-size:12px}
 html.sencilla .adv,html.sencilla #m4table th:nth-child(4),html.sencilla #m4table td:nth-child(4),html.sencilla #m4table th:nth-child(7),html.sencilla #m4table td:nth-child(7),html.sencilla #m4table th:nth-child(10),html.sencilla #m4table td:nth-child(10){display:none!important}html.sencilla .tab b{display:none}html.m.sencilla .mnav{grid-template-columns:repeat(4,minmax(0,1fr))}
 .nivel,html.m .nivel{flex:none;height:auto!important;align-items:stretch;background:rgba(240,236,224,.12)}.nivel button,html.m .nivel button{color:rgba(240,236,224,.8);padding:5px 12px;font-weight:600;font-size:12.5px;line-height:1.2;display:flex;align-items:center}.nivel button.on,html.m .nivel button.on{background:var(--mint);color:#0B3D2E}
 html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
@@ -686,17 +700,18 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
       <div class="idtxt"><h1>Finanzas en Acción</h1><p>Calculadoras de vivienda · @BuscandolaLF</p></div>
     </div>
     <nav class="tabs" role="tablist">
-      <button class="tab" role="tab" data-tab="cuanto"><b>1</b><span class="tl">¿Cuánto puedo comprar?</span><span class="ts">Mi presupuesto</span></button>
+      <button class="tab sen" role="tab" data-tab="simple"><b>1</b><span class="ts">Comprar casa</span></button>
+      <button class="tab adv" role="tab" data-tab="cuanto"><b>1</b><span class="tl">¿Cuánto puedo comprar?</span><span class="ts">Mi presupuesto</span></button>
       <button class="tab adv" role="tab" data-tab="hipotecas"><b>2</b><span class="tl">Comparar hipotecas</span><span class="ts">Comparar</span></button>
-      <button class="tab" role="tab" data-tab="alquilar"><b>3</b><span class="tl">¿Comprar o alquilar?</span><span class="ts">Comprar o alquilar</span></button>
-      <button class="tab" role="tab" data-tab="bancos"><b>4</b><span class="tl">Qué ofrecen los bancos</span><span class="ts">Bancos hoy</span></button>
+      <button class="tab adv" role="tab" data-tab="alquilar"><b>3</b><span class="tl">¿Comprar o alquilar?</span><span class="ts">Comprar o alquilar</span></button>
+      <button class="tab adv" role="tab" data-tab="bancos"><b>4</b><span class="tl">Qué ofrecen los bancos</span><span class="ts">Bancos hoy</span></button>
       <button class="tab adv" role="tab" data-tab="invertir"><b>5</b><span class="tl">Invertir para alquilar</span><span class="ts">Invertir</span></button>
       <button class="tab" role="tab" data-tab="mihipo"><b>6</b><span class="tl">Mi hipoteca</span><span class="ts">Mi hipoteca</span></button>
     </nav>
     <div class="htools">
       <button class="hbtn modebtn" id="btnMode" title="Cambiar entre versión web y versión móvil"></button>
       <button class="hbtn pdf" id="btnPdf" hidden title="Descargar un informe en PDF con tus datos"><span class="pdfw">Informe </span>PDF</button>
-      <div class="seg-ctl sm nivel" role="group" aria-label="Versión"><button data-nivel="sencilla" title="Lo justo para saber cuánto puedes comprar y qué pagarías">Sencilla</button><button data-nivel="completa" title="Todo: comparar ofertas con seguros, invertir para alquilar y más detalle">Completa</button></div>
+      <div class="seg-ctl sm nivel" role="group" aria-label="Versión"><button data-nivel="sencilla" title="Lo justo para saber cuánto puedes comprar y qué pagarías">Estándar</button><button data-nivel="completa" title="Todo el detalle: comparar ofertas con seguros, invertir, cartera de pisos, revisar la FEIN">Profesional</button></div>
       <button class="hbtn adv" id="btnCasos" title="Guardar casos y compararlos">Mis casos</button>
       <button class="hbtn" id="btnShare" title="Crear una imagen para compartir, sin tus importes">Compartir</button>
       <button class="hbtn" id="btnCopy" hidden title="Copiar un resumen para compartir">Copiar</button>
@@ -778,6 +793,20 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
     </div>
   </section>
 
+  <!-- Estándar -->
+  <section class="pane" id="p-simple" role="tabpanel" hidden>
+    <div class="simple">
+      <div class="s-left">
+        <div class="card s-in"><h2>Cuéntame tres cosas</h2><div class="s-q" id="sQ"></div><div id="sUso"></div><div class="s-mas" id="sMas"></div></div>
+        <div class="card s-alq" id="sAlq"></div>
+      </div>
+      <div class="s-right">
+        <div class="card hero s-out" id="sOut"></div>
+        <div class="card s-bk" id="sBancos"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- 6 -->
   <section class="pane" id="p-mihipo" role="tabpanel" hidden>
     <div class="cols">
@@ -804,10 +833,11 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 
 
 <nav class="mnav" aria-label="Calculadoras">
-  <button class="tab" data-tab="cuanto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Presu&shy;puesto</button>
+  <button class="tab sen" data-tab="simple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Comprar casa</button>
+  <button class="tab adv" data-tab="cuanto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Presu&shy;puesto</button>
   <button class="tab adv" data-tab="hipotecas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 16V9M12 16V5M17 16v-4"/></svg>Comparar</button>
-  <button class="tab" data-tab="alquilar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Comprar o alquilar</button>
-  <button class="tab" data-tab="bancos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/></svg>Bancos</button>
+  <button class="tab adv" data-tab="alquilar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Comprar o alquilar</button>
+  <button class="tab adv" data-tab="bancos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/></svg>Bancos</button>
   <button class="tab adv" data-tab="invertir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-7"/><path d="M15 9h5v5"/></svg>Invertir</button>
   <button class="tab" data-tab="mihipo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 15h4M12 13v4"/></svg>Mi hipoteca</button>
 </nav>
@@ -1016,6 +1046,10 @@ DEF.mrent=['Rentabilidad si lo inviertes','Lo que crees que ganaría al año ese
 $('g6a').innerHTML=F('m.capital','Capital pendiente','€','eur','','mcap')+F('m.anos','Años que quedan','años','int')+F('m.tin','TIN actual','%','dec','','mtin')+F('m.dif','Diferencial sobre Euríbor','%','dec','','dif')+MESSEL();
 ['m.dif','m.mes'].forEach(b=>$('g6a').querySelector(`[data-bind="${b}"]`).closest('.fld').classList.add('mvar'));
 $('g6b').innerHTML=F('m.extra','Dinero extra','€','eur')+F('m.comAm','Comisión por amortizar','%','dec','','mcom')+F('m.rent','Si lo inviertes, rinde','%/año','dec','','mrent');
+$('sQ').innerHTML=F('a.ahorros','¿Cuánto tienes ahorrado?','€','eur','','ahorros')+F('a.ingresos','¿Cuánto entra en casa al mes?','€/mes','eur','','ingresos')+CCAA('v.ccaa','¿En qué comunidad compras?');
+$('sUso').innerHTML=`<div class="uso-w" style="margin-top:12px"><div class="uso-l"><span>¿Para qué es la vivienda?</span>${Q('uso')}</div><div class="seg-ctl sm uso" role="group" aria-label="Para qué es la vivienda"><button data-uso="primera">Primera casa</button><button data-uso="cambio">Cambio de casa</button><button data-uso="segunda">Segunda vivienda</button></div></div>`;
+$('sAlq').innerHTML=`<h2>¿Comprar o alquilar?</h2>${F('r.alquiler','¿Cuánto pagarías de alquiler por una casa así?','€/mes','eur')}<div id="sAlqV"></div>`;
+$('sMas').innerHTML=`<div class="g2">${F('v.edad','Tu edad','años','int')}${F('v.precio','¿Tienes una casa en mente?','€','eur','','','opcional')}</div>`;
 $('g3d').innerHTML=F('r.reval','Revalorización','%/año','dec','','reval')+F('r.rent','Rentabilidad','%/año','dec','','rent');$('g3chk').innerHTML=SW('r.reinvierte','Si vendo, compro otra vivienda habitual','reinv');
 
 let touched=false;try{touched=localStorage.getItem('fea-touched')==='1'}catch(e){}
@@ -2083,6 +2117,40 @@ function render6(){const K=calc6(),M=K.M,mes=MESES[(M.mes||1)-1],eM=MKT.eurMes||
   X.m_tabla=()=>amortModal(K.C,K.t,K.Y,'Tu hipoteca');
   return K}
 
+/* =========================================================
+   ESTÁNDAR · una pantalla, tres preguntas, sin jerga
+   ========================================================= */
+function renderS(){const R=LAST.r1||calc1();if(!R)return;
+  const max=R.max,mx=Math.floor(max/1000)*1000,hip=Math.max(0,R.max-R.entMax),cu=cuotaFor(hip,S.v.tin,R.plazoB),need=R.entMax+R.gMax+S.a.colchon,ing=ingB();
+  const esf=ing>0?(cu+deudasB())/ing*100:I,sem=max<1?'bad':esf<=30?'good':esf<=35?'warn':'bad';
+  const semT={good:'Cómodo',warn:'Justo',bad:max<1?'Todavía no llega':'Alto'}[sem];
+  const tieneCasa=S.v.precio>0;
+  $('sOut').innerHTML=`<div class="eyebrow">${max>=1000?'Puedes comprar una vivienda de hasta':'Con estos datos'}</div>
+    ${max>=1000?`<button class="s-big num" data-x="max">${eur(mx)}</button>`:`<div class="s-big" style="font-size:28px">todavía no te llega para comprar</div>`}
+    <div class="pills"><span class="s-sem ${sem}"><i></i>${semT}</span><button class="pill neutral" data-x="max">Te frenan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>${S.v.segunda?'<span class="pill warn">Segunda vivienda: el banco presta el 70 %</span>':''}</div>
+    ${max>=1000?`<div class="s-lines">
+      <button data-x="sCuota"><span>Pagarías al mes</span><b>${eur(cu)}</b></button>
+      <button data-x="sNeed"><span>Necesitas tener ahorrado<br><small class="hint">entrada, impuestos de la compra y gastos</small></span><b>${eur(need)}</b></button>
+      <button data-x="sEsf"><span>Parte de lo que entra en casa</span><b style="color:var(--${sem==='good'?'good':sem==='warn'?'warn':'bad'})">${isFinite(esf)?pct(esf,0):'—'}</b></button>
+    </div>`:''}
+    ${tieneCasa?`<button class="s-verd ${R.ok?'good':'warn'}" data-x="miras"><span><b>La de ${eur(R.P)}</b> ${R.ok?'te llega':R.falta>0?`: te faltan ${eur(R.falta)} de ahorros`:': la cuota sería demasiado alta para el banco'}</span><small>Pagarías ${eur(R.cuota)} al mes</small></button>`:''}
+    <p class="hint" style="margin:10px 0 0">Con un interés del ${pct(S.v.tin,1)} a ${anos(R.plazoB)} y guardando ${eur(S.a.colchon)} para imprevistos. Pincha cualquier cifra para ver el cálculo.</p>`;
+  X.sCuota=()=>modal('Lo que pagarías al mes',`<div class="steps">${step('Vivienda',eur(mx))}${step('Te presta el banco',eur(hip))}${step('Interés',pct(S.v.tin,1)+' al año')}${step('Años',anos(R.plazoB))}${step('Cuota al mes',eur2(cu),'tot')}</div><p class="note">Es una cuota fija de referencia. La de verdad depende del banco: mira abajo lo que ofrecen hoy.</p>`);
+  X.sNeed=()=>modal('Lo que necesitas tener ahorrado',`<div class="steps">${step('Entrada',eur(R.entMax))}${step('Impuestos y gastos de la compra (notaría, registro, gestoría, tasación)',eur(R.gMax))}${step('Colchón para imprevistos',eur(S.a.colchon))}${step('Total',eur(need),'tot')}${step('Tienes',eur(S.a.ahorros))}</div><p class="note">El banco no presta para los impuestos ni los gastos: salen de tus ahorros.</p>`);
+  X.sEsf=()=>modal('Parte de lo que entra en casa',`<div class="steps">${step('Cuota al mes',eur(cu))}${deudasB()>0?step('+ Otros préstamos',eur(deudasB())):''}${ingSt('Lo que entra en casa al mes')}${step('Parte que se va en cuotas',isFinite(esf)?pct(esf,0):'—','tot')}</div><p class="note">Hasta un 30 % es cómodo. Del 30 al 35 % es justo, pero muchos bancos lo aceptan. Por encima del 35 %, la mayoría no la concede.</p>`);
+  // bancos: la mejor de cada tipo para la casa que tienes en mente
+  const P=hipoteca(),tipos=[['fija','Fija','la cuota no cambia nunca'],['mixta','Mixta','fija unos años y luego cambia con el Euríbor'],['variable','Variable','cambia cada año con el Euríbor']];
+  const rows=P>0?OFF.map((x,i)=>({x,i,c:mcalc(x)})).filter(r=>!r.c.noAcc&&!r.c.ltvKo):[];
+  $('sBancos').innerHTML=`<h2>Lo que ofrecen hoy los bancos</h2><p class="hint" style="margin:-4px 0 10px">La más barata de cada tipo para una hipoteca de ${eur(P)} (la casa de ${eur(S.v.precio)}).</p>
+    <div class="s-cards">${tipos.map(([t,n,d])=>{const b=rows.filter(r=>r.x.t===t).sort((a,b)=>a.c.int-b.c.int)[0];
+      return b?`<button class="s-card" data-mdet="${b.i}"><span class="tp ${t}">${n}</span><small>${d}</small><b>${esc(b.x.b)}</b><span class="sq">${eur(b.c.cuota)}<small style="font-size:12px;font-weight:500"> al mes</small></span><small>Interés ${pct(b.c.tin)}${t==='fija'?'':t==='mixta'?` los ${String(b.x.anos).replace('.',',')} primeros años`:' el primer año'}${b.c.sinBon?' (sin descuentos)':''}</small></button>`:`<div class="s-card"><span class="tp ${t}">${n}</span><small>Ninguna encaja con tus datos</small></div>`}).join('')}</div>
+    <div class="ofaviso" style="margin:12px 0 0"><span><b>Ofertas públicas y genéricas.</b> Con tu perfil se pueden mejorar, negociando o con un bróker.</span><a class="lnkbtn" data-cta="estandar-bancos" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Pide que te mejoren la tuya →</a></div>`;
+  // comprar o alquilar, con una pregunta
+  const R3=LAST.r3;
+  $('sAlqV').innerHTML=`${R3&&tieneCasa?`<button class="s-verd ${R3.dif>=0?'good':'warn'}" data-x="fin3"><span>Si vives ${anos(R3.H)} en ella, <b>te compensa ${R3.dif>=0?'comprar':'alquilar'}</b>: unos ${eur(Math.abs(R3.dif))} más</span><small>${R3.be?`Comprar empieza a ganar en el año ${R3.be}`:'Comprar no llega a ganar en ese plazo'} · pincha para ver el cálculo</small></button>`:'<p class="hint">Pon una casa en mente para compararlo.</p>'}`;
+}
+document.addEventListener('click',e=>{const d=e.target.closest('[data-mdet]');if(d){mDetail(+d.dataset.mdet);track('estandar-oferta',OFF[+d.dataset.mdet].t)}});
+
 /* ---------- bróker ---------- */
 function renderBroker(){
   const R=LAST.r1,t=S.tab;let txt;
@@ -2117,31 +2185,31 @@ let LAST={};
 function applyNivel(){const sen=S.nivel==='sencilla';document.documentElement.classList.toggle('sencilla',sen);
   document.querySelectorAll('[data-nivel]').forEach(b=>b.classList.toggle('on',b.dataset.nivel===S.nivel))}
 function setNivel(n,quiet){S.nivel=n==='sencilla'?'sencilla':'completa';try{localStorage.setItem('fea-nivel','1')}catch(e){}
-  refresh();if(S.nivel==='sencilla'&&['hipotecas','invertir'].includes(S.tab))showTab('cuanto');fitSoon();track('nivel',S.nivel);
-  if(!quiet)toast(S.nivel==='sencilla'?'Versión sencilla: lo justo para saber cuánto puedes comprar y qué pagarías':'Versión completa: todas las pestañas y todo el detalle')}
+  refresh();showTab(S.nivel==='sencilla'?(S.tab==='mihipo'?'mihipo':'simple'):(S.tab==='simple'?'cuanto':S.tab));fitSoon();track('nivel',S.nivel);
+  if(!quiet)toast(S.nivel==='sencilla'?'Versión estándar: lo justo para saber cuánto puedes comprar y qué pagarías':'Versión profesional: todas las pestañas y todo el detalle')}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nivel]');if(b){setNivel(b.dataset.nivel);return}
   const c=e.target.closest('[data-nivelch]');if(c){ov.hidden=true;setNivel(c.dataset.nivelch,true);return}
   const t=e.target.closest('[data-cta]');if(t)track('cta-jose',t.dataset.cta)});
-function refresh(skip){applyNivel();syncAll();fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();LAST.r6=render6();renderBroker();renderMres();fitSoon()}
+function refresh(skip){applyNivel();syncAll();fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();LAST.r6=render6();renderS();renderBroker();renderMres();fitSoon()}
 /* Barra de resultado fija en el móvil: el número clave de la pestaña siempre a la vista mientras rellenas datos */
 function renderMres(){const b=$('mres');if(!b)return;const t=S.tab;let h='';
-  if(t==='cuanto'&&LAST.r1){const R=LAST.r1;h=`<span>Puedes comprar hasta</span><b class="num">${eur(R.max)}</b><i class="${R.ok?'good':'bad'}">${R.ok?'La que miras te llega':'La que miras no te llega'}</i>`}
+  if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1;h=`<span>Puedes comprar hasta</span><b class="num">${eur(t==='simple'?Math.floor(R.max/1000)*1000:R.max)}</b><i class="${R.ok?'good':'bad'}">${R.ok?'La que miras te llega':'La que miras no te llega'}</i>`}
   else if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted.length){const w=LAST.r2.sorted[0];h=`<span>${S.h.offers.length>1?'La más barata':'Coste total'}</span><b>${esc(w.n)}</b><i class="good num">${eur(w.c.total)}</i>`}
   else if(t==='alquilar'&&LAST.r3){const R=LAST.r3;h=`<span>A ${anos(R.H)}</span><b>${R.dif>=0?'Compensa comprar':'Compensa alquilar'}</b><i class="${R.dif>=0?'good':'warn'} num">+${eur(Math.abs(R.dif))}</i>`}
   else if(t==='invertir'&&LAST.r5){const K=LAST.r5;h=`<span>Rentabilidad neta</span><b class="num">${pct(K.netaPct)}</b><i class="${K.caja>=0?'good':'bad'} num">${K.caja>=0?'+':'−'}${eur(Math.abs(K.caja)/12)} al mes</i>`}
   else if(t==='mihipo'&&LAST.r6){const K=LAST.r6;h=K.vari?`<span>Tras la revisión</span><b class="num">${eur(K.qN)}/mes</b><i class="${K.dq>0.5?'bad':'good'} num">${Math.abs(K.dq)<0.5?'igual':(K.dq>0?'+':'−')+eur(Math.abs(K.dq))}</i>`:`<span>Tu cuota fija</span><b class="num">${eur(K.qA)}/mes</b><i class="good">no cambia</i>`}
   b.innerHTML=h;b.hidden=!h}
-try{const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.target.closest('.pane[hidden]'))$('mres').classList.toggle('away',e.isIntersecting)}));['r1hero','verdict','r3hero','r5hero','r6hero'].forEach(id=>io.observe($(id)))}catch(e){}
+try{const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.target.closest('.pane[hidden]'))$('mres').classList.toggle('away',e.isIntersecting)}));['r1hero','verdict','r3hero','r5hero','r6hero','sOut'].forEach(id=>io.observe($(id)))}catch(e){}
 $('mres').onclick=()=>{const hero=document.querySelector('.pane:not([hidden]) .hero');if(hero)hero.scrollIntoView({behavior:'smooth',block:'start'})};
 /* Encaje en pantalla: si algo no cabe, se reduce la escala hasta un mínimo legible; por debajo, la tarjeta se desplaza por dentro */
 const ONE=matchMedia('(min-width:801px) and (min-height:540px)');let fitT=null,Z=1;
-function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .incard, .pane:not([hidden]) .offer, .pane:not([hidden]) .chartcard').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
+function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .incard, .pane:not([hidden]) .offer, .pane:not([hidden]) .chartcard, .pane:not([hidden]) .s-left, .pane:not([hidden]) .s-right').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
 function fit(){const root=document.documentElement;if(!ONE.matches||root.classList.contains('m')){root.style.zoom='';Z=1;return}
   root.style.zoom=1;let z=1;if(need()<0.999){let lo=0.78,hi=1;root.style.zoom=lo;if(need()>=0.999){for(let k=0;k<7;k++){const m=(lo+hi)/2;root.style.zoom=m;if(need()>=0.999)lo=m;else hi=m}}z=lo;root.style.zoom=z}
   Z=z;if(LAST.r3)drawChart3(LAST.r3,false)}
 function fitSoon(){clearTimeout(fitT);fitT=setTimeout(fit,120)}
 addEventListener('resize',fitSoon);
-function showTab(t){if(!['cuanto','hipotecas','alquilar','bancos','invertir','mihipo'].includes(t))t='cuanto';if(S.nivel==='sencilla'&&['hipotecas','invertir'].includes(t)){S.nivel='completa';applyNivel()}if(S.tab!==t||!showTab.done)track('pestana',t);showTab.done=true;S.tab=t;
+function showTab(t){if(!['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo'].includes(t))t='cuanto';if(S.nivel==='sencilla'&&['cuanto','alquilar','bancos','hipotecas','invertir'].includes(t)){if(['hipotecas','invertir'].includes(t)){S.nivel='completa';applyNivel()}else t='simple'}if(S.nivel!=='sencilla'&&t==='simple')t='cuanto';if(S.tab!==t||!showTab.done)track('pestana',t);showTab.done=true;S.tab=t;
   document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});
   document.querySelectorAll('.pane').forEach(p=>p.hidden=p.id!=='p-'+t);renderBroker();renderMres();save();fit();if(document.documentElement.classList.contains('m'))scrollTo(0,0);if(t==='alquilar'&&LAST.r3)drawChart3(LAST.r3)}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
@@ -2240,7 +2308,7 @@ $('mBody').addEventListener('click',async e=>{
 
 /* ---------- imagen para compartir: sin importes personales ---------- */
 function shareLines(){const t=S.tab;
-  if(t==='cuanto'&&LAST.r1){const R=LAST.r1;return ['¿Cuánto puedo comprar?',R.ok?'La vivienda que miro me llega':`Aún no me llega: me limitan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}`,isFinite(R.esfuerzo)?`La cuota se llevaría el ${Math.round(R.esfuerzo)} % de mis ingresos`:'']}
+  if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1;return ['¿Cuánto puedo comprar?',R.ok?'La vivienda que miro me llega':`Aún no me llega: me limitan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}`,isFinite(R.esfuerzo)?`La cuota se llevaría el ${Math.round(R.esfuerzo)} % de mis ingresos`:'']}
   if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted.length){const w=LAST.r2.sorted[0],o=S.h.offers[w.i]||{};return ['Comparar hipotecas',`Gana la ${o.tipo||'oferta'} que menos cuesta en total`,`Comparé ${S.h.offers.length} ofertas con seguros y comisiones`]}
   if(t==='alquilar'&&LAST.r3){const R=LAST.r3;return ['¿Comprar o alquilar?',`A ${anos(R.H)} me compensa ${R.dif>=0?'comprar':'alquilar'}`,R.be?`Comprar empieza a ganar en el año ${R.be}`:'Comprar no llega a ganar en ese plazo']}
   if(t==='invertir'&&LAST.r5){const K=LAST.r5;return ['Invertir para alquilar',`Rentabilidad neta del piso: ${pct(K.netaPct,1)}`,K.tir!=null?`Si vendo en ${anos(K.N)}: ${pct(K.tir,1)} al año tras impuestos`:'']}
@@ -2422,8 +2490,8 @@ if(!window.claude&&/^https?:$/.test(location.protocol)){fetch('data.json?t='+Dat
 if(!touched)document.querySelectorAll('.start').forEach(x=>x.hidden=false);
 renderOffers();refresh();
 applyModo(MODO||autoModo());
-const h=(location.hash||'').slice(1);showTab(['cuanto','hipotecas','alquilar','bancos','invertir','mihipo'].includes(h)?h:(S.tab||'cuanto'));
-if(PRIMERA_VEZ&&!['hipotecas','invertir'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Sencilla</b><span>Lo justo para saber cuánto puedes comprar, qué cuota pagarías y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Completa</b><span>Para profesionales e inversores: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Sencilla · Completa».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
+const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo'].includes(h)?h:(S.tab||'cuanto'));
+if(PRIMERA_VEZ&&!['hipotecas','invertir'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
 window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF};
 })();
 </script>
