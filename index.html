@@ -686,6 +686,14 @@ html.web .s-left>.card,html.web .s-right>.card{flex:none}
 .s-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media (max-width:900px){.s-cards{grid-template-columns:1fr}}
 .s-card{display:grid;gap:4px;border:0;background:var(--field);border-radius:14px;padding:12px 14px;text-align:left;color:var(--ink)}.s-card:hover{background:var(--accent-soft)}.s-card small{color:var(--muted)}.s-card .sq{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.s-card .tp{justify-self:start}
 .s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd small{color:var(--muted);font-size:12px}
+html .tab.old{display:none!important}
+html.m:not(.sencilla) .mnav{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.subnav{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap;padding:8px 0 10px}.subnav[hidden]{display:none}
+html.web .subnav{grid-row:3;margin:0 -16px;padding:8px 16px 10px;background:var(--bg)}
+.subnav button,html.m .subnav button{border:0;border-radius:999px;padding:6px 12px;font-weight:600;font-size:12.5px;background:rgba(240,236,224,.12);color:rgba(240,236,224,.85)}
+html.web .subnav button{background:var(--field);color:var(--muted)}
+.subnav button.on,html.m .subnav button.on{background:var(--mint);color:#0B3D2E}html.m .subnav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}html.m .subnav button{flex:none}html.web .subnav button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+html:not(.sencilla) .pro-nav{display:none}
 html.sencilla .adv,html.sencilla #m4table th:nth-child(4),html.sencilla #m4table td:nth-child(4),html.sencilla #m4table th:nth-child(7),html.sencilla #m4table td:nth-child(7),html.sencilla #m4table th:nth-child(10),html.sencilla #m4table td:nth-child(10){display:none!important}html.sencilla .tab b{display:none}html.m.sencilla .mnav{grid-template-columns:repeat(4,minmax(0,1fr))}
 .nivel,html.m .nivel{flex:none;height:auto!important;align-items:stretch;background:rgba(240,236,224,.12)}.nivel button,html.m .nivel button{color:rgba(240,236,224,.8);padding:5px 12px;font-weight:600;font-size:12.5px;line-height:1.2;display:flex;align-items:center}.nivel button.on,html.m .nivel button.on{background:var(--mint);color:#0B3D2E}
 html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
@@ -706,14 +714,18 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
     </div>
     <nav class="tabs" role="tablist">
       <button class="tab sen" role="tab" data-tab="simple"><b>1</b><span class="ts">Comprar casa</span></button>
-      <button class="tab adv" role="tab" data-tab="cuanto"><b>1</b><span class="tl">¿Cuánto puedo comprar?</span><span class="ts">Mi presupuesto</span></button>
-      <button class="tab adv" role="tab" data-tab="hipotecas"><b>2</b><span class="tl">Comparar hipotecas</span><span class="ts">Comparar</span></button>
-      <button class="tab adv" role="tab" data-tab="alquilar"><b>3</b><span class="tl">¿Comprar o alquilar?</span><span class="ts">Comprar o alquilar</span></button>
-      <button class="tab adv" role="tab" data-tab="bancos"><b>4</b><span class="tl">Qué ofrecen los bancos</span><span class="ts">Bancos hoy</span></button>
-      <button class="tab adv" role="tab" data-tab="invertir"><b>5</b><span class="tl">Invertir para alquilar</span><span class="ts">Invertir</span></button>
-      <button class="tab" role="tab" data-tab="mihipo"><b>6</b><span class="tl">Mi hipoteca</span><span class="ts">Mi hipoteca</span></button>
-      <button class="tab adv" role="tab" data-tab="pro"><b>7</b><span class="tl">Herramientas pro</span><span class="ts">Herramientas pro</span></button>
+      <button class="tab adv tgrp" role="tab" data-grp="comprar"><b>1</b><span class="ts">Comprar</span></button>
+      <button class="tab adv tgrp" role="tab" data-grp="hipotecas"><b>2</b><span class="ts">Hipotecas</span></button>
+      <button class="tab adv tgrp" role="tab" data-grp="invertir"><b>3</b><span class="ts">Invertir</span></button>
+      <button class="tab adv old" role="tab" data-tab="cuanto"><b>1</b><span class="tl">¿Cuánto puedo comprar?</span><span class="ts">Mi presupuesto</span></button>
+      <button class="tab adv old" role="tab" data-tab="hipotecas"><b>2</b><span class="tl">Comparar hipotecas</span><span class="ts">Comparar</span></button>
+      <button class="tab adv old" role="tab" data-tab="alquilar"><b>3</b><span class="tl">¿Comprar o alquilar?</span><span class="ts">Comprar o alquilar</span></button>
+      <button class="tab adv old" role="tab" data-tab="bancos"><b>4</b><span class="tl">Qué ofrecen los bancos</span><span class="ts">Bancos hoy</span></button>
+      <button class="tab adv old" role="tab" data-tab="invertir"><b>5</b><span class="tl">Invertir para alquilar</span><span class="ts">Invertir</span></button>
+      <button class="tab" role="tab" data-tab="mihipo"><b class="adv">4</b><b class="sen">2</b><span class="tl">Mi hipoteca</span><span class="ts">Mi hipoteca</span></button>
+      <button class="tab adv old" role="tab" data-tab="pro"><b>7</b><span class="tl">Herramientas pro</span><span class="ts">Herramientas pro</span></button>
     </nav>
+    <div class="subnav" id="subnav" hidden></div>
     <div class="htools">
       <button class="hbtn modebtn" id="btnMode" title="Cambiar entre versión web y versión móvil"></button>
       <button class="hbtn pdf" id="btnPdf" hidden title="Descargar un informe en PDF con tus datos"><span class="pdfw">Informe </span>PDF</button>
@@ -848,13 +860,16 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 
 <nav class="mnav" aria-label="Calculadoras">
   <button class="tab sen" data-tab="simple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Comprar casa</button>
-  <button class="tab adv" data-tab="cuanto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Presu&shy;puesto</button>
-  <button class="tab adv" data-tab="hipotecas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 16V9M12 16V5M17 16v-4"/></svg>Comparar</button>
-  <button class="tab adv" data-tab="alquilar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Comprar o alquilar</button>
-  <button class="tab adv" data-tab="bancos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/></svg>Bancos</button>
-  <button class="tab adv" data-tab="invertir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-7"/><path d="M15 9h5v5"/></svg>Invertir</button>
+  <button class="tab adv tgrp" data-grp="comprar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Comprar</button>
+  <button class="tab adv tgrp" data-grp="hipotecas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/></svg>Hipotecas</button>
+  <button class="tab adv tgrp" data-grp="invertir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-7"/><path d="M15 9h5v5"/></svg>Invertir</button>
+  <button class="tab adv old" data-tab="cuanto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>Presu&shy;puesto</button>
+  <button class="tab adv old" data-tab="hipotecas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 16V9M12 16V5M17 16v-4"/></svg>Comparar</button>
+  <button class="tab adv old" data-tab="alquilar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Comprar o alquilar</button>
+  <button class="tab adv old" data-tab="bancos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/></svg>Bancos</button>
+  <button class="tab adv old" data-tab="invertir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-7"/><path d="M15 9h5v5"/></svg>Invertir</button>
   <button class="tab" data-tab="mihipo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 15h4M12 13v4"/></svg>Mi hipoteca</button>
-  <button class="tab adv" data-tab="pro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"/></svg>Pro</button>
+  <button class="tab adv old" data-tab="pro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"/></svg>Pro</button>
 </nav>
 <div class="ov" id="ov" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
   <div class="m-hd"><h3 id="mTitle"></h3><button class="x" id="mClose" aria-label="Cerrar">✕</button></div>
@@ -2230,10 +2245,21 @@ function fit(){const root=document.documentElement;if(!ONE.matches||root.classLi
   Z=z;if(LAST.r3)drawChart3(LAST.r3,false)}
 function fitSoon(){clearTimeout(fitT);fitT=setTimeout(fit,120)}
 addEventListener('resize',fitSoon);
+/* Profesional agrupado: 4 pestañas con sus partes */
+const GRUPOS={comprar:[['cuanto','Mi presupuesto'],['alquilar','Comprar o alquilar'],['pro:informe','Informe para el bróker']],hipotecas:[['bancos','Bancos hoy'],['hipotecas','Comparar ofertas'],['pro:fein','Revisar la FEIN']],invertir:[['invertir','Un piso'],['pro:cartera','Mi cartera']]};
+const grpOf=(t,p)=>t==='pro'?({informe:'comprar',fein:'hipotecas',cartera:'invertir'}[p]||'invertir'):({cuanto:'comprar',alquilar:'comprar',bancos:'hipotecas',hipotecas:'hipotecas',invertir:'invertir'}[t]||null);
+const subKey=()=>S.tab==='pro'?'pro:'+(S.proTab||'cartera'):S.tab;
+function goSub(k){if(k.startsWith('pro:')){S.proTab=k.slice(4);showTab('pro');renderPro()}else showTab(k)}
+function goGrp(g){const last=(goGrp.last||{})[g];goSub(last||GRUPOS[g][0][0])}
+function renderSub(){const sn=$('subnav');if(!sn)return;const g=S.nivel==='sencilla'?null:grpOf(S.tab,S.proTab);
+  document.querySelectorAll('[data-grp]').forEach(b=>{const on=b.dataset.grp===g;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});
+  if(!g){sn.hidden=true;return}const k=subKey();goGrp.last=goGrp.last||{};goGrp.last[g]=k;
+  sn.hidden=false;sn.innerHTML=GRUPOS[g].map(([key,n])=>`<button data-sub="${key}" class="${key===k?'on':''}">${n}</button>`).join('')}
+document.addEventListener('click',e=>{const s=e.target.closest('[data-sub]');if(s){goSub(s.dataset.sub);return}});
 function showTab(t){if(!['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(t))t='cuanto';if(S.nivel==='sencilla'&&['cuanto','alquilar','bancos','hipotecas','invertir','pro'].includes(t)){if(['hipotecas','invertir','pro'].includes(t)){S.nivel='completa';applyNivel()}else t='simple'}if(S.nivel!=='sencilla'&&t==='simple')t='cuanto';if(S.tab!==t||!showTab.done)track('pestana',t);showTab.done=true;S.tab=t;
-  document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});
+  document.querySelectorAll('.tab[data-tab]').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});setTimeout(renderSub,0);
   document.querySelectorAll('.pane').forEach(p=>p.hidden=p.id!=='p-'+t);renderBroker();renderMres();save();fit();if(document.documentElement.classList.contains('m'))scrollTo(0,0);if(t==='alquilar'&&LAST.r3)drawChart3(LAST.r3)}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>b.dataset.grp?goGrp(b.dataset.grp):showTab(b.dataset.tab));
 document.addEventListener('click',e=>{const g=e.target.closest('[data-gotab]');if(g){showTab(g.dataset.gotab);if(!document.documentElement.classList.contains('m'))return;scrollTo(0,0)}});
 function toast(t,undo){const e=$('toast');e.textContent=t;if(undo){const b=document.createElement('button');b.className='undo';b.textContent='Deshacer';b.onclick=()=>{undo();e.hidden=true};e.appendChild(b)}e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,undo?7000:2000)}
 $('btnReset').onclick=()=>{const prev=clone(S),t=S.tab;S=clone(EXAMPLE);S.tab=t;renderOffers();refresh();toast('Datos de ejemplo restaurados',()=>{S=prev;renderOffers();refresh();toast('Tus datos han vuelto')})};
@@ -2563,7 +2589,7 @@ function renderPro(){const sec=S.proTab||'cartera';
   const R=LAST.r1;$('broR').innerHTML=R?`<div class="steps">${step('Precio máximo',eur(R.max))}${step('Vivienda que mira',eur(R.P))}${step('Hipoteca · cuota',eur(R.hip)+' · '+eur(R.cuota)+'/mes')}${step('Endeudamiento',isFinite(R.esfuerzo)?pct(R.esfuerzo,0):'—')}${step('Ahorro necesario · tiene',eur(R.need)+' · '+eur(S.a.ahorros))}${(S.cart||[]).length?step('Cartera',(S.cart||[]).length+' pisos · deuda '+eur(C.deuda)):''}</div>`:'';
 }
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-protab]');if(t){S.proTab=t.dataset.protab;renderPro();save();track('pro',S.proTab);return}
+  const t=e.target.closest('[data-protab]');if(t){S.proTab=t.dataset.protab;renderPro();renderSub();save();track('pro',S.proTab);return}
   if(e.target.closest('[data-cadd]')){S.cart=(S.cart||[]).concat([{n:'Piso '+((S.cart||[]).length+1),valor:150000,deuda:90000,cuota:450,alq:750,gastos:100}]).slice(0,12);renderPro();save();return}
   const d=e.target.closest('[data-cdel]');if(d){S.cart.splice(+d.dataset.cdel,1);document.activeElement&&document.activeElement.blur();renderPro();save();return}
   if(e.target.closest('[data-cart2p]')){const C=cartCalc();S.a.alqCobra=Math.round(C.alq);S.a.alqGastos=Math.round(C.gastos+C.cuota);refresh();toast(`En «Mi presupuesto»: ${eur(C.alq)} de alquileres y ${eur(C.gastos+C.cuota)} de gastos e hipotecas`);return}
