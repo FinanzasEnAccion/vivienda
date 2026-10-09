@@ -930,8 +930,8 @@ const PLUSV_TIPO=30; // tipo máximo de la plusvalía municipal: se usa como est
 const RED_OPC=[[50,'50 % · general'],[60,'60 % · contrato anterior al 26/05/2023, u obras de rehabilitación en los 2 años anteriores'],[70,'70 % · vivienda asequible o alquiler a una Administración; en zona tensionada, también inquilino de 18 a 35 años en el primer alquiler de la vivienda'],[90,'90 % · zona tensionada: bajas la renta más de un 5 % respecto al contrato anterior']];
 
 const EXAMPLE={
-  v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,entUnit:'pct',entradaEur:42000,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30,tasacion:0,ico:false,segunda:false,ltv:0},
-  a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,alqCobra:0,alqGastos:0,alqPct:70,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false},
+  v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,entUnit:'pct',entradaEur:42000,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30,tasacion:0,ico:false,segunda:false,ltv:0,prov:''},
+  a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,alqCobra:0,alqGastos:0,alqPct:70,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false,contrato:'indefinido'},
   h:{eur:Math.round(DATA0.mercado.eur*100)/100,offers:[
     {nombre:'Banco A · fija bonificada',tipo:'fija',tin:3.10,anos:1,dif:0.60,apertura:0,prods:[
       {n:'Nómina + tarjeta',b:0.20,c:0,s:0,m:0,hasta:30,on:true},
