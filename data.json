@@ -1,7 +1,7 @@
 {
  "version": 3,
- "actualizado": "2026-10-05",
- "fecha": "5 de octubre de 2026",
+ "actualizado": "2026-10-09",
+ "fecha": "9 de octubre de 2026",
  "mercado": {
   "eur": 3.247,
   "eurAgo": 2.954,
@@ -10,11 +10,12 @@
   "ineMes": "julio de 2026",
   "ineFija": 3.03,
   "ineVar": 2.97,
+  "inePctFija": 62.3,
   "bce": 2.5,
   "fuentes": {
    "eur": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20519",
    "ine": "https://www.ine.es/dyngs/INEbase/operacion.htm?c=Estadistica_C&cid=1254736170236&menu=ultiDatos&idp=1254735576757",
-   "bce": "https://www.infobae.com/espana/2026/09/11/depositos-un-18-mas-rentables-en-un-ano-e-hipotecas-un-10-mas-caras-quien-gana-y-quien-pierde-con-la-subida-de-tipos-del-bce/",
+   "bce": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.es.html",
    "cambios": "https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/",
    "eurAgo": "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-18507"
   },
@@ -25,14 +26,14 @@
   "fuenteNombres": {
    "eur": "Banco de España (BOE)",
    "ine": "INE",
-   "bce": "Infobae",
+   "bce": "BCE",
    "cambios": "HelpMyCash"
   },
   "eurMes": "septiembre de 2026",
   "eurAgoMes": "agosto de 2026",
   "eurAntMes": "septiembre de 2025",
-  "bceCorto": "subió en septiembre",
-  "bceNota": "El BCE subió el tipo 0,25 puntos, hasta el 2,5 %, el 11 de septiembre de 2026: la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %.",
+  "bceCorto": "subió el 10 de septiembre",
+  "bceNota": "El BCE subió 0,25 puntos la facilidad de depósito, hasta el 2,50 %, en su reunión del 10 de septiembre de 2026 (en vigor desde el 16): la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %.",
   "eurOficial": "Resolución del Banco de España de 1 de octubre de 2026, publicada en el BOE",
   "eurAgoOficial": "Resolución del Banco de España de 1 de septiembre de 2026, publicada en el BOE"
  },
@@ -48,10 +49,24 @@
    "pz": 25,
    "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguro de hogar, seguro de vida, plan de inversión ≥ 75 €/mes",
    "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)",
-   "f": "https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/",
-   "d": "28/09/2026",
+   "f": "https://www.ibercaja.es/particulares/hipotecas-prestamos/hipotecas/hipoteca-vamos-fija/",
+   "d": "09/10/2026",
    "ingMin": 2500,
-   "ingReq": "bonif"
+   "ingReq": "bonif",
+   "minImp": 100000
+  },
+  {
+   "b": "Banca March",
+   "p": "Hipoteca Fija Avantio",
+   "t": "fija",
+   "tin": 2.65,
+   "tae": "3,01 %",
+   "n": "Ingresos ≥ 4.000 €/mes; préstamo desde 200.000 €",
+   "f": "https://avantio.bancamarch.es/es/financiacion/hipoteca-fija/",
+   "d": "09/10/2026",
+   "ingMin": 4000,
+   "ingReq": "acceso",
+   "minImp": 200000
   },
   {
    "b": "Banco Sabadell",
@@ -64,7 +79,7 @@
    "pz": 30,
    "v": "Nómina, seguro de hogar, seguro de vida y seguro de protección de pagos",
    "c": "Sin apertura. Amortización 2 % los 10 primeros años, 1,5 % después",
-   "n": "Condiciones negociables según perfil",
+   "n": "Condiciones negociables según perfil. Sin confirmar en la web del banco: los comparadores dan ya una TAE del 3,67 %",
    "f": "https://www.helpmycash.com/hipotecas/sabadell/hipoteca-fija-bonificada/",
    "d": "01/09/2026"
   },
@@ -74,14 +89,14 @@
    "t": "fija",
    "tin": 2.9,
    "tinS": 3.4,
-   "tae": "3,41 %",
+   "tae": "3,44 %",
    "ltv": 80,
    "pz": 30,
-   "v": "Ingresos ≥ 900 €/mes (1.800 € con dos titulares), seguro de hogar; seguro de vida opcional",
+   "v": "Ingresos ≥ 900 €/mes (1.800 € con dos titulares), seguro de hogar, seguro de vida",
    "c": "Sin apertura ni amortización parcial",
-   "n": "Solo online. 2,80 % hasta 15 años; a 30 años entre 2,83 % y 2,90 % (aquí se usa 2,90 %)",
+   "n": "Solo online. 2,80 % hasta 15 años; la TAE es la de 30 años",
    "f": "https://www.openbank.es/hipoteca-fija",
-   "d": "30/09/2026",
+   "d": "09/10/2026",
    "tramos": [
     [
      15,
@@ -94,7 +109,7 @@
    ],
    "ingMin": 900,
    "ingMin2": 1800,
-   "ingReq": "acceso"
+   "ingReq": "bonif"
   },
   {
    "b": "CaixaBank",
@@ -107,9 +122,19 @@
    "pz": 30,
    "v": "Nómina ≥ 600 €/mes, recibos, tarjeta, seguro de vida, seguro de hogar, alarma",
    "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)",
-   "n": "Otras fuentes dan 2,80 %",
-   "f": "https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/",
-   "d": "28/09/2026",
+   "n": "2,80 % a 15 y 20 años",
+   "f": "https://www.caixabank.es/particular/hipotecas/casafacil.html",
+   "d": "09/10/2026",
+   "tramos": [
+    [
+     20,
+     2.8
+    ],
+    [
+     30,
+     2.85
+    ]
+   ],
    "ingMin": 600,
    "ingReq": "bonif"
   },
@@ -124,7 +149,7 @@
    "pz": 30,
    "v": "Nómina ≥ 600 €/mes, seguro de hogar, seguro de vida",
    "c": "Sin apertura. El banco paga notaría, gestoría y registro",
-   "n": "2,85 % a 15 años",
+   "n": "2,85 % a 15 años. TAE sin confirmar: no aparece en ninguna fuente de octubre",
    "f": "https://www.helpmycash.com/hipotecas/bbva/hipoteca-fija/",
    "d": "08/09/2026",
    "tramos": [
@@ -141,6 +166,15 @@
    "ingReq": "bonif"
   },
   {
+   "b": "Banco Santander",
+   "p": "Hipoteca Fija Bonificada",
+   "t": "fija",
+   "tin": 2.96,
+   "tae": "3,65 %",
+   "f": "https://www.bancosantander.es/particulares/hipotecas/hipoteca-fija",
+   "d": "09/10/2026"
+  },
+  {
    "b": "MyInvestor",
    "p": "Hipoteca Fija",
    "t": "fija",
@@ -150,13 +184,12 @@
    "ltv": 80,
    "pz": 30,
    "v": "Ninguna",
-   "c": "Apertura 1 %",
+   "c": "Sin apertura en una compra de vivienda",
    "n": "Ingresos ≥ 4.000 €/mes netos; préstamo desde 100.000 €",
    "f": "https://myinvestor.es/hipotecas/hipoteca-fija/",
-   "d": "30/09/2026",
+   "d": "09/10/2026",
    "ingMin": 4000,
    "ingReq": "acceso",
-   "apPct": 1,
    "minImp": 100000
   },
   {
@@ -173,6 +206,7 @@
    "pz": 30,
    "v": "Nómina, seguro de hogar, seguro de vida",
    "c": "Amortización 2 % en el tramo fijo",
+   "n": "Sin confirmar en la web del banco: los comparadores dan ya una TAE del 4,03 %",
    "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/",
    "d": "14/09/2026"
   },
@@ -180,19 +214,18 @@
    "b": "Pibank",
    "p": "Hipoteca Pibank Mixta",
    "t": "mixta",
-   "tin": 1.99,
-   "tinS": 1.99,
+   "tin": 2.7,
+   "tinS": 2.7,
    "anos": 4,
-   "dif": 0.68,
-   "difS": 0.68,
-   "tae": "3,40 %",
+   "dif": 0.65,
+   "difS": 0.65,
+   "tae": "3,81 %",
    "ltv": 80,
    "pz": 35,
    "v": "Ninguna",
    "c": "Sin comisiones",
-   "n": "Las fuentes no coinciden en el TIN fijo (1,60 % o 1,99 %)",
-   "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/",
-   "d": "14/09/2026"
+   "f": "https://www.pibank.es/hipotecas/",
+   "d": "09/10/2026"
   },
   {
    "b": "Ibercaja",
@@ -203,15 +236,26 @@
    "anos": 5,
    "dif": 0.6,
    "difS": 1.6,
-   "tae": "3,86 %",
+   "tae": "4,02 %",
    "ltv": 80,
    "pz": 25,
    "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguros, plan de ahorro",
    "c": "Amortización 2 %",
-   "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/",
-   "d": "14/09/2026",
+   "f": "https://www.ibercaja.es/particulares/hipotecas-prestamos/hipotecas/hipoteca-vamos-mixta-5/",
+   "d": "09/10/2026",
    "ingMin": 2500,
    "ingReq": "bonif"
+  },
+  {
+   "b": "Ibercaja",
+   "p": "Hipoteca Vamos Mixta 10",
+   "t": "mixta",
+   "tin": 2.1,
+   "anos": 10,
+   "dif": 0.6,
+   "tae": "3,59 %",
+   "f": "https://www.ibercaja.es/particulares/hipotecas-prestamos/hipotecas/hipoteca-vamos-mixta-10/",
+   "d": "09/10/2026"
   },
   {
    "b": "Banco Santander",
@@ -222,14 +266,14 @@
    "anos": 5.5,
    "dif": 0.74,
    "difS": 1.74,
-   "tae": "3,82 %",
+   "tae": "3,98 %",
    "ltv": 80,
    "pz": 30,
    "v": "Nómina ≥ 1.000 €/mes, seguro de vida y de hogar (≥ 300 €/año cada uno), Bizum o tarjeta",
    "c": "Sin apertura. Amortización 2 % en el tramo fijo",
    "n": "Tramo fijo de 66 meses",
-   "f": "https://www.helpmycash.com/hipotecas/santander/hipoteca-mixta-santander/",
-   "d": "03/09/2026",
+   "f": "https://www.bancosantander.es/particulares/hipotecas/hipoteca-mixta",
+   "d": "09/10/2026",
    "ingMin": 1000,
    "ingReq": "bonif"
   },
@@ -237,19 +281,18 @@
    "b": "ING",
    "p": "Naranja Mixta",
    "t": "mixta",
-   "tin": 3.45,
-   "tinS": 3.95,
+   "tin": 3.85,
    "anos": 5,
    "dif": 1.04,
    "difS": 1.54,
-   "tae": "4,49 %",
+   "tae": "4,66 %",
    "ltv": 80,
    "pz": 40,
    "v": "Nómina o saldo mínimo, seguro de hogar, seguro de vida",
    "c": "Amortización total 2 %",
-   "n": "ING subió precios el 14/09/2026",
-   "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/",
-   "d": "14/09/2026"
+   "n": "ING ya no publica una tarifa única: son las cifras de su ejemplo legal",
+   "f": "https://www.ing.es/hipotecas/hipoteca-mixta",
+   "d": "09/10/2026"
   },
   {
    "b": "Banco Sabadell",
@@ -264,7 +307,7 @@
    "pz": 30,
    "v": "Nómina, seguro de hogar, seguro de vida, seguro de protección de pagos",
    "c": "Sin apertura",
-   "n": "1,50 % el primer año",
+   "n": "1,50 % el primer año. Sin confirmar en la web del banco: los comparadores dan ya una TAE del 4,46 %",
    "f": "https://www.helpmycash.com/hipotecas/hipoteca-variable/",
    "d": "28/09/2026"
   },
@@ -272,18 +315,18 @@
    "b": "Unicaja",
    "p": "Hipoteca Variable",
    "t": "variable",
-   "tin": 1.9,
+   "tin": 2,
    "anos": 1,
    "dif": 0.55,
    "difS": 1.55,
-   "tae": "4,33 %",
+   "tae": "4,61 %",
    "ltv": 80,
    "pz": 30,
    "v": "Nómina ≥ 2.000 €, recibos, tarjeta, seguros de hogar y vida, plan de pensiones",
    "c": "Apertura 0,15 %. Amortización 0,25 %",
-   "n": "Otras fuentes dan 2,30 % el primer año",
-   "f": "https://www.kelisto.es/hipotecas/bancos/unicaja",
-   "d": "28/09/2026",
+   "n": "2,00 % el primer año, con nómina de 2.000 €",
+   "f": "https://www.unicajabanco.es/es/particulares/hipotecas-y-prestamos/hipotecas/hipoteca-tipo-variable",
+   "d": "09/10/2026",
    "ingMin": 2000,
    "ingReq": "bonif",
    "apPct": 0.15
@@ -292,18 +335,18 @@
    "b": "Kutxabank",
    "p": "Hipoteca Variable",
    "t": "variable",
-   "tin": 2,
+   "tin": 2.27,
    "anos": 1,
    "dif": 0.49,
    "difS": 1.49,
-   "tae": "3,82 %",
+   "tae": "4,11 %",
    "ltv": 80,
    "pz": 30,
    "v": "Nómina ≥ 3.000 €/mes, seguro de hogar, plan de pensiones ≥ 2.400 €/año",
    "c": "Sin apertura. Amortización 0,15 % los 5 primeros años",
-   "n": "Versión joven: 1,90 % el primer año",
-   "f": "https://www.kelisto.es/hipotecas/bancos/kutxabank",
-   "d": "28/09/2026",
+   "n": "2,27 % el primer año",
+   "f": "https://clientes.kutxabank.es/es/hipotecas/variable.html",
+   "d": "09/10/2026",
    "ingMin": 3000,
    "ingReq": "bonif"
   },
@@ -320,10 +363,25 @@
    "pz": 30,
    "v": "Nómina, seguro de hogar, seguro de vida, plan de pensiones",
    "c": "Apertura 500 €. Amortización 0,15 % los 5 primeros años",
-   "n": "2,50 % los 3 primeros años (3,80 % sin bonificar). Ficha FIPRE de 02/10/2026",
-   "f": "https://www.helpmycash.com/mejores-hipotecas/",
-   "d": "02/10/2026",
+   "n": "2,50 % los 3 primeros años (3,80 % sin bonificar). Ingresos de más de 2.500 €/mes",
+   "f": "https://www.bankinter.com/banca/hipotecas-prestamos/hipotecas/hipoteca-variable",
+   "d": "09/10/2026",
+   "ingMin": 2500,
+   "ingReq": "acceso",
    "apEur": 500
+  },
+  {
+   "b": "COINC",
+   "p": "Hipoteca Variable",
+   "t": "variable",
+   "tin": 2.5,
+   "anos": 3,
+   "dif": 0.5,
+   "tae": "3,68 %",
+   "v": "Cuenta en Bankinter",
+   "n": "Del grupo Bankinter",
+   "f": "https://www.coinc.es/ahorrador/nuestras-hipotecas/hipoteca-variable",
+   "d": "09/10/2026"
   }
  ]
 }

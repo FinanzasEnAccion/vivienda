@@ -336,6 +336,8 @@ tr+tr td{border-top:1px solid var(--line)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tp.fija{background:#1C3350;color:#8DBBEF}:root:not([data-theme="light"]) .tp.variable{background:#2E2340;color:#C7A8EE}}
 .addc{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;white-space:nowrap}
 .addc:hover{border-color:var(--accent);color:var(--accent)}
+.mkt .ccb{border:0;background:none;padding:0;font:inherit;color:inherit}
+.mkt .ccb:hover b{color:var(--good);text-decoration:underline}
 @media (max-width:800px){.tblwrap.mkt{overflow-x:auto}}
 
 /* Dónde se meten los datos */
@@ -362,6 +364,8 @@ tr+tr td{border-top:1px solid var(--line)}
 .vkn{font-size:11px;color:var(--muted);margin-left:2px}
 .vkn::before{content:"· "}
 .vkn::after{content:" productos"}
+.vkn.uno::after{content:" producto"}
+.vk.nd{background:var(--field);color:var(--muted);padding:0 9px}
 
 .flow{display:grid;gap:8px}
 .frow{display:grid;grid-template-columns:150px minmax(0,1fr) 90px;gap:10px;align-items:center;border:0;background:none;padding:0;text-align:left;width:100%}
@@ -500,6 +504,7 @@ html.m .mkt td:nth-child(4),html.m .mkt td:nth-child(5),html.m .mkt td:nth-child
 html.m .mkt td:nth-child(9){grid-column:1 / -1;max-width:none}
 html.m .mkt td:nth-child(10){grid-column:1 / -1}
 html.m .mkt td:nth-child(10) .addc{width:100%;padding:8px}
+html.m .mkt tr[data-m]:hover td{background:transparent}
 /* barra inferior */
 html.m .mnav{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:520px;z-index:9;background:var(--brand);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px rgba(0,0,0,.18)}
 html.m .mnav .tab{display:grid;justify-items:center;gap:2px;border-radius:12px;padding:6px 1px;font-size:10px;line-height:1.15;text-align:center;font-weight:600;color:rgba(240,236,224,.7);background:transparent}
@@ -651,6 +656,7 @@ html.m .hz button{min-width:44px;padding:8px 4px}
 .lnk-step{border:0;width:100%;text-align:left;cursor:pointer}.lnk-step:hover{background:var(--accent-soft)}
 .eurof{font-size:10.5px;margin-left:2px;flex:none}
 .mkt a.src.viejo{color:var(--warn)}
+.mkt span.src{display:block;font-size:11px;margin-top:2px;color:var(--muted)}.mkt span.src.viejo{color:var(--warn)}
 .mkt .pr.pz{color:var(--muted)}.mkt .pr.pz.corto{color:var(--warn);font-weight:600}
 .verdict-line{border:0;border-radius:12px;padding:9px 12px;text-align:left;font-size:13.5px;background:var(--field);color:var(--ink)}
 .mh-rows{display:grid;gap:8px}
@@ -882,7 +888,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 <script>
 (function(){
 const $=id=>document.getElementById(id);
-const DATA0={"version": 3, "actualizado": "2026-10-05", "fecha": "5 de octubre de 2026", "mercado": {"eur": 3.247, "eurAgo": 2.954, "eurAnt": 2.172, "ine": 3.01, "ineMes": "julio de 2026", "ineFija": 3.03, "ineVar": 2.97, "bce": 2.5, "fuentes": {"eur": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20519", "ine": "https://www.ine.es/dyngs/INEbase/operacion.htm?c=Estadistica_C&cid=1254736170236&menu=ultiDatos&idp=1254735576757", "bce": "https://www.infobae.com/espana/2026/09/11/depositos-un-18-mas-rentables-en-un-ano-e-hipotecas-un-10-mas-caras-quien-gana-y-quien-pierde-con-la-subida-de-tipos-del-bce/", "cambios": "https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/", "eurAgo": "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-18507"}, "ctx": ["Los bancos están subiendo las fijas (ING, Bankinter, BBVA y Santander este año).", "El Euríbor está en máximos de dos años: las variables salen caras tras el primer año."], "fuenteNombres": {"eur": "Banco de España (BOE)", "ine": "INE", "bce": "Infobae", "cambios": "HelpMyCash"}, "eurMes": "septiembre de 2026", "eurAgoMes": "agosto de 2026", "eurAntMes": "septiembre de 2025", "bceCorto": "subió en septiembre", "bceNota": "El BCE subió el tipo 0,25 puntos, hasta el 2,5 %, el 11 de septiembre de 2026: la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %.", "eurOficial": "Resolución del Banco de España de 1 de octubre de 2026, publicada en el BOE", "eurAgoOficial": "Resolución del Banco de España de 1 de septiembre de 2026, publicada en el BOE"}, "ofertas": [{"b": "Ibercaja", "p": "Hipoteca Vamos Fija", "t": "fija", "tin": 2.55, "tinS": 3.55, "tae": "3,49 %", "ltv": 80, "pz": 25, "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguro de hogar, seguro de vida, plan de inversión ≥ 75 €/mes", "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)", "f": "https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/", "d": "28/09/2026", "ingMin": 2500, "ingReq": "bonif"}, {"b": "Banco Sabadell", "p": "Hipoteca Fija Bonificada", "t": "fija", "tin": 2.75, "tinS": 3.75, "tae": "3,58 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida y seguro de protección de pagos", "c": "Sin apertura. Amortización 2 % los 10 primeros años, 1,5 % después", "n": "Condiciones negociables según perfil", "f": "https://www.helpmycash.com/hipotecas/sabadell/hipoteca-fija-bonificada/", "d": "01/09/2026"}, {"b": "Openbank", "p": "Hipoteca Open Fija", "t": "fija", "tin": 2.9, "tinS": 3.4, "tae": "3,41 %", "ltv": 80, "pz": 30, "v": "Ingresos ≥ 900 €/mes (1.800 € con dos titulares), seguro de hogar; seguro de vida opcional", "c": "Sin apertura ni amortización parcial", "n": "Solo online. 2,80 % hasta 15 años; a 30 años entre 2,83 % y 2,90 % (aquí se usa 2,90 %)", "f": "https://www.openbank.es/hipoteca-fija", "d": "30/09/2026", "tramos": [[15, 2.8], [30, 2.9]], "ingMin": 900, "ingMin2": 1800, "ingReq": "acceso"}, {"b": "CaixaBank", "p": "CasaFácil Fijo", "t": "fija", "tin": 2.85, "tinS": 3.85, "tae": "4,26 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 600 €/mes, recibos, tarjeta, seguro de vida, seguro de hogar, alarma", "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)", "n": "Otras fuentes dan 2,80 %", "f": "https://www.helpmycash.com/hipotecas/hipotecas-tipo-fijo/", "d": "28/09/2026", "ingMin": 600, "ingReq": "bonif"}, {"b": "BBVA", "p": "Hipoteca Fija", "t": "fija", "tin": 2.95, "tinS": 3.95, "tae": "3,93 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 600 €/mes, seguro de hogar, seguro de vida", "c": "Sin apertura. El banco paga notaría, gestoría y registro", "n": "2,85 % a 15 años", "f": "https://www.helpmycash.com/hipotecas/bbva/hipoteca-fija/", "d": "08/09/2026", "tramos": [[15, 2.85], [30, 2.95]], "ingMin": 600, "ingReq": "bonif"}, {"b": "MyInvestor", "p": "Hipoteca Fija", "t": "fija", "tin": 3.4, "tinS": 3.4, "tae": "3,61 %", "ltv": 80, "pz": 30, "v": "Ninguna", "c": "Apertura 1 %", "n": "Ingresos ≥ 4.000 €/mes netos; préstamo desde 100.000 €", "f": "https://myinvestor.es/hipotecas/hipoteca-fija/", "d": "30/09/2026", "ingMin": 4000, "ingReq": "acceso", "apPct": 1, "minImp": 100000}, {"b": "Banco Sabadell", "p": "Hipoteca Mixta", "t": "mixta", "tin": 1.8, "tinS": 2.7, "anos": 3, "dif": 0.7, "difS": 1.6, "tae": "3,72 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida", "c": "Amortización 2 % en el tramo fijo", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Pibank", "p": "Hipoteca Pibank Mixta", "t": "mixta", "tin": 1.99, "tinS": 1.99, "anos": 4, "dif": 0.68, "difS": 0.68, "tae": "3,40 %", "ltv": 80, "pz": 35, "v": "Ninguna", "c": "Sin comisiones", "n": "Las fuentes no coinciden en el TIN fijo (1,60 % o 1,99 %)", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Ibercaja", "p": "Hipoteca Vamos Mixta 5", "t": "mixta", "tin": 2, "tinS": 3, "anos": 5, "dif": 0.6, "difS": 1.6, "tae": "3,86 %", "ltv": 80, "pz": 25, "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguros, plan de ahorro", "c": "Amortización 2 %", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026", "ingMin": 2500, "ingReq": "bonif"}, {"b": "Banco Santander", "p": "Hipoteca Mixta", "t": "mixta", "tin": 2.34, "tinS": 3.34, "anos": 5.5, "dif": 0.74, "difS": 1.74, "tae": "3,82 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 1.000 €/mes, seguro de vida y de hogar (≥ 300 €/año cada uno), Bizum o tarjeta", "c": "Sin apertura. Amortización 2 % en el tramo fijo", "n": "Tramo fijo de 66 meses", "f": "https://www.helpmycash.com/hipotecas/santander/hipoteca-mixta-santander/", "d": "03/09/2026", "ingMin": 1000, "ingReq": "bonif"}, {"b": "ING", "p": "Naranja Mixta", "t": "mixta", "tin": 3.45, "tinS": 3.95, "anos": 5, "dif": 1.04, "difS": 1.54, "tae": "4,49 %", "ltv": 80, "pz": 40, "v": "Nómina o saldo mínimo, seguro de hogar, seguro de vida", "c": "Amortización total 2 %", "n": "ING subió precios el 14/09/2026", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Banco Sabadell", "p": "Hipoteca Variable", "t": "variable", "tin": 1.5, "anos": 1, "dif": 0.5, "difS": 1.5, "tae": "4,12 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida, seguro de protección de pagos", "c": "Sin apertura", "n": "1,50 % el primer año", "f": "https://www.helpmycash.com/hipotecas/hipoteca-variable/", "d": "28/09/2026"}, {"b": "Unicaja", "p": "Hipoteca Variable", "t": "variable", "tin": 1.9, "anos": 1, "dif": 0.55, "difS": 1.55, "tae": "4,33 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 2.000 €, recibos, tarjeta, seguros de hogar y vida, plan de pensiones", "c": "Apertura 0,15 %. Amortización 0,25 %", "n": "Otras fuentes dan 2,30 % el primer año", "f": "https://www.kelisto.es/hipotecas/bancos/unicaja", "d": "28/09/2026", "ingMin": 2000, "ingReq": "bonif", "apPct": 0.15}, {"b": "Kutxabank", "p": "Hipoteca Variable", "t": "variable", "tin": 2, "anos": 1, "dif": 0.49, "difS": 1.49, "tae": "3,82 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 3.000 €/mes, seguro de hogar, plan de pensiones ≥ 2.400 €/año", "c": "Sin apertura. Amortización 0,15 % los 5 primeros años", "n": "Versión joven: 1,90 % el primer año", "f": "https://www.kelisto.es/hipotecas/bancos/kutxabank", "d": "28/09/2026", "ingMin": 3000, "ingReq": "bonif"}, {"b": "Bankinter", "p": "Hipoteca Variable", "t": "variable", "tin": 2.5, "anos": 3, "dif": 0.5, "difS": 1.8, "tae": "4,04 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida, plan de pensiones", "c": "Apertura 500 €. Amortización 0,15 % los 5 primeros años", "n": "2,50 % los 3 primeros años (3,80 % sin bonificar). Ficha FIPRE de 02/10/2026", "f": "https://www.helpmycash.com/mejores-hipotecas/", "d": "02/10/2026", "apEur": 500}]};
+const DATA0={"version": 3, "actualizado": "2026-10-09", "fecha": "9 de octubre de 2026", "mercado": {"eur": 3.247, "eurAgo": 2.954, "eurAnt": 2.172, "ine": 3.01, "ineMes": "julio de 2026", "ineFija": 3.03, "ineVar": 2.97, "inePctFija": 62.3, "bce": 2.5, "fuentes": {"eur": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20519", "ine": "https://www.ine.es/dyngs/INEbase/operacion.htm?c=Estadistica_C&cid=1254736170236&menu=ultiDatos&idp=1254735576757", "bce": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.es.html", "cambios": "https://www.helpmycash.com/hipotecas/cambios-en-el-mercado-hipotecario/", "eurAgo": "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-18507"}, "ctx": ["Los bancos están subiendo las fijas (ING, Bankinter, BBVA y Santander este año).", "El Euríbor está en máximos de dos años: las variables salen caras tras el primer año."], "fuenteNombres": {"eur": "Banco de España (BOE)", "ine": "INE", "bce": "BCE", "cambios": "HelpMyCash"}, "eurMes": "septiembre de 2026", "eurAgoMes": "agosto de 2026", "eurAntMes": "septiembre de 2025", "bceCorto": "subió el 10 de septiembre", "bceNota": "El BCE subió 0,25 puntos la facilidad de depósito, hasta el 2,50 %, en su reunión del 10 de septiembre de 2026 (en vigor desde el 16): la segunda subida del año. Las fijas son hoy un 6,5 % más caras que hace un año y el tramo fijo de las mixtas un 10,7 %.", "eurOficial": "Resolución del Banco de España de 1 de octubre de 2026, publicada en el BOE", "eurAgoOficial": "Resolución del Banco de España de 1 de septiembre de 2026, publicada en el BOE"}, "ofertas": [{"b": "Ibercaja", "p": "Hipoteca Vamos Fija", "t": "fija", "tin": 2.55, "tinS": 3.55, "tae": "3,49 %", "ltv": 80, "pz": 25, "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguro de hogar, seguro de vida, plan de inversión ≥ 75 €/mes", "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)", "f": "https://www.ibercaja.es/particulares/hipotecas-prestamos/hipotecas/hipoteca-vamos-fija/", "d": "09/10/2026", "ingMin": 2500, "ingReq": "bonif", "minImp": 100000}, {"b": "Banca March", "p": "Hipoteca Fija Avantio", "t": "fija", "tin": 2.65, "tae": "3,01 %", "n": "Ingresos ≥ 4.000 €/mes; préstamo desde 200.000 €", "f": "https://avantio.bancamarch.es/es/financiacion/hipoteca-fija/", "d": "09/10/2026", "ingMin": 4000, "ingReq": "acceso", "minImp": 200000}, {"b": "Banco Sabadell", "p": "Hipoteca Fija Bonificada", "t": "fija", "tin": 2.75, "tinS": 3.75, "tae": "3,58 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida y seguro de protección de pagos", "c": "Sin apertura. Amortización 2 % los 10 primeros años, 1,5 % después", "n": "Condiciones negociables según perfil. Sin confirmar en la web del banco: los comparadores dan ya una TAE del 3,67 %", "f": "https://www.helpmycash.com/hipotecas/sabadell/hipoteca-fija-bonificada/", "d": "01/09/2026"}, {"b": "Openbank", "p": "Hipoteca Open Fija", "t": "fija", "tin": 2.9, "tinS": 3.4, "tae": "3,44 %", "ltv": 80, "pz": 30, "v": "Ingresos ≥ 900 €/mes (1.800 € con dos titulares), seguro de hogar, seguro de vida", "c": "Sin apertura ni amortización parcial", "n": "Solo online. 2,80 % hasta 15 años; la TAE es la de 30 años", "f": "https://www.openbank.es/hipoteca-fija", "d": "09/10/2026", "tramos": [[15, 2.8], [30, 2.9]], "ingMin": 900, "ingMin2": 1800, "ingReq": "bonif"}, {"b": "CaixaBank", "p": "CasaFácil Fijo", "t": "fija", "tin": 2.85, "tinS": 3.85, "tae": "4,26 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 600 €/mes, recibos, tarjeta, seguro de vida, seguro de hogar, alarma", "c": "Sin apertura. Amortización 2 % (1,5 % desde el año 11)", "n": "2,80 % a 15 y 20 años", "f": "https://www.caixabank.es/particular/hipotecas/casafacil.html", "d": "09/10/2026", "tramos": [[20, 2.8], [30, 2.85]], "ingMin": 600, "ingReq": "bonif"}, {"b": "BBVA", "p": "Hipoteca Fija", "t": "fija", "tin": 2.95, "tinS": 3.95, "tae": "3,93 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 600 €/mes, seguro de hogar, seguro de vida", "c": "Sin apertura. El banco paga notaría, gestoría y registro", "n": "2,85 % a 15 años. TAE sin confirmar: no aparece en ninguna fuente de octubre", "f": "https://www.helpmycash.com/hipotecas/bbva/hipoteca-fija/", "d": "08/09/2026", "tramos": [[15, 2.85], [30, 2.95]], "ingMin": 600, "ingReq": "bonif"}, {"b": "Banco Santander", "p": "Hipoteca Fija Bonificada", "t": "fija", "tin": 2.96, "tae": "3,65 %", "f": "https://www.bancosantander.es/particulares/hipotecas/hipoteca-fija", "d": "09/10/2026"}, {"b": "MyInvestor", "p": "Hipoteca Fija", "t": "fija", "tin": 3.4, "tinS": 3.4, "tae": "3,61 %", "ltv": 80, "pz": 30, "v": "Ninguna", "c": "Sin apertura en una compra de vivienda", "n": "Ingresos ≥ 4.000 €/mes netos; préstamo desde 100.000 €", "f": "https://myinvestor.es/hipotecas/hipoteca-fija/", "d": "09/10/2026", "ingMin": 4000, "ingReq": "acceso", "minImp": 100000}, {"b": "Banco Sabadell", "p": "Hipoteca Mixta", "t": "mixta", "tin": 1.8, "tinS": 2.7, "anos": 3, "dif": 0.7, "difS": 1.6, "tae": "3,72 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida", "c": "Amortización 2 % en el tramo fijo", "n": "Sin confirmar en la web del banco: los comparadores dan ya una TAE del 4,03 %", "f": "https://www.helpmycash.com/hipotecas/hipotecas-mixtas/", "d": "14/09/2026"}, {"b": "Pibank", "p": "Hipoteca Pibank Mixta", "t": "mixta", "tin": 2.7, "tinS": 2.7, "anos": 4, "dif": 0.65, "difS": 0.65, "tae": "3,81 %", "ltv": 80, "pz": 35, "v": "Ninguna", "c": "Sin comisiones", "f": "https://www.pibank.es/hipotecas/", "d": "09/10/2026"}, {"b": "Ibercaja", "p": "Hipoteca Vamos Mixta 5", "t": "mixta", "tin": 2, "tinS": 3, "anos": 5, "dif": 0.6, "difS": 1.6, "tae": "4,02 %", "ltv": 80, "pz": 25, "v": "Nómina ≥ 2.500 €/mes, tarjeta, recibos, seguros, plan de ahorro", "c": "Amortización 2 %", "f": "https://www.ibercaja.es/particulares/hipotecas-prestamos/hipotecas/hipoteca-vamos-mixta-5/", "d": "09/10/2026", "ingMin": 2500, "ingReq": "bonif"}, {"b": "Ibercaja", "p": "Hipoteca Vamos Mixta 10", "t": "mixta", "tin": 2.1, "anos": 10, "dif": 0.6, "tae": "3,59 %", "f": "https://www.ibercaja.es/particulares/hipotecas-prestamos/hipotecas/hipoteca-vamos-mixta-10/", "d": "09/10/2026"}, {"b": "Banco Santander", "p": "Hipoteca Mixta", "t": "mixta", "tin": 2.34, "tinS": 3.34, "anos": 5.5, "dif": 0.74, "difS": 1.74, "tae": "3,98 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 1.000 €/mes, seguro de vida y de hogar (≥ 300 €/año cada uno), Bizum o tarjeta", "c": "Sin apertura. Amortización 2 % en el tramo fijo", "n": "Tramo fijo de 66 meses", "f": "https://www.bancosantander.es/particulares/hipotecas/hipoteca-mixta", "d": "09/10/2026", "ingMin": 1000, "ingReq": "bonif"}, {"b": "ING", "p": "Naranja Mixta", "t": "mixta", "tin": 3.85, "anos": 5, "dif": 1.04, "difS": 1.54, "tae": "4,66 %", "ltv": 80, "pz": 40, "v": "Nómina o saldo mínimo, seguro de hogar, seguro de vida", "c": "Amortización total 2 %", "n": "ING ya no publica una tarifa única: son las cifras de su ejemplo legal", "f": "https://www.ing.es/hipotecas/hipoteca-mixta", "d": "09/10/2026"}, {"b": "Banco Sabadell", "p": "Hipoteca Variable", "t": "variable", "tin": 1.5, "anos": 1, "dif": 0.5, "difS": 1.5, "tae": "4,12 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida, seguro de protección de pagos", "c": "Sin apertura", "n": "1,50 % el primer año. Sin confirmar en la web del banco: los comparadores dan ya una TAE del 4,46 %", "f": "https://www.helpmycash.com/hipotecas/hipoteca-variable/", "d": "28/09/2026"}, {"b": "Unicaja", "p": "Hipoteca Variable", "t": "variable", "tin": 2, "anos": 1, "dif": 0.55, "difS": 1.55, "tae": "4,61 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 2.000 €, recibos, tarjeta, seguros de hogar y vida, plan de pensiones", "c": "Apertura 0,15 %. Amortización 0,25 %", "n": "2,00 % el primer año, con nómina de 2.000 €", "f": "https://www.unicajabanco.es/es/particulares/hipotecas-y-prestamos/hipotecas/hipoteca-tipo-variable", "d": "09/10/2026", "ingMin": 2000, "ingReq": "bonif", "apPct": 0.15}, {"b": "Kutxabank", "p": "Hipoteca Variable", "t": "variable", "tin": 2.27, "anos": 1, "dif": 0.49, "difS": 1.49, "tae": "4,11 %", "ltv": 80, "pz": 30, "v": "Nómina ≥ 3.000 €/mes, seguro de hogar, plan de pensiones ≥ 2.400 €/año", "c": "Sin apertura. Amortización 0,15 % los 5 primeros años", "n": "2,27 % el primer año", "f": "https://clientes.kutxabank.es/es/hipotecas/variable.html", "d": "09/10/2026", "ingMin": 3000, "ingReq": "bonif"}, {"b": "Bankinter", "p": "Hipoteca Variable", "t": "variable", "tin": 2.5, "anos": 3, "dif": 0.5, "difS": 1.8, "tae": "4,04 %", "ltv": 80, "pz": 30, "v": "Nómina, seguro de hogar, seguro de vida, plan de pensiones", "c": "Apertura 500 €. Amortización 0,15 % los 5 primeros años", "n": "2,50 % los 3 primeros años (3,80 % sin bonificar). Ingresos de más de 2.500 €/mes", "f": "https://www.bankinter.com/banca/hipotecas-prestamos/hipotecas/hipoteca-variable", "d": "09/10/2026", "ingMin": 2500, "ingReq": "acceso", "apEur": 500}, {"b": "COINC", "p": "Hipoteca Variable", "t": "variable", "tin": 2.5, "anos": 3, "dif": 0.5, "tae": "3,68 %", "v": "Cuenta en Bankinter", "n": "Del grupo Bankinter", "f": "https://www.coinc.es/ahorrador/nuestras-hipotecas/hipoteca-variable", "d": "09/10/2026"}]};
 const KEY='fea-vivienda-v3';
 
 /* ---------------------------------------------------------------
@@ -1828,15 +1834,27 @@ function render3(){
 
 
 /* =========================================================
-   4 · QUÉ OFRECEN LOS BANCOS (datos de mercado, 05/10/2026)
+   4 · QUÉ OFRECEN LOS BANCOS (datos de mercado, 09/10/2026)
    ========================================================= */
 let MKT_FECHA=DATA0.fecha,MKT=DATA0.mercado,OFF=DATA0.ofertas;
 /* Los datos de mercado viven en data.json: en la web se actualizan solos cada semana; aquí va una copia para funcionar sin conexión */
+/* Una oferta vale si trae lo imprescindible para calcularla (banco, tipo, TIN y, si revisa, años y diferencial).
+   Lo demás es opcional: si falta o viene mal se quita, y la web dice «sin dato» en vez de inventarlo. */
+const ofOk=x=>x&&x.b&&['fija','mixta','variable'].includes(x.t)&&typeof x.tin==='number'&&x.tin>0&&x.tin<15&&(x.t==='fija'||(typeof x.anos==='number'&&x.anos>0&&x.anos<=40&&typeof x.dif==='number'&&x.dif>-2&&x.dif<10));
+function ofLimpia(x){
+  ['tinS','difS','ltv','pz','ingMin','ingMin2','minImp','apPct','apEur'].forEach(k=>{if(k in x&&!(typeof x[k]==='number'&&isFinite(x[k])&&x[k]>=0))delete x[k]});
+  ['p','tae','taeS','v','c','n','f','d','ingReq'].forEach(k=>{if(k in x&&typeof x[k]!=='string')delete x[k]});
+  if(x.f&&!/^https?:\/\//.test(x.f))delete x.f;
+  if('tramos' in x&&!(Array.isArray(x.tramos)&&x.tramos.length&&x.tramos.every(t=>Array.isArray(t)&&t.length===2&&t.every(v=>typeof v==='number'&&v>0))))delete x.tramos;
+  if('vk' in x&&!(Array.isArray(x.vk)&&x.vk.every(v=>v&&typeof v.k==='string')))delete x.vk;
+  return x}
 function applyData(d){try{
   const m=d&&d.mercado,o=d&&d.ofertas;
   if(!m||typeof m.eur!=='number'||m.eur<-1||m.eur>10||!Array.isArray(o)||o.length<3)return false;
-  if(!o.every(x=>x&&x.b&&['fija','mixta','variable'].includes(x.t)&&typeof x.tin==='number'&&x.tin>0&&x.tin<15))return false;
-  const prev=Math.round(MKT.eur*100)/100;MKT_FECHA=d.fecha||MKT_FECHA;MKT=m;OFF=o;
+  if(!['eurAgo','eurAnt','ine','ineFija','ineVar','bce'].every(k=>typeof m[k]==='number'&&isFinite(m[k])))return false;
+  if(!o.every(ofOk))return false;
+  ['fuentes','fuenteNombres'].forEach(k=>{if(!m[k]||typeof m[k]!=='object')m[k]={}});
+  const prev=Math.round(MKT.eur*100)/100;MKT_FECHA=d.fecha||MKT_FECHA;MKT=m;OFF=o.map(ofLimpia);
   if(Math.abs(S.h.eur-prev)<1e-9)S.h.eur=Math.round(m.eur*100)/100; // si no lo habías cambiado, sigue al Euríbor real
   return true}catch(e){return false}}
 
@@ -1851,29 +1869,51 @@ const VK_I={
  proteccion:'<path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/>',
  alarma:'<path d="M6 17V11a6 6 0 0 1 12 0v6"/><path d="M4 17h16M10 20h4"/>',
  bizum:'<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/>',
+ cuenta:'<path d="M4 7h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4z"/><path d="M4 7V6a1 1 0 0 1 1-1h11"/><path d="M15.5 13h.5"/>',
  saldo:'<path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18M12 3 3 8h18z"/>'
 };
-const VK_L={nomina:'Nómina',tarjeta:'Tarjeta',recibos:'Recibos',hogar:'Seguro hogar',vida:'Seguro vida',pension:'Plan',proteccion:'Protección pagos',alarma:'Alarma',bizum:'Bizum',saldo:'Saldo mínimo'};
+const VK_L={nomina:'Nómina',tarjeta:'Tarjeta',recibos:'Recibos',hogar:'Seguro hogar',vida:'Seguro vida',pension:'Plan',proteccion:'Protección pagos',alarma:'Alarma',bizum:'Bizum',saldo:'Saldo mínimo',cuenta:'Cuenta en el banco'};
+/* Lo que cada producto exigido cuesta de más al año que contratándolo fuera del banco. SON SUPUESTOS, los mismos del ejemplo del comparador:
+   c = precio al año en el banco, m = precio fuera (0 = fuera no lo contratarías), s = % que el banco lo sube de más cada año.
+   Lo que no está aquí (nómina, recibos, tarjeta, Bizum, saldo, cuenta) no cuesta dinero: 0 €. */
+const VK_COSTE={
+ hogar:{n:'Seguro de hogar',c:350,m:220,s:2},
+ vida:{n:'Seguro de vida',c:300,m:180,s:4},
+ pension:{n:'Plan de pensiones (comisiones)',c:150,m:0,s:0},
+ proteccion:{n:'Seguro de protección de pagos',c:250,m:0,s:0},
+ alarma:{n:'Alarma',c:480,m:0,s:0}
+};
+/* una vinculación, como producto con su precio supuesto */
+const vkCoste=v=>{const k=VK_COSTE[v.k];return {k:v.k,n:k?(v.k==='pension'&&v.x?`Plan ${v.x} (comisiones)`:k.n):VK_L[v.k]+(v.x?' '+v.x:''),c:k?k.c:0,m:k?k.m:0,s:k?k.s:0}};
+/* las que el banco exige para el tipo bonificado (las opcionales no cuentan) y si la oferta no dice cuáles son */
+const vkReq=x=>vkOf(x).filter(v=>v.x!=='opcional');
+const vkNd=x=>!Array.isArray(x.vk)&&!(x.v||'').trim();
 function vkOf(x){
-  if(Array.isArray(x.vk))return x.vk;
+  if(Array.isArray(x.vk))return x.vk.filter(v=>v&&VK_I[v.k]);
   const t=(x.v||'').toLowerCase(),out=[];
   if(/^ninguna/.test(t))return [];
   const m=(x.v||'').match(/(?:N[óo]mina|Ingresos)[^,;]*?≥\s*([\d\.]+)\s*€/i);
-  if(/n[óo]mina|ingresos|pensi[óo]n domic/.test(t))out.push({k:'nomina',x:m?`≥ ${m[1]} €`:''});
-  if(/tarjeta/.test(t))out.push({k:'tarjeta'});
+  const opc=re=>new RegExp('(?:'+re+')[^,;]*opcional').test(t)?'opcional':'';
+  // «Bizum o tarjeta» y «nómina o saldo» son una sola exigencia, no dos
+  const tarjBiz=/bizum o (la |una )?tarjeta|tarjeta[^,;]*? o (el |un )?bizum/.test(t),nomSaldo=/n[óo]mina[^,;]*? o [^,;]*?saldo|saldo[^,;]*? o [^,;]*?n[óo]mina/.test(t);
+  const hayNom=/n[óo]mina|ingresos|pensi[óo]n domic/.test(t);
+  if(/cuenta/.test(t)&&(!hayNom||/no[- ]n[óo]mina/.test(t)))out.push({k:'cuenta'});
+  else if(hayNom)out.push({k:'nomina',x:m?`≥ ${m[1]} €`:nomSaldo?'o saldo mínimo':''});
+  if(/tarjeta/.test(t))out.push({k:'tarjeta',x:tarjBiz?'o Bizum':''});
   if(/recibos/.test(t))out.push({k:'recibos'});
-  if(/hogar|seguros?(?! de vida)/.test(t)&&/hogar|seguros/.test(t))out.push({k:'hogar'});
-  if(/vida|seguros/.test(t))out.push({k:'vida',x:/vida opcional/.test(t)?'opcional':''});
-  if(/pensiones|plan de (ahorro|inversi)/.test(t))out.push({k:'pension',x:/inversi/.test(t)?'de inversión':/ahorro/.test(t)?'de ahorro':'de pensiones'});
-  if(/protecci[óo]n de pagos/.test(t))out.push({k:'proteccion'});
-  if(/alarma/.test(t))out.push({k:'alarma'});
-  if(/bizum/.test(t))out.push({k:'bizum'});
-  if(/saldo m/.test(t))out.push({k:'saldo'});
+  if(/hogar|seguros?(?! de vida)/.test(t)&&/hogar|seguros/.test(t))out.push({k:'hogar',x:opc('hogar')});
+  if(/vida|seguros/.test(t))out.push({k:'vida',x:opc('vida')});
+  if(/pensiones|epsv|(plan|fondo)s? de (ahorro|inversi)/.test(t))out.push({k:'pension',x:opc('pensiones|epsv|(plan|fondo)s? de (ahorro|inversi)')||(/inversi/.test(t)?'de inversión':/ahorro/.test(t)?'de ahorro':'de pensiones')});
+  if(/protecci[óo]n de (pagos|pr[ée]stamos?)/.test(t))out.push({k:'proteccion',x:opc('protecci[óo]n de (pagos|pr[ée]stamos?)')});
+  if(/alarma/.test(t))out.push({k:'alarma',x:opc('alarma')});
+  if(/bizum/.test(t)&&!tarjBiz)out.push({k:'bizum'});
+  if(/saldo m/.test(t)&&!nomSaldo)out.push({k:'saldo'});
   return out;
 }
-function vkHtml(x,full){const L=vkOf(x);
+function vkHtml(x,full){const L=vkOf(x),nR=L.filter(v=>v.x!=='opcional').length;
+  if(vkNd(x))return `<span class="vk nd" title="La oferta no dice qué productos exige">Vinculaciones: sin dato</span>`;
   if(!L.length)return `<span class="vk none">Sin vinculaciones</span>`;
-  return `<span class="vks">${L.map(v=>`<span class="vk" title="${VK_L[v.k]}${v.x?' '+v.x:''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${VK_I[v.k]}</svg>${full||v.k==='nomina'?`<span>${VK_L[v.k]}${v.x?' '+v.x:''}</span>`:''}</span>`).join('')}<span class="vkn">${L.length}</span></span>`}
+  return `<span class="vks">${L.map(v=>`<span class="vk" title="${VK_L[v.k]}${v.x?' '+v.x:''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${VK_I[v.k]}</svg>${full||v.k==='nomina'?`<span>${VK_L[v.k]}${v.x?' '+v.x:''}</span>`:''}</span>`).join('')}<span class="vkn${nR===1?' uno':''}">${nR}</span></span>`}
 /* Algunas ofertas cambian el TIN según el plazo: tramos = [[hasta años, TIN], …] */
 function tinPara(x,years){if(Array.isArray(x.tramos)&&x.tramos.length){for(const [h,t] of x.tramos)if(years<=h)return t;return x.tramos[x.tramos.length-1][1]}return x.tin}
 /* Ingresos mínimos: de acceso (sin ellos no te dan la hipoteca) o para la bonificación (nómina domiciliada) */
@@ -1885,6 +1925,15 @@ const apOf=x=>x.apPct!=null?x.apPct:x.apEur&&hipoteca()>0?x.apEur/hipoteca()*100
 /* antigüedad de cada dato: días desde la fecha de la fuente (DD/MM/AAAA) */
 function diasDe(d){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(d||'');if(!m)return 0;const t=new Date(+m[3],+m[2]-1,+m[1]);return Math.max(0,Math.floor((Date.now()-t)/864e5))}
 const haceTxt=d=>{const n=diasDe(d);return n===0?'hoy':n===1?'hace 1 día':`hace ${n} días`};
+const sinFecha=d=>!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(d||'');
+/* De dónde sale cada oferta: la web del banco o, si no se pudo leer, un comparador */
+const COMPARADORES={'helpmycash.com':'HelpMyCash','kelisto.es':'Kelisto','rankia.com':'Rankia','idealista.com':'idealista','hipotecas.me':'hipotecas.me'};
+const hostOf=x=>(x.f||'').replace(/^https?:\/\/(www\.)?/,'').split('/')[0];
+const compOf=x=>{const h=hostOf(x);for(const k in COMPARADORES)if(h===k||h.endsWith('.'+k))return COMPARADORES[k];return ''};
+function ofFuentes(){const cs=[...new Set(OFF.map(compOf).filter(Boolean))],nB=OFF.filter(x=>x.f&&!compOf(x)).length;
+  return nB===OFF.length?'la web de cada banco':`la web de cada banco (${nB} de ${OFF.length})${cs.length?' y, donde no se pudo leer, '+yList(cs):''}`}
+/* % de hipotecas firmadas a tipo fijo (INE): viene en los datos; si faltara, vale el de la copia interna solo si es del mismo mes */
+const pctFija=()=>typeof MKT.inePctFija==='number'?MKT.inePctFija:(MKT.ineMes===DATA0.mercado.ineMes&&typeof DATA0.mercado.inePctFija==='number'?DATA0.mercado.inePctFija:null);
 function mcalc(x){
   const g=ingOf(x),sinBon=g.falla&&g.tipo==='bonif',noAcc=(g.falla&&g.tipo==='acceso')||g.fallaImp;
   const keep=S.v.plazo,years=Math.min(S.v.plazo,x.pz||S.v.plazo);S.v.plazo=years;
@@ -1903,10 +1952,10 @@ function render4(){
   $('m4kpis').innerHTML=`
     <button class="kpi" data-x="m_eur"><small>Euríbor oficial · ${esc(MKT.eurMes||'')}</small><strong class="num" style="color:${MKT.eur>MKT.eurAnt?'var(--bad)':'var(--good)'}">${pct(MKT.eur,3)}</strong><em>${MKT.eur>MKT.eurAnt?'▲':'▼'} desde ${pct(MKT.eurAnt,2)} hace un año · Banco de España</em></button>
     <button class="kpi" data-x="m_ine"><small>Tipo medio firmado (INE, ${MKT.ineMes})</small><strong class="num">${pct(MKT.ine)}</strong><em>fijas ${pct(MKT.ineFija)} · variables ${pct(MKT.ineVar)}</em></button>
-    <button class="kpi" data-x="m_bce"><small>Tipo del BCE</small><strong class="num">${pct(MKT.bce,1)}</strong><em>${esc(MKT.bceCorto||'')}</em></button>`;
+    <button class="kpi" data-x="m_bce"><small>BCE · facilidad de depósito</small><strong class="num">${pct(MKT.bce,2)}</strong><em>${esc(MKT.bceCorto||'')}</em></button>`;
   const FN=MKT.fuenteNombres||{},lk=(k,t)=>MKT.fuentes&&MKT.fuentes[k]?`<a href="${MKT.fuentes[k]}" target="_blank" rel="noopener">${esc(t||FN[k]||k)}</a>`:'';
   $('m4ctx').innerHTML=`<div><b>Qué está pasando</b> · datos a ${esc(MKT_FECHA)}</div><ul>${(MKT.ctx||[]).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
-    <div class="src-line">Fuentes: Euríbor ${lk('eur')} · tipo medio ${lk('ine')} · BCE ${lk('bce')} · ofertas: HelpMyCash, Kelisto y webs de los bancos (enlace en cada fila). Se revisan cada semana.</div>`;
+    <div class="src-line">Fuentes: Euríbor ${lk('eur')} · tipo medio ${lk('ine')} · BCE ${lk('bce')} · ofertas: ${ofFuentes()} (enlace y fecha en cada fila). Se revisan cada semana.</div>`;
   $('m4filter').innerHTML=[['todas','Todas'],['fija','Fijas'],['mixta','Mixtas'],['variable','Variables']].map(([k,l])=>`<button data-mf="${k}" class="${MF===k?'on':''}">${l}</button>`).join('');
   $('m4hint').textContent=P>0?`Cuotas calculadas para tu hipoteca de ${eur(P)} a ${anos(S.v.plazo)}, con el tipo bonificado y el Euríbor a ${pct(S.h.eur)} cuando toca revisar. Pincha una fila para ver el detalle.`:'Con una entrada del 100 % no hay hipoteca que calcular.';
   const rows=OFF.map((x,i)=>({x,i,c:P>0?mcalc(x):null})).filter(r=>MF==='todas'||r.x.t===MF);
@@ -1931,8 +1980,8 @@ function render4(){
     ${edadKo&&P>0?`<p class="ingw" style="margin-top:10px">Con ${S.v.edad} años, a ${anos(S.v.plazo)} terminarías de pagar a los ${S.v.edad+S.v.plazo}: la mayoría de bancos solo llegan a los ${EDAD_FIN}. <button class="btn" data-act="plazoB">Usar ${anos(Math.max(1,EDAD_FIN-S.v.edad))}</button></p>`:''}
     <p class="hint" style="margin-top:10px">Ordenadas por coste comparado: el tipo que pagas de media en toda la vida del préstamo, con la comisión de apertura, contando el Euríbor que supones cuando toca revisar. Sirve para comparar fijas, mixtas y variables entre sí. No incluyen el coste de las vinculaciones: llévalas al comparador para verlo. Condiciones publicadas a ${MKT_FECHA}; cambian a menudo y dependen de tu perfil, confírmalas con el banco.</p>`;
   X.m_eur=()=>modal('Euríbor a 12 meses',`<div class="steps">${step(esc(MKT.eurMes||'')+' (media mensual)',pct(MKT.eur,3),'tot')}${step(esc(MKT.eurAgoMes||'Mes anterior'),pct(MKT.eurAgo,3))}${step(esc(MKT.eurAntMes||'Hace un año'),pct(MKT.eurAnt,3))}</div><p>Es la media mensual oficial del Euríbor a un año, la que usan los bancos para revisar las hipotecas variables y las mixtas tras el tramo fijo. En «Comparar» puedes poner el Euríbor que supones para el futuro (ahora ${pct(S.h.eur)}).</p><p class="hint">Fuente: <a href="${MKT.fuentes.eur}" target="_blank" rel="noopener">${esc(MKT.eurOficial||'Banco de España')}</a>${MKT.fuentes.eurAgo?` · mes anterior: <a href="${MKT.fuentes.eurAgo}" target="_blank" rel="noopener">${esc(MKT.eurAgoOficial||'BOE')}</a>`:''}</p>`);
-  X.m_ine=()=>modal('Tipo medio de las hipotecas firmadas',`<div class="steps">${step('Todas',pct(MKT.ine),'tot')}${step('Tipo fijo (62 % de las firmas)',pct(MKT.ineFija))}${step('Tipo variable',pct(MKT.ineVar))}</div><p>Es lo que se firmó de media en ${MKT.ineMes}. Si te ofrecen bastante más, negocia o compara.</p><p class="hint">Fuente: <a href="${MKT.fuentes.ine}" target="_blank" rel="noopener">INE, Estadística de Hipotecas (${esc(MKT.ineMes)})</a></p>`);
-  X.m_bce=()=>modal('Tipo de interés del BCE',`<p>${esc(MKT.bceNota||'')}</p><p class="hint">Fuentes: <a href="${MKT.fuentes.bce}" target="_blank" rel="noopener">Infobae</a> · <a href="${MKT.fuentes.cambios}" target="_blank" rel="noopener">HelpMyCash</a></p>`);
+  X.m_ine=()=>modal('Tipo medio de las hipotecas firmadas',`<div class="steps">${step('Todas',pct(MKT.ine),'tot')}${step('Tipo fijo'+(pctFija()!=null?` (${pctS(pctFija())} de las firmas)`:''),pct(MKT.ineFija))}${step('Tipo variable',pct(MKT.ineVar))}</div><p>Es lo que se firmó de media en ${MKT.ineMes}. Si te ofrecen bastante más, negocia o compara.</p><p class="hint">Fuente: <a href="${MKT.fuentes.ine}" target="_blank" rel="noopener">INE, Estadística de Hipotecas (${esc(MKT.ineMes)})</a></p>`);
+  X.m_bce=()=>modal('Tipo del BCE: facilidad de depósito',`<div class="steps">${step('Facilidad de depósito',pct(MKT.bce,2),'tot')}</div><p>${esc(MKT.bceNota||'')}</p><p class="hint">Es lo que el BCE paga a los bancos por el dinero que le dejan de un día para otro, y el tipo con el que hoy dirige su política monetaria.</p><p class="hint">Fuentes: ${[lk('bce'),lk('cambios')].filter(Boolean).join(' · ')}</p>`);
   return rows;
 }
 function mDetail(i){const x=OFF[i],c=hipoteca()>0?mcalc(x):null;
