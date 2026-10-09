@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Calculadoras de vivienda de Finanzas en Acción: cuánto puedes comprar, comparador de hipotecas con la trampa de los seguros, comprar o alquilar, revisión de tu hipoteca variable y qué ofrecen hoy los bancos.">
+<title>Finanzas en Acción · Calculadoras de vivienda</title>
+<meta name="description" content="Seis calculadoras de vivienda: cuánto puedes comprar, comprar o alquilar, qué ofrecen hoy los bancos, comparar hipotecas, invertir para alquilar y revisar tu hipoteca.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Finanzas en Acción · Calculadoras de vivienda">
-<meta property="og:description" content="Cuánto puedes comprar, qué hipoteca te sale más barata, si te compensa comprar o alquilar, cuánto te sube la revisión de tu variable y qué ofrecen hoy los bancos.">
+<meta property="og:description" content="Cuánto puedes comprar, si te compensa comprar o alquilar, qué ofrecen hoy los bancos, qué hipoteca te sale más barata, si te renta un piso para alquilar y cuánto te sube la revisión de tu variable.">
 <meta property="og:image" content="https://finanzasenaccion.github.io/vivienda/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -17,22 +18,32 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://finanzasenaccion.github.io/vivienda/og.png">
 <meta name="twitter:site" content="@BuscandolaLF">
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Vivienda FA">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preload" href="fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
 <meta name="theme-color" content="#0B3D2E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;background:#EEF2EF}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Tipografías servidas desde el propio sitio (carpeta fonts/, licencia OFL): al cargar no se pide nada a terceros.
+   Mismas familias y ejes que antes se pedían a Google Fonts. Bricolage Grotesque (tamaño óptico y peso) se declara con dos caras, 600 y 800,
+   como hacía Google: así la negrita normal (700) usa la de 800 y todo se ve igual que antes. Instrument Sans, de 400 a 700.
+   Solo se precargan las dos «latin», que son las de la primera pantalla; las «latin-ext» se piden si hace falta alguna letra suya. */
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/instrument-sans-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/instrument-sans-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
 </head>
 <body>
-<title>Finanzas en Acción Vivienda</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: banda corporativa verde con logo y pestañas; cada pestaña = columna de datos a la izquierda + resultado visual a la derecha; cierre con la llamada al bróker. Toda cifra se pincha y explica su cálculo. */
 :root{
