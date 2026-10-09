@@ -1741,10 +1741,12 @@ function calc3(ov={}){
       Y.push({y:m/12,compra:valor*(1-S.r.venta/100)-B+portC-taxC-plusv,alq:portA-taxA,valor,deuda:B,portC,taxA,taxC,portA,plusv,ganCasa});yr.push({...acc});acc={int:0,cuota:0,gastos:0,alq:0,amort:0}}
   }
   const end=Y[Y.length-1],dif=end.compra-end.alq;
+  // empate: si los dos patrimonios se separan menos de EMPATE puntos al año, la diferencia no decide nada
+  const lo=Math.min(end.compra,end.alq),hi=Math.max(end.compra,end.alq),gap=lo>0?(Math.pow(hi/lo,1/H)-1)*100:null,emp=gap!=null&&gap<EMPATE;
   let be=null;for(let k=1;k<Y.length;k++){if(Y.slice(k).every(q=>q.compra>=q.alq)){be=k;break}}
   const g1=S.r.ibi+S.r.seguro+S.r.comunidad*12+P*S.r.mant/100;
   const irrec={int:yr[0]?yr[0].int:0,gastos:g1,oport:inicial*rent/100,reval:P*rv};
-  return {H,P,c,inicial,L,cuota,Y,yr,end,dif,be,irrec,alq1:S.r.alquiler,gastosMes1:g1/12,apA,apC};
+  return {H,P,c,inicial,L,cuota,Y,yr,end,dif,gap,emp,be,irrec,alq1:S.r.alquiler,gastosMes1:g1/12,apA,apC};
 }
 /* Lo que te cuesta la casa en Yrs años: precio pagado, impuestos y gastos de compra, intereses y gastos de propietario */
 function costeCasa(Yrs){
@@ -1783,8 +1785,8 @@ function tabla3(R){return `<div class="tblwrap"><table><thead><tr><th>Año</th><
 function render3(){
   const R=calc3(),buy=R.dif>=0,R0=calc3({reval:0}),EQ=revalEquilibrio();R.R0=R0;R.EQ=EQ;
   $('r3hero').innerHTML=`<div class="hzrow" id="r3hz"></div>
-    <div class="v-win" style="font-size:clamp(26px,3.4vw,38px)">${buy?'Te compensa comprar':'Te compensa alquilar'}</div>
-    <div class="pills"><button class="pill ${buy?'good':'warn'}" data-x="fin3">${buy?'Comprar':'Alquilar'} te deja ${eur(Math.abs(R.dif))} más</button>
+    <div class="v-win" style="font-size:clamp(26px,3.4vw,38px)">${R.emp?'Prácticamente igual':buy?'Te compensa comprar':'Te compensa alquilar'}</div>
+    <div class="pills"><button class="pill ${R.emp?'neutral':buy?'good':'warn'}" data-x="fin3">${buy?'Comprar':'Alquilar'} te deja ${eur(Math.abs(R.dif))} más</button>
     <button class="pill neutral" data-x="be3">${R.be?`Comprar gana a partir del año ${R.be}`:`En ${anos(R.H)} comprar no llega a ganar`}</button>
     ${R.c.im.usa?`<button class="pill good" data-x="itp">Con ITP reducido</button>`:''}
     ${LAST.r1&&!LAST.r1.ok?`<button class="pill bad" data-gotab="cuanto">Ojo: en «Mi presupuesto» esta compra no te llega</button>`:''}</div>`;
@@ -1832,7 +1834,9 @@ function render3(){
   X.fin3=()=>{const e=R.end;modal(`Patrimonio a ${anos(R.H)}`,`<h4>Comprando</h4><div class="steps">${step('Valor de la vivienda (+'+pct(S.r.reval,1)+' al año)',eur(e.valor))}${step('− Gastos si vendes ('+pct(S.r.venta,1)+')',eur(e.valor*S.r.venta/100))}${step('− Hipoteca pendiente',eur(e.deuda))}${step('+ Lo invertido los meses en que comprar salía más barato que alquilar',eur(e.portC))}${step('Patrimonio comprando',eur(e.compra),'tot')}</div>
     <div class="steps">${step(`− Plusvalía municipal al vender (estimada: ${SUELO3} % de suelo de la subida × ${PLUSV_TIPO} %)`,eur(e.plusv))}${step(S.r.reinvierte?'− IRPF de lo invertido (la ganancia de la casa no paga: reinviertes)':'− IRPF de lo invertido y de la ganancia de la casa',eur(e.taxC))}</div>
     <h4>Alquilando</h4><div class="steps">${step('Invierte el dinero que el comprador pone al principio',eur(R.inicial))}${step('+ cada mes, lo que paga de menos que el propietario, todo al '+pct(S.r.rent,1)+' anual','')}${step('Valor de la cartera',eur(e.portA))}${step('− IRPF del ahorro al vender (ganancia de '+eur(e.portA-R.apA)+')',eur(e.taxA))}${step('Patrimonio alquilando',eur(e.alq),'tot')}</div>
-    <div class="steps">${step(buy?'Ventaja de comprar':'Ventaja de alquilar',eur(Math.abs(R.dif)),'tot')}</div>
+    <div class="steps">${step(buy?'Ventaja de comprar':'Ventaja de alquilar',eur(Math.abs(R.dif)),'tot')}${R.gap==null?'':step('Lo que separa a los dos patrimonios, al año',pct(R.gap),R.emp?'tot':'')}</div>
+    ${R.emp?`<p><b>Prácticamente igual.</b> Menos de ${nf(2).format(EMPATE)} puntos al año no deciden nada: el resultado se da la vuelta con cualquier cambio en los supuestos.</p>`:''}
+    <p class="note">El alquiler sube un ${pctS(S.r.subAlq)} al año y los gastos de propietario con el IPC (${pctS(S.r.ipc)}).</p>${rdl29('ded')}
     <p class="note">Los dos casos gastan lo mismo cada mes: quien paga menos invierte la diferencia. Las inversiones pagan IRPF del ahorro (19 % a 30 %) sobre la ganancia al venderlas. Al vender la casa se paga siempre la plusvalía municipal; la ganancia paga IRPF salvo que reinviertas en otra vivienda habitual (o tengas más de 65 años). La plusvalía real depende del valor catastral y de tu ayuntamiento: se usa el tipo máximo como estimación prudente. La deducción por vivienda habitual solo existe para compras anteriores a 2013.</p>`)};
   X.be3=()=>modal('Año en que comprar empieza a ganar',`<p>${R.be?`Desde el año ${R.be}, el patrimonio comprando supera al de alquilar y ya no vuelve a quedar por debajo.`:`Dentro de ${anos(R.H)} el patrimonio alquilando sigue siendo mayor.`} Al principio pesan los impuestos y gastos de compra (${eur(R.c.imp+R.c.not+R.c.com+R.c.fijos)}) y lo que perderías al vender, que no vuelven.</p>`+tabla3(R));
   X.tabla3=()=>modal('Patrimonio año a año',tabla3(R));
@@ -2324,7 +2328,7 @@ try{const fx=(st,dst)=>{let ch=false;if(st&&st.lk&&st.i&&dst&&dst.i)[['i.tin','t
   fx(load(),S);const L=casos();if(L.map(c=>c&&fx(c.st,c.st)).some(Boolean))setCasos(L)}catch(e){}
 function metricsFor(st){const keep=S;try{S=sane(merge(EXAMPLE,clone(st)));syncAll();
   const r1=calc1(),r3=calc3(),ct=costeCasa(Math.max(1,Math.round(S.v.plazo))),k=inv();
-  return {precio:S.v.precio,ccaa:S.v.ccaa,nueva:S.v.nueva,entrada:S.v.precio*entradaEf()/100,ePct:entradaEf(),hip:r1.hip,cuota:r1.cuota,plazo:S.v.plazo,esf:r1.esfuerzo,ok:r1.ok,falta:r1.falta,max:r1.max,total:ct.total,dif:r3.dif,H:r3.H,neta:k.netaPct,caja:k.caja,tir:k.tir,N:k.N,dscr:k.dscr,iL:k.L,iP:k.P,iAlq:S.i.alquiler}}finally{S=keep;syncAll()}}
+  return {precio:S.v.precio,ccaa:S.v.ccaa,nueva:S.v.nueva,entrada:S.v.precio*entradaEf()/100,ePct:entradaEf(),hip:r1.hip,cuota:r1.cuota,plazo:S.v.plazo,esf:r1.esfuerzo,ok:r1.ok,falta:r1.falta,max:r1.max,total:ct.total,dif:r3.dif,emp3:r3.emp,H:r3.H,neta:k.netaPct,caja:k.caja,tir:k.tir,N:k.N,dscr:k.dscr,iL:k.L,iP:k.P,iAlq:S.i.alquiler}}finally{S=keep;syncAll()}}
 function casosModal(){
   const L=casos(),cols=[{n:'Lo que tienes ahora',st:S,now:true},...L.map((c,i)=>({n:c.n,st:c.st,i}))],M=cols.map(c=>metricsFor(c.st));
   const best=(f,low)=>{const v=M.map(f);const b=low?Math.min(...v):Math.max(...v);return v.map(x=>cols.length>1&&Math.abs(x-b)<0.5)};
@@ -2337,7 +2341,7 @@ function casosModal(){
     <div class="tblwrap cs-t"><table><thead><tr><th></th>${cols.map(c=>`<th>${esc(c.n)}</th>`).join('')}</tr></thead><tbody>
       ${row('Precio',m=>eur(m.precio))}${row('Comunidad',m=>esc(m.ccaa)+(m.nueva?' · nueva':''))}${row('Entrada',m=>eur(m.entrada)+' · '+pct(m.ePct,0))}${row('Hipoteca',m=>eur(m.hip)+' a '+m.plazo+' años')}
       ${row('Cuota al mes',m=>eur(m.cuota),bC)}${row('De tus ingresos',m=>isFinite(m.esf)?pct(m.esf,0):'—')}${row('¿Te llega?',m=>m.ok?'<b style="color:var(--good)">Sí</b>':`<b style="color:var(--bad)">No</b>${m.falta>0?' · faltan '+eur(m.falta):''}`)}
-      ${row('Lo que te cuesta la casa',m=>eur(m.total),bT)}${row('Comprar o alquilar',m=>`${m.dif>=0?'Comprar':'Alquilar'} +${eur(Math.abs(m.dif))} a ${m.H} años`)}
+      ${row('Lo que te cuesta la casa',m=>eur(m.total),bT)}${row('Comprar o alquilar',m=>`${m.emp3?'Prácticamente igual: ':''}${m.dif>=0?(m.emp3?'comprar':'Comprar'):(m.emp3?'alquilar':'Alquilar')} +${eur(Math.abs(m.dif))} a ${m.H} años`)}
       <tr class="cs-sep"><td colspan="${cols.length+1}">Si la alquilas</td></tr>
       ${row('Alquiler que supones',m=>eur(m.iAlq)+'/mes'+(Math.abs(m.iP-m.precio)>0.5?' · piso de '+eur(m.iP):''))}${row('Rentabilidad neta',m=>pct(m.neta),bestN(m=>m.neta,0.005))}${row('Caja al mes con hipoteca',m=>`<b style="color:var(--${m.caja>=0?'good':'bad'})">${m.caja>=0?'+':'−'}${eur(Math.abs(m.caja)/12)}</b>${m.iL>0?'':' · sin hipoteca'}`,bestN(m=>m.caja,0.5))}
       ${row('Rentabilidad total (TIR)',m=>m.tir==null?'—':pct(m.tir)+' vendiendo en '+anos(m.N),bestN(m=>m.tir,0.005))}${row('Cobertura de la cuota',m=>m.dscr==null?'sin hipoteca':nf(2).format(m.dscr)+' veces',bestN(m=>m.dscr,0.005))}
