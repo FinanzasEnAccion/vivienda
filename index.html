@@ -947,7 +947,10 @@ const EXAMPLE={
   i:{precio:120000,reforma:6000,fin:70,tin:3.2,plazo:25,alquiler:750,vacio:1,ibi:250,comunidad:50,seguro:320,mant:450,gestion:0,irpf:30,reduccion:50,constr:60,objetivo:5,anos:10,ccaa:'Asturias',nueva:false,tensionada:false,contado:false},
   r:{alquiler:850,ipc:2.5,reval:2.5,rent:5,horizonte:15,ibi:350,comunidad:60,seguro:250,mant:0.5,venta:3,reinvierte:true},
   lk:{'i.ccaa':true,'i.nueva':true,'i.precio':true,'i.tin':true,'i.plazo':true,'i.alquiler':true,'i.ibi':true,'i.comunidad':true,'i.mant':true},
-  m:{tipo:'variable',capital:150000,anos:22,tin:2.9,dif:0.75,mes:1,extra:10000,comAm:0.25,rent:5},mTouched:false,rapido:false,nivel:'completa',cart:[],proTab:'cartera',fein:{imp:168000,plazo:30,tipo:'fija',tin:2.75,anos:5,dif:0.6,cuotaF:0,taeF:0,apert:0,tasa:350,segHogar:300,segVida:400,otros:0,amortPct:2},bro:{nombre:'',nota:''},
+  m:{tipo:'variable',capital:150000,anos:22,tin:2.9,dif:0.75,mes:1,extra:10000,comAm:0.25,rent:5},
+  mTouched:false,rapido:false,nivel:'completa',cart:[],proTab:'cartera',
+  fein:{imp:168000,plazo:30,tipo:'fija',tin:2.75,anos:5,dif:0.6,cuotaF:0,taeF:0,apert:0,tasa:350,segHogar:300,segVida:400,otros:0,amortPct:2},
+  bro:{nombre:'',nota:''},
   iTouched:false,mf2:{dan:false,sinv:false},ct:{pre:true,com:true,int:true,prop:true,mant:true},
   tab:'cuanto'
 };
@@ -2238,7 +2241,11 @@ function setNivel(n,quiet){S.nivel=n==='sencilla'?'sencilla':'completa';try{loca
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nivel]');if(b){setNivel(b.dataset.nivel);return}
   const c=e.target.closest('[data-nivelch]');if(c){ov.hidden=true;setNivel(c.dataset.nivelch,true);return}
   const t=e.target.closest('[data-cta]');if(t)track('cta-jose',t.dataset.cta)});
-function refresh(skip){applyNivel();syncAll();fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();LAST.r6=render6();renderS();renderPro();renderBroker();renderMres();fitSoon()}
+/* Pintores añadidos por cada zona: se registran con AFTER.push(fn) junto a su código y se llaman al final de cada refresco */
+const AFTER=[];
+function refresh(skip){applyNivel();syncAll();fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();LAST.r6=render6();renderS();renderPro();renderBroker();renderMres();
+  AFTER.forEach(f=>{try{f()}catch(e){console.error(e)}});
+  fitSoon()}
 /* Barra de resultado fija en el móvil: el número clave de la pestaña siempre a la vista mientras rellenas datos */
 function renderMres(){const b=$('mres');if(!b)return;const t=S.tab;let h='';
   if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1;h=`<span>Puedes comprar hasta</span><b class="num">${eur(t==='simple'?Math.floor(R.max/1000)*1000:R.max)}</b><i class="${R.ok?'good':'bad'}">${R.ok?'La que miras te llega':'La que miras no te llega'}</i>`}
