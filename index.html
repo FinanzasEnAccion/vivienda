@@ -2313,7 +2313,7 @@ X.caso=()=>{const c=casoDe(),R=c.R,aj=c.aj,P=c.P,k=c.k,suelo=Math.max(1000,CASO_
   const jose=k==='lejos'?`<a class="lnkbtn" data-cta="caso-lejos" href="${JOSE_URL}" target="_blank" rel="noopener">Hablar con José de todas formas →</a>`:`<a class="btn solid" data-cta="caso" href="${JOSE_URL}" target="_blank" rel="noopener">Reservar con José →</a>`;
   modal(`Tu caso: ${CASO_N[k]}`,`<p>${porque}</p><div class="steps">${pasos}</div>
     ${k==='lejos'?`<p>${c.m==='ingresos'||c.m==='cuota'?`Aquí manda la cuota: los bancos no suelen aprobar cuotas que pasen del ${ESF_AVISO} % de lo que entra en casa (${ESF_BANCO} % como mucho). Te acercan un precio más bajo, más entrada o menos cuotas de otros préstamos.`:c.m==='ambos'?'Te acercan las dos cosas: más ahorro y un precio que tu sueldo pueda pagar.':`Lo que más acerca es el ahorro: lo habitual es que el banco financie el ${pctS(ltvAuto())} y que los impuestos y gastos, alrededor de un 10 %, salgan de tu bolsillo.`}${R.ico&&R.ico.perfil&&!S.v.ico&&c.m!=='ingresos'&&c.m!=='cuota'?' Si cumples el aval ICO, el banco puede financiar hasta el 100 %.':''}</p>`:''}
-    <div class="am-bar" style="margin-top:12px">${k==='lejos'?(P>0&&c.maxR>=suelo?`<button class="btn solid" data-act="usemax">Probar con ${eur(c.maxR)}</button>`:'')+(R.ico&&R.ico.perfil&&!S.v.ico?'<button class="btn" data-x="ico">Requisitos del aval ICO</button>':'')+'<button class="btn" data-x="pasos">Pasos y papeles</button>':jose}<button class="btn" data-x="max">Ver la cuenta del precio máximo</button></div>
+    <div class="am-bar" style="margin-top:12px">${k==='lejos'?(P>0&&c.maxR>=suelo?`<button class="btn solid" data-act="usemax">Probar con ${eur(c.maxR)}</button>`:'')+(R.ico&&R.ico.perfil&&!S.v.ico?'<button class="btn" data-x="ico">Requisitos del aval ICO</button>':'')+'<button class="btn" data-x="pasos">Pasos y papeles</button>':jose}<button class="btn" data-x="max">Ver la cuenta del precio máximo</button><button class="btn" data-casolink="1" title="Una dirección que abre la web con tus números, para enseñárselo a tu pareja o al bróker">Copiar enlace del caso</button></div>
     ${k==='lejos'?`<p style="margin-top:12px">${jose}</p>`:''}
     <p class="note"><b>Viable:</b> te llega con lo habitual (el banco financia el ${pctS(ltvAuto())} y las cuotas no pasan del ${pctS(S.a.esfuerzo)} de tus ingresos). <b>Justo:</b> te llega con aval ICO, con más financiación o con cuotas de hasta el ${pctS(CASO_ESF)}; o te falta menos del ${pctS(CASO_FALTA_PCT)} del precio o lo reúnes en ${CASO_MESES} meses o menos; o tu contrato es temporal o eres autónomo. <b>Lejos:</b> el resto.${CASO_PRECIO_MIN>0?` Sin casa en mente se mira tu precio máximo: viable desde ${eur(CASO_PRECIO_MIN)}.`:''} Es una orientación, no la respuesta de un banco.</p>`);track('caso-ver',k)};
 $('mBody').addEventListener('click',e=>{if(e.target.closest('[data-act="usemax"]'))ov.hidden=true});
@@ -2348,7 +2348,8 @@ function joseTxt(con){
   else if(c==='inv'){const i=S.i;t=`Compra para alquilar de ${eur(i.precio)} en ${i.ccaa}${i.contado?', al contado':`, con hipoteca del ${pctS(i.fin)}`}, alquiler previsto de ${eur(i.alquiler)} al mes; ${perfil}.`}
   else{const k=casoDe(),co=casoCorto(k),P=k.P,uso=S.v.segunda?'segunda vivienda':S.v.primera?'primera vivienda':'cambio de casa';
     t=`Caso ${k.k}${co?` (${co})`:''}: ${P>0?`compra de ${eur(P)}`:k.maxR>=1000?`busco vivienda de hasta ${eur(k.maxR)}${k.ico&&k.m!=='avalmax'?` (con aval ICO, hasta ${eur(Math.floor(k.ico.max/1000)*1000)})`:''}`:'quiero comprar'} en ${joseLugar()} (${S.v.nueva?'obra nueva':'segunda mano'}, ${uso}), ${perfil}, ${S.v.edad} años.`}
-  return T(`${JOSE_ORIGEN} ${t}`)}
+  const u=casoUrl(); // el enlace va al final y sin punto detrás, para que se pueda pinchar tal cual
+  return T(`${JOSE_ORIGEN} ${t}`)+' Caso completo: '+(u.length>CASO_LARGO?casoUrl(true):u)}
 const joseQuien=()=>{const n=(S.bro.nombre||'').trim(),e=(S.bro.email||'').trim();return {n,e:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:''}};
 /* Dirección de la reserva: cal.com admite rellenar el formulario por la URL (notes, name, email). El nombre y el correo solo van si los has escrito en la ficha y envías tu caso. */
 function joseHref(con){const q=['notes='+encodeURIComponent(joseTxt(con))];
@@ -2374,8 +2375,81 @@ document.addEventListener('click',e=>{const a=joseA(e);if(!a)return;
   if(!JOSE&&joseCtx()){e.preventDefault();joseModal();return} // primera vez: se enseña lo que se enviaría y se elige
   track('reserva',josePrepara(a)?'con-caso':'sin-datos')},true);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-joseset]');if(!b)return;josePon(b.dataset.joseset);joseModal();toast(JOSE==='si'?'Tu caso irá con la reserva':'Reservarás sin datos')});
+
+/* ---------- enlace que reproduce el caso ----------
+   La dirección de la web con tus datos en el fragmento (#c=…): JSON compacto en base64url con solo lo que difiere del ejemplo.
+   No pasa por ningún servidor (el fragmento no se envía a nadie) y no lleva nombre, teléfono, correo ni notas.
+   Dentro de Claude el fragmento no llega a la página: el enlace se genera siempre con la dirección pública de la web. */
+const WEB_URL='https://finanzasenaccion.github.io/vivienda/';
+const CASO_VISTA=['tab','nivel','rapido','proTab','mf2','ct'],CASO_PRIV=['nombre','tel','email','nota']; // lo que no viaja: cómo ves tú la web y tus datos personales
+const CASO_LARGO=1500; // en las notas de la reserva, si el enlace pasa de este largo se manda sin las ofertas del comparador, la cartera ni la FEIN
+const b64u=s=>{let b='';new TextEncoder().encode(s).forEach(c=>{b+=String.fromCharCode(c)});return btoa(b).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const b64uDe=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0)));
+/* Lo que difiere del ejemplo (corto=true: sin las listas largas) */
+function casoDif(corto){const d={},eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+  for(const k in EXAMPLE){if(CASO_VISTA.includes(k)||(corto&&(k==='cart'||k==='fein')))continue;const b=EXAMPLE[k],v=S[k];
+    if(b&&typeof b==='object'&&!Array.isArray(b)){const o={};for(const f in b){
+        if(k==='bro'&&CASO_PRIV.includes(f))continue;
+        if(k==='i'&&LINKS['i.'+f]&&S.lk['i.'+f]!==false)continue; // lo que Invertir toma de las otras pestañas se recalcula al abrir
+        if(k==='v'&&f==='entradaEur'&&S.v.entUnit!=='eur')continue; // la entrada en euros sale del porcentaje
+        if(corto&&k==='h'&&f==='offers')continue;
+        if(!eq(v[f],b[f]))o[f]=v[f]}
+      if(Object.keys(o).length)d[k]=o}
+    else if(!eq(v,b))d[k]=v}
+  return d}
+function casoUrl(corto){const base=window.claude||!/^https?:$/.test(location.protocol)?WEB_URL:location.origin+location.pathname,d=casoDif(corto);return Object.keys(d).length?base+'#c='+b64u(JSON.stringify(d)):base}
+/* Lo que llega por un enlace lo ha podido escribir cualquiera: antes de mezclarlo con el ejemplo se limpia (sin marcas HTML, números finitos y acotados, listas cortas) */
+function casoLimpia(x,n=0){
+  if(typeof x==='string')return x.replace(/[<>"'`\\]/g,'').slice(0,120);
+  if(typeof x==='number')return isFinite(x)?Math.max(-1e9,Math.min(1e9,x)):0;
+  if(typeof x==='boolean')return x;
+  if(n>5||x==null||typeof x!=='object')return null;
+  if(Array.isArray(x))return x.slice(0,12).map(y=>casoLimpia(y,n+1));
+  const o={};Object.keys(x).slice(0,60).forEach(k=>{if(!/^(__proto__|constructor|prototype)$/.test(k))o[k]=casoLimpia(x[k],n+1)});return o}
+/* …y después de mezclarlo, lo mismo que impone la web al escribir: opciones válidas, límites de cada casilla, enteros y nada negativo salvo donde se puede */
+function casoAjusta(st){const en=(o,f,L,def)=>{if(!L.includes(o[f]))o[f]=def},T3=['fija','mixta','variable'];
+  en(st.v,'ccaa',Object.keys(ITP),EXAMPLE.v.ccaa);en(st.v,'entUnit',['pct','eur'],'pct');en(st.a,'contrato',Object.keys(CONTRATO),'indefinido');en(st.m,'tipo',['variable','fija'],'variable');en(st.fein,'tipo',T3,'fija');
+  if(typeof PROV!=='undefined'&&!(PROV[st.v.ccaa]||[]).includes(st.v.prov))st.v.prov='';
+  const pos=o=>{for(const k in o){const v=o[k];if(typeof v==='number')o[k]=k==='reval'||k==='dif'?Math.max(-20,Math.min(50,v)):Math.max(0,v);else if(v&&typeof v==='object')pos(v)}};pos(st);
+  st.h.offers=st.h.offers.slice(0,3);st.h.offers.forEach(o=>{en(o,'tipo',T3,'fija');o.dif=Math.max(0,o.dif);o.anos=Math.round(o.anos);o.prods=o.prods.slice(0,12)});
+  st.cart=(Array.isArray(st.cart)?st.cart:[]).filter(p=>p&&typeof p==='object'&&!Array.isArray(p)).slice(0,12).map(p=>({n:String(p.n==null?'':p.n).slice(0,40),valor:Math.max(0,+p.valor||0),deuda:Math.max(0,+p.deuda||0),cuota:Math.max(0,+p.cuota||0),alq:Math.max(0,+p.alq||0),gastos:Math.max(0,+p.gastos||0)}));
+  const num=(p,f)=>{const ks=p.split('.'),l=ks.pop(),o=ks.reduce((x,k)=>x&&x[k],st);if(o&&typeof o[l]==='number')o[l]=f(o[l])};
+  document.querySelectorAll('[data-bind][data-fmt="int"]').forEach(el=>num(el.dataset.bind,Math.round));
+  for(const p in LIM)num(p,v=>Math.min(LIM[p][1],Math.max(LIM[p][0],v)));
+  return st}
+/* De un fragmento «#c=…» al estado completo y saneado. Devuelve null si no hay caso o está roto: se ignora en silencio. */
+function casoLee(h){try{const m=/^#?c=([A-Za-z0-9_-]{2,40000})/.exec(h||'');if(!m)return null;const d=JSON.parse(b64uDe(m[1]));if(!d||typeof d!=='object'||Array.isArray(d))return null;
+    const x=casoLimpia(d);if(!x)return null;CASO_VISTA.forEach(k=>{delete x[k]});if(x.bro&&typeof x.bro==='object')CASO_PRIV.forEach(k=>{delete x.bro[k]});
+    return casoAjusta(sane(merge(EXAMPLE,x)))}catch(e){return null}}
+/* Abrir un caso compartido sin perder lo tuyo: tus datos se guardan aparte (PROPIO_KEY) y puedes volver a ellos cuando quieras */
+const PROPIO_KEY='fea-vivienda-propio';
+const propioHay=()=>{try{return !!localStorage.getItem(PROPIO_KEY)}catch(e){return false}};
+let CASO_PREV=null,CASO_COPIA=false; // lo que había en pantalla antes de abrir el caso, y si la copia de tus datos se hizo al abrirlo
+function casoAbre(st){
+  try{const raw=localStorage.getItem(KEY);CASO_COPIA=!!raw&&!localStorage.getItem(PROPIO_KEY);if(CASO_COPIA)localStorage.setItem(PROPIO_KEY,raw)}catch(e){CASO_COPIA=false}
+  CASO_PREV=clone(S);CASO_VISTA.forEach(k=>{st[k]=clone(S[k])});S=st;if(typeof markTouched==='function')markTouched()}
+function casoPinta(msg){ov.hidden=true;renderOffers();refresh();casoChip();setTimeout(()=>toast(msg),0)}
+/* «Deshacer»: vuelve lo que tenías en pantalla justo antes de abrir el caso */
+function casoDeshace(){if(!CASO_PREV)return;const st=CASO_PREV;CASO_PREV=null;['tab','nivel','proTab'].forEach(k=>{st[k]=S[k]});S=st;if(CASO_COPIA)try{localStorage.removeItem(PROPIO_KEY)}catch(e){}casoPinta('Tus datos han vuelto')}
+/* «Volver a mis datos»: recupera la copia guardada aparte, aunque hayas recargado la página */
+function casoVuelve(){let st=null;try{const raw=localStorage.getItem(PROPIO_KEY);if(raw)st=sane(merge(EXAMPLE,JSON.parse(raw)))}catch(e){}
+  if(!st)return;['tab','nivel','proTab'].forEach(k=>{st[k]=S[k]});S=st;CASO_PREV=null;try{localStorage.removeItem(PROPIO_KEY)}catch(e){}casoPinta('Tus datos han vuelto')}
+/* Aviso fijo mientras miras un caso compartido y tus datos están guardados aparte (en la barra superior, junto a «Cómo lo calculo») */
+$('btnPdf').insertAdjacentHTML('afterend','<button class="hbtn pdf" id="btnPropio" data-x="propio" title="Estás viendo un caso compartido. Tus datos siguen guardados" hidden>Caso compartido</button>');
+function casoChip(){$('btnPropio').hidden=!propioHay()}
+X.propio=()=>modal('Estás viendo un caso compartido',`<p>Tus datos de antes siguen guardados en este navegador.</p><div class="am-bar"><button class="btn solid" data-casofin="vuelve">Volver a mis datos</button><button class="btn" data-casofin="queda">Quedarme con este caso</button></div><p class="hint" style="margin-top:10px">Si te quedas con este caso, tus datos de antes se borran.</p>`);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-casofin]');if(b){if(b.dataset.casofin==='vuelve')casoVuelve();else{try{localStorage.removeItem(PROPIO_KEY)}catch(err){}CASO_PREV=null;ov.hidden=true;casoChip();toast('Te quedas con este caso')}return}
+  if(!e.target.closest('[data-casolink]'))return;const u=casoUrl(),fb=()=>modal('Enlace del caso',`<p>Copia esta dirección. Quien la abra verá tu caso con tus números, sin tu nombre, tu teléfono ni tu correo, y sin perder sus propios datos.</p><div class="formula" style="white-space:pre-wrap;word-break:break-all;user-select:all">${esc(u)}</div>`);
+  track('caso-enlace');try{navigator.clipboard.writeText(u).then(()=>toast('Enlace copiado: lleva tus números, no tu nombre ni tu teléfono'),fb)}catch(err){fb()}});
+/* Al abrir la web con un enlace de caso: se carga antes del primer pintado, se quita el fragmento de la dirección (para que recargar no lo repita) y se avisa con «Deshacer» */
+(()=>{let st=null;try{st=casoLee(location.hash)}catch(e){}casoChip();if(!st)return;
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  casoAbre(st);setTimeout(()=>{casoChip();toast('Has abierto un caso compartido',casoDeshace);track('caso-abierto')},600)})();
+/* …y lo mismo si pegas el enlace con la web ya abierta (solo cambia el fragmento y la página no se recarga) */
+addEventListener('hashchange',()=>{const st=casoLee(location.hash);if(!st)return;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  casoAbre(st);ov.hidden=true;renderOffers();refresh();casoChip();toast('Has abierto un caso compartido',casoDeshace);track('caso-abierto')});
 /* Para las pruebas: las funciones del bróker se añaden a window.__FEA cuando ya existe (se crea en la última línea) */
-setTimeout(()=>{if(window.__FEA)Object.assign(window.__FEA,{casoR,casoDe,casoVer,casoCorto,casoFalta,joseCtx,joseTxt,joseHref})},0);
+setTimeout(()=>{if(window.__FEA)Object.assign(window.__FEA,{casoR,casoDe,casoVer,casoCorto,casoFalta,joseCtx,joseTxt,joseHref,casoDif,casoUrl,casoLee})},0);
 
 
 /* ---------- versión web / móvil ---------- */
