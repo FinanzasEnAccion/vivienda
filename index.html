@@ -1998,9 +1998,9 @@ function mcalc0(x){
   return {years,tin:o.tin,cuota:r.cuota,cuota2:t2?t2.cuota:null,desde:t2?Math.ceil(t2.desde/12):null,int:r.int,ef:efTae?tN:efV,get efSin(){return eS==null?(eS=tae(r.P,r.ap,r.pays)):eS},efTae,
     extra:sinP?0:vk.reduce((s,p)=>s+p.extra,0),vinc:r.vinc,vk,nProd:vk.length,vkNd:nd,r,sinBon,sinP,noAcc,ltvKo,g,ap:r.ap};
 }
-/* fuente y fecha de una oferta; si falta alguna, se dice */
-const srcHtml=x=>{const nf_=sinFecha(x.d),old=nf_||diasDe(x.d)>30,t=`${hostOf(x)||'sin fuente'} · ${nf_?'sin fecha':haceTxt(x.d)}`;
-  return x.f?`<a class="src${old?' viejo':''}" href="${esc(x.f)}" target="_blank" rel="noopener" title="${nf_?'Dato sin fecha':'Dato del '+esc(x.d)}">${esc(t)}</a>`:`<span class="src${old?' viejo':''}">${esc(t)}</span>`};
+/* fuente y fecha de una oferta; si falta alguna, se dice. En ámbar: dato de hace más de 30 días, sin fecha o tomado de un comparador (sin confirmar en la web del banco) */
+const srcHtml=x=>{const nf_=sinFecha(x.d),cp=compOf(x),old=nf_||diasDe(x.d)>30||!!cp,t=`${hostOf(x)||'sin fuente'} · ${nf_?'sin fecha':haceTxt(x.d)}`;
+  return x.f?`<a class="src${old?' viejo':''}" href="${esc(x.f)}" target="_blank" rel="noopener" title="${nf_?'Dato sin fecha':'Dato del '+esc(x.d)}${cp?`, de ${esc(cp)}: sin confirmar en la web del banco`:''}">${esc(t)}</a>`:`<span class="src${old?' viejo':''}">${esc(t)}</span>`};
 /* celda del coste comparado: se pincha y enseña la cuenta producto a producto */
 const ccHtml=(i,c)=>`<button class="ccb" data-mcc="${i}" title="${c.vkNd&&!c.sinP?'La oferta no dice qué productos exige'+(c.efTae?': va ordenada por la TAE del banco':''):'Ver la cuenta, producto a producto'}">${c.vkNd&&!c.sinP?`<span class="sindato">sin dato</span>`:`<b>${pct(c.ef)}</b>`}${c.extra>0?`<span class="pr">productos: +${eur(c.extra)}/año</span>`:''}${c.ap>0?`<span class="pr">apertura: ${eur(c.ap)}</span>`:''}</button>`;
 let MF='todas',MLAST=[];
