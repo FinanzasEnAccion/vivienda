@@ -2454,12 +2454,13 @@ window.__ogCard=()=>cardCanvas(['6 calculadoras de vivienda, con el cálculo y l
 window.__shareLines=shareLines; /* para las pruebas: el texto de la tarjeta de la pestaña abierta, con (true) o sin importes */
 const SHK='fea-compartir';let SHM=null,SHB=null,SHU=null;try{SHM=localStorage.getItem(SHK)}catch(e){}if(SHM!=='con'&&SHM!=='sin')SHM=null;
 const shCtx=()=>S.tab+(shareLines().pub?'':SHM==='con'?'-con-importes':'-sin-importes');
-async function shareBlob(con){try{await Promise.all([document.fonts.load('800 54px "Bricolage Grotesque"'),document.fonts.load('600 28px "Instrument Sans"')])}catch(e){}
+async function shareBlob(con){/* espera a las tipografías de la web, como mucho segundo y medio: si no llegan, la tarjeta sale con las del sistema */
+  try{await Promise.race([Promise.all([document.fonts.load('800 54px "Bricolage Grotesque"'),document.fonts.load('600 28px "Instrument Sans"')]),new Promise(ok=>setTimeout(ok,1500))])}catch(e){}
   const c=cardCanvas(shareLines(con));return await new Promise(ok=>c.toBlob(ok,'image/png'))}
 /* La ventana: la primera vez solo pregunta «con o sin importes»; después abre ya con lo elegido y deja cambiarlo */
 async function shareModal(){const pub=!!shareLines().pub,pedir=!pub&&!SHM,con=!pub&&SHM==='con';
   if(SHU)URL.revokeObjectURL(SHU);SHU=null;SHB=pedir?null:await shareBlob(con);if(SHB)SHU=URL.createObjectURL(SHB);
-  const seg=pub?'':`<div class="seg-ctl" role="group" aria-label="Qué lleva la imagen"><button data-shimp="sin" class="${!pedir&&!con?'on':''}">Sin importes</button><button data-shimp="con" class="${con?'on':''}">Con importes</button></div>`;
+  const seg=pub?'':`<div class="seg-ctl" role="group" aria-label="Qué lleva la imagen"><button data-shimp="sin" class="${!pedir&&!con?'on':''}" aria-pressed="${!pedir&&!con}">Sin importes</button><button data-shimp="con" class="${con?'on':''}" aria-pressed="${con}">Con importes</button></div>`;
   modal('Compartir',`${pedir?`<p style="margin:0 0 10px">¿Con tus importes o sin ellos? La próxima vez me acuerdo.</p>${seg}`:`${seg}<p class="hint" style="margin:8px 0 10px">${pub?'Solo lleva datos públicos del mercado: nada tuyo.':con?'Lleva las cifras de la pestaña en la que estás.':'Solo la conclusión de la pestaña en la que estás, sin tus importes.'}</p>`}
     ${SHB?`<img src="${SHU}" alt="Imagen para compartir" style="width:100%;border-radius:12px;display:block;box-shadow:var(--shadow)">
     <div class="am-bar" style="margin-top:12px">${navigator.share?'<button class="btn solid" data-shdo="1">Compartir</button>':''}<button class="btn${navigator.share?'':' solid'}" data-shdl="1">Descargar imagen</button></div>`:''}`)}
