@@ -2149,7 +2149,7 @@ function calc6(o={}){const M=Object.assign({},S.m,o),vari=M.tipo==='variable',C=
   const eO=MKT.eur,tinN=vari?Math.max(0,eO+M.dif):M.tin,qA=cuotaFor(C,M.tin,Y),qN=cuotaFor(C,tinN,Y);
   const esc=[-1,0,1].map(d=>{const e=eO+d,t=Math.max(0,e+M.dif),q=cuotaFor(C,t,Y);return {d,e,t,q,dq:q-qA}});
   // próxima revisión: las cuotas que faltan hasta ese mes (contando desde el mes de hoy) se pagan como ahora y el resto con la cuota revisada
-  const mesHoy=new Date().getMonth()+1,kRev=vari?(((Math.round(M.mes)||1)-mesHoy)%12+12)%12:0,pag12=kRev*qA+(12-kRev)*qN,dif12=pag12-12*qA,intQ=kRev*qA+(n-kRev)*qN-C;
+  const mesHoy=new Date().getMonth()+1,kRev=vari?(((Math.round(M.mes)||1)-mesHoy)%12+12)%12:0,pag12=kRev*qA+(12-kRev)*qN,dif12=pag12-12*qA;
   // dinero extra, con el tipo que vas a pagar a partir de ahora
   const t=tinN,A=Math.max(0,Math.min(M.extra,C*(1+M.comAm/100))),com=A*M.comAm/(100+M.comAm),Am=A-com,C1=Math.max(0,C-Am),q0=cuotaFor(C,t,Y),intBase=q0*n-C;
   const q1=cuotaFor(C1,t,Y),sCuota=q0-q1,intCuota=q1*n-C1;
@@ -2160,7 +2160,7 @@ function calc6(o={}){const M=Object.assign({},S.m,o),vari=M.tipo==='variable',C=
   // la mejor opción frente a la mejor del otro tipo (amortizar o invertir). Empate: menos del 2 % del dinero extra o de EMPATE puntos de rentabilidad equivalente
   const best=rk[0],riv=best.k==='inv'?(wP.net>=wC.net?ops[0]:ops[1]):ops[2],difW=best.w.net-riv.w.net,req=w=>A>0&&w>0?(Math.pow(w/A,1/Y)-1)*100:null;
   const gapW=req(best.w.net)!=null&&req(riv.w.net)!=null?req(best.w.net)-req(riv.w.net):null,empW=A>0&&(difW<0.02*A||(gapW!=null&&gapW<EMPATE));
-  return {M,vari,C,Y,n,eO,tinN,qA,qN,dq:qN-qA,esc,mesHoy,kRev,pag12,dif12,intQ,t,A,com,Am,C1,q0,intBase,q1,sCuota,intCuota,n2,libre,intPlazo,wC,wP,wI,ops,rk,best,riv,difW,gapW,empW}}
+  return {M,vari,C,Y,n,eO,tinN,qA,qN,dq:qN-qA,esc,mesHoy,kRev,pag12,dif12,t,A,com,Am,C1,q0,intBase,q1,sCuota,intCuota,n2,libre,intPlazo,wC,wP,wI,ops,rk,best,riv,difW,gapW,empW}}
 /* Rentabilidad a partir de la cual invertir deja más que amortizar reduciendo plazo */
 function rentEq6(){const f=r=>{const K=calc6({rent:r});return K.wI.net-K.wP.net};if(f(0)>0)return 0;if(f(30)<0)return null;let lo=0,hi=30;for(let k=0;k<40;k++){const m=(lo+hi)/2;if(f(m)>0)hi=m;else lo=m}return (lo+hi)/2}
 const mesesTxt=m=>{m=Math.round(m);const a=Math.floor(m/12),r=m%12;return a&&r?`${anos(a)} y ${r} ${r===1?'mes':'meses'}`:a?anos(a):`${r} ${r===1?'mes':'meses'}`};
@@ -2239,7 +2239,7 @@ function render6(){const K=calc6(),M=K.M,mes=MESES[(M.mes||1)-1],eM=MKT.eurMes||
     <button class="pill neutral" data-x="m_eur">Euríbor oficial ${pct(K.eO,3)}</button></div>
     <div class="kpis"><button class="kpi" data-x="m_rev"><small>Cuota hoy</small><strong class="num">${eur(K.qA)}</strong><em>TIN ${pct(M.tin)}</em></button>
     <button class="kpi" data-x="m_rev"><small>Próximos 12 meses</small><strong class="num" style="color:${up?'var(--bad)':dn?'var(--good)':'inherit'}">${up||dn?(K.dif12>=0?'+':'−')+eur(Math.abs(K.dif12)):'igual'}</strong><em>${!(up||dn)?'sin cambio':K.kRev?`${K.kRev} ${K.kRev===1?'cuota':'cuotas'} a ${eur(K.qA)} y ${12-K.kRev} a ${eur(K.qN)}`:`12 cuotas a ${eur(K.qN)}`}</em></button>
-    <button class="kpi" data-x="m_int"><small>Intereses que te quedan</small><strong class="num">${eur(K.intQ)}</strong><em>si el Euríbor sigue como hoy</em></button>
+    <button class="kpi" data-x="m_int"><small>Intereses que te quedan</small><strong class="num">${eur(K.intBase)}</strong><em>si el tipo no cambia</em></button>
     <button class="kpi" data-x="m_tabla"><small>Cuadro de amortización</small><strong class="num" style="font-size:16px">Ver mes a mes</strong><em>y descargarlo</em></button></div>`
    :`<div class="eyebrow">Tienes una hipoteca fija</div><button class="big num" data-x="m_rev">${eur(K.qA)}<span style="font-size:.45em;font-weight:700"> al mes</span></button>
     <div class="pills"><button class="pill good" data-x="m_rev">La cuota no cambia aunque suba el Euríbor</button><button class="pill neutral" data-x="m_eur">Euríbor oficial ${pct(K.eO,3)}</button></div>
@@ -2274,7 +2274,7 @@ function render6(){const K=calc6(),M=K.M,mes=MESES[(M.mes||1)-1],eM=MKT.eurMes||
       = ${eur2(K.qN)}</div><div class="steps">${step('Cuota hoy (TIN '+pct(M.tin)+')',eur2(K.qA))}${step('Cuota tras la revisión',eur2(K.qN),'tot')}${step('Diferencia al mes',(K.dq>=0?'+':'−')+eur2(Math.abs(K.dq)),'tot')}</div>
     <h4>Lo que pagas los próximos 12 meses</h4><div class="steps">${K.kRev?step(`${K.kRev} ${K.kRev===1?'cuota':'cuotas'} hasta la revisión (${K.kRev===1?MESES[K.mesHoy-1]:K.kRev===2?MESES[K.mesHoy-1]+' y '+MESES[K.mesHoy%12]:'de '+MESES[K.mesHoy-1]+' a '+MESES[(K.mesHoy+K.kRev-2)%12]}) × ${eur2(K.qA)}`,eur(K.kRev*K.qA)):''}${step(`${12-K.kRev} ${K.kRev===11?'cuota':'cuotas'} desde ${mes} × ${eur2(K.qN)}`,eur((12-K.kRev)*K.qN))}${step('Total en 12 meses',eur(K.pag12),'tot')}${step('Con la cuota de hoy serían',eur(12*K.qA))}${step('Diferencia',(K.dif12>=0?'+':'−')+eur(Math.abs(K.dif12)),'tot')}</div>
     <p class="note">${K.kRev?`Hoy es ${MESES[K.mesHoy-1]}: hasta la revisión de ${mes} sigues pagando la cuota de hoy.`:`La revisión es este mes (${mes}): las 12 cuotas se cuentan ya con el tipo nuevo.`} El banco suele usar el Euríbor publicado uno o dos meses antes de la revisión (mira tu escritura); aquí se usa el último oficial del Banco de España. Se calcula con el capital y los años que pones: en la revisión real habrán bajado un poco.</p>`:`<div class="formula">Cuota = ${nf(0).format(K.C)} × ${nf(6).format(M.tin/1200)} / (1 − (1 + ${nf(6).format(M.tin/1200)})^−${K.n}) = ${eur2(K.qA)}</div><p>En una fija el tipo no se revisa: la cuota es la misma hasta el final.</p>`);
-  X.m_int=()=>modal('Intereses que te quedan',`<div class="steps">${K.vari&&K.kRev?step(`${K.kRev} ${K.kRev===1?'cuota':'cuotas'} hasta la revisión de ${mes} × ${eur2(K.qA)}`,eur(K.kRev*K.qA))+step(`${K.n-K.kRev} ${K.n-K.kRev===1?'cuota':'cuotas'} desde la revisión × ${eur2(K.qN)}`,eur((K.n-K.kRev)*K.qN)):step('Cuota',eur2(K.q0))+step('× Meses que quedan',String(K.n))}${step('Total que pagarás',eur(K.intQ+K.C))}${step('− Capital pendiente',eur(K.C))}${step('Intereses',eur(K.intQ),'tot')}</div><p class="note">${K.vari?`Con el Euríbor oficial de ${esc(eM)} hasta el final (TIN ${pct(K.t)}): en una variable cambiará en cada revisión`:`Con un TIN del ${pct(K.t)} todo el plazo`}.</p>`);
+  X.m_int=()=>modal('Intereses que te quedan',`<div class="steps">${step('Cuota',eur2(K.q0))}${step('× Meses que quedan',String(K.n))}${step('Total que pagarás',eur(K.q0*K.n))}${step('− Capital pendiente',eur(K.C))}${step('Intereses',eur(K.intBase),'tot')}</div><p class="note">Con un TIN del ${pct(K.t)} todo el plazo${K.vari?': en una variable cambiará en cada revisión':''}.</p>`);
   X.m_tabla=()=>amortModal(K.C,K.t,K.Y,'Tu hipoteca');
   renderCb(K);
   return K}
