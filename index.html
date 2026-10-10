@@ -1565,6 +1565,9 @@ function chipFor(m,h,p){
   return {cls:'warn',s:`Hasta el año ${m.opt}`,t:`Compensa hasta el año ${m.opt} · después, cámbialo en la renovación${p&&esSeguro(p)?' a otra aseguradora':''}`};
 }
 const sinBanco=p=>esHogar(p)?'en otra aseguradora':esSeguro(p)?'fuera del banco':'sin vincular';
+/* El ahorro «ajustando seguros» depende mucho de un supuesto: lo que el banco sube cada seguro de más que fuera, año tras año. Se enseña donde se anuncia ese ahorro */
+const subeDe=(o,a)=>o.prods.filter((p,j)=>p.c>0&&p.s>0.01&&(p.on||(a&&a.best[j]>0)));
+const subeTxt=(o,a)=>{const L=subeDe(o,a).map(p=>`«${sinSup(p.n)}» un ${pctS(p.s)}`);return L.length?`supone que el banco sube cada año ${yList(L)} más que fuera`:''};
 function render2(){
   $('h_imp').textContent=eur(hipoteca());
   X.himp=()=>modal('Importe de la hipoteca',`<div class="steps">${step('Precio',eur(S.v.precio))}${step('× Financiación',pctS(100-entradaEf()))}${step('Importe',eur(hipoteca()),'tot')}</div>`);
@@ -1584,7 +1587,7 @@ function render2(){
     const bb=card.querySelector('[data-o=best]'),gain=a.cur.total-a.bestT;
     if(gain>=25&&a.best.some((y,j)=>y!==a.H[j])){
       const parts=o.prods.map((p,j)=>({p,y:a.best[j],h:a.H[j]})).filter(q=>q.y!==q.h).map(q=>q.y===0?`${q.p.n} ${sinBanco(q.p)}`:q.h===0?`contrata ${q.p.n}${q.y>=S.v.plazo?'':' '+anos(q.y)}`:q.y>=S.v.plazo?`mantén ${q.p.n} todo el plazo`:`${q.p.n} solo ${q.y} años`);
-      bb.hidden=false;bb.title=parts.join(' · ');bb.innerHTML=`<span>Ahorra <b class="num">${eur(gain)}</b> ajustando seguros</span><button data-act="best">Aplicar</button><button class="lnk" data-act="exp" data-what="best">Ver</button>`;
+      bb.hidden=false;bb.title=parts.join(' · ')+(subeTxt(o,a)?' · '+subeTxt(o,a):'');bb.innerHTML=`<span>Ahorra <b class="num">${eur(gain)}</b> ajustando seguros</span><button data-act="best">Aplicar</button><button class="lnk" data-act="exp" data-what="best">Ver</button>`;
     }else bb.hidden=true;
   });
   // prueba de estrés: Euríbor 2 puntos más alto en las que revisan
@@ -1658,7 +1661,11 @@ function explain2(i,what,j){
       <div class="formula">Buscamos i tal que  ${nf(0).format(c.P-c.ap)} = Σ (cuotaₘ + sobrecosteₘ) / (1 + i)^m
 Coste comparado = (1 + i)^12 − 1</div><p>Es el interés anual equivalente de todo lo que pagas, sumando como si fueran intereses las comisiones y lo que los seguros del banco cuestan de más que fuera, año a año. Sirve para comparar ofertas con vinculaciones distintas.</p>
       <h4>TAE como la publica el banco</h4><div class="steps">${step('Cuotas con todas las bonificaciones + comisión + tasación y fijos + precio en el banco de todos los productos vinculados, el del primer año, durante todo el plazo',pct(c.taeB),'tot')}</div><p class="note">La TAE legal (Ley 5/2019 y Orden EHA/2899/2011) supone que mantienes todas las vinculaciones todo el plazo y que su precio no cambia, y suma el precio entero de los seguros, no solo lo que pagas de más; en mixtas y variables usa el Euríbor de hoy durante toda la vida del préstamo. Por eso no sirve para decidir si un seguro compensa.</p>`);
-  if(what==='best'){const B=a.best;modal(`Mejor estrategia de seguros · ${o.nombre}`,`<div class="steps">${o.prods.map((p,j)=>step(esc(p.n),B[j]===0?(esHogar(p)?'En otra aseguradora':esSeguro(p)?'Fuera del banco':'No vincularlo'):B[j]>=S.v.plazo?'Todo el plazo':`${anos(B[j])} y cambiarlo`)).join('')}${step('Coste total con lo que tienes',eur(a.cur.total))}${step('Coste total con esta estrategia',eur(a.bestT))}${step('Ahorro',eur(a.cur.total-a.bestT),'tot')}</div><button class="btn solid" data-act2="best" data-i="${i}">Aplicar</button><p class="note">Se busca, seguro a seguro, el año en que deja de compensar, teniendo en cuenta cómo se afectan entre sí.</p>`)}
+  if(what==='best'){const B=a.best,gain=a.cur.total-a.bestT,sube=subeDe(o,a);
+    // el mismo ahorro si el banco no subiera sus seguros más que fuera (s = 0 en todos): lo que queda es lo que no depende del supuesto
+    let sup='';if(sube.length){const o0=clone(o);o0.prods.forEach(p=>p.s=0);const a0=analyse(o0),g0=Math.max(0,a0.cur.total-a0.bestT);
+      sup=`<h4>Cuánto depende de un supuesto</h4><div class="steps">${step('Ahorro si el banco no subiera sus seguros más que fuera',eur(g0))}${step(`Ahorro que viene de suponer que sube cada año ${yList(sube.map(p=>`«${esc(sinSup(p.n))}» un ${pctS(p.s)}`))} más que fuera`,eur(Math.max(0,gain-g0)))}</div><p class="hint">Es un supuesto, no un dato del banco. Cámbialo en cada seguro: «El banco lo sube de más».</p>`}
+    modal(`Mejor estrategia de seguros · ${o.nombre}`,`<div class="steps">${o.prods.map((p,j)=>step(esc(p.n),B[j]===0?(esHogar(p)?'En otra aseguradora':esSeguro(p)?'Fuera del banco':'No vincularlo'):B[j]>=S.v.plazo?'Todo el plazo':`${anos(B[j])} y cambiarlo`)).join('')}${step('Coste total con lo que tienes',eur(a.cur.total))}${step('Coste total con esta estrategia',eur(a.bestT))}${step('Ahorro',eur(gain),'tot')}</div><button class="btn solid" data-act2="best" data-i="${i}">Aplicar</button>${sup}<p class="note">Se busca, seguro a seguro, el año en que deja de compensar, teniendo en cuenta cómo se afectan entre sí.</p>`)}
   if(what==='prod'){const p=o.prods[j];
     const fe=(k,label,unit,val,mode='decimal')=>`<div class="fld"><label>${label}</label><div class="inp"><input data-pe="${k}" inputmode="${mode}" value="${val}" aria-label="${label}"><span>${unit}</span></div></div>`;
     modal(`${p.n} · ${o.nombre}`,`
@@ -1685,7 +1692,7 @@ function prodAnalysis(i,j){
   const ch=chipFor(m,a.H[j],p),sube=p.s>0.01;
   box.innerHTML=`
     <div class="pills" style="margin-top:14px"><span class="pill ${ch.cls}">${ch.t}</span></div>
-    <p>${esVida(p)?`El seguro de vida cubre lo que debes, así que su prima baja con la deuda y sube con tu edad (un ${subidaVida(S.v.edad)} % al año ahora, más a partir de los 40 y los 50), igual en el banco que fuera.`:`Dentro y fuera del banco el precio sube con el IPC (${pctS(S.r.ipc)}).`} ${sube?`El banco te lo sube además un ${pctS(p.s)} más cada año. A la vez, la rebaja de ${pct(p.b)} te ahorra cada año menos porque debes menos. Llega un año en que el seguro cuesta más de lo que ahorra: esa es la trampa.`:`La rebaja de ${pct(p.b)} te ahorra cada año menos, porque debes menos.`}</p>
+    <p>${esVida(p)?`El seguro de vida cubre lo que debes, así que su prima baja con la deuda y sube con tu edad (un ${subidaVida(S.v.edad)} % al año ahora, más a partir de los 40 y los 50), igual en el banco que fuera.`:`Dentro y fuera del banco el precio sube con el IPC (${pctS(S.r.ipc)}).`} ${sube?`Supones que el banco te lo sube además un ${pctS(p.s)} más cada año. A la vez, la rebaja de ${pct(p.b)} te ahorra cada año menos porque debes menos. Llega un año en que el seguro cuesta más de lo que ahorra: esa es la trampa.`:`La rebaja de ${pct(p.b)} te ahorra cada año menos, porque debes menos.`}</p>
     ${prodChart(rows,m.opt)}
     <div class="steps">
       ${step('Coste total de la hipoteca si no lo contratas',eur(m.sin))}
@@ -2589,8 +2596,26 @@ function buildPdf(){
     doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(...M);
     doc.textWithLink(T('Primer contacto gratis con José: cal.com/jose-perales-asesor/9zfdea'),L+6,yy+15.5,{url:'https://cal.com/jose-perales-asesor/9zfdea'})};
   let brokerDone=false;if(y<254){BROKER(Math.max(y+4,256));brokerDone=true}
-  /* 2 */
-  if(hipoteca()>0&&AN.length){
+  /* 2 · tus ofertas del comparador solo si las has tocado; si no, las mejores ofertas públicas del día (nunca las de ejemplo) */
+  if(hipoteca()>0&&!hTocado()){
+    if(y>200){doc.addPage();y=20}else y+=2;
+    H1(2,'Qué ofrecen los bancos para tu hipoteca');
+    const pub=OFF.map(x=>({x,c:mcalc(x)})).filter(r=>!r.c.noAcc&&!r.c.ltvKo).sort((p,q)=>p.c.ef-q.c.ef),top=pub.slice(0,3),sinSig=t=>String(t).replace(/≥\s*/g,'desde ');
+    if(top.length){
+      P(`Hipoteca de ${eur(hipoteca())} a ${S.v.plazo} años. ${top.length>1?`Las ${top.length} ofertas públicas con menor coste comparado`:'La única oferta pública'} entre las ${pub.length} que encajan con tus datos, de ${OFF.length} revisadas. Datos a ${MKT_FECHA}${top.some(r=>r.x.t!=='fija')?`; Euríbor supuesto ${pct(S.h.eur)} cuando toca revisar`:''}.`,9.5,INK);
+      const fila=(t,f)=>[t,...top.map(f)];
+      TABLE(['',...top.map(r=>`${r.x.b} · ${r.x.t}`)],[
+        fila('Producto',r=>r.x.p||'-'),
+        fila('TIN'+(top.some(r=>r.c.sinBon)?'':' bonificado'),({x,c})=>pct(c.tin)+(x.t==='fija'?'':x.t==='mixta'?` ${dv(x.anos)} años`:x.anos>1?` los ${dv(x.anos)} primeros años`:' el primer año')+(x.t==='fija'?'':`; después Euríbor + ${pct(c.sinBon?(x.difS||x.dif):x.dif)}`)+(c.sinBon?' (sin bonificar: no llegas a la nómina que pide)':'')),
+        fila('Tu cuota al mes',({c})=>eur(c.cuota)+(c.cuota2?`; ${eur(c.cuota2)} desde el año ${c.desde}`:'')+(c.years<S.v.plazo?` (a ${c.years} años, su máximo)`:'')),
+        fila('Coste comparado',({c})=>c.vkNd&&!c.sinBon?'sin dato':pct(c.ef)),
+        fila('TAE del banco',({x})=>x.tae||'sin dato'),
+        fila('Productos que exige',({x,c})=>c.vkNd?'sin dato':c.vk.length?sinSig(c.vk.map(p=>sinSup(p.n).replace(' (comisiones)','')).join(', ')):'Ninguno'),
+        fila('Dato del',({x})=>(sinFecha(x.d)?'sin fecha':x.d)+(hostOf(x)?` (${hostOf(x)})`:''))
+      ],{cols:Object.assign({0:{textColor:MUT,cellWidth:34}},...top.map((_,k)=>({[k+1]:{cellWidth:(CW-34)/top.length}}))),extra:{didParseCell:d=>{if(d.section==='body'&&d.column.index>0&&(d.row.index===2||d.row.index===3))d.cell.styles.fontStyle='bold'}}});
+      P('Ofertas públicas y genéricas para un perfil estándar: confírmalas con el banco. Coste comparado: el tipo anual de todo lo que pagas (cuotas, apertura y lo que los productos exigidos cuestan de más que fuera del banco, con precios supuestos). La TAE del banco es la de su ejemplo, con el Euríbor del mes en que la publicó.',8.2);
+    }else P(`Ninguna de las ${OFF.length} ofertas públicas revisadas a ${MKT_FECHA} encaja con tus datos: piden más ingresos, un préstamo mayor o financian menos de lo que necesitas.`,9.5,INK);
+  }else if(hipoteca()>0&&AN.length){
     if(y>200){doc.addPage();y=20}else y+=2;
     H1(2,'Comparativa de hipotecas');
     const sorted=AN.map((a,i)=>({i,o:S.h.offers[i],a})).sort((p,q)=>p.a.cur.total-q.a.cur.total);
@@ -2599,7 +2624,8 @@ function buildPdf(){
     sorted.forEach(({o,a,i})=>{if(!o.prods.length)return;
       P(o.nombre+' · vinculaciones',9.5,INK,true);y-=1;
       TABLE(['Seguro o producto','Rebaja','En el banco','Fuera','Lo mantienes','Recomendación'],o.prods.map((p,j)=>{const ch=chipFor(a.marg[j],a.H[j],p);return [p.n,'-'+dv(p.b)+' %',eur(p.c)+(p.s?` (+${dv(p.s)} %/año)`:''),eur(p.m),p.on?anos(p.hasta):'No',ch.t]}),{cols:{1:{cellWidth:16},2:{cellWidth:32},3:{cellWidth:16},4:{cellWidth:22},5:{cellWidth:56}}});
-      if(a.cur.total-a.bestT>=25)P(`Con la mejor estrategia de seguros el coste total de ${o.nombre} baja a ${eur(a.bestT)} (ahorras ${eur(a.cur.total-a.bestT)}).`,9,INK)});
+      if(a.cur.total-a.bestT>=25)P(`Con la mejor estrategia de seguros el coste total de ${o.nombre} baja a ${eur(a.bestT)} (ahorras ${eur(a.cur.total-a.bestT)}${subeTxt(o,a)?'; '+subeTxt(o,a):''}).`,9,INK)});
+    if(sorted.some(({o})=>o.prods.some(p=>esSup(p.n))))P('* Cifras supuestas al traer la oferta de la tabla de bancos: precio típico de cada producto, no el de ese banco, y rebaja repartida a partes iguales entre sus productos.',8.2);
     P('Coste total = intereses + lo que pagas de más por los seguros frente a contratarlos fuera + comisiones. Un seguro se cambia de aseguradora en su renovación anual, avisando al menos un mes antes; el de hogar es obligatorio, el de vida no.',8.2);
   }
 
