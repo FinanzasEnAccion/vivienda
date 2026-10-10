@@ -52,6 +52,22 @@ Está escrita y apagada. Usa GoatCounter, sin cookies, y solo cuenta qué se usa
 
 Los datos del bróker (nombre, empresa, número de registro en el Banco de España, honorarios y el acuerdo que tiene con Finanzas en Acción) irán en la constante `BROKER_INFO` de `index.html`. Mientras esté vacía, la web no enseña nada de eso.
 
+## Qué revisar cuando cambie una norma
+
+Todo está en constantes de `index.html`, cada una con su fuente al lado:
+
+| Qué | Constante |
+|---|---|
+| ITP de cada comunidad (tipo general, rebajas y sus requisitos) | `ITP` |
+| AJD, IVA e IGIC de obra nueva | `AJD`, `AJD_ESC`, `AJD_RED`, `IND`, `IND_RED` |
+| Aval ICO: precio máximo, tope de ingresos por provincia, patrimonio | `ICO_PRECIO`, `ICO_ING`, `ICO_PAT`, `ICO_MENOR` |
+| Avisos del Real Decreto-ley 29/2026 (pendiente de convalidación) | `RDL29` |
+| Préstamo TU CASA y ayudas de las comunidades, con su fecha | `AYUDA_TUCASA`, `AYUDAS_CCAA`, `AYUDAS_FECHA` |
+| Precio supuesto de los productos que exigen los bancos | `VK_COSTE` |
+| Topes legales de la comisión por cambiar de banco o de tipo | `CB_LEY` |
+
+Cuando se vote la convalidación del Real Decreto-ley 29/2026 hay que actualizar `RDL29` y `AYUDA_TUCASA` (o quitarlos si decae). Las ayudas con fecha de cierre (`fin`) dejan de anunciarse como abiertas ellas solas al pasar la fecha.
+
 ## Para publicar
 
 GitHub Pages publica la rama `main`. Las tipografías (Instrument Sans y Bricolage Grotesque, licencia OFL) se sirven desde `fonts/`. Si cambias un icono o una tipografía, sube el número de `CACHE` en `sw.js`.
