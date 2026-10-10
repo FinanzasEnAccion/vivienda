@@ -2355,12 +2355,33 @@ function ctaCtx(){const t=S.tab;
   return t}
 $('cta').addEventListener('click',()=>track('cta-jose',ctaCtx()));
 
-/* ---------- guardar ficheros: en Claude con su permiso de descargas, en la web con un enlace ---------- */
+/* ---------- guardar ficheros: en Claude con su permiso de descargas, en la web con un enlace.
+   En el móvil, el PDF y el CSV salen por el menú de compartir del sistema (guardar en Archivos, WhatsApp, correo…): la descarga con enlace
+   falla a menudo en los navegadores internos de X o Instagram. La descarga normal queda como alternativa: si no hay menú, si falla o si lo cierras.
+   saveFile devuelve true si se ha descargado, 'compartido' si ha salido por el menú y false si no se ha guardado. ---------- */
 const DLP=(async()=>{let dl=null;try{dl=await (window.claude&&window.claude.use?window.claude.use('downloads'):null)}catch(e){}
   if(!dl&&window.claude)return null;
-  return dl||{save:async({filename,data,type})=>{const url=URL.createObjectURL(new Blob([data],{type:type||'application/octet-stream'}));const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);return {status:'saved'}}}})();
+  return dl||{save:async({filename,data,type})=>{const url=URL.createObjectURL(new Blob([data],{type:type||'application/octet-stream'}));const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);return {status:'saved'}}}})();
+const porMenu=file=>{try{return !window.claude&&matchMedia('(pointer:coarse)').matches&&!!navigator.share&&!!navigator.canShare&&navigator.canShare({files:[file]})}catch(e){return false}};
+/* 60 s de margen: si el navegador no avisa de que el menú se ha cerrado, el botón que espera no se queda bloqueado */
+const alMenu=file=>Promise.race([navigator.share({files:[file]}).then(()=>'compartido'),new Promise(ok=>setTimeout(()=>ok(false),60000))]);
+/* El menú de compartir solo se abre justo después de un toque. Si preparar el fichero ha tardado más (el PDF carga sus librerías), se pide otro toque */
+let FLP=null;
+function pedirToque(file,bajar){return new Promise(res=>{FLP={file,bajar,res};
+  modal(/\.pdf$/i.test(file.name)?'Tu informe está listo':'Tu fichero está listo',`<div class="am-bar" style="margin:0"><button class="btn solid" data-flsh="1">Compartir o guardar</button><button class="btn" data-fldl="1">Descargar</button></div>`);
+  const mo=new MutationObserver(()=>{if(!ov.hidden&&$('mBody').querySelector('[data-flsh]'))return;mo.disconnect();if(FLP&&FLP.res===res){FLP=null;res(false)}});
+  mo.observe(ov,{attributes:true,attributeFilter:['hidden']});mo.observe($('mBody'),{childList:true})})}
+document.addEventListener('click',async e=>{if(!FLP)return;const sh=e.target.closest('[data-flsh]'),dl=e.target.closest('[data-fldl]');if(!sh&&!dl)return;const P=FLP;
+  if(sh){try{const r=await alMenu(P.file);FLP=null;ov.hidden=true;P.res(r)}catch(x){if(x&&x.name==='AbortError')return;FLP=null;ov.hidden=true;P.res(await P.bajar())}return}
+  FLP=null;ov.hidden=true;P.res(await P.bajar())});
 async function saveFile(filename,data,type){const dl=await DLP;if(!dl){toast('Aquí no se pueden descargar ficheros');return false}
-  try{await dl.save({filename,data,type});return true}catch(e){if(!(e&&e.code==='declined'))toast(e&&e.code==='rate_limited'?'Espera un momento y vuelve a probar':'No se ha podido descargar');return false}}
+  const bajar=async()=>{try{await dl.save({filename,data,type});return true}catch(e){if(!(e&&e.code==='declined'))toast(e&&e.code==='rate_limited'?'Espera un momento y vuelve a probar':'No se ha podido descargar');return false}};
+  if(/\.(pdf|csv)$/i.test(filename)){let file=null;try{file=new File([data],filename,{type})}catch(e){}
+    if(file&&porMenu(file)){try{return await alMenu(file)}
+      catch(e){const n=e&&e.name;
+        if(n==='AbortError'){toast('¿Prefieres descargarlo?',async()=>{if(await bajar())toast('Descargado')});const u=$('toast').querySelector('.undo');if(u)u.textContent='Descargar';return false}
+        if(n==='NotAllowedError'&&ov.hidden)return pedirToque(file,bajar)}}}
+  return bajar()}
 
 /* ---------- cuadro de amortización (mes a mes o por años) y CSV ---------- */
 let AMV='anual',AMA=null;
