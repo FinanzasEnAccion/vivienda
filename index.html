@@ -2800,7 +2800,7 @@ renderOffers();refresh();
 applyModo(MODO||autoModo());
 const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(h)?h:(S.tab||'cuanto'));
 if(PRIMERA_VEZ&&!['hipotecas','invertir','pro'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
-window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf,hTocado};
+window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf,hTocado,applyData};
 })();
 </script>
 
