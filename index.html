@@ -404,7 +404,11 @@ tr+tr td{border-top:1px solid var(--line)}
 .broker .ic{width:38px;height:38px}
 .broker h3{font-size:17px}
 .broker p{font-size:12.5px}
-.broker p.disc{font-size:11px;color:rgba(240,236,224,.5);margin-top:2px}
+.broker p.disc{font-size:11px;color:rgba(240,236,224,.72);margin-top:2px}
+.broker .lnkbtn{color:var(--mint);font-size:inherit}
+#btnMetodo .sm{display:none}
+@media (max-width:374px){html.m #btnMetodo .lg{display:none}html.m #btnMetodo .sm{display:inline}}
+@media (max-width:800px){html.web #btnMetodo{display:none}}
 .broker .btxt p{max-width:none}
 .broker h3{display:inline}
 @media (min-width:901px){.broker{padding:10px 18px}}
@@ -2420,6 +2424,8 @@ X.metodo=()=>{const L=(u,t)=>`<a href="${u}" target="_blank" rel="noopener">${t}
    ['Comprar o alquilar','Patrimonio de cada caso: casa neta de venta, deuda e impuestos frente a la cartera invertida. Quien paga menos cada mes invierte la diferencia.','Cálculo propio con tus supuestos','—'],
    ['Amortizar o invertir','Lo que tendrías al acabar la hipoteca pagando lo mismo cada mes: el ahorro de cuota o de plazo se invierte a la rentabilidad que pones, tras IRPF.','Cálculo propio con tus supuestos','—']];
   modal('Cómo lo calculo',`<p>Cada cifra de la calculadora se pincha y enseña su cálculo. Esta es la lista de fórmulas y fuentes.</p><div class="tblwrap met"><table><thead><tr><th>Cifra</th><th>Cómo</th><th>Fuente</th><th>Fecha</th></tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="note">Los supuestos (revalorización, rentabilidad, IPC, Euríbor futuro) los eliges tú: son los que más cambian el resultado. No es asesoramiento financiero ni fiscal.</p>`);track('metodo')};
+/* Segundo acceso a «Cómo lo calculo», fuera del banner del bróker: un botón en la barra superior (se añade desde aquí para no tocar el HTML de la cabecera) */
+$('btnPdf').insertAdjacentHTML('afterend','<button class="hbtn" id="btnMetodo" data-x="metodo" title="Fórmulas, fuentes y fecha de cada cifra" aria-label="Cómo lo calculo: fórmulas, fuentes y fechas"><span class="lg">Cómo lo calculo</span><span class="sm">Fuentes</span></button>');
 
 /* ---------- informe PDF ---------- */
 const LIBS=['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js'];
