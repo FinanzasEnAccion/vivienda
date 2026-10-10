@@ -3192,7 +3192,7 @@ $('btnCopy').onclick=()=>{
   else if(S.tab==='hipotecas'){L=[`Comparativa hipoteca ${eur(hipoteca())} a ${S.v.plazo} años:`];LAST.r2.sorted.forEach((r,k)=>L.push(`${k+1}. ${r.n}: cuota ${eur2(r.c.cuota)}, coste total ${eur(r.c.total)}`))}
   else if(S.tab==='invertir'){const K=LAST.r5;L=[`Piso de ${eur(S.i.precio)} alquilado a ${eur(S.i.alquiler)}/mes: rentabilidad bruta ${pct(K.brutaPct)}, neta ${pct(K.netaPct)}.`,`${K.caja>=0?'Deja':'Cuesta'} ${eur(Math.abs(K.caja)/12)} al mes con hipoteca.`+(K.tir!=null?` Rentabilidad total a ${anos(K.N)}: ${pct(K.tir)}.`:'')]}
   else if(S.tab==='bancos'){L=[`Mejores hipotecas para ${eur(hipoteca())} a ${anos(S.v.plazo)} (datos a ${MKT_FECHA}):`];(LAST.r4||[]).slice(0,3).forEach((r,k)=>r.c&&L.push(`${k+1}. ${r.x.b} ${r.x.t} ${pct(r.x.tin)}: cuota ${eur(r.c.cuota)}, intereses ${eur(r.c.int)}`))}
-  else{const R=LAST.r3;L=[`Vivienda de ${eur(R.P)} frente a alquiler de ${eur(S.r.alquiler)}/mes a ${anos(R.H)}: ${R.dif>=0?'comprar':'alquilar'} deja ${eur(Math.abs(R.dif))} más de patrimonio.`,R.be?`Comprar gana a partir del año ${R.be}.`:'']}
+  else{const R=LAST.r3;L=[`Vivienda de ${eur(R.P)} frente a alquiler de ${eur(S.r.alquiler)}/mes a ${anos(R.H)}: ${R.emp?'prácticamente igual, ':''}${R.dif>=0?'comprar':'alquilar'} deja ${eur(Math.abs(R.dif))} más de patrimonio.`,R.be?`Comprar gana a partir del año ${R.be}.`:'']}
   L.push('Calculado con Finanzas en Acción · @BuscandolaLF');const txt=L.filter(Boolean).join('\n');
   const fb=()=>modal('Copia este resumen',`<div class="formula" style="white-space:pre-wrap;user-select:all">${esc(txt)}</div>`);
   try{navigator.clipboard.writeText(txt).then(()=>toast('Resumen copiado'),fb)}catch(e){fb()}
@@ -3342,6 +3342,7 @@ function shareLines(con){const t=S.tab,E=`Euríbor oficial de ${MKT.eurMes||'est
       :{t:T,lead:'Coste total de mi hipoteca',big:eur(w.c.total),d:`${nm(w)}: intereses, seguros y comisiones. Cuota de ${eur(w.c.cuota)} al mes`};
     return n>1?{t:T,h:`Gana la ${o.tipo||'oferta'} que menos cuesta en total`,d:`Comparé ${n} ofertas con seguros y comisiones`}:{t:T,h:'Ya sé lo que me cuesta mi hipoteca en total',d:'Con intereses, seguros y comisiones'}}
   if(t==='alquilar'&&LAST.r3){const R=LAST.r3,buy=R.dif>=0,T='¿Comprar o alquilar?';
+    if(R.emp)return con?{t:T,lead:`A ${anos(R.H)}, comprar o alquilar me sale`,big:'Prácticamente igual',d:`${buy?'Comprar':'Alquilar'} me deja ${eur(Math.abs(R.dif))} más`}:{t:T,h:`A ${anos(R.H)}, comprar o alquilar me sale prácticamente igual`,d:''};
     return con?{t:T,lead:`A ${anos(R.H)}, ${buy?'comprar':'alquilar'} me deja`,big:`${eur(Math.abs(R.dif))} más`,d:`que ${buy?'alquilar':'comprar'}. ${R.be?`Comprar gana a partir del año ${R.be}`:`En ${anos(R.H)} comprar no llega a ganar`}`}
       :{t:T,h:`A ${anos(R.H)} me compensa ${buy?'comprar':'alquilar'}`,d:R.be?`Comprar empieza a ganar en el año ${R.be}`:'Comprar no llega a ganar en ese plazo'}}
   if(t==='invertir'&&LAST.r5){const K=LAST.r5,T='Invertir para alquilar';
@@ -3427,7 +3428,7 @@ $('btnPdf').insertAdjacentHTML('afterend','<button class="hbtn" id="btnMetodo" d
 const LIBS=['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js'];
 function loadScript(src){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>ko(new Error('No se pudo cargar '+src));document.head.appendChild(s)})}
 async function libs(){if(!window.jspdf)await loadScript(LIBS[0]);if(!(window.jspdf&&window.jspdf.jsPDF.API.autoTable))await loadScript(LIBS[1])}
-const T=x=>String(x).replace(/−/g,'-').replace(/[   ]/g,' ').replace(/→/g,'>').replace(/≈/g,'aprox.');
+const T=x=>String(x).replace(/≥\s*/g,'desde ').replace(/≤\s*/g,'hasta ').replace(/−/g,'-').replace(/[   ]/g,' ').replace(/→/g,'>').replace(/≈/g,'aprox.');
 function buildPdf(){
   alDia(); // el informe lee los resultados de todas las pestañas
   const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'});
@@ -3494,21 +3495,21 @@ function buildPdf(){
       const fila=(t,f)=>[t,...top.map(f)];
       TABLE(['',...top.map(r=>`${r.x.b} · ${r.x.t}`)],[
         fila('Producto',r=>r.x.p||'-'),
-        fila('TIN'+(top.some(r=>r.c.sinBon)?'':' bonificado'),({x,c})=>pct(c.tin)+(x.t==='fija'?'':x.t==='mixta'?` ${anosTxt(x.anos)}`:x.anos>1?` los primeros ${anosTxt(x.anos)}`:' el primer año')+(x.t==='fija'?'':`; después Euríbor + ${pct(c.sinBon?(x.difS||x.dif):x.dif)}`)+(c.sinBon?' (sin bonificar: no llegas a la nómina que pide)':'')),
-        fila('Tu cuota al mes',({c})=>eur(c.cuota)+(c.cuota2?`; ${eur(c.cuota2)} desde el año ${c.desde}`:'')+(c.years<S.v.plazo?` (a ${c.years} años, su máximo)`:'')),
+        fila('TIN'+(top.some(r=>r.c.sinBon)?'':' bonificado'),({x,c})=>pct(c.tin)+(x.t==='fija'?'':x.t==='mixta'?` ${anosTxt(x.anos)}`:x.anos>1?` los primeros ${anosTxt(x.anos)}`:' el primer año')+(x.t==='fija'?'':`; después Euríbor + ${pct(c.sinBon?c.dif:x.dif)}`)+(c.sinBon?` (sin bonificar: ${c.sN?`con nómina menor de ${eur(c.g.min)}`:c.tinS?`${pct(c.tinS)} ${desdeTxt(c.promoM+1)}`:'no llegas a la nómina que pide'})`:'')),
+        fila('Tu cuota al mes',({c})=>eur(c.cuota)+(c.cuota2?`; ${eur(c.cuota2)} ${desdeTxt(c.desdeM)}`:'')+(c.cuota3?`; ${eur(c.cuota3)} ${desdeTxt(c.desde3M)}`:'')+(c.years<S.v.plazo?` (a ${c.years} años, su máximo)`:'')),
         fila('Coste comparado',({c})=>c.vkNd&&!c.sinP?'sin dato':pct(c.ef)),
-        fila('TAE del banco',({x})=>x.tae||'sin dato'),
+        fila('TAE del banco',({x})=>x.tae?x.tae+(x.taeF?'*':''):'sin dato'),
         fila('Productos que exige',({x,c})=>c.vkNd?'sin dato':c.vk.length?sinSig(vkLista(c.vk.map(p=>p.n.replace(' (comisiones)',''))).join(', ')):'Ninguno'),
         fila('Dato del',({x})=>(sinFecha(x.d)?'sin fecha':x.d)+(hostOf(x)?` (${hostOf(x)})`:''))
       ],{cols:Object.assign({0:{textColor:MUT,cellWidth:34}},...top.map((_,k)=>({[k+1]:{cellWidth:(CW-34)/top.length}}))),extra:{didParseCell:d=>{if(d.section==='body'&&d.column.index>0&&(d.row.index===2||d.row.index===3))d.cell.styles.fontStyle='bold'}}});
-      P('Ofertas públicas y genéricas para un perfil estándar: confírmalas con el banco. Coste comparado: el tipo anual de todo lo que pagas (cuotas, apertura y lo que los productos exigidos cuestan de más que fuera del banco, con precios supuestos). La TAE del banco es la de su ejemplo, con el Euríbor del mes en que la publicó.',8.2);
+      P('Ofertas públicas y genéricas para un perfil estándar: confírmalas con el banco. Coste comparado: el tipo anual de todo lo que pagas (cuotas, apertura y lo que los productos exigidos cuestan de más que fuera del banco, con precios supuestos). La TAE del banco es la de su ejemplo, con el Euríbor del mes en que la publicó.'+top.filter(r=>r.x.tae&&r.x.taeF).map(r=>` * ${taeFTxt(r.x)}.`).join(''),8.2);
     }else P(`Ninguna de las ${OFF.length} ofertas públicas revisadas a ${MKT_FECHA} encaja con tus datos: piden más ingresos, un préstamo mayor o financian menos de lo que necesitas.`,9.5,INK);
   }else if(hipoteca()>0&&AN.length){
     if(y>200){doc.addPage();y=20}else y+=2;
     H1(2,'Comparativa de hipotecas');
     const sorted=AN.map((a,i)=>({i,o:S.h.offers[i],a})).sort((p,q)=>p.a.cur.total-q.a.cur.total);
-    P(`Hipoteca de ${eur(hipoteca())} a ${S.v.plazo} años. Euríbor supuesto ${pct(S.h.eur)} e IPC ${pctS(S.r.ipc)}. La más barata es ${sorted[0].o.nombre}`+(sorted[1]?`, que ahorra ${eur(sorted[1].a.cur.total-sorted[0].a.cur.total)} frente a ${sorted[1].o.nombre}.`:'.'),9.5,INK);
-    TABLE(['Oferta','Tipo','TIN aplicado','Cuota','Coste total'],sorted.map(({o,a})=>[o.nombre,o.tipo[0].toUpperCase()+o.tipo.slice(1),pct(a.cur.tramos[0]?a.cur.tramos[0].tin:o.tin),eur(a.cur.cuota),eur(a.cur.total)]),{cols:{2:{halign:'right'},3:{halign:'right'},4:{halign:'right',fontStyle:'bold'}}});
+    P(`Hipoteca de ${eur(hipoteca())} a ${S.v.plazo} años. Euríbor supuesto ${pct(S.h.eur)} e IPC ${pctS(S.r.ipc)}.`+(sorted[1]?` La más barata es ${sorted[0].o.nombre}, que ahorra ${eur(sorted[1].a.cur.total-sorted[0].a.cur.total)} frente a ${sorted[1].o.nombre}.`:` Solo hay una oferta: ${sorted[0].o.nombre}.`),9.5,INK);
+    TABLE(['Oferta','Tipo','TIN aplicado','Cuota','Coste total'],sorted.map(({o,a})=>[o.nombre+(cz=>cz==null?'':`\nSu máximo son ${anos(o.pz)}: a ese plazo, ${eur(cz)} al mes`)(cuotaPz(o)),o.tipo[0].toUpperCase()+o.tipo.slice(1),pct(a.cur.tramos[0]?a.cur.tramos[0].tin:o.tin),eur(a.cur.cuota),eur(a.cur.total)]),{cols:{2:{halign:'right'},3:{halign:'right'},4:{halign:'right',fontStyle:'bold'}}});
     sorted.forEach(({o,a,i})=>{if(!o.prods.length)return;
       P(o.nombre+' · vinculaciones',9.5,INK,true);y-=1;
       TABLE(['Seguro o producto','Rebaja','En el banco','Fuera','Lo mantienes','Recomendación'],o.prods.map((p,j)=>{const ch=chipFor(a.marg[j],a.H[j],p);return [p.n,'-'+dv(p.b)+' %',eur(p.c)+(p.s?` (+${dv(p.s)} %/año)`:''),eur(p.m),p.on?anos(p.hasta):'No',ch.t]}),{cols:{1:{cellWidth:16},2:{cellWidth:32},3:{cellWidth:16},4:{cellWidth:22},5:{cellWidth:56}}});
@@ -3521,14 +3522,15 @@ function buildPdf(){
   const R3=calc3();
   if(y>190){doc.addPage();y=20}else y+=2;
   H1(3,'¿Comprar o alquilar?');
-  BIG(`Si vives ${anos(R3.H)} en la vivienda`,R3.dif>=0?'Te compensa comprar':'Te compensa alquilar',`${R3.dif>=0?'Comprar':'Alquilar'} te deja ${eur(Math.abs(R3.dif))} más`+(R3.be?` · comprar gana desde el año ${R3.be}`:''));
+  BIG(`Si vives ${anos(R3.H)} en la vivienda`,R3.emp?'Prácticamente igual':R3.dif>=0?'Te compensa comprar':'Te compensa alquilar',`${R3.dif>=0?'Comprar':'Alquilar'} te deja ${eur(Math.abs(R3.dif))} más`+(R3.be?` · comprar gana desde el año ${R3.be}`:''));
   {const CT=costeCasa(R3.H),fin3=R3.H>=S.v.plazo;P(`Lo que te cuesta la casa de ${eur(CT.P)} en los ${anos(R3.H)} que vivirás en ella: ${eur(CT.total-CT.deuda)} (${eur((CT.total-CT.deuda)/(R3.H*12))} al mes de media)${CT.deuda>1?`, y aún deberías ${eur(CT.deuda)}`:''}.`,9.5,INK,true);
     TABLE(['Concepto','Importe'],[[fin3?'Precio de la vivienda':'Entrada y capital devuelto',eur(fin3?CT.P:CT.entrada+CT.cap)],[CT.c.im.nombre+', notaría y gastos de compra',eur(CT.compra)],['Intereses de la hipoteca',eur(CT.int)],['IBI, comunidad y seguro',eur(CT.ibi+CT.com+CT.seg)],['Mantenimiento',eur(CT.mant)],['Total',eur(CT.total-CT.deuda)]],{cols:{1:{halign:'right',fontStyle:'bold'}}})}
   TABLE(['Supuestos','','',''],[
-    ['Alquiler al mes',eur(S.r.alquiler),'IPC (sube alquiler y gastos)',pctS(S.r.ipc)],
+    ['Alquiler al mes',eur(S.r.alquiler),'Subida del alquiler',pctS(S.r.subAlq)+' al año'],
     ['IBI · comunidad · seguro',`${eur(S.r.ibi)}/año · ${eur(S.r.comunidad)}/mes · ${eur(S.r.seguro)}/año`,'Mantenimiento',pctS(S.r.mant)+' del valor'],
     ['Revalorización anual',pctS(S.r.reval),'Rentabilidad si inviertes',pctS(S.r.rent)],
-    ['Gastos si vendes',pctS(S.r.venta),'Dinero que pones al comprar',eur(R3.inicial)]
+    ['Gastos si vendes',pctS(S.r.venta),'Dinero que pones al comprar',eur(R3.inicial)],
+    ['IPC (gastos)',pctS(S.r.ipc)+' al año','','']
   ],{cols:{0:{textColor:MUT},2:{textColor:MUT},1:{fontStyle:'bold'},3:{fontStyle:'bold'}}});
   // gráfico
   const ch={x:L,y:y,w:CW,h:52};if(ch.y+ch.h+10>280){doc.addPage();y=20;ch.y=y}
@@ -3555,7 +3557,7 @@ function buildPdf(){
     H1(sec++,'Mi hipoteca');
     BIG(K6.vari?'Cuota tras la revisión con el Euríbor oficial de '+(MKT.eurMes||''):'Cuota de tu hipoteca fija',eur(K6.vari?K6.qN:K6.qA)+' al mes',K6.vari?(Math.abs(K6.dq)<0.5?'Igual que hoy':(K6.dq>0?'Sube ':'Baja ')+eur(Math.abs(K6.dq))+' al mes'):'No cambia con el Euríbor');
     TABLE(['Escenario','TIN','Cuota','Frente a hoy'],K6.esc.map(s=>['Euríbor '+pct(s.e,2)+(s.d===0?' (oficial)':''),pct(s.t),eur(s.q),(s.dq>=0?'+':'-')+eur(Math.abs(s.dq))]),{cols:{1:{halign:'right'},2:{halign:'right'},3:{halign:'right',fontStyle:'bold'}}});
-    if(K6.A>=1)TABLE([`Con ${eur(K6.A)} de dinero extra`,'Lo que tendrías en '+anos(K6.Y)],K6.rk.map(o=>[o.n,eur(o.w.net)]),{cols:{1:{halign:'right',fontStyle:'bold'}}});
+    if(K6.A>=1)TABLE([`Con ${eur(K6.A)} de dinero extra`+(K6.empW?' (prácticamente igual)':''),'Lo que tendrías en '+anos(K6.Y)],K6.rk.map(o=>[o.n,eur(o.w.net)]),{cols:{1:{halign:'right',fontStyle:'bold'}}});
   }
   // pasos y documentos
   if(y>200){doc.addPage();y=20}else y+=2;
@@ -3573,6 +3575,8 @@ function buildPdf(){
     catch(e){toast('No se ha podido generar el informe')}
     finally{b.disabled=false;b.innerHTML=txt;fitSoon()}}})();
 window.__buildPdf=async()=>{await libs();return buildPdf()};
+/* Para las pruebas (window.__FEA se crea en la última línea) */
+setTimeout(()=>{if(window.__FEA)Object.assign(window.__FEA,{shareLines,pdfT:T,mAdd,cuotaPz,desdeTxt,ofFuentes})},0);
 
 /* =========================================================
    7 · HERRAMIENTAS PRO: cartera de pisos, revisar la FEIN, informe para el bróker
