@@ -3297,7 +3297,8 @@ $('mBody').addEventListener('click',async e=>{
 
 /* ---------- imagen para compartir: con o sin tus importes, a elegir (la elección se recuerda) ----------
    shareLines(con) devuelve {t: calculadora, h: titular, d: detalle} o, con importes, {t, lead: frase, big: la cifra, d: detalle}.
-   pub marca la tarjeta que solo lleva datos públicos del mercado. Las cifras salen de LAST: son las mismas que enseña la pestaña. */
+   pub marca la tarjeta que solo lleva datos públicos del mercado. Las cifras salen de LAST: son las mismas que enseña la pestaña.
+   Un \n en el detalle separa dos datos: en una línea se pinta como « · »; si no caben, cada uno en la suya. */
 function shareLines(con){const t=S.tab,E=`Euríbor oficial de ${MKT.eurMes||'este mes'}: ${pct(MKT.eur,3)}`;
   if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1,A=R.aj,ok=A?A.ok:R.ok,mas=ok&&!R.ok,casa=S.v.precio>0,lim=R.bind==='ahorros'?'los ahorros':'los ingresos',T='¿Cuánto puedo comprar?';
     const esf=isFinite(R.esfuerzo)&&R.esfuerzo<=100?`La cuota se llevaría el ${Math.round(R.esfuerzo)} % de mis ingresos`:'';
@@ -3313,10 +3314,10 @@ function shareLines(con){const t=S.tab,E=`Euríbor oficial de ${MKT.eurMes||'est
     return con?{t:T,lead:`A ${anos(R.H)}, ${buy?'comprar':'alquilar'} me deja`,big:`${eur(Math.abs(R.dif))} más`,d:`que ${buy?'alquilar':'comprar'}. ${R.be?`Comprar gana a partir del año ${R.be}`:`En ${anos(R.H)} comprar no llega a ganar`}`}
       :{t:T,h:`A ${anos(R.H)} me compensa ${buy?'comprar':'alquilar'}`,d:R.be?`Comprar empieza a ganar en el año ${R.be}`:'Comprar no llega a ganar en ese plazo'}}
   if(t==='invertir'&&LAST.r5){const K=LAST.r5,T='Invertir para alquilar';
-    return con?{t:T,lead:`Rentabilidad neta de un piso de ${eur(S.i.precio)}`,big:pct(K.netaPct),d:`Alquilado a ${eur(S.i.alquiler)} al mes: ${K.caja>=0?'me deja':'me cuesta'} ${eur(Math.abs(K.caja)/12)} al mes${K.tir!=null?` · ${pct(K.tir)} al año si vendo en ${anos(K.N)}`:''}`}
+    return con?{t:T,lead:`Rentabilidad neta de un piso de ${eur(S.i.precio)}`,big:pct(K.netaPct),d:`Alquilado a ${eur(S.i.alquiler)} al mes: ${K.caja>=0?'me deja':'me cuesta'} ${eur(Math.abs(K.caja)/12)} al mes${K.tir!=null?`\n${pct(K.tir)} al año si vendo en ${anos(K.N)}`:''}`}
       :{t:T,h:`Rentabilidad neta del piso: ${pct(K.netaPct)}`,d:K.tir!=null?`Si vendo en ${anos(K.N)}: ${pct(K.tir)} al año tras impuestos`:''}}
   if(t==='mihipo'&&LAST.r6){const K=LAST.r6,p=K.qA>0?K.dq/K.qA*100:0,up=K.dq>0.5,dn=K.dq<-0.5,T='Mi hipoteca';
-    if(con)return K.vari?{t:T,lead:'Mi cuota tras la revisión',big:`${eur(K.qN)} al mes`,d:`${up?`Sube ${eur(K.dq)} al mes`:dn?`Baja ${eur(-K.dq)} al mes`:'Se queda igual'} · ${E}`}:{t:T,lead:'Mi cuota fija',big:`${eur(K.qA)} al mes`,d:'No cambia aunque suba el Euríbor'};
+    if(con)return K.vari?{t:T,lead:'Mi cuota tras la revisión',big:`${eur(K.qN)} al mes`,d:`${up?`Sube ${eur(K.dq)} al mes`:dn?`Baja ${eur(-K.dq)} al mes`:'Se queda igual'}\n${E}`}:{t:T,lead:'Mi cuota fija',big:`${eur(K.qA)} al mes`,d:'No cambia aunque suba el Euríbor'};
     return {t:T,h:K.vari?(up||dn?`En mi revisión la cuota ${up?'sube':'baja'} ${Math.abs(p)<0.5?'menos de un 1 %':'un '+pct(Math.abs(p),0)}`:'En mi revisión la cuota se queda igual'):'Mi cuota fija no cambia con el Euríbor',d:E}}
   const f=OFF.filter(x=>x.t==='fija').sort((a,b)=>a.tin-b.tin)[0];return {pub:true,t:'Qué ofrecen los bancos',lead:`Euríbor oficial de ${MKT.eurMes||'este mes'}`,big:pct(MKT.eur,3),d:f?`Fija con el TIN más bajo publicado: ${pct(f.tin)} (${f.b})`:''}}
 /* La tarjeta, 1200 × 630, con las tipografías de la web (si no están cargadas, las del sistema). Admite también las tres líneas sueltas de antes. */
@@ -3327,10 +3328,14 @@ function cardCanvas(L,generic){if(Array.isArray(L))L={t:L[0],h:L[1],d:L[2]};cons
   g.fillStyle='#F0ECE0';g.font=`800 40px ${FD}`;g.fillText('Finanzas en Acción',144,82);g.fillStyle='#7DD3A8';g.font=`500 24px ${F}`;g.fillText('Calculadoras de vivienda · @BuscandolaLF',144,116);
   const wrap=(t,maxW)=>{const ws=t.split(' '),L=[];let cur='';ws.forEach(w=>{const tt=cur?cur+' '+w:w;if(g.measureText(tt).width>maxW&&cur){L.push(cur);cur=w}else cur=tt});if(cur)L.push(cur);return L};
   const fit=(t,wt,px,fam,min)=>{let s=px;g.font=`${wt} ${s}px ${fam}`;while(s>min&&g.measureText(t).width>MW){s-=2;g.font=`${wt} ${s}px ${fam}`}return s};
-  /* como mucho dos líneas: si son dos, se reparten parejas (sin palabras sueltas); si sobra texto, se corta con puntos suspensivos */
-  const lines=(t,f)=>{if(!t)return [];g.font=f;let l=wrap(t,MW);
-    if(l.length>2){let s=l[1];while(s.length>1&&g.measureText(s+'…').width>MW)s=s.slice(0,-1);l=[l[0],s.replace(/[\s,.:;·]+$/,'')+'…']}
-    else if(l.length===2)for(let m=MW*.55;m<MW;m+=MW*.05){const b=wrap(t,m);if(b.length===2){l=b;break}}
+  /* como mucho dos líneas. Si hacen falta dos, se parte por el salto previsto (\n) o tras un signo de puntuación; si no hay por dónde, repartidas parejas
+     (sin palabras sueltas). Si aun así sobra texto, se corta con puntos suspensivos */
+  const lines=(t,f)=>{if(!t)return [];g.font=f;const an=s=>g.measureText(s).width,un=s=>s.replace(/\n/g,' · '),uno=un(t);if(an(uno)<=MW)return [uno];
+    const c=[...t.matchAll(/\n|[.:;?!] /g)].map(m=>[un(t.slice(0,m.index+(m[0]==='\n'?0:1))),un(t.slice(m.index+m[0].length)),m[0]==='\n'?0:1]).filter(p=>an(p[0])<=MW&&an(p[1])<=MW);
+    if(c.length)return c.sort((x,y)=>x[2]-y[2]||Math.abs(an(x[0])-an(x[1]))-Math.abs(an(y[0])-an(y[1])))[0].slice(0,2);
+    let l=wrap(uno,MW);
+    if(l.length>2){let s=l[1];while(s.length>1&&an(s+'…')>MW)s=s.slice(0,-1);l=[l[0],s.replace(/[\s,.:;·]+$/,'')+'…']}
+    else if(l.length===2)for(let m=MW*.55;m<MW;m+=MW*.05){const b=wrap(uno,m);if(b.length===2){l=b;break}}
     return l},fD=`500 30px ${F}`,fH=`800 ${generic?50:54}px ${FD}`,D=lines(L.d,fD),HL=L.big?[]:lines(L.h,fH);
   /* el bloque de texto va centrado en el panel claro, tenga las líneas que tenga */
   const alto=L.big?(D.length?204+40*D.length:186):(D.length?58+64*HL.length+40*D.length:32+64*HL.length);
