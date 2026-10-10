@@ -2404,34 +2404,71 @@ $('mBody').addEventListener('click',async e=>{
   if(e.target.closest('[data-shdl]')){shareSave();return}
 });
 
-/* ---------- imagen para compartir: sin importes personales ---------- */
-function shareLines(){const t=S.tab;
-  if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1;return ['¿Cuánto puedo comprar?',R.ok?'La vivienda que miro me llega':`Aún no me llega: me limitan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}`,isFinite(R.esfuerzo)?`La cuota se llevaría el ${Math.round(R.esfuerzo)} % de mis ingresos`:'']}
-  if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted.length){const w=LAST.r2.sorted[0],o=S.h.offers[w.i]||{};return ['Comparar hipotecas',`Gana la ${o.tipo||'oferta'} que menos cuesta en total`,`Comparé ${S.h.offers.length} ofertas con seguros y comisiones`]}
-  if(t==='alquilar'&&LAST.r3){const R=LAST.r3;return ['¿Comprar o alquilar?',`A ${anos(R.H)} me compensa ${R.dif>=0?'comprar':'alquilar'}`,R.be?`Comprar empieza a ganar en el año ${R.be}`:'Comprar no llega a ganar en ese plazo']}
-  if(t==='invertir'&&LAST.r5){const K=LAST.r5;return ['Invertir para alquilar',`Rentabilidad neta del piso: ${pct(K.netaPct,1)}`,K.tir!=null?`Si vendo en ${anos(K.N)}: ${pct(K.tir,1)} al año tras impuestos`:'']}
-  if(t==='mihipo'&&LAST.r6){const K=LAST.r6,p=K.qA>0?K.dq/K.qA*100:0;return ['Mi hipoteca',K.vari?(Math.abs(p)<0.5?'En mi revisión la cuota se queda igual':`En mi revisión la cuota ${p>0?'sube':'baja'} un ${pct(Math.abs(p),0)}`):'Mi cuota fija no cambia con el Euríbor',`Euríbor oficial de ${MKT.eurMes||'este mes'}: ${pct(MKT.eur,3)}`]}
-  const f=OFF.filter(x=>x.t==='fija').sort((a,b)=>a.tin-b.tin)[0];return ['Qué ofrecen los bancos',`Euríbor oficial de ${MKT.eurMes||'este mes'}: ${pct(MKT.eur,3)}`,f?`Fija más barata publicada: ${pct(f.tin)} (${f.b})`:'']}
-function cardCanvas(lines,generic){const W=1200,H=630,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+/* ---------- imagen para compartir: con o sin tus importes, a elegir (la elección se recuerda) ----------
+   shareLines(con) devuelve {t: calculadora, h: titular, d: detalle} o, con importes, {t, lead: frase, big: la cifra, d: detalle}.
+   pub marca la tarjeta que solo lleva datos públicos del mercado. Las cifras salen de LAST: son las mismas que enseña la pestaña. */
+function shareLines(con){const t=S.tab,E=`Euríbor oficial de ${MKT.eurMes||'este mes'}: ${pct(MKT.eur,3)}`;
+  if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1,A=R.aj,ok=A?A.ok:R.ok,mas=ok&&!R.ok,casa=S.v.precio>0,lim=R.bind==='ahorros'?'los ahorros':'los ingresos',T='¿Cuánto puedo comprar?';
+    const esf=isFinite(R.esfuerzo)&&R.esfuerzo<=100?`La cuota se llevaría el ${Math.round(R.esfuerzo)} % de mis ingresos`:'';
+    if(!(R.max>=1000))return {t:T,h:'Todavía no me llega para comprar',d:`Me limitan ${lim}`};
+    if(con)return {t:T,lead:'Puedo comprar una vivienda de hasta',big:eur(t==='simple'?Math.floor(R.max/1000)*1000:R.max),
+      d:!casa?`Me limitan ${lim}`:ok?`La de ${eur(R.P)} me llega${mas?' con más entrada':''}: pagaría ${eur(mas&&isFinite(A.cuota)?A.cuota:R.cuota)} al mes`:`La de ${eur(R.P)} aún no me llega: me limitan ${lim}`};
+    return !casa?{t:T,h:`Lo que más me limita para comprar: ${lim}`,d:''}:ok?{t:T,h:'La vivienda que miro me llega'+(mas?' con más entrada':''),d:mas?'':esf}:{t:T,h:`Aún no me llega: me limitan ${lim}`,d:esf}}
+  if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted.length){const s=LAST.r2.sorted,w=s[0],o=S.h.offers[w.i]||{},n=s.length,gap=n>1?s[1].c.total-w.c.total:0,T='Comparar hipotecas',nm=x=>{const v=String(x.n||'').trim()||'Oferta';return v.length>28?v.slice(0,27).trim()+'…':v};
+    if(con)return gap>=1?{t:T,lead:'Elegir la hipoteca más barata me ahorra',big:eur(gap),d:`${nm(w)}, frente a ${nm(s[1])}. Con intereses, seguros y comisiones`}
+      :{t:T,lead:'Coste total de mi hipoteca',big:eur(w.c.total),d:`${nm(w)}: intereses, seguros y comisiones. Cuota de ${eur(w.c.cuota)} al mes`};
+    return n>1?{t:T,h:`Gana la ${o.tipo||'oferta'} que menos cuesta en total`,d:`Comparé ${n} ofertas con seguros y comisiones`}:{t:T,h:'Ya sé lo que me cuesta mi hipoteca en total',d:'Con intereses, seguros y comisiones'}}
+  if(t==='alquilar'&&LAST.r3){const R=LAST.r3,buy=R.dif>=0,T='¿Comprar o alquilar?';
+    return con?{t:T,lead:`A ${anos(R.H)}, ${buy?'comprar':'alquilar'} me deja`,big:`${eur(Math.abs(R.dif))} más`,d:`que ${buy?'alquilar':'comprar'}. ${R.be?`Comprar gana a partir del año ${R.be}`:`En ${anos(R.H)} comprar no llega a ganar`}`}
+      :{t:T,h:`A ${anos(R.H)} me compensa ${buy?'comprar':'alquilar'}`,d:R.be?`Comprar empieza a ganar en el año ${R.be}`:'Comprar no llega a ganar en ese plazo'}}
+  if(t==='invertir'&&LAST.r5){const K=LAST.r5,T='Invertir para alquilar';
+    return con?{t:T,lead:`Rentabilidad neta de un piso de ${eur(S.i.precio)}`,big:pct(K.netaPct),d:`Alquilado a ${eur(S.i.alquiler)} al mes: ${K.caja>=0?'me deja':'me cuesta'} ${eur(Math.abs(K.caja)/12)} al mes${K.tir!=null?` · ${pct(K.tir)} al año si vendo en ${anos(K.N)}`:''}`}
+      :{t:T,h:`Rentabilidad neta del piso: ${pct(K.netaPct)}`,d:K.tir!=null?`Si vendo en ${anos(K.N)}: ${pct(K.tir)} al año tras impuestos`:''}}
+  if(t==='mihipo'&&LAST.r6){const K=LAST.r6,p=K.qA>0?K.dq/K.qA*100:0,up=K.dq>0.5,dn=K.dq<-0.5,T='Mi hipoteca';
+    if(con)return K.vari?{t:T,lead:'Mi cuota tras la revisión',big:`${eur(K.qN)} al mes`,d:`${up?`Sube ${eur(K.dq)} al mes`:dn?`Baja ${eur(-K.dq)} al mes`:'Se queda igual'} · ${E}`}:{t:T,lead:'Mi cuota fija',big:`${eur(K.qA)} al mes`,d:'No cambia aunque suba el Euríbor'};
+    return {t:T,h:K.vari?(up||dn?`En mi revisión la cuota ${up?'sube':'baja'} ${Math.abs(p)<0.5?'menos de un 1 %':'un '+pct(Math.abs(p),0)}`:'En mi revisión la cuota se queda igual'):'Mi cuota fija no cambia con el Euríbor',d:E}}
+  const f=OFF.filter(x=>x.t==='fija').sort((a,b)=>a.tin-b.tin)[0];return {pub:true,t:'Qué ofrecen los bancos',lead:`Euríbor oficial de ${MKT.eurMes||'este mes'}`,big:pct(MKT.eur,3),d:f?`Fija con el TIN más bajo publicado: ${pct(f.tin)} (${f.b})`:''}}
+/* La tarjeta, 1200 × 630, con las tipografías de la web (si no están cargadas, las del sistema). Admite también las tres líneas sueltas de antes. */
+function cardCanvas(L,generic){if(Array.isArray(L))L={t:L[0],h:L[1],d:L[2]};const W=1200,H=630,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
   g.fillStyle='#0B3D2E';g.fillRect(0,0,W,H);g.fillStyle='#F4F7F5';const r=36,x0=48,y0=150,w=W-96,h=360;g.beginPath();g.moveTo(x0+r,y0);g.arcTo(x0+w,y0,x0+w,y0+h,r);g.arcTo(x0+w,y0+h,x0,y0+h,r);g.arcTo(x0,y0+h,x0,y0,r);g.arcTo(x0,y0,x0+w,y0,r);g.fill();
   const logo=document.querySelector('.logo');try{g.drawImage(logo,48,40,76,76)}catch(e){}
-  const F='system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
-  g.fillStyle='#F0ECE0';g.font=`800 40px ${F}`;g.fillText('Finanzas en Acción',144,82);g.fillStyle='#7DD3A8';g.font=`500 24px ${F}`;g.fillText('Calculadoras de vivienda · @BuscandolaLF',144,116);
+  const SYS='system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',FD='"Bricolage Grotesque",'+SYS,F='"Instrument Sans",'+SYS,X=x0+44,MW=w-88;
+  g.fillStyle='#F0ECE0';g.font=`800 40px ${FD}`;g.fillText('Finanzas en Acción',144,82);g.fillStyle='#7DD3A8';g.font=`500 24px ${F}`;g.fillText('Calculadoras de vivienda · @BuscandolaLF',144,116);
   const wrap=(t,maxW)=>{const ws=t.split(' '),L=[];let cur='';ws.forEach(w=>{const tt=cur?cur+' '+w:w;if(g.measureText(tt).width>maxW&&cur){L.push(cur);cur=w}else cur=tt});if(cur)L.push(cur);return L};
-  let y=y0+64;g.fillStyle='#1D7A53';g.font=`700 28px ${F}`;g.fillText(lines[0],x0+44,y);y+=62;
-  g.fillStyle='#10261E';g.font=`800 ${generic?50:54}px ${F}`;wrap(lines[1],w-88).slice(0,2).forEach(l=>{g.fillText(l,x0+44,y);y+=64});
-  if(lines[2]){g.fillStyle='#5B6E66';g.font=`500 30px ${F}`;wrap(lines[2],w-88).slice(0,2).forEach(l=>{g.fillText(l,x0+44,y+6);y+=40})}
+  const fit=(t,wt,px,fam,min)=>{let s=px;g.font=`${wt} ${s}px ${fam}`;while(s>min&&g.measureText(t).width>MW){s-=2;g.font=`${wt} ${s}px ${fam}`}return s};
+  /* como mucho dos líneas: si son dos, se reparten parejas (sin palabras sueltas); si sobra texto, se corta con puntos suspensivos */
+  const lines=(t,f)=>{if(!t)return [];g.font=f;let l=wrap(t,MW);
+    if(l.length>2){let s=l[1];while(s.length>1&&g.measureText(s+'…').width>MW)s=s.slice(0,-1);l=[l[0],s.replace(/[\s,.:;·]+$/,'')+'…']}
+    else if(l.length===2)for(let m=MW*.55;m<MW;m+=MW*.05){const b=wrap(t,m);if(b.length===2){l=b;break}}
+    return l},fD=`500 30px ${F}`,fH=`800 ${generic?50:54}px ${FD}`,D=lines(L.d,fD),HL=L.big?[]:lines(L.h,fH);
+  /* el bloque de texto va centrado en el panel claro, tenga las líneas que tenga */
+  const alto=L.big?(D.length?204+40*D.length:186):(D.length?58+64*HL.length+40*D.length:32+64*HL.length);
+  let y=Math.round(y0+(h-alto)/2)+22;g.fillStyle='#1D7A53';fit(L.t,700,28,F,20);g.fillText(L.t,X,y);g.fillStyle='#10261E';
+  if(L.big){fit(L.lead,600,34,F,24);g.fillText(L.lead,X,y+52);fit(L.big,800,112,FD,56);g.fillText(L.big,X-4,y+158);y+=214}
+  else{g.font=fH;HL.forEach((l,k)=>g.fillText(l,X,y+62+64*k));y+=68+64*HL.length}
+  g.fillStyle='#5B6E66';g.font=fD;D.forEach((l,k)=>g.fillText(l,X,y+40*k));
   g.fillStyle='#F0ECE0';g.font=`600 26px ${F}`;g.fillText('Haz tus números gratis: finanzasenaccion.github.io/vivienda',48,H-46);
   return c}
-window.__ogCard=()=>cardCanvas(['6 calculadoras con fuentes oficiales','¿Cuánto puedo comprar? ¿Comprar o alquilar?','Compara hipotecas, revisa tu variable y mira qué ofrecen hoy los bancos'],true).toDataURL('image/png');
-let SHB=null;
-async function shareBlob(){const c=cardCanvas(shareLines().filter((x,i)=>i<2||x));return await new Promise(ok=>c.toBlob(ok,'image/png'))}
-$('btnShare').onclick=async()=>{SHB=await shareBlob();const url=URL.createObjectURL(SHB);
-  modal('Compartir',`<p>Esta imagen no lleva tus importes: solo la conclusión de la pestaña en la que estás.</p><img src="${url}" alt="Imagen para compartir" style="width:100%;border-radius:12px;display:block;box-shadow:var(--shadow)">
-    <div class="am-bar" style="margin-top:12px">${navigator.share?'<button class="btn solid" data-shdo="1">Compartir</button>':''}<button class="btn${navigator.share?'':' solid'}" data-shdl="1">Descargar imagen</button></div>`);track('compartir-abrir',S.tab)};
+window.__ogCard=()=>cardCanvas(['6 calculadoras de vivienda, con el cálculo y la fuente de cada cifra','¿Cuánto puedo comprar? ¿Comprar o alquilar?','Mira qué ofrecen hoy los bancos, compara hipotecas, estudia un piso para alquilar y revisa tu hipoteca'],true).toDataURL('image/png');
+window.__shareLines=shareLines; /* para las pruebas: el texto de la tarjeta de la pestaña abierta, con (true) o sin importes */
+const SHK='fea-compartir';let SHM=null,SHB=null,SHU=null;try{SHM=localStorage.getItem(SHK)}catch(e){}if(SHM!=='con'&&SHM!=='sin')SHM=null;
+const shCtx=()=>S.tab+(shareLines().pub?'':SHM==='con'?'-con-importes':'-sin-importes');
+async function shareBlob(con){try{await Promise.all([document.fonts.load('800 54px "Bricolage Grotesque"'),document.fonts.load('600 28px "Instrument Sans"')])}catch(e){}
+  const c=cardCanvas(shareLines(con));return await new Promise(ok=>c.toBlob(ok,'image/png'))}
+/* La ventana: la primera vez solo pregunta «con o sin importes»; después abre ya con lo elegido y deja cambiarlo */
+async function shareModal(){const pub=!!shareLines().pub,pedir=!pub&&!SHM,con=!pub&&SHM==='con';
+  if(SHU)URL.revokeObjectURL(SHU);SHU=null;SHB=pedir?null:await shareBlob(con);if(SHB)SHU=URL.createObjectURL(SHB);
+  const seg=pub?'':`<div class="seg-ctl" role="group" aria-label="Qué lleva la imagen"><button data-shimp="sin" class="${!pedir&&!con?'on':''}">Sin importes</button><button data-shimp="con" class="${con?'on':''}">Con importes</button></div>`;
+  modal('Compartir',`${pedir?`<p style="margin:0 0 10px">¿Con tus importes o sin ellos? La próxima vez me acuerdo.</p>${seg}`:`${seg}<p class="hint" style="margin:8px 0 10px">${pub?'Solo lleva datos públicos del mercado: nada tuyo.':con?'Lleva las cifras de la pestaña en la que estás.':'Solo la conclusión de la pestaña en la que estás, sin tus importes.'}</p>`}
+    ${SHB?`<img src="${SHU}" alt="Imagen para compartir" style="width:100%;border-radius:12px;display:block;box-shadow:var(--shadow)">
+    <div class="am-bar" style="margin-top:12px">${navigator.share?'<button class="btn solid" data-shdo="1">Compartir</button>':''}<button class="btn${navigator.share?'':' solid'}" data-shdl="1">Descargar imagen</button></div>`:''}`)}
+$('btnShare').title='Crear una imagen para compartir, con o sin tus importes';
+$('btnShare').onclick=async()=>{await shareModal();track('compartir-abrir',S.tab)};
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-shimp]');if(!b)return;SHM=b.dataset.shimp==='con'?'con':'sin';try{localStorage.setItem(SHK,SHM)}catch(x){}
+  await shareModal();const n=$('mBody').querySelector(`[data-shimp="${SHM}"]`);if(n)n.focus()});
 async function doShare(){if(!SHB)return;const file=new File([SHB],`finanzas-en-accion-${S.tab}.png`,{type:'image/png'}),data={files:[file],title:'Finanzas en Acción',text:'Haz tus números de vivienda: https://finanzasenaccion.github.io/vivienda/'};
-  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share(data);track('compartir',S.tab);return}await navigator.share({title:data.title,text:data.text,url:'https://finanzasenaccion.github.io/vivienda/'});track('compartir',S.tab)}catch(e){if(e&&e.name==='AbortError')return;shareSave()}}
-async function shareSave(){if(!SHB)return;if(await saveFile(`finanzas-en-accion-${S.tab}.png`,await SHB.arrayBuffer(),'image/png')){toast('Imagen descargada');track('compartir-descarga',S.tab)}}
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share(data);track('compartir',shCtx());return}await navigator.share({title:data.title,text:data.text,url:'https://finanzasenaccion.github.io/vivienda/'});track('compartir',shCtx())}catch(e){if(e&&e.name==='AbortError')return;shareSave()}}
+async function shareSave(){if(!SHB)return;if(await saveFile(`finanzas-en-accion-${S.tab}.png`,await SHB.arrayBuffer(),'image/png')){toast('Imagen descargada');track('compartir-descarga',shCtx())}}
 
 /* ---------- cómo lo calculo: fórmula, fuente y fecha de cada cifra ---------- */
 X.metodo=()=>{const L=(u,t)=>`<a href="${u}" target="_blank" rel="noopener">${t}</a>`,F=MKT.fuentes||{};
