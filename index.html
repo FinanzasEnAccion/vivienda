@@ -709,8 +709,20 @@ html.m .simple{gap:12px}
   html.web .s-out .s-lines button{flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:1px;padding:9px 12px;font-size:12.5px}
   html.web .s-out .s-big{font-size:clamp(34px,3.3vw,46px)}
 }
-.s-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media (max-width:900px){.s-cards{grid-template-columns:1fr}}
-.s-card{display:grid;gap:4px;border:0;background:var(--field);border-radius:14px;padding:12px 14px;text-align:left;color:var(--ink)}.s-card:hover{background:var(--accent-soft)}.s-card small{color:var(--muted)}.s-card .sq{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.s-card .tp{justify-self:start}
+/* bancos: apiladas (banco y condiciones a la izquierda, cuota a la derecha) y, si la tarjeta es ancha, las tres en fila */
+.s-bk{container:sbk / inline-size}.s-bk h2{margin-bottom:4px}.s-bksub{margin:0 0 10px;font-size:12px;color:var(--muted)}
+.s-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.s-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline;align-content:start;border:0;background:var(--field);border-radius:14px;padding:11px 13px;text-align:left;color:var(--ink);min-width:0}button.s-card:hover{background:var(--accent-soft)}
+.s-card small{grid-column:1;color:var(--muted);font-size:12px;min-width:0}.s-card small:last-child{grid-column:1 / -1}.s-card .pz-w{display:inline;font-size:12px;font-weight:600}
+.s-card .sc-h{grid-column:1;grid-row:1;display:flex;align-items:center;gap:8px;min-width:0}.s-card .sc-h b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.s-card .tp{flex:none}
+.s-card .sq{grid-column:2;grid-row:1;text-align:right;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}.s-card .sq small{font-size:12px;font-weight:500}
+.s-card .sc-2{grid-column:2;grid-row:2;text-align:right;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.s-card.none{grid-template-columns:auto minmax(0,1fr);align-items:center}.s-card.none small{grid-column:2}
+.s-bknote{margin:8px 0 0;font-size:12px;color:var(--warn);font-weight:600}
+@container sbk (min-width:540px){
+  .s-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .s-card{grid-template-columns:minmax(0,1fr);gap:3px}.s-card .sq,.s-card .sc-2{grid-column:1;grid-row:auto;text-align:left}.s-card .sq{font-size:22px}.s-card.none{grid-template-columns:minmax(0,1fr)}.s-card.none small{grid-column:1}
+}
 .s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);width:100%}#sAlqV .s-verd{margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd.bad{background:var(--bad-soft)}.s-verd small{color:var(--muted);font-size:12px}
 html .tab.old{display:none!important}
 html.m:not(.sencilla) .mnav{grid-template-columns:repeat(4,minmax(0,1fr))!important}
@@ -2312,6 +2324,9 @@ function render6(){const K=calc6(),M=K.M,mes=MESES[(M.mes||1)-1],eM=MKT.eurMes||
 /* =========================================================
    ESTÁNDAR · una pantalla, tres preguntas, sin jerga
    ========================================================= */
+/* Las ofertas de los bancos se valoran para la hipoteca de la Estándar: la casa en mente (o el precio máximo) con la entrada y el plazo del veredicto */
+let sBk={P:0,E:0,pz:30};
+const sCon=fn=>{const k=S.v.plazo;try{S.v.plazo=sBk.pz;return conCasa(sBk.P,sBk.E,fn)}finally{S.v.plazo=k}};
 /* «Ajusta tu hipoteca» va plegado y se recuerda si lo dejaste abierto */
 let sOpen=false;try{sOpen=localStorage.getItem('fea-s-mas')==='1'}catch(e){}
 document.addEventListener('click',e=>{
@@ -2352,18 +2367,29 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
       ${aj.mas?`<p class="note">Con la entrada mínima (${eur(eMin)}) la cuota sería de ${eur(qMin)} al mes: más de lo que el banco aprueba con lo que entra en casa. Por eso la cuenta se hace con ${eur(aj.ent)} de entrada${aj.ok?', que tus ahorros cubren':''}.</p>`:''}
       ${aj.plazo<S.v.plazo?`<p class="note">Se usa un plazo de ${anos(aj.plazo)}: el que te daría el banco para terminar de pagar antes de los ${EDAD_FIN}.</p>`:''}
       <p class="note">El banco no presta para los impuestos ni los gastos: salen de tus ahorros.</p>`)};
-  // bancos: la mejor de cada tipo para la casa que tienes en mente
-  const P=hipoteca(),tipos=[['fija','Fija','la cuota no cambia nunca'],['mixta','Mixta','fija unos años y luego cambia con el Euríbor'],['variable','Variable','cambia cada año con el Euríbor']];
-  const rows=P>0?OFF.map((x,i)=>({x,i,c:mcalc(x)})).filter(r=>!r.c.noAcc&&!r.c.ltvKo):[];
-  $('sBancos').innerHTML=`<h2>Lo que ofrecen hoy los bancos</h2><p class="hint" style="margin:-4px 0 10px">La más barata de cada tipo para una hipoteca de ${eur(P)} (la casa de ${eur(S.v.precio)}).</p>
-    <div class="s-cards">${tipos.map(([t,n,d])=>{const b=rows.filter(r=>r.x.t===t).sort((a,b)=>a.c.int-b.c.int)[0];
-      return b?`<button class="s-card" data-mdet="${b.i}"><span class="tp ${t}">${n}</span><small>${d}</small><b>${esc(b.x.b)}</b><span class="sq">${eur(b.c.cuota)}<small style="font-size:12px;font-weight:500"> al mes</small></span><small>Interés ${pct(b.c.tin)}${t==='fija'?'':t==='mixta'?` los ${String(b.x.anos).replace('.',',')} primeros años`:' el primer año'}${b.c.sinBon?' (sin descuentos)':''}</small></button>`:`<div class="s-card"><span class="tp ${t}">${n}</span><small>Ninguna encaja con tus datos</small></div>`}).join('')}</div>
-    <div class="ofaviso" style="margin:12px 0 0"><span><b>Ofertas públicas y genéricas.</b> Con tu perfil se pueden mejorar, negociando o con un bróker.</span><a class="lnkbtn" data-cta="estandar-bancos" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Pide que te mejoren la tuya →</a></div>`;
+  // bancos: la mejor de cada tipo por coste comparado, entre las que puedes conseguir, para la hipoteca del veredicto:
+  // la casa que tienes en mente o, si no hay, tu precio máximo, con la misma entrada y el plazo que daría el banco
+  sBk={P:tieneCasa?R.P:mx,E:tieneCasa?aj.ent:entM,pz:R.plazoB};
+  const tipos=[['fija','Fija','La cuota no cambia nunca'],['mixta','Mixta','Fija unos años y luego cambia con el Euríbor'],['variable','Variable','Cambia con el Euríbor en cada revisión']];
+  const bk=sBk.P>0?sCon(()=>hipoteca()>0?{H:hipoteca(),L:OFF.map((x,i)=>({x,i,c:mcalc(x)}))}:null):null;
+  const dan=bk?bk.L.filter(r=>!r.c.noAcc&&!r.c.ltvKo):[],masDel80=bk&&!dan.length&&bk.L.some(r=>!r.c.noAcc),rows=dan.length?dan:bk?bk.L.filter(r=>!r.c.noAcc):[];
+  const eurHoy=Math.abs(S.h.eur-Math.round(MKT.eur*100)/100)<0.005;
+  const card=([t,n,d])=>{const b=rows.filter(r=>r.x.t===t).sort((a,b)=>a.c.ef-b.c.ef)[0];
+    if(!b)return `<div class="s-card none"><span class="tp ${t}" title="${d}">${n}</span><small>Ninguna encaja con tus datos</small></div>`;
+    const x=b.x,c=b.c,np=c.nProd!=null?c.nProd:vkOf(x).length,per=x.anos>1?`los ${String(x.anos).replace('.',',')} primeros años`:'el primer año';
+    return `<button class="s-card" data-mdet="${b.i}" title="${d}"><span class="sc-h"><span class="tp ${t}">${n}</span><b>${esc(x.b)}</b></span>
+      <span class="sq">${eur(c.cuota)}<small> al mes</small></span><span class="sc-2">${c.cuota2?`→ ${eur(c.cuota2)} desde el año ${c.desde}`:t==='fija'?'no cambia':'después, parecida'}</span>
+      <small>Interés ${pct(c.tin)}${t==='fija'?' fijo':' '+per}${c.sinBon?' · sin bonificar':''}</small>
+      <small>${c.years<sBk.pz?`<i class="pz-w">a ${anos(c.years)}, su máximo</i> · `:''}${np?`${np} producto${np>1?'s':''}`:'sin productos'} · TAE ${esc(x.tae)}</small></button>`};
+  $('sBancos').innerHTML=`<h2>Lo que ofrecen hoy los bancos</h2>`+(rows.length?`<p class="s-bksub">Para una hipoteca de <b class="num">${eur(bk.H)}</b> a ${anos(sBk.pz)} (${tieneCasa?`la casa de ${eur(R.P)}`:`tu precio máximo, ${eur(mx)}`}). Después, con el Euríbor ${eurHoy?'de hoy':'al '+pct(S.h.eur)}.</p>
+    <div class="s-cards">${tipos.map(card).join('')}</div>${masDel80?`<p class="s-bknote">Estas ofertas financian hasta el 80 %. Para más, pregunta por el aval ICO en un banco adherido.</p>`:''}`
+    :`<p class="s-bksub">${bk?'Ninguna oferta pública encaja con estos datos.':tieneCasa||puede?'Con estos datos no hay hipoteca que comparar.':'Cuando te llegue para comprar, aquí verás la mejor hipoteca de cada tipo.'}</p>`)+
+    `<div class="ofaviso" style="margin:10px 0 0"><span><b>Ofertas públicas y genéricas.</b> Con tu perfil se pueden mejorar, negociando o con un bróker.</span><a class="lnkbtn" data-cta="estandar-bancos" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Pide que te mejoren la tuya →</a></div>`;
   // comprar o alquilar, con una pregunta
   const R3=LAST.r3;
   $('sAlqV').innerHTML=`${R3&&tieneCasa?`<button class="s-verd ${R3.dif>=0?'good':'warn'}" data-x="fin3"><span>Si vives ${anos(R3.H)} en ella, <b>te compensa ${R3.dif>=0?'comprar':'alquilar'}</b>: unos ${eur(Math.abs(R3.dif))} más</span><small>${R3.be?`Comprar empieza a ganar en el año ${R3.be}`:'Comprar no llega a ganar en ese plazo'} · pincha para ver el cálculo</small></button>`:'<p class="hint">Pon una casa en mente para compararlo.</p>'}`;
 }
-document.addEventListener('click',e=>{const d=e.target.closest('[data-mdet]');if(d){mDetail(+d.dataset.mdet);track('estandar-oferta',OFF[+d.dataset.mdet].t)}});
+document.addEventListener('click',e=>{const d=e.target.closest('[data-mdet]');if(d){sCon(()=>mDetail(+d.dataset.mdet));track('estandar-oferta',OFF[+d.dataset.mdet].t)}});
 
 /* ---------- bróker ---------- */
 function renderBroker(){
