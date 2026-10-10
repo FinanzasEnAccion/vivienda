@@ -1779,6 +1779,8 @@ function analyse(o){
   return {cur,H,marg,best:B,bestT:sim(o,B).total};
 }
 const offersEl=$('offers');
+/* una oferta traída de un banco que no llega al plazo del comparador (o.pz): su primera cuota a su plazo máximo; null si no hace falta avisar */
+const cuotaPz=o=>{if(!(o.pz>0&&o.pz<S.v.plazo&&hipoteca()>0))return null;const k=S.v.plazo;S.v.plazo=o.pz;try{return sim(o,holdsOf(o)).cuota}finally{S.v.plazo=k}};
 /* ¿Has tocado las ofertas del comparador? (editado alguna o traído una de «Bancos hoy»). Mientras no, el informe PDF no enseña las de ejemplo.
    S.hTouched se pone al tocarlas; por si el estado viene de antes de existir la marca, también cuenta que no sean ya las de ejemplo (sin mirar los años, que siguen al plazo) */
 const hFirma=L=>JSON.stringify(L.map(o=>[o.nombre,o.tipo,o.tin,o.anos,o.dif,o.apertura,o.prods.map(p=>[p.n,p.b,p.c,p.s,p.m,p.on])]));
@@ -1796,6 +1798,7 @@ function renderOffers(){
         <button class="kpi main" data-act="exp" data-what="total"><small>Coste total</small><strong class="num" data-o="total"></strong><em>intereses, seguros de más y comisiones</em></button>
         <button class="kpi" data-act="exp" data-what="cuota"><small>Cuota</small><strong class="num" data-o="cuota"></strong><em data-o="cuotasub"></em></button>
       </div>
+      <div class="ingw" style="color:var(--warn)" data-o="pzw" hidden></div>
       <div class="bestbar" data-o="best" hidden></div>
       <div class="o-conf">
         <div class="seg-ctl sm" role="group" aria-label="Tipo de hipoteca">${['fija','mixta','variable'].map(t=>`<button data-tipo="${t}" class="${o.tipo===t?'on':''}">${t[0].toUpperCase()+t.slice(1)}</button>`).join('')}</div>
@@ -1861,7 +1864,8 @@ function render2(){
     card.querySelector('[data-o=total]').textContent=eur(c.total);
         card.querySelector('[data-o=cuota]').textContent=eur(c.cuota);
     const t2=c.tramos.find((t,k)=>k>0&&Math.abs(t.cuota-c.cuota)>=1);
-    card.querySelector('[data-o=cuotasub]').textContent=t2?`${eur(t2.cuota)} desde año ${Math.ceil(t2.desde/12)}`:`TIN ${pct(c.tramos[0]?c.tramos[0].tin:0)}`;
+    card.querySelector('[data-o=cuotasub]').textContent=t2?(t2.desde<=12?`${eur(t2.cuota)} desde el mes ${t2.desde}`:`${eur(t2.cuota)} desde año ${Math.ceil(t2.desde/12)}`):`TIN ${pct(c.tramos[0]?c.tramos[0].tin:0)}`;
+    const pw=card.querySelector('[data-o=pzw]'),cz=cuotaPz(o);if(pw){pw.hidden=cz==null;pw.textContent=cz==null?'':`Su máximo son ${anos(o.pz)}: a ese plazo, ${eur(cz)} al mes`}
 
     card.querySelectorAll('.prow').forEach(row=>{const jj=+row.dataset.j,m=a.marg[jj],dot=row.querySelector('.dot'),ch=chipFor(m,a.H[jj],S.h.offers[i].prods[jj]);dot.className='dot pill '+ch.cls;dot.textContent=ch.s;dot.title=ch.t});
     const bb=card.querySelector('[data-o=best]'),gain=a.cur.total-a.bestT;
@@ -2377,17 +2381,30 @@ function mCoste(i){const x=OFF[i];if(!x||hipoteca()<=0)return;const c=mcalc(x),a
   modal(`Coste comparado · ${x.b}`,h+pie)}
 /* Lleva una oferta al comparador con un producto por cada vinculación exigida: su precio supuesto (VK_COSTE) y la rebaja repartida a partes iguales
    (los bancos no publican cuánto rebaja cada producto). Así el comparador da desde el principio el mismo coste comparado que la tabla. */
-function mAdd(i){const x=OFF[i];if(!x)return;const tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo)),g=ingOf(x),sinBon=g.falla&&g.tipo==='bonif'&&bonOf(x)>0;
-  const req=vkReq(x).map(vkCoste),n=req.length,B=Math.round(bonOf(x)*100),q=n?Math.floor(B/n):0,resto=n?B-q*n:0,r4=v=>Math.round(v*1e4)/1e4;
+function mAdd(i){const x=OFF[i];if(!x)return;const tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo)),g=ingOf(x),sb=g.falla&&g.tipo==='bonif',sn=sb&&x.sinNom?x.sinNom:null,sinBon=sb&&!sn&&bonOf(x)>0;
+  // sn: no llegas a la nómina y el banco publica un precio para ese caso con el resto de productos: va con él, sin la nómina, y la rebaja de los demás es lo que separa su diferencial del de sin bonificar
+  const req=vkReq(x).filter(v=>!sn||v.k!=='nomina').map(vkCoste),n=req.length,B=sn?Math.max(0,Math.round(((x.difS||sn.dif)-sn.dif)*100)):Math.round(bonOf(x)*100),q=n?Math.floor(B/n):0,resto=n?B-q*n:0,r4=v=>Math.round(v*1e4)/1e4;
   const rep=B>0&&n>1,prods=n?req.map((p,j)=>({n:p.n+(p.c>0||rep?'*':''),b:(q+(j<resto?1:0))/100,c:p.c,s:p.s,m:p.m,hasta:S.v.plazo,on:!sinBon})).filter(p=>p.b>0||p.c>0)
     :B>0?[{n:'Vinculaciones del banco',b:B/100,c:0,s:0,m:0,hasta:S.v.plazo,on:!sinBon}]:[];
-  const o={nombre:`${x.b} · ${x.t}`,tipo:x.t,tin:r4(tp+B/100),anos:x.t==='fija'?1:x.anos,dif:x.t==='fija'?0.6:r4((x.dif||0)+B/100),apertura:r4(apOf(x)),prods};
-  const prev=clone(S.h.offers),prevT=S.hTouched;
-  if(S.h.offers.length>=3)S.h.offers[2]=o;else S.h.offers.push(o);S.hTouched=true;
+  const o={nombre:`${x.b} · ${x.t}`,tipo:x.t,tin:r4((sn?sn.tin:tp)+B/100),anos:x.t==='fija'?1:x.anos,dif:x.t==='fija'?0.6:r4((sn?sn.dif:(x.dif||0))+B/100),apertura:r4(apOf(x)),prods};
+  if(!sn&&x.promoS>0&&B>0){o.promoM=Math.round(x.promoS);o.promoB=B/100} // el tipo bonificado que el banco mantiene al principio aunque no bonifiques
+  if(x.pz)o.pz=x.pz;                                                     // plazo máximo del banco: el comparador avisa si se pasa
+  /* tr = orden en que se trajo; trF = cómo era al traerla (si ya no coincide, la has editado a mano) */
+  const firma=hFirma([o]),ej=!hTocado();
+  if(!ej&&S.h.offers.some(q=>q.tr&&hFirma([q])===firma)){ov.hidden=true;showTab('hipotecas');toast(`${x.b} ya está en el comparador.`);return}
+  const prev=clone(S.h.offers),prevT=S.hTouched;let fuera='';
+  o.tr=1+Math.max(0,...S.h.offers.map(q=>q.tr||0));o.trF=firma;
+  if(ej)S.h.offers=[o];                           // siguen las de ejemplo sin tocar: se quitan y queda solo la real
+  else if(S.h.offers.length<3)S.h.offers.push(o); // mientras haya sitio, se añade
+  else{                                           // lleno: sale la que lleva más tiempo de las traídas, y antes una sin retocar que una editada a mano
+    const T=S.h.offers.map((q,k)=>({k,tr:q.tr||0,ed:hFirma([q])!==q.trF})).filter(q=>q.tr).sort((a,b)=>(a.ed-b.ed)||(a.tr-b.tr)),k=T.length?T[0].k:2;
+    fuera=S.h.offers[k].nombre;S.h.offers[k]=o}
+  S.hTouched=true;
   const sup=prods.some(p=>p.c>0);
   ov.hidden=true;renderOffers();refresh();showTab('hipotecas');$('toast').classList.add('largo');
   toast(`${x.b}, en el comparador`+(sup||rep?` con ${[sup&&'precios supuestos',rep&&'la rebaja repartida a partes iguales'].filter(Boolean).join(' y ')} (*): pon los de tu oferta.`:'.')
-    +(vkNd(x)?' No dice qué productos exige: añádelos tú.':'')+(sinBon?' Van sin contratar: no llegas a la nómina que pide.':'')+(x.pz&&x.pz<S.v.plazo?` Su plazo máximo son ${anos(x.pz)} y aquí va a ${S.v.plazo}.`:''),
+    +(vkNd(x)?' No dice qué productos exige: añádelos tú.':'')+(sinBon?' Van sin contratar: no llegas a la nómina que pide.':'')+(sn?` Va con el precio para nómina menor de ${eur(g.min)}.`:'')+(x.pz&&x.pz<S.v.plazo?` Su plazo máximo son ${anos(x.pz)} y aquí va a ${S.v.plazo}.`:'')
+    +(ej?' Las de ejemplo se han quitado.':fuera?` Sale «${fuera}», la que más tiempo llevaba.`:''),
     ()=>{S.h.offers=prev;S.hTouched=prevT;renderOffers();refresh()})}
 document.addEventListener('click',e=>{
   const f=e.target.closest('[data-mf]');if(f){MF=f.dataset.mf;render4();fitSoon();return}
