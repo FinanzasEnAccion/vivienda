@@ -674,8 +674,9 @@ html.m .mnav .tab{font-size:9px}
 .ofaviso{display:flex;gap:10px 16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--warn-soft);border-radius:12px;padding:9px 12px;font-size:12.5px;margin-bottom:10px}.ofaviso span{flex:1 1 320px}.ofaviso a{white-space:nowrap;font-weight:700}
 html:not(.sencilla) .sen{display:none!important}html.m.sencilla .mnav{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 /* Estándar: cuatro tarjetas (tus datos, resultado, bancos, comprar o alquilar). Móvil y ventanas pequeñas: una columna.
-   Escritorio en una pantalla: con altura, tres columnas; sin ella, el resultado a lo ancho y debajo bancos y alquiler.
-   No se reduce la página: «Ajusta tu hipoteca» abierto se desplaza dentro de su tarjeta y, si algo no cabe, dentro del panel. */
+   Escritorio en una pantalla (desde 1280 px): tus datos a la izquierda, el resultado a lo ancho y, debajo, bancos y alquiler;
+   con poca altura (portátil) todo va más compacto. No se reduce la página: «Ajusta tu hipoteca» abierto se desplaza dentro
+   de su tarjeta y, si algo no cabe, dentro del panel. */
 .simple{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
 .s-in{order:1}.s-out{order:2}.s-bk{order:3}.s-alq{order:4}
 html.m .simple{gap:12px}
@@ -684,11 +685,24 @@ html.m .simple{gap:12px}
   html.web .s-in{grid-area:in}html.web .s-out{grid-area:out}html.web .s-bk{grid-area:bk}html.web .s-alq{grid-area:alq}
 }
 @media (min-width:1280px) and (min-height:540px){
-  html.web .pane>.simple{grid-template-columns:minmax(0,330px) minmax(0,1.7fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"in out out" "in bk alq"}
-  html.web .s-in{max-height:100%;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+  html.web .pane>.simple{grid-template-columns:minmax(0,340px) minmax(0,1.7fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"in out out" "in bk alq"}
+  html.web .s-in{height:100%;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}html.web .s-bk,html.web .s-alq{align-self:stretch}
+  html.web .s-out{grid-template-columns:minmax(0,.92fr) minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto auto;column-gap:18px;align-items:start}
+  html.web .s-o1{grid-column:1;grid-row:1}html.web .s-out .s-lines{grid-column:2;grid-row:1;grid-template-columns:1fr 1fr;margin-top:0}html.web #sIco{grid-column:2;grid-row:2}html.web .s-o3{grid-column:3;grid-row:1 / span 2}html.web .s-links{grid-column:1;grid-row:2;align-self:end}
+  html.web .s-out:has(#sIco:empty) .s-lines{grid-row:1 / span 2}
+  html.web .s-out .s-lines button{flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:2px;padding:9px 12px;font-size:12.5px}html.web .s-out .s-lines b small{display:inline;margin-left:8px}
+  html.web .s-out .s-big{font-size:clamp(34px,3.3vw,46px)}
 }
-@media (min-width:1280px) and (min-height:820px){
-  html.web .pane>.simple{grid-template-columns:minmax(0,340px) minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"in out bk" "in out alq"}
+@media (min-width:1280px) and (min-height:540px) and (max-height:860px){
+  html.web .pane>.simple{gap:10px;grid-template-columns:minmax(0,330px) minmax(0,1.7fr) minmax(0,1fr)}html.web .simple>.card{padding:12px 14px}html.web .simple .inp{height:32px}html.web .simple .card h2{margin-bottom:6px}
+  html.web .s-hd{margin-bottom:8px}html.web .s-q{gap:8px}html.web .s-two{gap:10px}html.web .s-two .seg-ctl.uso{height:32px!important}html.web .s-fold{margin-top:8px;padding:7px 10px}
+  html.web .s-out{gap:6px;column-gap:16px}html.web .s-o1{gap:6px}html.web .s-o3{gap:6px}html.web .s-out .s-big{font-size:40px}html.web .s-ejp{display:none}
+  html.web .s-sem{padding:4px 10px;font-size:13px}html.web .s-out .s-lines{gap:6px}html.web .s-out .s-lines button{padding:6px 10px;line-height:1.25}html.web .s-lines b{font-size:16px;line-height:1.2}
+  html.web .s-out .s-verd{padding:7px 12px;font-size:14px;line-height:1.3}html.web .s-links .chip{padding:2px 9px;font-size:11.5px}html.web .s-ico{padding:2px 8px}html.web .s-ico button{padding:3px 10px}html.web .s-ico .lnk{padding:3px 4px}
+  html.web .s-bkh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}html.web .s-bkh h2,html.web .s-bkh .s-bksub{margin:0}html.web .s-bk2,html.web .s-bk .ofaviso{display:none}
+  html.web .s-card{padding:8px 11px;line-height:1.3}html.web .s-bknote{margin-top:6px}
+  html.web .s-alq .fld{grid-template-columns:minmax(0,1fr) 124px;align-items:center;gap:10px}html.web .s-alq .fld label .lt{white-space:normal;line-height:1.25}
+  html.web #sAlqV .s-verd{margin-top:8px;padding:7px 12px;font-size:13.5px;line-height:1.3}html.web .s-prud{margin-top:6px;padding:4px 12px}
 }
 .s-hd{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:12px}.s-hd h2{margin:0}.s-ej,html.m .s-ej{font-size:11.5px;padding:3px 9px}
 .s-q{display:grid;gap:12px}.s-q .fld label .lt,.s-two .uso-l{font-size:14px;color:var(--ink);font-weight:600}
@@ -698,7 +712,7 @@ html.m .simple{gap:12px}
 .s-sum{grid-column:1;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 .s-mas{display:grid;gap:10px;margin-top:12px}
 .s-o1{display:grid;gap:8px;justify-items:start;min-width:0}.s-o3{display:grid;gap:8px;min-width:0}
-.s-ico{justify-self:stretch;gap:6px}.s-ico .lnk{flex:1;text-align:left;font-weight:600;white-space:normal}.s-ico.good{background:var(--good-soft)}.s-ico.good .lnk{color:var(--good)}.s-ico.warn{background:var(--warn-soft)}.s-ico.warn .lnk{color:var(--warn)}.s-ico [data-act="sIcoOff"]{flex:none;text-decoration:underline}
+#sIco:empty{display:none}.s-ico{gap:6px}.s-ico .lnk{flex:1;text-align:left;font-weight:600;white-space:normal}.s-ico.good{background:var(--good-soft)}.s-ico.good .lnk{color:var(--good)}.s-ico.warn{background:var(--warn-soft)}.s-ico.warn .lnk{color:var(--warn)}.s-ico [data-act="sIcoOff"]{flex:none;text-decoration:underline}
 .s-links{display:flex;gap:6px;flex-wrap:wrap}.s-links .chip{color:var(--accent)}
 .s-prud{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;align-items:baseline;width:100%;margin-top:8px;border:0;background:var(--field);border-radius:12px;padding:9px 14px;text-align:left;font-size:12.5px;color:var(--muted)}.s-prud:hover{background:var(--accent-soft)}.s-prud b{color:var(--ink);font-variant-numeric:tabular-nums}
 .s-mas .s-c4 button,html.m .s-mas .s-c4 button{font-size:12.5px;padding-inline:2px}
@@ -708,27 +722,20 @@ html.s-ojo body:has(#p-simple:not([hidden])) .mres i.good{background:var(--warn-
 .s-big{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,52px);line-height:1;border:0;background:none;padding:0;color:var(--ink);text-align:left}
 .s-sem{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;border-radius:999px;padding:6px 12px;border:0}.s-sem i{width:12px;height:12px;border-radius:50%;display:inline-block}
 .s-sem.good{background:var(--good-soft);color:var(--good)}.s-sem.good i{background:var(--good)}.s-sem.warn{background:var(--warn-soft);color:var(--warn)}.s-sem.warn i{background:var(--warn)}.s-sem.bad{background:var(--bad-soft,#fde8e6);color:var(--bad)}.s-sem.bad i{background:var(--bad)}
-.s-lines{display:grid;gap:8px;margin-top:4px}.s-lines button{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border:0;background:var(--field);border-radius:12px;padding:12px 14px;text-align:left;font-size:14px;color:var(--ink)}.s-lines button:hover{background:var(--accent-soft)}.s-lines b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}.s-lines small{display:block;font-size:12px;color:var(--muted)}.s-lines small.good,.s-verd small i.good{color:var(--good);font-weight:600}.s-lines small.warn,.s-verd small i.warn{color:var(--warn);font-weight:600}.s-verd small i{font-style:normal}
-/* resultado a lo ancho (escritorio con poca altura): titular, cifras y casa en mente en tres bloques */
-@media (min-width:1280px) and (min-height:540px) and (max-height:819px){
-  html.web .s-out{grid-template-columns:minmax(0,1.05fr) minmax(0,1.25fr) minmax(0,1fr);column-gap:18px;align-items:start}
-  html.web .s-out .s-lines{grid-template-columns:1fr 1fr;margin-top:0}
-  html.web .s-out .s-lines button{flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:1px;padding:9px 12px;font-size:12.5px}
-  html.web .s-out .s-big{font-size:clamp(34px,3.3vw,46px)}
-}
+.s-lines{display:grid;gap:8px;margin-top:4px}.s-lines button{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border:0;background:var(--field);border-radius:12px;padding:12px 14px;text-align:left;font-size:14px;color:var(--ink)}.s-lines button:hover{background:var(--accent-soft)}.s-lines b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}.s-lines small{display:block;font-size:12px;color:var(--muted)}.s-lines b small{font-weight:600;text-align:right}.s-lines small.good,.s-verd small i.good{color:var(--good);font-weight:600}.s-lines small.warn,.s-verd small i.warn{color:var(--warn);font-weight:600}.s-verd small i{font-style:normal}
 /* bancos: apiladas (banco y condiciones a la izquierda, cuota a la derecha) y, si la tarjeta es ancha, las tres en fila */
 .s-bk{container:sbk / inline-size}.s-bk h2{margin-bottom:4px}.s-bksub{margin:0 0 10px;font-size:12px;color:var(--muted)}
 .s-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
 .s-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline;align-content:start;border:0;background:var(--field);border-radius:14px;padding:11px 13px;text-align:left;color:var(--ink);min-width:0}button.s-card:hover{background:var(--accent-soft)}
-.s-card small{grid-column:1;color:var(--muted);font-size:12px;min-width:0}.s-card small:last-child{grid-column:1 / -1}.s-card .pz-w{display:inline;font-size:12px;font-weight:600}
-.s-card .sc-h{grid-column:1;grid-row:1;display:flex;align-items:center;gap:8px;min-width:0}.s-card .sc-h b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.s-card .tp{flex:none}
+.s-card small{grid-column:1 / -1;color:var(--muted);font-size:12px;min-width:0}.s-card small.sc-i{grid-column:1;grid-row:2}.s-card small.sc-p{color:var(--warn);font-weight:600}
+.s-card .sc-h{grid-column:1;grid-row:1;display:flex;align-items:center;gap:8px;min-width:0}.s-card .sc-h b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.s-card .tp{flex:none}.s-card .sc-ps{display:none;font-style:normal;font-weight:600;color:var(--warn)}
 .s-card .sq{grid-column:2;grid-row:1;text-align:right;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}.s-card .sq small{font-size:12px;font-weight:500}
 .s-card .sc-2{grid-column:2;grid-row:2;text-align:right;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .s-card.none{grid-template-columns:auto minmax(0,1fr);align-items:center}.s-card.none small{grid-column:2}
 .s-bknote{margin:8px 0 0;font-size:12px;color:var(--warn);font-weight:600}
 @container sbk (min-width:540px){
   .s-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-  .s-card{grid-template-columns:minmax(0,1fr);gap:3px}.s-card .sq,.s-card .sc-2{grid-column:1;grid-row:auto;text-align:left}.s-card .sq{font-size:22px}.s-card.none{grid-template-columns:minmax(0,1fr)}.s-card.none small{grid-column:1}
+  .s-card{grid-template-columns:minmax(0,1fr);gap:2px}.s-card .sq,.s-card .sc-2,.s-card small.sc-i{grid-column:1;grid-row:auto;text-align:left}.s-card .sc-w,.s-card small.sc-p{display:none}.s-card .sc-ps{display:inline}.s-card .sq{white-space:normal}.s-card.none{grid-template-columns:minmax(0,1fr)}.s-card.none small{grid-column:1}
 }
 .s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);width:100%}#sAlqV .s-verd{margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd.bad{background:var(--bad-soft)}.s-verd small{color:var(--muted);font-size:12px}
 html .tab.old{display:none!important}
@@ -861,7 +868,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
   <section class="pane" id="p-simple" role="tabpanel" hidden>
     <div class="simple">
       <div class="card s-in"><div class="s-hd"><h2>Cuéntame tres cosas</h2><span class="pill warn s-ej" id="sEj" hidden>Datos de ejemplo</span></div><div class="s-q" id="sQ"></div><button type="button" class="s-fold" id="sFold" aria-expanded="false" aria-controls="sMas"></button><div class="s-mas" id="sMas" hidden></div></div>
-      <div class="card hero s-out" id="sOut"><div class="s-o1" id="sO1"></div><div class="s-lines" id="sO2"></div><div class="s-o3"><div id="sCasa"></div><div id="sCasaV"></div><div class="s-links" id="sLinks"></div></div></div>
+      <div class="card hero s-out" id="sOut"><div class="s-o1" id="sO1"></div><div id="sIco"></div><div class="s-lines" id="sO2"></div><div class="s-o3"><div id="sCasa"></div><div id="sCasaV"></div></div><div class="s-links" id="sLinks"></div></div>
       <div class="card s-bk" id="sBancos"></div>
       <div class="card s-alq" id="sAlq"></div>
     </div>
@@ -2422,15 +2429,16 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
   const icoH=icoU?`<div class="bestbar s-ico ${icoU.ok&&!icoU.duda?'good':'warn'}"><button class="lnk" data-x="ico">${!icoU.ok?'Aval ICO: no cumples':icoU.duda?(icoU.tope.varios?'Aval ICO: depende de tu provincia':'Aval ICO: cerca del tope de ingresos'):'Calculado con aval ICO'}</button><button class="lnk" data-act="sIcoOff">Quitar</button></div>`
     :mi&&miMx>=mx+5000?`<div class="bestbar s-ico${mi.duda?' warn':''}"><button class="lnk" data-x="ico">Con aval ICO: hasta\u00a0<b class="num">${eur(miMx).replace(' €','\u00a0€')}</b></button><button data-act="sIcoOn">Calcular con él</button></div>`:'';
   // resultado
-  $('sO1').innerHTML=`<div class="eyebrow">${!puede?'Con estos datos':touched?'Puedes comprar una vivienda de hasta':'Con los datos de ejemplo, una vivienda de hasta'}</div>
+  $('sO1').innerHTML=`<div class="eyebrow">${!puede?'Con estos datos':touched?'Puedes comprar una vivienda de hasta':'Ejemplo: se puede comprar hasta'}</div>
     ${puede?`<button class="s-big num" data-x="max">${eur(mx)}</button>`:`<div class="s-big" style="font-size:28px">todavía no te llega para comprar</div>`}
-    <div class="pills"><button class="s-sem ${semV}" data-x="sEsf"><i></i>${semT}</button><button class="pill neutral" data-x="max">Te frenan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>${touched?'':`<button class="pill warn" data-act="sEj">Datos de ejemplo: pon los tuyos</button>`}</div>${icoH}`;
+    <div class="pills"><button class="s-sem ${semV}" data-x="sEsf"><i></i>${semT}</button><button class="pill neutral" data-x="max">Te frenan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>${touched?'':`<button class="pill warn s-ejp" data-act="sEj">Datos de ejemplo: pon los tuyos</button>`}</div>`;
+  $('sIco').innerHTML=icoH;
   $('sLinks').innerHTML=`<button class="chip" data-x="ayudas">Ayudas para comprar</button><button class="chip" data-x="pasos">Pasos y papeles</button>`;
   $('sO2').hidden=!puede;
   $('sO2').innerHTML=puede?`<button data-x="sCuota"><span>Pagarías al mes</span><b>${eur(cu)}</b></button>
-      <button data-x="sNeed"><span>Necesitas tener ahorrado<small>entrada, impuestos, gastos${S.a.colchon>0?` y ${eur(S.a.colchon)} de colchón`:''}</small></span><b>${eur(need)}</b></button>
-      <button data-x="sItp"><span>Impuestos de la compra<small class="${tx.st}">${tx.lab}${tx.extra?' · '+tx.extra:''}</small></span><b>${eur(cm.imp)}</b></button>
-      <button data-x="sEsf"><span>Parte de lo que entra en casa</span><b style="color:var(--${sem==='good'?'good':sem==='warn'?'warn':'bad'})">${isFinite(esf)?pct(esf,0):'—'}</b></button>`:'';
+      <button data-x="sEsf"><span>Parte de lo que entra en casa</span><b style="color:var(--${sem==='good'?'good':sem==='warn'?'warn':'bad'})">${isFinite(esf)?pct(esf,0):'—'}</b></button>
+      <button data-x="sNeed"><span>Necesitas tener ahorrado<small>${S.a.colchon>0?`con ${eur(S.a.colchon)} de colchón`:'sin colchón'}</small></span><b>${eur(need)}</b></button>
+      <button data-x="sItp"><span>Impuestos de la compra<small class="${tx.st}">${tx.lab}</small></span><b>${eur(cm.imp)}${tx.extra?`<small class="${tx.st}">${tx.extra}</small>`:''}</b></button>`:'';
   X.sItp=()=>sItp(mx,'sItp');X.sItpCasa=()=>sItp(R.P,'sItpCasa');
   $('sCasaV').innerHTML=tieneCasa?`<button class="s-verd ${aj.ok?(ojo?'warn':'good'):'bad'}" data-x="sMiras"><span><b>La de ${eur(R.P)}</b> ${aj.ok?(ojo?'te llega por números':'te llega'):`no te llega: te faltan ${eur(aj.falta)} de ahorros`}</span><small>${aj.ok?`${ojo?`<i class="warn">Ojo: ${ctrT}</i> · `:''}Pagarías ${eur(aj.cuota)} al mes${aj.mas?` poniendo ${eur(aj.ent)} de entrada`:''} · <i class="${txC.st}">${txC.lab}: ${eur(R.c.imp)}</i>`:R.falta>0?`Necesitas ${eur(aj.need)} ahorrados y tienes ${eur(S.a.ahorros)}`:`Con lo que entra en casa el banco te presta hasta ${eur(aj.hip)}: el resto lo pones tú`}</small></button>`:'';
   X.sCuota=()=>modal('Lo que pagarías al mes',`<div class="steps">${step('Vivienda',eur(mx))}${step('− Entrada',eur(entM))}${step('Te presta el banco',eur(hip)+(mx>0?' · '+pct(hip/mx*100,0):''))}${step('Interés',pct(S.v.tin)+' al año')}${step('Plazo',anos(R.plazoB))}${step('Cuota al mes',eur2(cu),'tot')}</div><p class="note">Es una cuota fija de referencia. La de verdad depende del banco: mira lo que ofrecen hoy.</p>`);
@@ -2455,18 +2463,18 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
     if(!b)return `<div class="s-card none"><span class="tp ${t}" title="${d}">${n}</span><small>Ninguna encaja con tus datos</small></div>`;
     const x=b.x,c=b.c,np=c.nProd!=null?c.nProd:vkOf(x).length,per=x.anos>1?`los ${String(x.anos).replace('.',',')} primeros años`:'el primer año';
     return `<button class="s-card" data-mdet="${b.i}" title="${d}"><span class="sc-h"><span class="tp ${t}">${n}</span><b>${esc(x.b)}</b></span>
-      <span class="sq">${eur(c.cuota)}<small> al mes</small></span><span class="sc-2">${c.cuota2?`→ ${eur(c.cuota2)} desde el año ${c.desde}`:t==='fija'?'no cambia':'después, parecida'}</span>
-      <small>Interés ${pct(c.tin)}${t==='fija'?' fijo':' '+per}${c.sinBon?' · sin bonificar':''}</small>
-      <small>${c.years<sBk.pz?`<i class="pz-w">a ${anos(c.years)}, su máximo</i> · `:''}${np?`${np} producto${np>1?'s':''}`:'sin productos'} · TAE ${esc(x.tae)}</small></button>`};
-  $('sBancos').innerHTML=`<h2>Lo que ofrecen hoy los bancos</h2>`+(rows.length?`<p class="s-bksub">Para una hipoteca de <b class="num">${eur(bk.H)}</b> a ${anos(sBk.pz)} (${tieneCasa?`la casa de ${eur(R.P).replace(' €','\u00a0€')}`:`tu precio máximo, ${eur(mx).replace(' €','\u00a0€')}`}). Después, con el Euríbor ${eurHoy?'de hoy':'al '+pct(S.h.eur)}.</p>
+      <span class="sq">${eur(c.cuota)}<small> al mes${c.years<sBk.pz?`<i class="sc-ps">, a ${anos(c.years)}</i>`:''}</small></span><span class="sc-2">${c.cuota2?`→ ${eur(c.cuota2)} desde el año ${c.desde}`:t==='fija'?'no cambia':'después, parecida'}</span>
+      <small class="sc-i"><span class="sc-w">Interés </span>${pct(c.tin)}${t==='fija'?' fijo':' '+per}${c.sinBon?' · sin bonificar':''}</small>${c.years<sBk.pz?`<small class="sc-p">a ${anos(c.years)}, su máximo</small>`:''}
+      <small class="sc-d">${np?`${np} producto${np>1?'s':''}`:'sin productos'} · TAE ${esc(x.tae)}</small></button>`};
+  $('sBancos').innerHTML=(rows.length?`<div class="s-bkh"><h2>Lo que ofrecen hoy los bancos</h2><p class="s-bksub">Para una hipoteca de <b class="num">${eur(bk.H).replace(' €','\u00a0€')}</b> a ${anos(sBk.pz)}<span class="s-bk2"> (${tieneCasa?`la casa de ${eur(R.P).replace(' €','\u00a0€')}`:`tu precio máximo, ${eur(mx).replace(' €','\u00a0€')}`}). Después, con el Euríbor ${eurHoy?'de hoy':'al '+pct(S.h.eur)}.</span></p></div>
     <div class="s-cards">${tipos.map(card).join('')}</div>${masDel80?`<p class="s-bknote">Estas ofertas financian hasta el 80 %. Para más, pregunta por el aval ICO en un banco adherido.</p>`:''}`
-    :`<p class="s-bksub">${bk?'Ninguna oferta pública encaja con estos datos.':tieneCasa||puede?'Con estos datos no hay hipoteca que comparar.':'Cuando te llegue para comprar, aquí verás la mejor hipoteca de cada tipo.'}</p>`)+
+    :`<h2>Lo que ofrecen hoy los bancos</h2><p class="s-bksub">${bk?'Ninguna oferta pública encaja con estos datos.':tieneCasa||puede?'Con estos datos no hay hipoteca que comparar.':'Cuando te llegue para comprar, aquí verás la mejor hipoteca de cada tipo.'}</p>`)+
     `<div class="ofaviso" style="margin:10px 0 0"><span><b>Ofertas públicas y genéricas.</b> Con tu perfil se pueden mejorar, negociando o con un bróker.</span><a class="lnkbtn" data-cta="estandar-bancos" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Pide que te mejoren la tuya →</a></div>`;
   // comprar o alquilar, con una pregunta
   // «unos» va redondeado (a miles desde 10.000 €, a cientos por debajo); al lado, el caso prudente: la vivienda no sube de precio
   const R3=LAST.r3,R0=R3&&R3.R0,unos=v=>{const a=Math.abs(v);return eur(a>=10000?Math.round(a/1000)*1000:Math.round(a/100)*100)},igual=v=>Math.abs(v)<50;
-  $('sAlqV').innerHTML=R3&&tieneCasa?`<button class="s-verd ${R3.dif>=0?'good':'warn'}" data-x="fin3"><span>Si vives ${anos(R3.H)} en ella, ${igual(R3.dif)?'<b>comprar y alquilar salen parecido</b>':`<b>te compensa ${R3.dif>=0?'comprar':'alquilar'}</b>: unos ${unos(R3.dif)} más`}</span><small>${R3.be?`Comprar gana desde el año ${R3.be}`:'Comprar no llega a ganar en ese plazo'} · si la vivienda sube un ${pctS(S.r.reval)} al año</small></button>
-    ${R0?`<button class="s-prud" data-x="eq3"><span>Si la vivienda no sube de precio</span><b>${igual(R0.dif)?'salen parecido':`${R0.dif>=0?'comprar':'alquilar'}: unos ${unos(R0.dif)} más`}</b></button>`:''}`:'<p class="hint" style="margin:8px 0 0">Pon una casa en mente para compararlo.</p>';
+  $('sAlqV').innerHTML=R3&&tieneCasa?`<button class="s-verd ${R3.dif>=0?'good':'warn'}" data-x="fin3"><span>Si vives ${anos(R3.H)} en ella, ${igual(R3.dif)?'<b>comprar y alquilar salen parecido</b>':`<b>te compensa ${R3.dif>=0?'comprar':'alquilar'}</b>: unos ${unos(R3.dif)} más`}</span><small>Si la vivienda sube un ${pctS(S.r.reval)} al año · ${R3.be?`gana desde el año ${R3.be}`:'comprar no llega a ganar'}</small></button>
+    ${R0?`<button class="s-prud" data-x="eq3"><span>Si no sube de precio</span><b>${igual(R0.dif)?'salen parecido':`${R0.dif>=0?'comprar':'alquilar'}: unos ${unos(R0.dif)} más`}</b></button>`:''}`:'<p class="hint" style="margin:8px 0 0">Pon una casa en mente para compararlo.</p>';
 }
 document.addEventListener('click',e=>{const d=e.target.closest('[data-mdet]');if(d){sCon(()=>mDetail(+d.dataset.mdet));track('estandar-oferta',OFF[+d.dataset.mdet].t)}});
 
