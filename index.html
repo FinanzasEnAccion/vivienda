@@ -868,7 +868,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 
   <aside class="broker" aria-label="Ayuda de un bróker">
     <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></div>
-    <div class="btxt"><h3 id="brokerT">¿Quieres ayuda del bróker que me ayudó a mí?</h3><button type="button" class="ctag" id="casoTag" data-x="caso" title="Pincha para ver por qué" hidden></button><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button></p></div>
+    <div class="btxt"><h3 id="brokerT">¿Quieres ayuda del bróker que me ayudó a mí?</h3><button type="button" class="ctag" id="casoTag" data-x="caso" title="Pincha para ver por qué" hidden></button><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button><span id="brokerQuien" hidden> · <button type="button" class="lnkbtn" data-x="quien">Quién es José</button></span></p></div>
     <a class="cta" id="cta" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Primer contacto gratis con José <span aria-hidden="true">→</span></a>
     <a class="cta" id="ctaAlt" href="#" role="button" data-x="caso" hidden>Ver qué te acerca <span aria-hidden="true">→</span></a>
   </aside>
@@ -2246,7 +2246,7 @@ function renderBroker(){
   else bt.textContent=txt+' Es quien llevó mi hipoteca. El primer contacto es gratis: le cuentas tu caso y te dice qué puedes conseguir.';
   $('brokerT').textContent=k==='lejos'?'Todavía no te llega para ir al banco':'¿Quieres ayuda del bróker que me ayudó a mí?';
   const tag=$('casoTag');tag.hidden=!c;if(c){tag.className='ctag '+k;tag.innerHTML=`<i></i>Tu caso: ${CASO_N[k]}`}
-  $('cta').hidden=k==='lejos';$('ctaAlt').hidden=k!=='lejos';
+  $('cta').hidden=k==='lejos';$('ctaAlt').hidden=k!=='lejos';$('brokerQuien').hidden=!brokerHay();
 }
 /* Resultado de «¿Cuánto puedo comprar?» siempre al día para el banner, el resumen y la ficha, sin depender de qué pestaña se haya pintado. Solo se recalcula si cambian tus datos. */
 function casoR(){const k=JSON.stringify([S.v,S.a]);if(casoR.k!==k){casoR.k=k;casoR.c=null;casoR.r=calc1()}return casoR.r}
@@ -2344,6 +2344,17 @@ $('mBody').addEventListener('click',e=>{if(e.target.closest('[data-act="usemax"]
    No se usa window.open (dentro de Claude no es fiable): se cambia el href y navega el propio enlace.
    La analítica solo recibe qué se eligió: nunca el resumen ni importes. */
 const JOSE_URL='https://cal.com/jose-perales-asesor/9zfdea',JOSE_KEY='fea-jose',JOSE_ORIGEN='Vengo de Finanzas en Acción.';
+/* Quién es José y el acuerdo de referidos. Solo Alejandro puede dar estos datos: mientras estén vacíos, no se enseña nada.
+   En cuanto haya alguno aparece «Quién es José» en el banner y en la ventana de la reserva, con lo que esté relleno.
+     nombre:     nombre y apellidos del bróker
+     empresa:    empresa o marca con la que trabaja
+     registro:   número de inscripción en el registro del Banco de España como intermediario de crédito inmobiliario
+     honorarios: cuánto cobra y quién lo paga (por ejemplo, si cobra del banco o del cliente, y cuándo)
+     acuerdo:    la frase del acuerdo de referidos (por ejemplo: «Si firmas con él, Finanzas en Acción cobra una comisión; a ti no te cuesta más») */
+const BROKER_INFO={nombre:'',empresa:'',registro:'',honorarios:'',acuerdo:''};
+const brokerHay=()=>Object.keys(BROKER_INFO).some(k=>String(BROKER_INFO[k]||'').trim());
+X.quien=()=>{const B=BROKER_INFO,f=(l,v)=>String(v||'').trim()?step(l,esc(v)):'';
+  modal(B.nombre?`Quién es ${B.nombre}`:'Quién es José',`<div class="steps">${f('Nombre',B.nombre)}${f('Empresa',B.empresa)}${f('Registro del Banco de España (intermediario de crédito inmobiliario)',B.registro)}${f('Honorarios',B.honorarios)}</div>${String(B.acuerdo||'').trim()?`<p class="note">${esc(B.acuerdo)}</p>`:''}`);track('quien-es')};
 let JOSE=null;try{const v=localStorage.getItem(JOSE_KEY);JOSE=v==='si'||v==='no'?v:null}catch(e){}
 const josePon=v=>{JOSE=v==='si'||v==='no'?v:null;try{if(JOSE)localStorage.setItem(JOSE_KEY,JOSE);else localStorage.removeItem(JOSE_KEY)}catch(e){}};
 const CONTRATO={indefinido:'contrato indefinido',temporal:'contrato temporal',autonomo:'autónomo',funcionario:'funcionario'};
@@ -2357,7 +2368,9 @@ function joseCtx(){
   if(t==='mihipo')return hipo?'hipo':compra?'compra':null;
   if(enInv)return inv||compra?'inv':hipo?'hipo':null;
   return compra?'compra':hipo?'hipo':inv?'inv':null}
-const joseLugar=()=>[(S.bro.muni||'').trim(),S.v.prov&&S.v.prov!==S.v.ccaa?S.v.prov:'',S.v.ccaa].filter(Boolean).join(', ');
+/* La provincia solo cuenta si es de la comunidad elegida (la tabla PROV existe cuando están los impuestos por provincia) */
+const provOk=()=>{const L=typeof PROV!=='undefined'&&PROV[S.v.ccaa]||null,p=S.v.prov||'';return L&&!L.includes(p)?'':p};
+const joseLugar=()=>[(S.bro.muni||'').trim(),provOk()!==S.v.ccaa?provOk():'',S.v.ccaa].filter(Boolean).join(', ');
 /* Texto exacto que se propone en las notas de la reserva: con=true, el resumen de tu caso; con=false, solo de dónde vienes */
 function joseTxt(con){
   const c=con?joseCtx():null;if(!c)return JOSE_ORIGEN;
@@ -2376,13 +2389,14 @@ function joseHref(con){const q=['notes='+encodeURIComponent(joseTxt(con))];
   return JOSE_URL+'?'+q.join('&')}
 function joseModal(){
   const hay=!!joseCtx(),{n,e}=joseQuien(),caja=t=>`<div class="formula" style="white-space:pre-wrap;word-break:break-word">${esc(t)}</div>`;
+  const quien=brokerHay()?`<p class="hint" style="margin-top:10px">${String(BROKER_INFO.acuerdo||'').trim()?esc(BROKER_INFO.acuerdo)+' ':''}<button type="button" class="lnkbtn" data-x="quien">Quién es José</button></p>`:'';
   const ahora=JOSE?`<p class="hint" style="margin-top:10px">Ahora ${JOSE==='si'?'tu caso va con la reserva':'reservas sin datos'}. <button type="button" class="lnkbtn" data-joseset="${JOSE==='si'?'no':'si'}">${JOSE==='si'?'Dejar de enviarlo':'Enviar mi caso'}</button></p>`:'<p class="hint" style="margin-top:10px">Recuerdo lo que elijas en este navegador. Lo cambias cuando quieras en «Qué recibe José».</p>';
   modal('Lo que recibe José con tu reserva',hay?`<p>Esto se escribe en las notas de la reserva. Lo ves allí y lo puedes cambiar antes de confirmar.</p>${caja(joseTxt(true))}
     ${n||e?`<div class="steps">${n?step('Nombre',esc(n)):''}${e?step('Correo',esc(e)):''}</div>`:''}
     <div class="am-bar" style="margin-top:12px"><a class="btn solid" data-jose="si" href="${esc(joseHref(true))}" target="_blank" rel="noopener">Enviar mi caso con la reserva</a><a class="btn" data-jose="no" href="${esc(joseHref(false))}" target="_blank" rel="noopener">Reservar sin datos</a></div>
-    <p class="note">Sin datos, la reserva solo dice «${JOSE_ORIGEN}»</p>${ahora}`
+    <p class="note">Sin datos, la reserva solo dice «${JOSE_ORIGEN}»</p>${ahora}${quien}`
    :`<p>Todavía no has puesto tus datos, así que la reserva solo dirá de dónde vienes:</p>${caja(JOSE_ORIGEN)}
-    <div class="am-bar" style="margin-top:12px"><a class="btn solid" data-jose="${JOSE||'no'}" href="${esc(joseHref(false))}" target="_blank" rel="noopener">Reservar con José →</a></div>${JOSE?ahora:''}`)}
+    <div class="am-bar" style="margin-top:12px"><a class="btn solid" data-jose="${JOSE||'no'}" href="${esc(joseHref(false))}" target="_blank" rel="noopener">Reservar con José →</a></div>${JOSE?ahora:''}${quien}`)}
 X.jose=()=>{joseModal();track('jose-que-recibe')};
 const esJose=a=>!!a&&/^https:\/\/cal\.com\//.test(a.getAttribute('href')||'');
 const joseA=e=>{const a=e.target&&e.target.closest?e.target.closest('a[href]'):null;return esJose(a)?a:null};
@@ -2390,9 +2404,10 @@ const joseA=e=>{const a=e.target&&e.target.closest?e.target.closest('a[href]'):n
 function josePrepara(a){const con=(a.dataset.jose||JOSE)==='si'&&!!joseCtx();a.href=joseHref(con);return con}
 ['pointerdown','auxclick','contextmenu'].forEach(ev=>document.addEventListener(ev,e=>{const a=joseA(e);if(a)josePrepara(a)},true));
 document.addEventListener('click',e=>{const a=joseA(e);if(!a)return;
-  if(a.dataset.jose){if(joseCtx())josePon(a.dataset.jose);const con=josePrepara(a);ov.hidden=true;track('reserva',con?'con-caso':'sin-datos');return} // elegido en la ventana: navega el propio enlace
+  const ev=con=>{const c=casoVer();track('reserva',(con?'con-caso':'sin-datos')+(c?'/'+c.k:''))}; // a la analítica solo va qué se eligió y la etiqueta: nunca el resumen
+  if(a.dataset.jose){if(joseCtx())josePon(a.dataset.jose);ev(josePrepara(a));ov.hidden=true;return} // elegido en la ventana: navega el propio enlace
   if(!JOSE&&joseCtx()){e.preventDefault();joseModal();return} // primera vez: se enseña lo que se enviaría y se elige
-  track('reserva',josePrepara(a)?'con-caso':'sin-datos')},true);
+  ev(josePrepara(a))},true);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-joseset]');if(!b)return;josePon(b.dataset.joseset);joseModal();toast(JOSE==='si'?'Tu caso irá con la reserva':'Reservarás sin datos')});
 
 /* ---------- enlace que reproduce el caso ----------
@@ -2585,11 +2600,20 @@ $('mBody').addEventListener('click',e=>{
 
 /* ---------- analítica sin cookies (GoatCounter) ----------
    No se envía ningún importe ni dato personal: solo qué se usa (pestaña, botón, contexto genérico).
-   Se activa poniendo el código del sitio en GC_CODE. Fuera de la web propia (en Claude) no hace nada. */
+   PARA ACTIVARLA: pon en GC_CODE el código del sitio de GoatCounter (lo que va delante de «.goatcounter.com»). No hay que tocar nada más.
+   Con GC_CODE vacío no se carga nada de terceros. Fuera de la web propia (en Claude) tampoco hace nada.
+   Se cuenta la visita (la dirección sin el fragmento «#c=…» de un caso compartido) y estos eventos, con la forma «evento/nombre/contexto»:
+   pestana, nivel, modo, vista, pro, uso, financiacion, aval-ico, mi-hipoteca-tipo, accion, estandar-oferta, oferta-detalle, oferta-al-comparador,
+   cta-jose (qué enlace a José y desde dónde), reserva (con-caso o sin-datos, y la etiqueta del caso), jose-que-recibe, quien-es,
+   caso-ver, caso-enlace, caso-abierto, caso-guardar, caso-cargar, casos-abrir, copiar-resumen, reiniciar, metodo,
+   pdf, informe-broker, ficha-compartir, csv-amortizacion, csv-invertir, compartir-abrir, compartir, compartir-descarga, invertir-fondo. */
 const GC_CODE='';
 const GCQ=[];
-function track(name,ctx){try{if(!GC_CODE||window.claude)return;const ev={path:'evento/'+name+(ctx?'/'+String(ctx).toLowerCase().replace(/[^a-z0-9áéíóúñü-]+/g,'-'):''),title:name,event:true};
-  if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count(ev);else GCQ.push(ev)}catch(e){}}
+function track(name,ctx){try{if(!GC_CODE||window.claude)return;
+  // El contexto se reduce a letras, cifras sueltas y guiones. Se quita cualquier número de 4 cifras o más: aunque alguien pase un importe por error, no sale de aquí.
+  const c=ctx==null||ctx===''?'':'/'+String(ctx).toLowerCase().replace(/(\d)[.,\s](?=\d)/g,'$1').replace(/\d{4,}/g,'').replace(/[^a-z0-9áéíóúñü-]+/g,'-').slice(0,60);
+  const ev={path:'evento/'+name+c,title:name,event:true};
+  if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count(ev);else if(GCQ.length<50)GCQ.push(ev)}catch(e){}}
 if(GC_CODE&&!window.claude&&/^https?:$/.test(location.protocol)){const s=document.createElement('script');s.async=true;s.src='https://gc.zgo.at/count.js';s.dataset.goatcounter=`https://${GC_CODE}.goatcounter.com/count`;
   s.onload=()=>{const t=setInterval(()=>{if(window.goatcounter&&window.goatcounter.count){clearInterval(t);GCQ.splice(0).forEach(ev=>window.goatcounter.count(ev))}},300);setTimeout(()=>clearInterval(t),8000)};document.head.appendChild(s)}
 /* contexto genérico del clic en el bróker, sin importes */
@@ -2600,6 +2624,19 @@ function ctaCtx(){const t=S.tab;
   if(t==='mihipo'&&LAST.r6)return t+'/'+(LAST.r6.vari?(LAST.r6.dq>0.5?'sube':'no-sube'):'fija');
   return t}
 $('cta').addEventListener('click',()=>track('cta-jose',ctaCtx()));
+/* Clics que importan y que su propio código no mide: se cuentan aquí, sin tocar cada manejador. Solo el botón y un contexto genérico (tipo de oferta, banco, pestaña). */
+document.addEventListener('click',e=>{const t=e.target,c=q=>t.closest?t.closest(q):null;let x;
+  if((x=c('[data-madd]'))){const o=OFF[+x.dataset.madd];track('oferta-al-comparador',o?o.b+'-'+o.t:'');return}
+  if((x=c('tr[data-m]'))){if(!c('a')){const o=OFF[+x.dataset.m];track('oferta-detalle',o?o.b+'-'+o.t:'')}return}
+  if(c('#csSave')){track('caso-guardar');return}
+  if(c('[data-csload]')){track('caso-cargar');return}
+  if(c('#btnCasos')){track('casos-abrir');return}
+  if(c('#btnCopy')||c('#csCopy')){track('copiar-resumen',S.tab);return}
+  if(c('#btnReset')){track('reiniciar');return}
+  if(c('#btnMode')){track('vista',document.documentElement.classList.contains('m')?'web':'movil');return}
+  if(c('[data-fcsv]')){track('csv-invertir');return}
+  if((x=c('[data-sub]'))&&x.dataset.sub.slice(0,4)==='pro:'){track('pro',x.dataset.sub.slice(4));return}
+  if((x=c('[data-act]'))&&!c('.offer')&&['usemax','tinBest','eurOf','plazoB','icoOn','rebajaOn','rebajaTog'].includes(x.dataset.act))track('accion',x.dataset.act)},true);
 
 /* ---------- guardar ficheros: en Claude con su permiso de descargas, en la web con un enlace ---------- */
 const DLP=(async()=>{let dl=null;try{dl=await (window.claude&&window.claude.use?window.claude.use('downloads'):null)}catch(e){}
@@ -2671,6 +2708,7 @@ X.metodo=()=>{const L=(u,t)=>`<a href="${u}" target="_blank" rel="noopener">${t}
    ['IVA y AJD','Obra nueva: IVA 10 % (IGIC 7 % en Canarias, IPSI 4 % en Ceuta y Melilla) más el AJD general de cada comunidad.','Normativa autonómica (fuente secundaria: GuíaFiscal)','2026'],
    ['Aval ICO','35 años o menos, primera vivienda, patrimonio hasta 150.000 €, aval del 20 % (25 % con calificación D o mejor).',L('https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-14404','BOE')+' · '+L('https://www.ico.es/en/linea-avales-hipoteca-primera-vivienda','ICO'),'Adenda de 23/06/2026'],
    ['Lo que mira el banco','Cuotas hasta el 35 % de los ingresos netos (40 % como mucho), 900 € al mes por titular, terminar antes de los 75 y prueba con el tipo 2 puntos más alto.','Criterios habituales de los bancos (orientativo)','—'],
+   ['Tu caso: viable, justo o lejos',`Viable: te llega con lo habitual. Justo: te llega con aval ICO, con más financiación o con cuotas de hasta el ${CASO_ESF} %; te falta menos del ${CASO_FALTA_PCT} % del precio o lo reúnes en ${CASO_MESES} meses o menos; o tu contrato es temporal o eres autónomo. Lejos: el resto.`,'Criterio propio (orientativo)','—'],
    ['IRPF del ahorro','19 % hasta 6.000 €, 21 % hasta 50.000 €, 23 % hasta 200.000 €, 27 % hasta 300.000 € y 30 % por encima.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764','Ley del IRPF'),'2026'],
    ['Reducción por alquilar','50 %, 60 %, 70 % o 90 % del rendimiento neto positivo según el contrato.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764','Art. 23.2 de la Ley del IRPF')+' · '+L('https://www.boe.es/buscar/act.php?id=BOE-A-2023-12203','Ley 12/2023'),'Contratos desde 26/05/2023'],
    ['Plusvalía municipal','Estimación prudente con el tipo máximo (30 %) sobre la parte de suelo de la subida.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2004-4214','Ley de Haciendas Locales'),'—'],
