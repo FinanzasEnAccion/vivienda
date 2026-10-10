@@ -1908,6 +1908,8 @@ const VK_COSTE={
 /* los supuestos, en una frase: van en la definición del coste comparado (el «?» de la tabla) y sirven para «Cómo lo calculo» */
 const vkSupTxt=()=>Object.values(VK_COSTE).map(k=>`${k.n.toLowerCase()}, ${eur(k.c)}${k.m?` en el banco y ${eur(k.m)} fuera`:''}${k.s?` (y sube un ${pctS(k.s)} más al año)`:''}`).join('; ');
 DEF.comparado[1]+=` Precios supuestos en «Bancos hoy», al año: ${vkSupTxt()}.`;
+/* lista de productos en una frase: el primero como viene y los demás en minúscula (menos las marcas) */
+const vkLista=L=>L.map((n,k)=>k&&!/^Bizum/.test(n)?n[0].toLowerCase()+n.slice(1):n);
 /* una vinculación, como producto con su precio supuesto */
 const vkCoste=v=>{const k=VK_COSTE[v.k];return {k:v.k,n:k?(v.k==='pension'&&v.x?`Plan ${v.x} (comisiones)`:k.n):VK_L[v.k]+(v.x?' '+v.x:''),c:k?k.c:0,m:k?k.m:0,s:k?k.s:0}};
 /* las que el banco exige para el tipo bonificado (las opcionales no cuentan) y si la oferta no dice cuáles son */
@@ -2066,7 +2068,7 @@ function mCoste(i){const x=OFF[i];if(!x||hipoteca()<=0)return;const c=mcalc(x),a
   if(c.sinBon)h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin bonificar',pct(c.ef),'tot')}${taeB}</div><p class="note">No llegas a la nómina que pide para bonificar (${eur(c.g.min)} al mes): va con el tipo sin bonificar y sin sus productos.</p>`;
   else if(c.vkNd)h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin productos',pct(c.efSin))}${taeB}</div><p class="note">La oferta no dice qué productos exige, así que su coste comparado no se puede calcular.${c.efTae?' Va ordenada por la TAE del banco, que ya lleva el precio de sus productos.':''}</p>`;
   else h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin productos',pct(c.efSin))}
-      ${(g=>g.length?step(esc(yList(g.map(p=>p.n)))+': no cuesta'+(g.length>1?'n':'')+' dinero','0 €'):'')(c.vk.filter(p=>!p.c))}
+      ${(g=>g.length?step(esc(yList(vkLista(g.map(p=>p.n))))+': no cuesta'+(g.length>1?'n':'')+' dinero','0 €'):'')(c.vk.filter(p=>!p.c))}
       ${c.vk.filter(p=>p.c).map(p=>step(esc(p.n)+`: ${eur(p.c)} en el banco${p.m?`, ${eur(p.m)} fuera`:'; fuera no lo contratarías'}`,'+'+eur(p.extra)+'/año')).join('')}
       ${c.vk.length?step('Pagas de más el primer año',eur(c.extra)):step('No exige productos','0 €')}${c.vinc>0?step(`En ${anos(c.years)}, con las subidas de precio`,eur(c.vinc)):''}
       ${step('Coste comparado',pct(c.ef),'tot')}${taeB}</div>
@@ -2622,7 +2624,7 @@ function buildPdf(){
         fila('Tu cuota al mes',({c})=>eur(c.cuota)+(c.cuota2?`; ${eur(c.cuota2)} desde el año ${c.desde}`:'')+(c.years<S.v.plazo?` (a ${c.years} años, su máximo)`:'')),
         fila('Coste comparado',({c})=>c.vkNd&&!c.sinBon?'sin dato':pct(c.ef)),
         fila('TAE del banco',({x})=>x.tae||'sin dato'),
-        fila('Productos que exige',({x,c})=>c.vkNd?'sin dato':c.vk.length?sinSig(c.vk.map(p=>sinSup(p.n).replace(' (comisiones)','')).join(', ')):'Ninguno'),
+        fila('Productos que exige',({x,c})=>c.vkNd?'sin dato':c.vk.length?sinSig(vkLista(c.vk.map(p=>p.n.replace(' (comisiones)',''))).join(', ')):'Ninguno'),
         fila('Dato del',({x})=>(sinFecha(x.d)?'sin fecha':x.d)+(hostOf(x)?` (${hostOf(x)})`:''))
       ],{cols:Object.assign({0:{textColor:MUT,cellWidth:34}},...top.map((_,k)=>({[k+1]:{cellWidth:(CW-34)/top.length}}))),extra:{didParseCell:d=>{if(d.section==='body'&&d.column.index>0&&(d.row.index===2||d.row.index===3))d.cell.styles.fontStyle='bold'}}});
       P('Ofertas públicas y genéricas para un perfil estándar: confírmalas con el banco. Coste comparado: el tipo anual de todo lo que pagas (cuotas, apertura y lo que los productos exigidos cuestan de más que fuera del banco, con precios supuestos). La TAE del banco es la de su ejemplo, con el Euríbor del mes en que la publicó.',8.2);
