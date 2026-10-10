@@ -1985,22 +1985,24 @@ function mcalc0(x){
   const tb=tinPara(x,years),bonT=bonOf(x),nd=vkNd(x);
   const vk=vkReq(x).map(v=>{const p=vkCoste(v);p.extra=p.c-p.m;return p});
   // si no llegas a la nómina que pide para bonificar, se calcula con el tipo sin bonificar y sin sus productos
+  // (solo si la oferta dice cuánto sube sin bonificar: si no lo dice, el tipo que se usa sigue exigiéndolos)
+  const sinP=sinBon&&bonT>0;
   const o={tipo:x.t,tin:sinBon?tb+bonT:tb,anos:x.t==='fija'?1:x.anos,dif:sinBon?(x.difS||x.dif||0):(x.dif||0),apertura:apOf(x),
-    prods:sinBon?[]:vk.filter(p=>p.c>0).map(p=>({n:p.n,b:0,c:p.c,s:p.s,m:p.m,hasta:years,on:true}))};
+    prods:sinP?[]:vk.filter(p=>p.c>0).map(p=>({n:p.n,b:0,c:p.c,s:p.s,m:p.m,hasta:years,on:true}))};
   const r=sim(o,o.prods.map(()=>years));
   const t2=r.tramos.find((t,k)=>k>0&&Math.abs(t.cuota-r.cuota)>=1);
   const efV=tae(r.P,r.ap,r.pays,r.years);S.v.plazo=keep;
   const base=Math.min(S.v.precio,tasa()),ltvKo=base>0&&r.P/base*100>(x.ltv||80)+0.5;
-  const tN=taeNum(x),efTae=nd&&!sinBon&&tN!=null&&tN>efV;
+  const tN=taeNum(x),efTae=nd&&!sinP&&tN!=null&&tN>efV;
   let eS=o.prods.length?null:efV;   // efSin solo se enseña dentro del clic: se calcula cuando se pide
   return {years,tin:o.tin,cuota:r.cuota,cuota2:t2?t2.cuota:null,desde:t2?Math.ceil(t2.desde/12):null,int:r.int,ef:efTae?tN:efV,get efSin(){return eS==null?(eS=tae(r.P,r.ap,r.pays)):eS},efTae,
-    extra:sinBon?0:vk.reduce((s,p)=>s+p.extra,0),vinc:r.vinc,vk,nProd:vk.length,vkNd:nd,r,sinBon,noAcc,ltvKo,g,ap:r.ap};
+    extra:sinP?0:vk.reduce((s,p)=>s+p.extra,0),vinc:r.vinc,vk,nProd:vk.length,vkNd:nd,r,sinBon,sinP,noAcc,ltvKo,g,ap:r.ap};
 }
 /* fuente y fecha de una oferta; si falta alguna, se dice */
 const srcHtml=x=>{const nf_=sinFecha(x.d),old=nf_||diasDe(x.d)>30,t=`${hostOf(x)||'sin fuente'} · ${nf_?'sin fecha':haceTxt(x.d)}`;
   return x.f?`<a class="src${old?' viejo':''}" href="${esc(x.f)}" target="_blank" rel="noopener" title="${nf_?'Dato sin fecha':'Dato del '+esc(x.d)}">${esc(t)}</a>`:`<span class="src${old?' viejo':''}">${esc(t)}</span>`};
 /* celda del coste comparado: se pincha y enseña la cuenta producto a producto */
-const ccHtml=(i,c)=>`<button class="ccb" data-mcc="${i}" title="${c.vkNd&&!c.sinBon?'La oferta no dice qué productos exige'+(c.efTae?': va ordenada por la TAE del banco':''):'Ver la cuenta, producto a producto'}">${c.vkNd&&!c.sinBon?`<span class="sindato">sin dato</span>`:`<b>${pct(c.ef)}</b>`}${c.extra>0?`<span class="pr">productos: +${eur(c.extra)}/año</span>`:''}${c.ap>0?`<span class="pr">apertura: ${eur(c.ap)}</span>`:''}</button>`;
+const ccHtml=(i,c)=>`<button class="ccb" data-mcc="${i}" title="${c.vkNd&&!c.sinP?'La oferta no dice qué productos exige'+(c.efTae?': va ordenada por la TAE del banco':''):'Ver la cuenta, producto a producto'}">${c.vkNd&&!c.sinP?`<span class="sindato">sin dato</span>`:`<b>${pct(c.ef)}</b>`}${c.extra>0?`<span class="pr">productos: +${eur(c.extra)}/año</span>`:''}${c.ap>0?`<span class="pr">apertura: ${eur(c.ap)}</span>`:''}</button>`;
 let MF='todas',MLAST=[];
 function render4(){
   const P=hipoteca();
@@ -2050,7 +2052,7 @@ function mDetail(i){const x=OFF[i],c=hipoteca()>0?mcalc(x):null;
       ${step('TAE del banco: la de su ejemplo, con el Euríbor del mes en que la publicó',x.tae?esc(x.tae):'sin dato')}${x.taeS?step('TAE del banco sin bonificar',esc(x.taeS)):''}
       ${step('Financiación máxima · plazo máximo',(x.ltv?x.ltv+' %':'sin dato')+' · '+(x.pz?x.pz+' años':'sin dato'))}
       ${c?step(`Tu cuota (${eur(hipoteca())} a ${anos(c.years)})`,eur2(c.cuota)+(c.cuota2?` → ${eur2(c.cuota2)} desde el año ${c.desde}`:''),'tot'):''}
-      ${c?`<button class="step tot lnk-step" data-mcc="${i}"><span>Coste comparado${c.sinBon?'':c.vkNd?': no dice qué productos exige':c.extra>0?`: con ${eur(c.extra)} al año de más en productos (supuesto)`:': no exige productos de pago'}</span><span>${c.vkNd&&!c.sinBon?'sin dato':pct(c.ef)} ›</span></button>`:''}${c&&c.sinBon?step('Calculada sin bonificar','no llegas a la nómina que pide'):''}${c?step('Intereses totales',eur(c.int)):''}
+      ${c?`<button class="step tot lnk-step" data-mcc="${i}"><span>Coste comparado${c.sinP?'':c.vkNd?': no dice qué productos exige':c.extra>0?`: con ${eur(c.extra)} al año de más en productos (supuesto)`:': no exige productos de pago'}</span><span>${c.vkNd&&!c.sinP?'sin dato':pct(c.ef)} ›</span></button>`:''}${c&&c.sinBon?step('Calculada sin bonificar','no llegas a la nómina que pide'):''}${c?step('Intereses totales',eur(c.int)):''}
     </div>
     <h4>Vinculaciones para el tipo bonificado</h4><div style="margin:6px 0 8px">${vkHtml(x,true)}</div>${x.v?`<p class="hint">${esc(x.v)}</p>`:''}
     <h4>Comisiones</h4><p>${esc(x.c||'No publicadas')}</p>
@@ -2065,7 +2067,7 @@ function mCoste(i){const x=OFF[i];if(!x||hipoteca()<=0)return;const c=mcalc(x),a
   const taeB=step('TAE del banco: la de su ejemplo, con el Euríbor del mes en que la publicó',x.tae?esc(x.tae):'sin dato');
   const pie=`<p class="hint">Para tu hipoteca de ${eur(hipoteca())} a ${anos(c.years)}${x.t==='fija'?'':`, con el Euríbor a ${pct(S.h.eur)} cuando toca revisar`}. Es el mismo coste comparado que da el comparador.</p>`;
   let h;
-  if(c.sinBon)h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin bonificar',pct(c.ef),'tot')}${taeB}</div><p class="note">No llegas a la nómina que pide para bonificar (${eur(c.g.min)} al mes): va con el tipo sin bonificar y sin sus productos.</p>`;
+  if(c.sinP)h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin bonificar',pct(c.ef),'tot')}${taeB}</div><p class="note">No llegas a la nómina que pide para bonificar (${eur(c.g.min)} al mes): va con el tipo sin bonificar y sin sus productos.</p>`;
   else if(c.vkNd)h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin productos',pct(c.efSin))}${taeB}</div><p class="note">La oferta no dice qué productos exige, así que su coste comparado no se puede calcular.${c.efTae?' Va ordenada por la TAE del banco, que ya lleva el precio de sus productos.':''}</p>`;
   else h=`<div class="steps">${step('Tipo anual de cuotas'+ap+', sin productos',pct(c.efSin))}
       ${(g=>g.length?step(esc(yList(vkLista(g.map(p=>p.n))))+': no cuesta'+(g.length>1?'n':'')+' dinero','0 €'):'')(c.vk.filter(p=>!p.c))}
@@ -2077,7 +2079,7 @@ function mCoste(i){const x=OFF[i];if(!x||hipoteca()<=0)return;const c=mcalc(x),a
   modal(`Coste comparado · ${x.b}`,h+pie)}
 /* Lleva una oferta al comparador con un producto por cada vinculación exigida: su precio supuesto (VK_COSTE) y la rebaja repartida a partes iguales
    (los bancos no publican cuánto rebaja cada producto). Así el comparador da desde el principio el mismo coste comparado que la tabla. */
-function mAdd(i){const x=OFF[i];if(!x)return;const tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo)),g=ingOf(x),sinBon=g.falla&&g.tipo==='bonif';
+function mAdd(i){const x=OFF[i];if(!x)return;const tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo)),g=ingOf(x),sinBon=g.falla&&g.tipo==='bonif'&&bonOf(x)>0;
   const req=vkReq(x).map(vkCoste),n=req.length,B=Math.round(bonOf(x)*100),q=n?Math.floor(B/n):0,resto=n?B-q*n:0,r4=v=>Math.round(v*1e4)/1e4;
   const rep=B>0&&n>1,prods=n?req.map((p,j)=>({n:p.n+(p.c>0||rep?'*':''),b:(q+(j<resto?1:0))/100,c:p.c,s:p.s,m:p.m,hasta:S.v.plazo,on:!sinBon})).filter(p=>p.b>0||p.c>0)
     :B>0?[{n:'Vinculaciones del banco',b:B/100,c:0,s:0,m:0,hasta:S.v.plazo,on:!sinBon}]:[];
@@ -2622,7 +2624,7 @@ function buildPdf(){
         fila('Producto',r=>r.x.p||'-'),
         fila('TIN'+(top.some(r=>r.c.sinBon)?'':' bonificado'),({x,c})=>pct(c.tin)+(x.t==='fija'?'':x.t==='mixta'?` ${dv(x.anos)} años`:x.anos>1?` los ${dv(x.anos)} primeros años`:' el primer año')+(x.t==='fija'?'':`; después Euríbor + ${pct(c.sinBon?(x.difS||x.dif):x.dif)}`)+(c.sinBon?' (sin bonificar: no llegas a la nómina que pide)':'')),
         fila('Tu cuota al mes',({c})=>eur(c.cuota)+(c.cuota2?`; ${eur(c.cuota2)} desde el año ${c.desde}`:'')+(c.years<S.v.plazo?` (a ${c.years} años, su máximo)`:'')),
-        fila('Coste comparado',({c})=>c.vkNd&&!c.sinBon?'sin dato':pct(c.ef)),
+        fila('Coste comparado',({c})=>c.vkNd&&!c.sinP?'sin dato':pct(c.ef)),
         fila('TAE del banco',({x})=>x.tae||'sin dato'),
         fila('Productos que exige',({x,c})=>c.vkNd?'sin dato':c.vk.length?sinSig(vkLista(c.vk.map(p=>p.n.replace(' (comisiones)',''))).join(', ')):'Ninguno'),
         fila('Dato del',({x})=>(sinFecha(x.d)?'sin fecha':x.d)+(hostOf(x)?` (${hostOf(x)})`:''))
