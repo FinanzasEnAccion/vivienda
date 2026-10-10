@@ -339,7 +339,7 @@ tr+tr td{border-top:1px solid var(--line)}
 .addc:hover{border-color:var(--accent);color:var(--accent)}
 .toast.largo{border-radius:17px;width:max-content;max-width:min(620px,calc(100vw - 24px));line-height:1.35}
 .mkt .ccb{border:0;background:none;padding:0;font:inherit;color:inherit;text-align:inherit}
-.mkt .nd{color:var(--muted);font-size:12px}
+.mkt .sindato{color:var(--muted);font-size:12px}
 .mkt th .q{margin-left:4px;vertical-align:-2px}
 .mkt .ccb:hover b{color:var(--good);text-decoration:underline}
 @media (max-width:800px){.tblwrap.mkt{overflow-x:auto}}
@@ -369,7 +369,7 @@ tr+tr td{border-top:1px solid var(--line)}
 .vkn::before{content:"· "}
 .vkn::after{content:" productos"}
 .vkn.uno::after{content:" producto"}
-.vk.nd{background:var(--field);color:var(--muted);padding:0 9px;box-shadow:inset 0 0 0 1px var(--line)}
+.vk.sindato{background:var(--field);color:var(--muted);padding:0 9px;box-shadow:inset 0 0 0 1px var(--line)}
 
 .flow{display:grid;gap:8px}
 .frow{display:grid;grid-template-columns:150px minmax(0,1fr) 90px;gap:10px;align-items:center;border:0;background:none;padding:0;text-align:left;width:100%}
@@ -1935,7 +1935,7 @@ function vkLee(x){
   return out;
 }
 function vkHtml(x,full){const L=vkOf(x),nR=L.filter(v=>v.x!=='opcional').length;
-  if(vkNd(x))return `<span class="vk nd" title="La oferta no dice qué productos exige">Vinculaciones: sin dato</span>`;
+  if(vkNd(x))return `<span class="vk sindato" title="La oferta no dice qué productos exige">Vinculaciones: sin dato</span>`;
   if(!L.length)return `<span class="vk none">Sin vinculaciones</span>`;
   return `<span class="vks">${L.map(v=>`<span class="vk" title="${VK_L[v.k]}${v.x?' '+v.x:''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${VK_I[v.k]}</svg>${full||v.k==='nomina'?`<span>${VK_L[v.k]}${v.x?' '+v.x:''}</span>`:''}</span>`).join('')}<span class="vkn${nR===1?' uno':''}">${nR}</span></span>`}
 /* Algunas ofertas cambian el TIN según el plazo: tramos = [[hasta años, TIN], …] */
@@ -1995,7 +1995,7 @@ function mcalc0(x){
 const srcHtml=x=>{const nf_=sinFecha(x.d),old=nf_||diasDe(x.d)>30,t=`${hostOf(x)||'sin fuente'} · ${nf_?'sin fecha':haceTxt(x.d)}`;
   return x.f?`<a class="src${old?' viejo':''}" href="${esc(x.f)}" target="_blank" rel="noopener" title="${nf_?'Dato sin fecha':'Dato del '+esc(x.d)}">${esc(t)}</a>`:`<span class="src${old?' viejo':''}">${esc(t)}</span>`};
 /* celda del coste comparado: se pincha y enseña la cuenta producto a producto */
-const ccHtml=(i,c)=>`<button class="ccb" data-mcc="${i}" title="${c.vkNd&&!c.sinBon?'La oferta no dice qué productos exige'+(c.efTae?': va ordenada por la TAE del banco':''):'Ver la cuenta, producto a producto'}">${c.vkNd&&!c.sinBon?`<span class="nd">sin dato</span>`:`<b>${pct(c.ef)}</b>`}${c.extra>0?`<span class="pr">productos: +${eur(c.extra)}/año</span>`:''}${c.ap>0?`<span class="pr">apertura: ${eur(c.ap)}</span>`:''}</button>`;
+const ccHtml=(i,c)=>`<button class="ccb" data-mcc="${i}" title="${c.vkNd&&!c.sinBon?'La oferta no dice qué productos exige'+(c.efTae?': va ordenada por la TAE del banco':''):'Ver la cuenta, producto a producto'}">${c.vkNd&&!c.sinBon?`<span class="sindato">sin dato</span>`:`<b>${pct(c.ef)}</b>`}${c.extra>0?`<span class="pr">productos: +${eur(c.extra)}/año</span>`:''}${c.ap>0?`<span class="pr">apertura: ${eur(c.ap)}</span>`:''}</button>`;
 let MF='todas',MLAST=[];
 function render4(){
   const P=hipoteca();
@@ -2021,7 +2021,7 @@ function render4(){
       <td><span class="tp ${x.t}">${x.t[0].toUpperCase()+x.t.slice(1)}</span></td>
       <td class="num"><b>${pct(c?c.tin:x.tin)}</b>${x.t==='fija'?'':x.t==='mixta'?` · ${String(x.anos).replace('.',',')} años`:x.anos>1?` · ${String(x.anos).replace('.',',')} primeros años`:' · 1.er año'}${x.tramos?`<span class="pr">a ${anos(c?c.years:S.v.plazo)}</span>`:''}${c&&c.sinBon?`<span class="pr" style="color:var(--warn)">sin bonificar: no llegas a la nómina que pide</span>`:x.tinS&&x.tinS>x.tin&&x.t!=='variable'?`<span class="pr">sin bonificar ${pct(x.tinS+((c?c.tin:x.tin)-x.tin))}</span>`:''}</td>
       <td class="num">${x.t==='fija'?'—':`Euríbor + ${pct(c&&c.sinBon?(x.difS||x.dif):x.dif)}`}</td>
-      <td class="num" title="La que publica el banco para su ejemplo, con el Euríbor del mes en que la publicó">${x.tae?esc(x.tae):'<span class="nd">sin dato</span>'}</td>
+      <td class="num" title="La que publica el banco para su ejemplo, con el Euríbor del mes en que la publicó">${x.tae?esc(x.tae):'<span class="sindato">sin dato</span>'}</td>
       <td class="num">${c?`<b class="big">${eur(c.cuota)}</b>${c.cuota2?`<span class="pr">${eur(c.cuota2)} desde el año ${c.desde}</span>`:''}${c?`<span class="pr pz${c.years<S.v.plazo?' corto':''}">a ${anos(c.years)}${c.years<S.v.plazo?' (su máximo)':''}</span>`:''}${c&&c.ltvKo?`<span class="pr" style="color:var(--warn)">financia hasta el ${x.ltv||80} %: solo con aval ICO si el banco está adherido</span>`:''}`:'—'}</td>
       <td class="num">${c?ccHtml(r.i,c):'—'}</td>
       <td class="num">${c?eur(c.int):'—'}${c&&x.pz<S.v.plazo?`<span class="pr">a ${x.pz} años</span>`:''}</td>
