@@ -55,7 +55,8 @@
    "d": "10/10/2026",
    "ingMin": 2500,
    "ingReq": "bonif",
-   "minImp": 100000
+   "minImp": 100000,
+   "promoS": 12
   },
   {
    "b": "Banco Sabadell",
@@ -165,7 +166,8 @@
     ]
    ],
    "ingMin": 600,
-   "ingReq": "bonif"
+   "ingReq": "bonif",
+   "taeF": "HelpMyCash, 01/10/2026"
   },
   {
    "b": "MyInvestor",
@@ -204,7 +206,8 @@
    "ingMin": 4000,
    "ingMin2": 4000,
    "ingReq": "acceso",
-   "minImp": 200000
+   "minImp": 200000,
+   "promoS": 12
   },
   {
    "b": "Banco Santander",
@@ -223,7 +226,8 @@
    "d": "10/10/2026",
    "ingMin": 1000,
    "ingReq": "bonif",
-   "minImp": 20000
+   "minImp": 20000,
+   "promoS": 6
   },
   {
    "b": "Banco Sabadell",
@@ -283,7 +287,8 @@
    "d": "10/10/2026",
    "ingMin": 2500,
    "ingReq": "bonif",
-   "minImp": 100000
+   "minImp": 100000,
+   "promoS": 12
   },
   {
    "b": "Banco Santander",
@@ -305,7 +310,8 @@
    "d": "10/10/2026",
    "ingMin": 1000,
    "ingReq": "bonif",
-   "minImp": 20000
+   "minImp": 20000,
+   "promoS": 6
   },
   {
    "b": "ING",
@@ -347,7 +353,8 @@
    "d": "10/10/2026",
    "ingMin": 2500,
    "ingReq": "bonif",
-   "minImp": 100000
+   "minImp": 100000,
+   "promoS": 12
   },
   {
    "b": "Banco Sabadell",
@@ -386,7 +393,12 @@
    "d": "10/10/2026",
    "ingMin": 2000,
    "ingReq": "bonif",
-   "apPct": 0.15
+   "apPct": 0.15,
+   "promoS": 12,
+   "sinNom": {
+    "tin": 2.4,
+    "dif": 0.65
+   }
   },
   {
    "b": "Kutxabank",
@@ -406,7 +418,8 @@
    "f": "https://clientes.kutxabank.es/es/hipotecas/variable.html",
    "d": "10/10/2026",
    "ingMin": 3000,
-   "ingReq": "bonif"
+   "ingReq": "bonif",
+   "promoS": 12
   },
   {
    "b": "Bankinter",
