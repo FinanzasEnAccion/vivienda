@@ -685,7 +685,7 @@ html.web .s-left>.card,html.web .s-right>.card{flex:none}
 .s-lines{display:grid;gap:8px;margin-top:4px}.s-lines button{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border:0;background:var(--field);border-radius:12px;padding:12px 14px;text-align:left;font-size:14px;color:var(--ink)}.s-lines button:hover{background:var(--accent-soft)}.s-lines b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .s-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media (max-width:900px){.s-cards{grid-template-columns:1fr}}
 .s-card{display:grid;gap:4px;border:0;background:var(--field);border-radius:14px;padding:12px 14px;text-align:left;color:var(--ink)}.s-card:hover{background:var(--accent-soft)}.s-card small{color:var(--muted)}.s-card .sq{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.s-card .tp{justify-self:start}
-.s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd small{color:var(--muted);font-size:12px}
+.s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd.bad{background:var(--bad-soft)}.s-verd small{color:var(--muted);font-size:12px}
 html .tab.old{display:none!important}
 html.m:not(.sencilla) .mnav{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 .subnav{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap;padding:8px 0 10px}.subnav[hidden]{display:none}
@@ -2291,7 +2291,7 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
   const max=R.max,mx=Math.floor(max/1000)*1000,hip=Math.max(0,R.max-R.entMax),cu=cuotaFor(hip,S.v.tin,R.plazoB),need=R.entMax+R.gMax+S.a.colchon,ing=ingB();
   const esf=ing>0?(cu+deudasB())/ing*100:I,sem=max<1?'bad':esf<=30?'good':esf<=35?'warn':'bad';
   const semT={good:'Cómodo',warn:'Justo',bad:max<1?'Todavía no llega':'Alto'}[sem];
-  const tieneCasa=S.v.precio>0;
+  const tieneCasa=S.v.precio>0,aj=R.aj;
   $('sOut').innerHTML=`<div class="eyebrow">${max>=1000?'Puedes comprar una vivienda de hasta':'Con estos datos'}</div>
     ${max>=1000?`<button class="s-big num" data-x="max">${eur(mx)}</button>`:`<div class="s-big" style="font-size:28px">todavía no te llega para comprar</div>`}
     <div class="pills"><span class="s-sem ${sem}"><i></i>${semT}</span><button class="pill neutral" data-x="max">Te frenan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button></div>
@@ -2300,11 +2300,19 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
       <button data-x="sNeed"><span>Necesitas tener ahorrado<br><small class="hint">entrada, impuestos de la compra y gastos</small></span><b>${eur(need)}</b></button>
       <button data-x="sEsf"><span>Parte de lo que entra en casa</span><b style="color:var(--${sem==='good'?'good':sem==='warn'?'warn':'bad'})">${isFinite(esf)?pct(esf,0):'—'}</b></button>
     </div>`:''}
-    ${tieneCasa?`<button class="s-verd ${R.ok?'good':'warn'}" data-x="miras"><span><b>La de ${eur(R.P)}</b> ${R.ok?'te llega':R.falta>0?`: te faltan ${eur(R.falta)} de ahorros`:': la cuota sería demasiado alta para el banco'}</span><small>Pagarías ${eur(R.cuota)} al mes</small></button>`:''}
+    ${tieneCasa?`<button class="s-verd ${aj.ok?'good':'bad'}" data-x="sMiras"><span><b>La de ${eur(R.P)}</b> ${aj.ok?'te llega':`no te llega: te faltan ${eur(aj.falta)} de ahorros`}</span><small>${aj.ok?`Pagarías ${eur(aj.cuota)} al mes${aj.mas?` poniendo ${eur(aj.ent)} de entrada`:''}`:R.falta>0?`Necesitas ${eur(aj.need)} ahorrados y tienes ${eur(S.a.ahorros)}`:`Con lo que entra en casa el banco te presta hasta ${eur(aj.hip)}: el resto lo pones tú`}</small></button>`:''}
     <p class="hint" style="margin:10px 0 0">El banco te financia el ${pctS(ltvEf())} con un interés del ${pct(S.v.tin)} a ${anos(R.plazoB)}, y guardas ${eur(S.a.colchon)} para imprevistos. Pincha cualquier cifra para ver el cálculo.</p>`;
   X.sCuota=()=>modal('Lo que pagarías al mes',`<div class="steps">${step('Vivienda',eur(mx))}${step('Te presta el banco',eur(hip))}${step('Interés',pct(S.v.tin)+' al año')}${step('Te financia el banco',pctS(ltvEf()))}${step('Años',anos(R.plazoB))}${step('Cuota al mes',eur2(cu),'tot')}</div><p class="note">Es una cuota fija de referencia. La de verdad depende del banco: mira abajo lo que ofrecen hoy.</p>`);
   X.sNeed=()=>modal('Lo que necesitas tener ahorrado',`<div class="steps">${step('Entrada',eur(R.entMax))}${step('Impuestos y gastos de la compra (notaría, registro, gestoría, tasación)',eur(R.gMax))}${step('Colchón para imprevistos',eur(S.a.colchon))}${step('Total',eur(need),'tot')}${step('Tienes',eur(S.a.ahorros))}</div><p class="note">El banco no presta para los impuestos ni los gastos: salen de tus ahorros.</p>`);
   X.sEsf=()=>modal('Parte de lo que entra en casa',`<div class="steps">${step('Cuota al mes',eur(cu))}${deudasB()>0?step('+ Otros préstamos',eur(deudasB())):''}${ingSt('Lo que entra en casa al mes')}${step('Parte que se va en cuotas',isFinite(esf)?pct(esf,0):'—','tot')}</div><p class="note">Hasta un 30 % es cómodo. Del 30 al 35 % es justo, pero muchos bancos lo aceptan. Por encima del 35 %, la mayoría no la concede.</p>`);
+  // la casa que tienes en mente, con la misma regla que el precio máximo (R.aj): entrada, impuestos, gastos y colchón frente a tus ahorros; hipoteca y cuota
+  X.sMiras=()=>{const c=R.c,im=c.im,gs=c.not+c.com+c.fijos,eMin=c.entrada,qMin=cuotaFor(Math.max(0,R.P-eMin),S.v.tin,aj.plazo),esfA=ing>0?(aj.cuota+deudasB())/ing*100:I;
+    modal(`La vivienda de ${eur(R.P)}`,`<div class="steps">${step(`Entrada (${pct(aj.pct,aj.mas?1:0)})`,eur(aj.ent))}${step(`${im.nombre} (${pctS(im.tipoEf)})`,eur(c.imp))}${step('Notaría, registro, gestoría y tasación',eur(gs))}${step('Colchón para imprevistos',eur(S.a.colchon))}
+      ${step('Necesitas tener ahorrado',eur(aj.need),'tot')}${step('Tienes',eur(S.a.ahorros))}${step(aj.falta>0?'Te faltan':'Te sobran',eur(Math.abs(aj.falta)),'tot')}</div>
+      <h4>La hipoteca</h4><div class="steps">${step('Te presta el banco',eur(aj.hip)+(R.P>0?' · '+pct(aj.hip/R.P*100,0):''))}${step('Interés',pct(S.v.tin)+' al año')}${step('Plazo',anos(aj.plazo))}${step('Cuota al mes',eur2(aj.cuota),'tot')}${step('Parte de lo que entra en casa',isFinite(esfA)?pct(esfA,0):'—')}</div>
+      ${aj.mas?`<p class="note">Con la entrada mínima (${eur(eMin)}) la cuota sería de ${eur(qMin)} al mes: más de lo que el banco aprueba con lo que entra en casa. Por eso la cuenta se hace con ${eur(aj.ent)} de entrada${aj.ok?', que tus ahorros cubren':''}.</p>`:''}
+      ${aj.plazo<S.v.plazo?`<p class="note">Se usa un plazo de ${anos(aj.plazo)}: el que te daría el banco para terminar de pagar antes de los ${EDAD_FIN}.</p>`:''}
+      <p class="note">El banco no presta para los impuestos ni los gastos: salen de tus ahorros.</p>`)};
   // bancos: la mejor de cada tipo para la casa que tienes en mente
   const P=hipoteca(),tipos=[['fija','Fija','la cuota no cambia nunca'],['mixta','Mixta','fija unos años y luego cambia con el Euríbor'],['variable','Variable','cambia cada año con el Euríbor']];
   const rows=P>0?OFF.map((x,i)=>({x,i,c:mcalc(x)})).filter(r=>!r.c.noAcc&&!r.c.ltvKo):[];
