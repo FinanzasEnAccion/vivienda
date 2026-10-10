@@ -411,6 +411,12 @@ tr+tr td{border-top:1px solid var(--line)}
 .broker .ctag i{width:9px;height:9px;border-radius:50%;background:var(--mint)}
 .broker .ctag.justo i{background:#E6B24E}.broker .ctag.lejos i{background:#EE7A72}
 a.btn{text-decoration:none;display:inline-block}
+#broIn .bro-sw{display:flex;align-items:center;min-height:36px}
+#broR .steps{margin-top:0}
+#broIn .ta{padding:7px 10px}
+#pro_informe>h2{margin-bottom:10px}
+@media (min-width:1100px){html.web #broR .steps{grid-template-columns:1fr 1fr}html.web #broR .steps>:first-child{grid-column:1 / -1}}
+html.m #broIn .w2{grid-column:1 / -1}
 html.m .broker .ctag{margin:6px 0 2px;padding:6px 12px;font-size:13px}
 #btnMetodo .sm{display:none}
 @media (max-width:374px){html.m #btnMetodo .lg{display:none}html.m #btnMetodo .sm{display:inline}}
@@ -857,7 +863,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
     <div class="card pro-nav"><div class="seg-ctl" role="group" aria-label="Herramienta"><button data-protab="cartera">Cartera de pisos</button><button data-protab="fein">Revisar la FEIN</button><button data-protab="informe">Informe para el bróker</button></div><button class="lnkbtn" data-gotab="invertir">Invertir a fondo →</button></div>
     <div class="card scroll pro-sec" id="pro_cartera"><h2>Tu cartera de pisos</h2><p class="hint" style="margin-top:-4px">Todos tus inmuebles a la vez, como los ve el banco al pedir otra hipoteca.</p><div class="tblwrap cart-t" id="cartT"></div><div class="am-bar" style="margin:8px 0 12px"><button class="btn" data-cadd="1">+ Añadir piso</button></div><div id="cartK"></div></div>
     <div class="card scroll pro-sec" id="pro_fein" hidden><h2>Revisar la FEIN</h2><p class="hint" style="margin-top:-4px">Copia los datos de la oferta vinculante del banco y comprueba que todo cuadra antes de firmar.</p><div class="pro2"><div><div class="seg-ctl sm" role="group" aria-label="Tipo"><button data-ftipo="fija">Fija</button><button data-ftipo="mixta">Mixta</button><button data-ftipo="variable">Variable</button></div><div class="g2" id="feinIn" style="margin-top:10px"></div></div><div id="feinR"></div></div></div>
-    <div class="card scroll pro-sec" id="pro_informe" hidden><h2>Informe para el bróker</h2><p class="hint" style="margin-top:-4px">Un PDF con el caso completo (perfil, operación, lo que mirará el banco, ofertas de referencia y cartera) listo para mandar a José o al banco. Usa los datos de las otras pestañas.</p><div class="pro2"><div class="grp" id="broIn"></div><div><div id="broR"></div><div class="am-bar" style="margin-top:12px"><button class="btn solid" data-bropdf="1">Descargar informe</button><a class="btn" data-cta="informe" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Reservar con José →</a></div></div></div></div>
+    <div class="card scroll pro-sec" id="pro_informe" hidden><h2>Informe para el bróker</h2><p class="hint" style="margin:-6px 0 8px">La ficha de tu caso en un PDF (perfil, operación, lo que mirará el banco, ofertas de referencia y cartera), lista para mandar a José o al banco. Usa los datos de las otras pestañas.</p><div class="pro2"><div class="grp" id="broIn"></div><div><div id="broR"></div><div class="am-bar" style="margin-top:12px"><button class="btn solid" data-bropdf="1">Descargar ficha</button><button class="btn" data-broshare="1" id="broShareB" hidden>Compartir ficha</button><button class="btn" data-casolink="1" title="Una dirección que abre la web con tus números, para enseñárselo a tu pareja o al bróker">Copiar enlace del caso</button><a class="btn" data-cta="informe" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Reservar con José →</a></div></div></div></div>
   </section>
 
   <aside class="broker" aria-label="Ayuda de un bróker">
@@ -961,7 +967,7 @@ const EXAMPLE={
   m:{tipo:'variable',capital:150000,anos:22,tin:2.9,dif:0.75,mes:1,extra:10000,comAm:0.25,rent:5},
   mTouched:false,rapido:false,nivel:'completa',cart:[],proTab:'cartera',
   fein:{imp:168000,plazo:30,tipo:'fija',tin:2.75,anos:5,dif:0.6,cuotaF:0,taeF:0,apert:0,tasa:350,segHogar:300,segVida:400,otros:0,amortPct:2},
-  bro:{nombre:'',nota:''},
+  bro:{nombre:'',nota:'',tel:'',email:'',antig:0,muni:'',arras:false,arrasFin:'',origen:''},
   iTouched:false,mf2:{dan:false,sinv:false},ct:{pre:true,com:true,int:true,prop:true,mant:true},
   tab:'cuanto'
 };
@@ -1097,7 +1103,18 @@ $('sUso').innerHTML=`<div class="uso-w" style="margin-top:12px"><div class="uso-
 $('sAlq').innerHTML=`<h2>¿Comprar o alquilar?</h2>${F('r.alquiler','¿Cuánto pagarías de alquiler por una casa así?','€/mes','eur')}<div id="sAlqV"></div>`;
 $('sMas').innerHTML=`<div class="gtitle" style="margin:0">Ajusta tu hipoteca</div>${finChips()}<div class="uso-w"><div class="uso-l"><span>Años para pagarla</span></div><div class="seg-ctl sm uso" role="group" aria-label="Años">${[20,25,30,35].map(n=>`<button data-plazo="${n}">${n}</button>`).join('')}</div></div><div class="g2">${F('v.tin','Interés','% al año','dec','<button type="button" class="lnkbtn" data-act="tinBest" title="Usar el interés de la mejor oferta de hoy">mejor oferta</button>','tin')}${F('a.deudas','Otros préstamos','€/mes','eur','','deudas')}</div><div class="g2">${F('v.edad','Tu edad','años','int')}${F('v.precio','¿Tienes una casa en mente?','€','eur','','','opcional')}</div>`;
 $('feinIn').innerHTML=F('fein.imp','Importe','€','eur')+F('fein.plazo','Plazo','años','int')+F('fein.tin','TIN inicial','%','dec')+`<div class="fvar">${F('fein.anos','Años a tipo fijo','años','int')}</div><div class="fvar">${F('fein.dif','Diferencial','%','dec')}</div>`+F('fein.cuotaF','Cuota que dice la FEIN','€','eur','','','opcional')+F('fein.taeF','TAE que dice la FEIN','%','dec','','','opcional')+F('fein.apert','Comisión de apertura','€','eur')+F('fein.tasa','Tasación y otros gastos','€','eur')+F('fein.segHogar','Seguro de hogar','€/año','eur')+F('fein.segVida','Seguro de vida','€/año','eur')+F('fein.otros','Otros productos','€/año','eur')+F('fein.amortPct','Comisión por amortizar','%','dec');
-$('broIn').innerHTML=`<div class="fld"><label for="broN"><span class="lt">Nombre del cliente (opcional)</span></label><div class="inp"><input id="broN" data-bind="bro.nombre" data-fmt="txt" maxlength="60" placeholder="Para el título del informe"></div></div><div class="fld"><label for="broT"><span class="lt">Notas para el bróker</span></label><textarea id="broT" class="ta" data-bind="bro.nota" data-fmt="txt" maxlength="600" rows="6" placeholder="Situación laboral, plazos, dudas, qué buscas…"></textarea></div>`;
+/* Ficha para el bróker: lo que pregunta primero (contrato y antigüedad, dónde compras, arras, origen de los ahorros) y cómo localizarte. Todo opcional. */
+DEF.borigen=['Origen de los ahorros','El banco suele pedir que justifiques de dónde sale el dinero de la entrada. Dile al bróker si es tuyo, si te ayuda la familia o si viene de vender otra vivienda.'];
+DEF.barras=['Arras','El contrato con el que reservas la vivienda: das una señal (suele ser un 10 % del precio) y fijáis una fecha límite para firmar. Al bróker le marca el plazo que tiene para conseguirte la hipoteca.'];
+LIM['bro.antig']=[0,60];
+const ORIGEN={propios:'propios',familia:'ayuda de la familia',venta:'venta de otra vivienda',varios:'de varios sitios'};
+{const tx=(f,l,x,c='')=>`<div class="fld${c}"><label for="bro_${f}"><span class="lt">${l}</span></label><div class="inp"><input id="bro_${f}" data-bind="bro.${f}" data-fmt="txt" ${x}></div></div>`,
+  sel=(id,bind,l,ops,q,c='')=>`<div class="fld${c}"><label for="${id}"><span class="lt">${l}</span>${Q(q)}</label><div class="inp"><select id="${id}" data-bind="${bind}">${ops.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select></div></div>`;
+ $('broIn').innerHTML=`<div class="g3">${tx('nombre','Nombre','maxlength="60" autocomplete="name" placeholder="opcional"')}${tx('tel','Teléfono','type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="opcional"')}${tx('email','Correo','type="email" maxlength="80" autocomplete="email" placeholder="opcional"',' w2')}
+  ${sel('broC','a.contrato','Contrato',[['indefinido','Indefinido'],['temporal','Temporal'],['autonomo','Autónomo'],['funcionario','Funcionario']],'')}${F('bro.antig','Antigüedad','años','dec','','','—')}${sel('broO','bro.origen','Origen de los ahorros',[['','Sin indicar'],['propios','Propios'],['familia','Ayuda de la familia'],['venta','Venta de otra vivienda'],['varios','De varios sitios']],'borigen',' w2')}
+  <div id="broProvW" hidden>${sel('broProv','v.prov','Provincia',[],'')}</div>${tx('muni','Municipio','maxlength="60" placeholder="dónde compras"')}
+  <div class="fld"><label><span class="lt">¿Has firmado arras?</span>${Q('barras')}</label><div class="bro-sw">${SW('bro.arras','Firmadas')}</div></div><div id="broFinW" hidden>${tx('arrasFin','Fecha límite de las arras','type="date" maxlength="10"')}</div></div>
+  <div class="fld"><label for="broT"><span class="lt">Notas para el bróker</span></label><textarea id="broT" class="ta" data-bind="bro.nota" data-fmt="txt" maxlength="600" rows="2" placeholder="Plazos, dudas, qué buscas…"></textarea></div>`}
 $('g3d').innerHTML=F('r.reval','Revalorización','%/año','dec','','reval')+F('r.rent','Rentabilidad','%/año','dec','','rent');$('g3chk').innerHTML=SW('r.reinvierte','Si vendo, compro otra vivienda habitual','reinv');
 
 let touched=false;try{touched=localStorage.getItem('fea-touched')==='1'}catch(e){}
@@ -2223,7 +2240,9 @@ function renderBroker(){
   else if(t==='bancos')txt='Estas son las ofertas públicas. Un bróker suele conseguir mejores condiciones que las de la web del banco.';
   else txt='Si decides comprar, te acompaña desde la búsqueda de la hipoteca hasta la firma.';
   // Según la etiqueta del caso: viable, el mensaje de siempre; justo, el motivo por el que José puede ayudar; lejos, qué te acerca (y el botón deja de ser la llamada)
-  const bt=$('brokerTxt');if(k==='justo'||k==='lejos'||(c&&c.ico))bt.innerHTML=casoFrase(c)+(k==='lejos'?'':' El primer contacto es gratis.');
+  const bt=$('brokerTxt'),enCompra=t==='cuanto'||t==='simple'||t==='pro';
+  if(k==='justo'||k==='lejos')bt.innerHTML=casoFrase(c)+(k==='lejos'?'':' El primer contacto es gratis.');
+  else if(c&&enCompra&&(c.ico||c.m==='max'))bt.innerHTML=casoFrase(c)+(c.ico?'':' José te dice qué hipoteca puedes conseguir y con qué banco.')+' El primer contacto es gratis.'; // sin casa en mente: el banner dice hasta dónde llegas
   else bt.textContent=txt+' Es quien llevó mi hipoteca. El primer contacto es gratis: le cuentas tu caso y te dice qué puedes conseguir.';
   $('brokerT').textContent=k==='lejos'?'Todavía no te llega para ir al banco':'¿Quieres ayuda del bróker que me ayudó a mí?';
   const tag=$('casoTag');tag.hidden=!c;if(c){tag.className='ctag '+k;tag.innerHTML=`<i></i>Tu caso: ${CASO_N[k]}`}
@@ -2342,14 +2361,14 @@ const joseLugar=()=>[(S.bro.muni||'').trim(),S.v.prov&&S.v.prov!==S.v.ccaa?S.v.p
 /* Texto exacto que se propone en las notas de la reserva: con=true, el resumen de tu caso; con=false, solo de dónde vienes */
 function joseTxt(con){
   const c=con?joseCtx():null;if(!c)return JOSE_ORIGEN;
-  const perfil=`${eur(S.a.ahorros)} ahorrados, ${eur(S.a.ingresos)} netos al mes${S.a.titulares>1?` entre ${S.a.titulares} titulares`:''}, ${CONTRATO[S.a.contrato]||CONTRATO.indefinido}`;
+  const perfil=`${eur(S.a.ahorros)} ahorrados, ${eur(S.a.ingresos)} netos al mes${S.a.titulares>1?` entre ${S.a.titulares} titulares`:''}, ${CONTRATO[S.a.contrato]||CONTRATO.indefinido}${S.bro.antig>0?` (${String(S.bro.antig).replace('.',',')} ${S.bro.antig===1?'año':'años'} de antigüedad)`:''}`;
   let t;
   if(c==='hipo'){const m=S.m;t=`Ya tengo hipoteca ${m.tipo==='fija'?'fija':'variable o mixta'}: ${eur(m.capital)} pendientes, ${anos(m.anos)}, TIN ${pct(m.tin)}${m.tipo==='fija'?'':` (Euríbor + ${pct(m.dif)})`}.`}
   else if(c==='inv'){const i=S.i;t=`Compra para alquilar de ${eur(i.precio)} en ${i.ccaa}${i.contado?', al contado':`, con hipoteca del ${pctS(i.fin)}`}, alquiler previsto de ${eur(i.alquiler)} al mes; ${perfil}.`}
   else{const k=casoDe(),co=casoCorto(k),P=k.P,uso=S.v.segunda?'segunda vivienda':S.v.primera?'primera vivienda':'cambio de casa';
-    t=`Caso ${k.k}${co?` (${co})`:''}: ${P>0?`compra de ${eur(P)}`:k.maxR>=1000?`busco vivienda de hasta ${eur(k.maxR)}${k.ico&&k.m!=='avalmax'?` (con aval ICO, hasta ${eur(Math.floor(k.ico.max/1000)*1000)})`:''}`:'quiero comprar'} en ${joseLugar()} (${S.v.nueva?'obra nueva':'segunda mano'}, ${uso}), ${perfil}, ${S.v.edad} años.`}
-  const u=casoUrl(); // el enlace va al final y sin punto detrás, para que se pueda pinchar tal cual
-  return T(`${JOSE_ORIGEN} ${t}`)+' Caso completo: '+(u.length>CASO_LARGO?casoUrl(true):u)}
+    t=`Caso ${k.k}${co?` (${co})`:''}: ${P>0?`compra de ${eur(P)}`:k.maxR>=1000?`busco vivienda de hasta ${eur(k.maxR)}${k.ico&&k.m!=='avalmax'?` (con aval ICO, hasta ${eur(Math.floor(k.ico.max/1000)*1000)})`:''}`:'quiero comprar'} en ${joseLugar()} (${S.v.nueva?'obra nueva':'segunda mano'}, ${uso}), ${perfil}, ${S.v.edad} años.${S.bro.arras?` Arras firmadas${fechaEs(S.bro.arrasFin)?` (límite ${fechaEs(S.bro.arrasFin)})`:''}.`:''}`}
+  const u=casoUrl(),tel=(S.bro.tel||'').trim(); // el enlace va al final y sin punto detrás, para que se pueda pinchar tal cual
+  return T(`${JOSE_ORIGEN} ${t}${tel?` Teléfono: ${tel}.`:''}`)+' Caso completo: '+(u.length>CASO_LARGO?casoUrl(true):u)}
 const joseQuien=()=>{const n=(S.bro.nombre||'').trim(),e=(S.bro.email||'').trim();return {n,e:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:''}};
 /* Dirección de la reserva: cal.com admite rellenar el formulario por la URL (notes, name, email). El nombre y el correo solo van si los has escrito en la ficha y envías tu caso. */
 function joseHref(con){const q=['notes='+encodeURIComponent(joseTxt(con))];
@@ -2409,6 +2428,7 @@ function casoLimpia(x,n=0){
 /* …y después de mezclarlo, lo mismo que impone la web al escribir: opciones válidas, límites de cada casilla, enteros y nada negativo salvo donde se puede */
 function casoAjusta(st){const en=(o,f,L,def)=>{if(!L.includes(o[f]))o[f]=def},T3=['fija','mixta','variable'];
   en(st.v,'ccaa',Object.keys(ITP),EXAMPLE.v.ccaa);en(st.v,'entUnit',['pct','eur'],'pct');en(st.a,'contrato',Object.keys(CONTRATO),'indefinido');en(st.m,'tipo',['variable','fija'],'variable');en(st.fein,'tipo',T3,'fija');
+  en(st.bro,'origen',[''].concat(Object.keys(ORIGEN)),'');if(!/^\d{4}-\d{2}-\d{2}$/.test(st.bro.arrasFin))st.bro.arrasFin='';
   if(typeof PROV!=='undefined'&&!(PROV[st.v.ccaa]||[]).includes(st.v.prov))st.v.prov='';
   const pos=o=>{for(const k in o){const v=o[k];if(typeof v==='number')o[k]=k==='reval'||k==='dif'?Math.max(-20,Math.min(50,v)):Math.max(0,v);else if(v&&typeof v==='object')pos(v)}};pos(st);
   st.h.offers=st.h.offers.slice(0,3);st.h.offers.forEach(o=>{en(o,'tipo',T3,'fija');o.dif=Math.max(0,o.dif);o.anos=Math.round(o.anos);o.prods=o.prods.slice(0,12)});
@@ -2449,7 +2469,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-casofin]')
 addEventListener('hashchange',()=>{const st=casoLee(location.hash);if(!st)return;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
   casoAbre(st);ov.hidden=true;renderOffers();refresh();casoChip();toast('Has abierto un caso compartido',casoDeshace);track('caso-abierto')});
 /* Para las pruebas: las funciones del bróker se añaden a window.__FEA cuando ya existe (se crea en la última línea) */
-setTimeout(()=>{if(window.__FEA)Object.assign(window.__FEA,{casoR,casoDe,casoVer,casoCorto,casoFalta,joseCtx,joseTxt,joseHref,casoDif,casoUrl,casoLee})},0);
+setTimeout(()=>{if(window.__FEA)Object.assign(window.__FEA,{casoR,casoDe,casoVer,casoCorto,casoFalta,joseCtx,joseTxt,joseHref,casoDif,casoUrl,casoLee,broDoc,broNom})},0);
 
 
 /* ---------- versión web / móvil ---------- */
@@ -2844,7 +2864,7 @@ function renderPro(){const sec=S.proTab||'cartera';
   X.f_tae=()=>modal('TAE calculada',`<p>Es el interés anual equivalente de todo lo que pagas por el dinero que de verdad recibes (método de la Circular 5/2012 del Banco de España).</p><div class="steps">${step('Recibes: importe − apertura − tasación',eur(F2.P-F2.costes))}${step('Pagas: cuotas',eur(F2.int+F2.P))}${step('+ Seguros y productos obligatorios',eur(F2.seg*F2.n/12)+` (${eur(F2.seg)}/año)`)}${step('TAE',pct(F2.taeC),'tot')}</div><p class="note">Supone seguros constantes y, en el tramo variable, el Euríbor de hoy.</p>`);
   X.f_total=()=>modal('Coste total de la hipoteca',`<div class="steps">${step('Intereses',eur(F2.int))}${step('Seguros y productos obligatorios',eur(F2.seg*F2.n/12))}${step('Apertura y tasación',eur(F2.costes))}${step('Coste total',eur(F2.total),'tot')}</div>`);
   // informe
-  const R=LAST.r1;$('broR').innerHTML=R?`<div class="steps">${step('Precio máximo',eur(R.max))}${step('Vivienda que mira',eur(R.P))}${step('Hipoteca · cuota',eur(R.hip)+' · '+eur(R.cuota)+'/mes')}${step('Endeudamiento',isFinite(R.esfuerzo)?pct(R.esfuerzo,0):'—')}${step('Ahorro necesario · tiene',eur(R.need)+' · '+eur(S.a.ahorros))}${(S.cart||[]).length?step('Cartera',(S.cart||[]).length+' pisos · deuda '+eur(C.deuda)):''}</div>`:'';
+  broRender();
 }
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-protab]');if(t){S.proTab=t.dataset.protab;renderPro();renderSub();save();track('pro',S.proTab);return}
@@ -2856,24 +2876,56 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{const el=e.target.closest('[data-cart]');if(!el)return;const [i,k]=el.dataset.cart.split(':');const p=S.cart[+i];if(!p)return;p[k]=k==='n'?el.value.slice(0,40):pEur(el.value);save();renderPro()});
 document.addEventListener('focusout',e=>{if(e.target.closest&&e.target.closest('[data-cart]'))setTimeout(()=>{if(!$('cartT').contains(document.activeElement))renderPro()},0)});
 /* Informe para el bróker: el caso del cliente en un PDF */
-async function broPdf(){const dl=await DLP;if(!dl){toast('Aquí no se pueden descargar ficheros');return}
-  try{await libs()}catch(e){toast('No se ha podido preparar el informe');return}
+const fechaEs=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||'');return m?`${m[3]}/${m[2]}/${m[1]}`:''};
+const broNom=()=>'caso-hipoteca-'+(S.bro.nombre||'cliente').toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi,'-')+'.pdf';
+/* El resumen de la ficha en pantalla (y qué casillas se ven) */
+function broRender(){const R=casoR(),c=casoDe(),C=cartCalc(),co=casoCorto(c),B=S.bro;
+  $('broR').innerHTML=`<div class="steps"><button type="button" class="step lnk-step tot" data-x="caso" title="Pincha para ver por qué"><span>Caso</span><span>${c.k[0].toUpperCase()+c.k.slice(1)}${co?' · '+esc(co):''}</span></button>${step('Precio máximo',eur(R.max))}${step('Vivienda que mira'+(c.P>0||!(R.P>0)?'':' (la del ejemplo)'),R.P>0?eur(R.P):'sin casa en mente')}${step('Hipoteca · cuota',eur(R.hip)+' · '+eur(R.cuota)+'/mes')}${step('Endeudamiento',isFinite(R.esfuerzo)?pct(R.esfuerzo,0):'—')}${step('Ahorro necesario · tiene',eur(R.need)+' · '+eur(S.a.ahorros))}${(S.cart||[]).length?step('Cartera',(S.cart||[]).length+' pisos · deuda '+eur(C.deuda)):''}</div>`;
+  const L=typeof PROV!=='undefined'&&PROV[S.v.ccaa]||[],ps=$('broProv');$('broProvW').hidden=L.length<2;
+  if(ps.dataset.k!==S.v.ccaa){ps.dataset.k=S.v.ccaa;const isl=S.v.ccaa==='Baleares';ps.closest('.fld').querySelector('.lt').textContent=isl?'Isla':'Provincia';ps.innerHTML='<option value="">Sin indicar</option>'+L.map(x=>`<option>${esc(x)}</option>`).join('')}
+  ps.value=L.includes(S.v.prov)?S.v.prov:'';
+  $('broFinW').hidden=!B.arras;$('broShareB').hidden=!navigator.share;
+  // la librería del PDF se carga al entrar en la ficha: así «Compartir ficha» abre el menú del móvil con un solo toque
+  if(S.tab==='pro'&&S.proTab==='informe'&&!broRender.w&&!window.claude&&/^https?:$/.test(location.protocol)){broRender.w=1;libs().catch(()=>{})}}
+/* El PDF de la ficha (hace falta que las librerías estén cargadas: libs()) */
+function broDoc(){
   const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),G=[11,61,46],INK=[16,38,30],MUT=[91,110,102],W=210,L=16,CW=W-2*L;let y=0;
-  const R=calc1(),C=cartCalc(),today=new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+  const R=calc1(),C=cartCalc(),B=S.bro,c=casoDe(),co=casoCorto(c),today=new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
   doc.setFillColor(...G);doc.rect(0,0,W,28,'F');try{doc.addImage(document.querySelector('.logo').src,'PNG',L,6,16,16)}catch(e){}
-  doc.setTextColor(240,236,224);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text(T('Ficha del caso para el bróker'),L+21,14);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.text(T((S.bro.nombre?S.bro.nombre+' · ':'')+today+' · Finanzas en Acción'),L+21,20.5);y=38;
+  doc.setTextColor(240,236,224);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text(T('Ficha del caso para el bróker'),L+21,14);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.text(T((B.nombre?B.nombre+' · ':'')+today+' · Finanzas en Acción'),L+21,20.5);y=38;
+  // etiqueta del caso
+  {const col={viable:[[226,239,232],G],justo:[[253,241,220],[168,105,15]],lejos:[[251,231,229],[194,65,58]]}[c.k],tx=doc.splitTextToSize(T('Caso '+c.k+(co?': '+co:'')),CW-8);
+   doc.setFillColor(...col[0]);doc.roundedRect(L,y-6,CW,5+tx.length*4.6,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(10.5);doc.setTextColor(...col[1]);doc.text(tx,L+4,y-0.4);y+=tx.length*4.6+6}
   const H=t=>{if(y>255){doc.addPage();y=20}doc.setFont('helvetica','bold');doc.setFontSize(12.5);doc.setTextColor(...INK);doc.text(T(t),L,y);y+=4};
-  const TB=(head,body)=>{doc.autoTable({startY:y,head:[head.map(T)],body:body.map(r=>r.map(x=>T(String(x)))),margin:{left:L,right:L},theme:'plain',styles:{font:'helvetica',fontSize:9,textColor:INK,cellPadding:1.8},headStyles:{fillColor:[226,239,232],textColor:G,fontStyle:'bold'},alternateRowStyles:{fillColor:[246,248,246]},columnStyles:{1:{halign:'right',fontStyle:'bold'},3:{halign:'right',fontStyle:'bold'}}});y=doc.lastAutoTable.finalY+7};
-  const uso=S.v.segunda?'Segunda vivienda o inversión':S.v.primera?'Primera vivienda':'Cambio de vivienda habitual';
-  H('Perfil');TB(['Dato','','Dato',''],[['Edad (mayor de los titulares)',S.v.edad+' años','Titulares',S.a.titulares],['Ingresos netos/mes',eur(S.a.ingresos),'Alquileres que computan',eur(alqB()+(C.L.length?C.comput:0))],['Otras cuotas/mes',eur(deudasB()),'Ahorros · colchón',eur(S.a.ahorros)+' · '+eur(S.a.colchon)],['Comunidad',S.v.ccaa,'Uso',uso]]);
-  H('Operación');TB(['Concepto','','Concepto',''],[['Precio',eur(R.P),'Precio máximo por perfil',eur(R.max)],['Entrada',eur(R.c.entrada)+' · '+pctS(R.eEf),'Hipoteca',eur(R.hip)],['Plazo',anos(S.v.plazo),'Cuota estimada ('+pct(S.v.tin)+')',eur(R.cuota)],['Impuestos y gastos',eur(R.gastos),'Ahorro necesario',eur(R.need)],['Endeudamiento',isFinite(R.esfuerzo)?pct(R.esfuerzo,0):'-','Financiación sobre tasación',pct(R.ltv,0)]]);
-  const K=R.chk;H('Lo que mirará el banco');TB(['Criterio','Cumple','',''],[['Entrada mínima',K.entrada?'Sí':'No','',''],['Cuotas hasta su máximo',K.esf?'Sí':'No','',''],[`Le quedan ${eur(RESID)} por titular`,K.resto?'Sí':'No','',''],[`Termina antes de los ${EDAD_FIN}`,K.plazo?'Sí':'No','',''],[`Aguanta el tipo +${ESTRES} puntos`,K.estres?'Sí':'Ojo','','']]);
+  const TB=(head,body,cs)=>{doc.autoTable({startY:y,head:[head.map(T)],body:body.map(r=>r.map(x=>T(String(x)))),margin:{left:L,right:L},theme:'plain',styles:{font:'helvetica',fontSize:9,textColor:INK,cellPadding:1.8},headStyles:{fillColor:[226,239,232],textColor:G,fontStyle:'bold'},alternateRowStyles:{fillColor:[246,248,246]},columnStyles:cs||{1:{halign:'right',fontStyle:'bold'},3:{halign:'right',fontStyle:'bold'}}});y=doc.lastAutoTable.finalY+7};
+  const uso=S.v.segunda?'Segunda vivienda o inversión':S.v.primera?'Primera vivienda':'Cambio de vivienda habitual',may=t=>t?t[0].toUpperCase()+t.slice(1):'-',cto=(CONTRATO[S.a.contrato]||CONTRATO.indefinido).replace('contrato ','');
+  H('Perfil');TB(['Dato','','Dato',''],[['Edad (mayor de los titulares)',S.v.edad+' años','Titulares',S.a.titulares],['Ingresos netos/mes',eur(S.a.ingresos),'Alquileres que computan',eur(alqB()+(C.L.length?C.comput:0))],['Otras cuotas/mes',eur(deudasB()),'Ahorros · colchón',eur(S.a.ahorros)+' · '+eur(S.a.colchon)],
+    ['Contrato',may(cto)+(B.antig>0?' · '+String(B.antig).replace('.',',')+(B.antig===1?' año':' años'):''),'Origen de los ahorros',may(ORIGEN[B.origen]||'')],['Dónde compra',joseLugar(),'Uso',uso],['Arras',B.arras?'Firmadas'+(fechaEs(B.arrasFin)?' · límite '+fechaEs(B.arrasFin):''):'Sin firmar','','']].concat(B.tel||B.email?[['Teléfono',B.tel||'-','Correo',B.email||'-']]:[]));
+  H('Operación');TB(['Concepto','','Concepto',''],[['Precio'+(c.P>0||!(R.P>0)?'':' (el del ejemplo)'),R.P>0?eur(R.P):'Sin casa en mente','Precio máximo por perfil',eur(R.max)],['Entrada',eur(R.c.entrada)+' · '+pctS(R.eEf),'Hipoteca',eur(R.hip)],['Plazo',anos(S.v.plazo),'Cuota estimada ('+pct(S.v.tin)+')',eur(R.cuota)],['Impuestos y gastos',eur(R.gastos),'Ahorro necesario',eur(R.need)],['Endeudamiento',isFinite(R.esfuerzo)?pct(R.esfuerzo,0):'-','Financiación sobre tasación',pct(R.ltv,0)]]);
+  const K=R.chk;H('Lo que mirará el banco');TB(['Criterio','Cumple'],[['Entrada mínima',K.entrada?'Sí':'No'],['Cuotas hasta su máximo',K.esf?'Sí':'No'],[`Le quedan ${eur(RESID)} por titular`,K.resto?'Sí':'No'],[`Termina antes de los ${EDAD_FIN}`,K.plazo?'Sí':'No'],[`Aguanta el tipo +${ESTRES} puntos`,K.estres?'Sí':'Ojo']],{1:{fontStyle:'bold',cellWidth:30}});
   const top=hipoteca()>0?OFF.map(x=>({x,c:mcalc(x)})).filter(r=>!r.c.noAcc&&!r.c.ltvKo).sort((a,b)=>a.c.int-b.c.int).slice(0,3):[];
   if(top.length){H('Ofertas públicas de referencia (mejorables)');TB(['Banco','Cuota','Tipo','Interés'],top.map(r=>[r.x.b+' · '+r.x.p,eur(r.c.cuota),r.x.t,pct(r.c.tin)]))}
   if(C.L.length){H('Cartera de pisos');TB(['Piso','Te deja/mes','Valor · deuda','Alquiler'],C.L.map(p=>[p.n||'Piso',eur(p.neto),eur(+p.valor||0)+' · '+eur(+p.deuda||0),eur(+p.alq||0)]))}
-  if(S.bro.nota){H('Notas del cliente');doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(...INK);const ls=doc.splitTextToSize(T(S.bro.nota),CW);doc.text(ls,L,y+2);y+=ls.length*4.5+6}
+  if(B.nota){H('Notas del cliente');doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(...INK);const ls=doc.splitTextToSize(T(B.nota),CW);doc.text(ls,L,y+2);y+=ls.length*4.5+6}
+  // enlace que abre el caso en la calculadora (sin nombre, teléfono ni correo)
+  {if(y>272){doc.addPage();y=20}doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor(...G);doc.textWithLink(T('Abrir este caso en la calculadora'),L,y+2,{url:casoUrl()});doc.setFont('helvetica','normal');doc.setTextColor(...MUT);doc.text(T('(enlace con los números del caso, sin datos personales)'),L+doc.getTextWidth(T('Abrir este caso en la calculadora'))+7,y+2);y+=8}
   const n=doc.getNumberOfPages();for(let k=1;k<=n;k++){doc.setPage(k);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(T('Cálculos orientativos con los datos que ha puesto el cliente. No son una oferta ni asesoramiento financiero.'),L,290);doc.text(`${k}/${n}`,W-L,290,{align:'right'})}
-  if(await saveFile('caso-hipoteca-'+(S.bro.nombre||'cliente').toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi,'-')+'.pdf',doc.output('arraybuffer'),'application/pdf')){toast('Informe descargado');track('informe-broker')}}
+  return doc}
+async function broPdf(){const dl=await DLP;if(!dl){toast('Aquí no se pueden descargar ficheros');return}
+  let doc;try{await libs();doc=broDoc()}catch(e){toast('No se ha podido preparar la ficha');return}
+  if(await saveFile(broNom(),doc.output('arraybuffer'),'application/pdf')){toast('Ficha descargada');track('informe-broker')}}
+/* «Compartir ficha»: el menú de compartir del dispositivo con el PDF como fichero; donde no se puede, se descarga como siempre */
+let BRO_F=null;
+const broShareDatos=()=>({files:[BRO_F],title:'Ficha de mi caso',text:'Ficha de mi caso de hipoteca (Finanzas en Acción)'});
+async function broShare(){
+  try{await libs();BRO_F=new File([broDoc().output('blob')],broNom(),{type:'application/pdf'})}catch(e){toast('No se ha podido preparar la ficha');return}
+  if(!(navigator.share&&navigator.canShare&&navigator.canShare({files:[BRO_F]}))){broPdf();return}
+  try{await navigator.share(broShareDatos());track('ficha-compartir')}
+  catch(e){if(e&&e.name==='AbortError')return;
+    if(e&&e.name==='NotAllowedError'){modal('La ficha está lista',`<div class="am-bar"><button class="btn solid" data-broshare2="1">Compartir</button><button class="btn" data-bropdf="1">Descargar</button></div>`);return} // el navegador pide un toque nuevo si ha pasado un rato
+    broPdf()}}
+document.addEventListener('click',async e=>{if(e.target.closest('[data-broshare]')){broShare();return}
+  if(e.target.closest('[data-broshare2]')&&BRO_F){ov.hidden=true;try{await navigator.share(broShareDatos());track('ficha-compartir')}catch(err){if(!(err&&err.name==='AbortError'))broPdf()}}});
 
 /* Invertir a fondo: ratios, flujos año a año y sensibilidad precio × alquiler */
 function fondoModal(){const K=inv(),I=S.i;
