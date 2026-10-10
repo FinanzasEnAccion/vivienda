@@ -2416,7 +2416,7 @@ function shareLines(con){const t=S.tab,E=`Euríbor oficial de ${MKT.eurMes||'est
       d:!casa?`Me limitan ${lim}`:ok?`La de ${eur(R.P)} me llega${mas?' con más entrada':''}: pagaría ${eur(mas&&isFinite(A.cuota)?A.cuota:R.cuota)} al mes`:`La de ${eur(R.P)} aún no me llega: me limitan ${lim}`};
     return !casa?{t:T,h:`Lo que más me limita para comprar: ${lim}`,d:''}:ok?{t:T,h:'La vivienda que miro me llega'+(mas?' con más entrada':''),d:mas?'':esf}:{t:T,h:`Aún no me llega: me limitan ${lim}`,d:esf}}
   if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted.length){const s=LAST.r2.sorted,w=s[0],o=S.h.offers[w.i]||{},n=s.length,gap=n>1?s[1].c.total-w.c.total:0,T='Comparar hipotecas',nm=x=>{const v=String(x.n||'').trim()||'Oferta';return v.length>28?v.slice(0,27).trim()+'…':v};
-    if(con)return gap>=1?{t:T,lead:'Elegir la hipoteca más barata me ahorra',big:eur(gap),d:`${nm(w)}, frente a ${nm(s[1])}. Con intereses, seguros y comisiones`}
+    if(con)return gap>=1?{t:T,lead:'Elegir la hipoteca más barata me ahorra',big:eur(gap),d:`${nm(w)}, frente a ${(nm(s[1])+'.').replace('….','…')} Con intereses, seguros y comisiones`}
       :{t:T,lead:'Coste total de mi hipoteca',big:eur(w.c.total),d:`${nm(w)}: intereses, seguros y comisiones. Cuota de ${eur(w.c.cuota)} al mes`};
     return n>1?{t:T,h:`Gana la ${o.tipo||'oferta'} que menos cuesta en total`,d:`Comparé ${n} ofertas con seguros y comisiones`}:{t:T,h:'Ya sé lo que me cuesta mi hipoteca en total',d:'Con intereses, seguros y comisiones'}}
   if(t==='alquilar'&&LAST.r3){const R=LAST.r3,buy=R.dif>=0,T='¿Comprar o alquilar?';
