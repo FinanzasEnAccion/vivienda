@@ -406,6 +406,12 @@ tr+tr td{border-top:1px solid var(--line)}
 .broker p{font-size:12.5px}
 .broker p.disc{font-size:11px;color:rgba(240,236,224,.72);margin-top:2px}
 .broker .lnkbtn{color:var(--mint);font-size:inherit}
+.broker .ctag{display:inline-flex;align-items:center;gap:6px;margin-left:8px;border:0;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:rgba(240,236,224,.14);color:var(--brand-ink);white-space:nowrap;vertical-align:2px}
+.broker .ctag:hover{background:rgba(240,236,224,.26)}
+.broker .ctag i{width:9px;height:9px;border-radius:50%;background:var(--mint)}
+.broker .ctag.justo i{background:#E6B24E}.broker .ctag.lejos i{background:#EE7A72}
+a.btn{text-decoration:none;display:inline-block}
+html.m .broker .ctag{margin:6px 0 2px;padding:6px 12px;font-size:13px}
 #btnMetodo .sm{display:none}
 @media (max-width:374px){html.m #btnMetodo .lg{display:none}html.m #btnMetodo .sm{display:inline}}
 @media (max-width:800px){html.web #btnMetodo{display:none}}
@@ -856,8 +862,9 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 
   <aside class="broker" aria-label="Ayuda de un bróker">
     <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></div>
-    <div class="btxt"><h3>¿Quieres ayuda del bróker que me ayudó a mí?</h3><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button></p></div>
+    <div class="btxt"><h3 id="brokerT">¿Quieres ayuda del bróker que me ayudó a mí?</h3><button type="button" class="ctag" id="casoTag" data-x="caso" title="Pincha para ver por qué" hidden></button><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button></p></div>
     <a class="cta" id="cta" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Primer contacto gratis con José <span aria-hidden="true">→</span></a>
+    <a class="cta" id="ctaAlt" href="#" role="button" data-x="caso" hidden>Ver qué te acerca <span aria-hidden="true">→</span></a>
   </aside>
 </main>
 
@@ -2208,17 +2215,108 @@ document.addEventListener('click',e=>{const d=e.target.closest('[data-mdet]');if
 
 /* ---------- bróker ---------- */
 function renderBroker(){
-  const R=LAST.r1,t=S.tab;let txt;
-  if(t==='cuanto')txt=R&&(R.falta>0||R.esfuerzo>S.a.esfuerzo)?'Si no te llega, puede buscarte un banco que financie más o tramitar el aval ICO, y decirte qué precio te conviene de verdad.':'Antes de hacer una oferta por la vivienda, te dice qué hipoteca puedes conseguir y con qué banco.';
+  const t=S.tab,c=casoVer(),k=c?c.k:'';let txt;
+  if(t==='cuanto')txt=c&&c.m==='entrada'?'Con la entrada mínima del banco te llega: te dice qué hipoteca puedes conseguir y con qué banco.':'Antes de hacer una oferta por la vivienda, te dice qué hipoteca puedes conseguir y con qué banco.';
   else if(t==='hipotecas')txt='Llévale estas ofertas: negocia el tipo y las vinculaciones por ti y te dice si hay algo mejor en el mercado.';
   else if(t==='invertir')txt='Para comprar para alquilar los bancos piden más entrada y condiciones distintas: un bróker te dice cuánto te financian de verdad.';
   else if(t==='mihipo')txt=LAST.r6&&LAST.r6.vari&&LAST.r6.dq>0.5?'Si la revisión te sube la cuota, puede estudiar si te compensa pasar a fija, negociar el diferencial o cambiar de banco.':'Puede revisar tu hipoteca y decirte si hoy conseguirías mejores condiciones en otro banco o pasando a fija.';
   else if(t==='bancos')txt='Estas son las ofertas públicas. Un bróker suele conseguir mejores condiciones que las de la web del banco.';
   else txt='Si decides comprar, te acompaña desde la búsqueda de la hipoteca hasta la firma.';
-  $('brokerTxt').textContent=txt+' Es quien llevó mi hipoteca. El primer contacto es gratis: le cuentas tu caso y te dice qué puedes conseguir.';
+  // Según la etiqueta del caso: viable, el mensaje de siempre; justo, el motivo por el que José puede ayudar; lejos, qué te acerca (y el botón deja de ser la llamada)
+  const bt=$('brokerTxt');if(k==='justo'||k==='lejos'||(c&&c.ico))bt.innerHTML=casoFrase(c)+(k==='lejos'?'':' El primer contacto es gratis.');
+  else bt.textContent=txt+' Es quien llevó mi hipoteca. El primer contacto es gratis: le cuentas tu caso y te dice qué puedes conseguir.';
+  $('brokerT').textContent=k==='lejos'?'Todavía no te llega para ir al banco':'¿Quieres ayuda del bróker que me ayudó a mí?';
+  const tag=$('casoTag');tag.hidden=!c;if(c){tag.className='ctag '+k;tag.innerHTML=`<i></i>Tu caso: ${CASO_N[k]}`}
+  $('cta').hidden=k==='lejos';$('ctaAlt').hidden=k!=='lejos';
 }
 /* Resultado de «¿Cuánto puedo comprar?» siempre al día para el banner, el resumen y la ficha, sin depender de qué pestaña se haya pintado. Solo se recalcula si cambian tus datos. */
-function casoR(){const k=JSON.stringify([S.v,S.a]);if(casoR.k!==k){casoR.k=k;casoR.r=calc1()}return casoR.r}
+function casoR(){const k=JSON.stringify([S.v,S.a]);if(casoR.k!==k){casoR.k=k;casoR.c=null;casoR.r=calc1()}return casoR.r}
+
+/* ---------- etiqueta del caso: viable, justo o lejos ----------
+   Para no mandar a una llamada con José a quien todavía no puede comprar. Sale de «¿Cuánto puedo comprar?» (calc1):
+   para la casa que tienes en mente o, si no has puesto ninguna, para tu precio máximo. Es una orientación con criterio propio.
+   Umbrales: */
+const CASO_FALTA_PCT=10, // justo: te faltan ahorros por menos de este % del precio
+  CASO_MESES=24,         // justo si reúnes lo que falta en estos meses o menos; lejos si tardarías más
+  CASO_ESF=ESF_BANCO,    // justo: la cuota cabe con el esfuerzo máximo que acepta algún banco (40 %)
+  CASO_PRECIO_MIN=50000, // sin casa en mente: con un precio máximo por debajo de este no se manda a una llamada (0 = sin suelo). Criterio de negocio: confirmar con José desde qué importe trabaja
+  CASO_ICO_MAS=1.2;      // sin casa en mente: se menciona el aval ICO si con él tu precio máximo sube al menos un 20 %
+/* La casa que tienes en mente, si la has puesto tú (el precio del ejemplo no cuenta) */
+const casoP=()=>S.v.precio>0&&S.v.precio!==EXAMPLE.v.precio?S.v.precio:0;
+/* La casa que miras con la regla del precio máximo (si la cuota no cuadra, más entrada). Es R.aj cuando calc1 lo da; si no, la misma cuenta con sus resultados. */
+function casoAj(R){if(R.aj)return R.aj;const ent=Math.max(R.c.entrada,R.P-R.hipMax),hip=Math.max(0,R.P-ent),need=ent+R.gastos+S.a.colchon,falta=need-S.a.ahorros;
+  return {ent,pct:R.P>0?ent/R.P*100:0,hip,cuota:cuotaFor(hip,S.v.tin,R.plazoB),plazo:R.plazoB,need,falta,ok:falta<=0,mas:ent>R.c.entrada+0.5,meses:falta>0&&S.a.ahorroMes>0?Math.ceil(falta/S.a.ahorroMes):null}}
+/* Ahorros que faltarían (>0) para la casa que miras si el banco financiara el ltv % y aceptara cuotas de hasta el esf % de tus ingresos, con la entrada mínima */
+function casoFalta(R,ltv,esf){const P=R.P,base=Math.min(P,R.tas>0?R.tas:P),cuotaMax=Math.max(0,Math.min(ingB()*esf/100-deudasB(),R.cuotaRes)),hipMax=pvFor(cuotaMax,S.v.tin,R.plazoB);
+  return Math.max(0,P-ltv/100*base,P-hipMax)+R.gastos+S.a.colchon-S.a.ahorros}
+/* Precio máximo si usaras el aval ICO (null si no cumples el perfil o ya lo usas). Usa maxConIco() cuando existe. */
+function casoIco(){if(typeof maxConIco==='function')return maxConIco();if(S.v.ico)return null;const k=[S.v.ico,S.v.entrada,S.v.entUnit,S.v.ltv];
+  try{S.v.ico=true;S.v.entUnit='pct';S.v.entrada=0;S.v.ltv=0;const R=calc1(),ic=icoInfo(R.max);return ic.ok&&R.max>=1000?{max:R.max}:null}finally{[S.v.ico,S.v.entrada,S.v.entUnit,S.v.ltv]=k}}
+/* La etiqueta: k = viable | justo | lejos y m = el motivo. Se guarda hasta que cambien tus datos. */
+function casoDe(){const R=casoR();if(casoR.c)return casoR.c;
+  const P=casoP(),ct=S.a.contrato,suelo=Math.max(1000,CASO_PRECIO_MIN),o={R,P,maxR:Math.floor(R.max/1000)*1000,aj:null,ico:null};
+  const fin=(k,m)=>{if(k==='viable'&&(ct==='temporal'||ct==='autonomo')){k='justo';m=ct}return casoR.c=Object.assign(o,{k,m})};
+  if(!(P>0)){ // sin casa en mente: manda tu precio máximo
+    const mi=R.ico&&R.ico.perfil&&!S.v.ico&&R.bind==='ahorros'?casoIco():null; // te frenan los ahorros y tienes el perfil del aval ICO: con él llegarías más lejos
+    if(R.max>=suelo){if(mi&&mi.max>=R.max*CASO_ICO_MAS)o.ico=mi;return fin('viable','max')}
+    if(R.cuotaMax<=0)return fin('lejos','cuota');
+    if(mi&&mi.max>=suelo){o.ico=mi;return fin('justo','avalmax')}
+    return fin('lejos',R.max>=1000?'max':'nada')}
+  const aj=o.aj=casoAj(R),esf=S.a.esfuerzo,fStd=casoFalta(R,ltvAuto(),esf);
+  if(fStd<=0)return fin('viable',aj.ok?'ok':'entrada'); // con lo habitual (80 %, o 70 % en segunda vivienda) y la entrada mínima, te llega
+  if(R.cuotaMax<=0)return fin('lejos','cuota');
+  if(R.ico&&R.ico.ok&&casoFalta(R,100,esf)<=0)return fin('justo','aval');
+  if(ltvBanco()>ltvAuto()&&casoFalta(R,ltvBanco(),esf)<=0)return fin('justo','fin');
+  if(esf<CASO_ESF&&casoFalta(R,ltvAuto(),CASO_ESF)<=0)return fin('justo','esf');
+  if(fStd<P*CASO_FALTA_PCT/100)return fin('justo','poco');
+  if(S.a.ahorroMes>0&&Math.ceil(fStd/S.a.ahorroMes)<=CASO_MESES)return fin('justo','pronto');
+  return fin('lejos',!aj.mas?'ahorros':R.falta>0?'ambos':'ingresos')} // ahorros: solo faltan ahorros; ingresos: la cuota no cabe; ambos: las dos cosas
+/* La etiqueta solo se enseña en las pestañas de la compra y con datos tuyos (no con los del ejemplo) */
+function casoVer(){const t=S.tab;if(typeof touched!=='undefined'&&!touched)return null;
+  return t==='simple'||t==='cuanto'||t==='alquilar'||t==='hipotecas'||t==='bancos'||(t==='pro'&&S.proTab==='informe')?casoDe():null}
+const CASO_N={viable:'viable',justo:'justo',lejos:'aún lejos'};
+/* El precio máximo tal como se enseña en la pestaña en la que estás: redondeado a miles en la Estándar, exacto en el resto (un número por concepto) */
+const casoMax=c=>S.tab==='simple'?c.maxR:c.R.max;
+/* El motivo en pocas palabras, para el resumen que recibe José y la ficha */
+function casoCorto(c){const aj=c.aj,f=aj&&aj.falta>0?`faltan ${eur(aj.falta)}${aj.mas?' para que la cuota cuadre':' de ahorros'}`:'';
+  if(c.k==='viable')return c.m==='entrada'?'con la entrada mínima del banco':'';
+  return ({aval:'con aval ICO',avalmax:'con aval ICO',fin:`necesita financiación del ${pctS(ltvBanco())}`,esf:`cuota por encima del ${pctS(S.a.esfuerzo)} de los ingresos`,poco:f,pronto:f+(aj&&aj.meses?`, ${mesesTxt(aj.meses)} ahorrando`:''),
+    temporal:'contrato temporal',autonomo:'autónomo',ahorros:f,ambos:'faltan ahorros y la cuota no cabe en sus ingresos',ingresos:'la cuota no cabe en sus ingresos',cuota:'sin margen para la cuota',nada:'sin ahorros para la compra'})[c.m]||''}
+/* La línea del banner: por qué José puede ayudar (justo) o qué te acerca (lejos). Las cifras se pinchan y abren la cuenta. */
+function casoFrase(c){const aj=c.aj,P=c.P,fig=t=>`<button type="button" class="lnkbtn num" data-x="caso">${t}</button>`,mx=casoMax(c),hoy=c.maxR>=1000?` Hoy te llega para una de ${fig(eur(mx))}.`:'';
+  switch(c.k==='viable'&&c.ico?'avalmax':c.m){
+    case 'aval':return `Con el aval ICO te llega para la de ${fig(eur(P))}: José sabe qué bancos lo tramitan y si cumples.`;
+    case 'avalmax':return `Hoy te llega para una de ${fig(eur(mx))}; con el aval ICO, hasta ${fig(eur(Math.floor(c.ico.max/1000)*1000))}. José sabe qué bancos lo tramitan y si cumples.`;
+    case 'fin':return `Cuentas con que el banco financie el ${pctS(ltvBanco())}: pocos lo dan. José sabe cuáles.`;
+    case 'esf':return `La cuota de la de ${fig(eur(P))} pasa del ${pctS(S.a.esfuerzo)} de tus ingresos: José puede buscarte un banco que llegue al ${pctS(CASO_ESF)}.`;
+    case 'poco':return `Te faltan ${fig(eur(aj.falta))}${aj.mas?' para que la cuota cuadre: José puede decirte cómo ajustarlo.':' de ahorros: José puede buscarte un banco que financie más.'}`;
+    case 'pronto':return `Te faltan ${fig(eur(aj.falta))}${aj.meses?`: ${fig(mesesTxt(aj.meses))} ahorrando ${eur(S.a.ahorroMes)} al mes`:''}. José puede decirte qué banco financiaría más.`;
+    case 'temporal':return 'Con contrato temporal muchos bancos dicen que no: José sabe cuáles lo estudian.';
+    case 'autonomo':return 'Siendo autónomo, los bancos piden más papeles: José sabe cuáles encajan mejor.';
+    case 'ahorros':return `Para la de ${eur(P)} te faltan ${fig(eur(aj.falta))}${aj.meses?`: ${fig(mesesTxt(aj.meses))} ahorrando ${eur(S.a.ahorroMes)} al mes`:''}.${hoy}`;
+    case 'ambos':return `Para la de ${fig(eur(P))} te faltan ahorros y la cuota no cabe en tus ingresos.${hoy}`;
+    case 'ingresos':return `Con tus ingresos, el banco no aprobaría la cuota de la de ${fig(eur(P))}.${hoy}`;
+    case 'cuota':return 'Con tus ingresos y tus otras cuotas, hoy un banco no te daría hipoteca.';
+    case 'max':return `Con tus datos, hoy te llega para una vivienda de hasta ${fig(eur(mx))}.`;
+    default:return 'Con estos ahorros todavía no te llega para comprar.'}}
+/* La cuenta de la etiqueta, paso a paso, con la acción recomendada */
+X.caso=()=>{const c=casoDe(),R=c.R,aj=c.aj,P=c.P,k=c.k,suelo=Math.max(1000,CASO_PRECIO_MIN);
+  const pasos=P>0?step('La vivienda que miras',eur(P))+step(aj.mas?'Entrada para que la cuota cuadre':'Entrada',eur(aj.ent)+' · '+pct(aj.pct,0))+step('Impuestos y gastos de la compra',eur(R.gastos))+step('Colchón que no tocas',eur(S.a.colchon))
+      +step('Necesitas',eur(aj.need),'tot')+step('Tienes',eur(S.a.ahorros))+step(aj.falta>0?'Te faltan':'Te sobran',eur(Math.abs(aj.falta)),'tot')
+      +(aj.falta>0&&aj.meses?step(`Ahorrando ${eur(S.a.ahorroMes)} al mes lo reúnes en`,mesesTxt(aj.meses)):'')
+      +step(`Cuota al mes (${pct(S.v.tin)}, ${anos(aj.plazo)})`,eur(aj.cuota))
+      +(c.m==='aval'&&!S.v.ico?step('Con el aval ICO (el banco financia hasta el 100 %) necesitas',eur(casoFalta(R,100,S.a.esfuerzo)+S.a.ahorros),'tot'):c.m==='esf'?step(`Con cuotas de hasta el ${pctS(CASO_ESF)} de tus ingresos necesitas`,eur(casoFalta(R,ltvAuto(),CASO_ESF)+S.a.ahorros),'tot'):c.m==='entrada'?step(`Con la entrada mínima del banco necesitas`,eur(casoFalta(R,ltvAuto(),S.a.esfuerzo)+S.a.ahorros),'tot'):'')
+      +step('Precio máximo que te llega hoy',eur(casoMax(c)))
+    :step('Tus ahorros, sin el colchón',eur(R.disp))+step('Cuota máxima que aprobaría el banco',eur(R.cuotaMax)+'/mes')+step('Precio máximo que te llega hoy',eur(casoMax(c)),'tot')+(c.ico?step('Precio máximo con el aval ICO',eur(c.ico.max),'tot'):'');
+  const porque={ok:'Con lo habitual en un banco te llega: los ahorros y la cuota.',max:'Con lo habitual en un banco te llega para comprar.',entrada:'Con la entrada que has puesto no te llega, pero con la mínima del banco sí.',
+    temporal:'Los números te llegan, pero con contrato temporal muchos bancos no la aprueban o piden otro titular.',autonomo:'Los números te llegan, pero a un autónomo los bancos suelen pedirle dos años de actividad y miran la media de sus ingresos.'}[c.m]||casoFrase(c).replace(/<[^>]+>/g,'');
+  const jose=k==='lejos'?`<a class="lnkbtn" data-cta="caso-lejos" href="${JOSE_URL}" target="_blank" rel="noopener">Hablar con José de todas formas →</a>`:`<a class="btn solid" data-cta="caso" href="${JOSE_URL}" target="_blank" rel="noopener">Reservar con José →</a>`;
+  modal(`Tu caso: ${CASO_N[k]}`,`<p>${porque}</p><div class="steps">${pasos}</div>
+    ${k==='lejos'?`<p>${c.m==='ingresos'||c.m==='cuota'?`Aquí manda la cuota: los bancos no suelen aprobar cuotas que pasen del ${ESF_AVISO} % de lo que entra en casa (${ESF_BANCO} % como mucho). Te acercan un precio más bajo, más entrada o menos cuotas de otros préstamos.`:c.m==='ambos'?'Te acercan las dos cosas: más ahorro y un precio que tu sueldo pueda pagar.':`Lo que más acerca es el ahorro: lo habitual es que el banco financie el ${pctS(ltvAuto())} y que los impuestos y gastos, alrededor de un 10 %, salgan de tu bolsillo.`}${R.ico&&R.ico.perfil&&!S.v.ico&&c.m!=='ingresos'&&c.m!=='cuota'?' Si cumples el aval ICO, el banco puede financiar hasta el 100 %.':''}</p>`:''}
+    <div class="am-bar" style="margin-top:12px">${k==='lejos'?(P>0&&c.maxR>=suelo?`<button class="btn solid" data-act="usemax">Probar con ${eur(c.maxR)}</button>`:'')+(R.ico&&R.ico.perfil&&!S.v.ico?'<button class="btn" data-x="ico">Requisitos del aval ICO</button>':'')+'<button class="btn" data-x="pasos">Pasos y papeles</button>':jose}<button class="btn" data-x="max">Ver la cuenta del precio máximo</button></div>
+    ${k==='lejos'?`<p style="margin-top:12px">${jose}</p>`:''}
+    <p class="note"><b>Viable:</b> te llega con lo habitual (el banco financia el ${pctS(ltvAuto())} y las cuotas no pasan del ${pctS(S.a.esfuerzo)} de tus ingresos). <b>Justo:</b> te llega con aval ICO, con más financiación o con cuotas de hasta el ${pctS(CASO_ESF)}; o te falta menos del ${pctS(CASO_FALTA_PCT)} del precio o lo reúnes en ${CASO_MESES} meses o menos; o tu contrato es temporal o eres autónomo. <b>Lejos:</b> el resto.${CASO_PRECIO_MIN>0?` Sin casa en mente se mira tu precio máximo: viable desde ${eur(CASO_PRECIO_MIN)}.`:''} Es una orientación, no la respuesta de un banco.</p>`);track('caso-ver',k)};
+$('mBody').addEventListener('click',e=>{if(e.target.closest('[data-act="usemax"]'))ov.hidden=true});
 
 /* ---------- enlaces a José (cal.com): de dónde viene la reserva y, con tu permiso, el resumen del caso ----------
    Todos los enlaces a cal.com de la página pasan por aquí con un manejador delegado: no hay que tocarlos uno a uno.
@@ -2248,8 +2346,8 @@ function joseTxt(con){
   let t;
   if(c==='hipo'){const m=S.m;t=`Ya tengo hipoteca ${m.tipo==='fija'?'fija':'variable o mixta'}: ${eur(m.capital)} pendientes, ${anos(m.anos)}, TIN ${pct(m.tin)}${m.tipo==='fija'?'':` (Euríbor + ${pct(m.dif)})`}.`}
   else if(c==='inv'){const i=S.i;t=`Compra para alquilar de ${eur(i.precio)} en ${i.ccaa}${i.contado?', al contado':`, con hipoteca del ${pctS(i.fin)}`}, alquiler previsto de ${eur(i.alquiler)} al mes; ${perfil}.`}
-  else{const P=S.v.precio,uso=S.v.segunda?'segunda vivienda':S.v.primera?'primera vivienda':'cambio de casa';
-    t=`${P>0?`Compra de ${eur(P)}`:`Busco vivienda de hasta ${eur(Math.floor(casoR().max/1000)*1000)}`} en ${joseLugar()} (${S.v.nueva?'obra nueva':'segunda mano'}, ${uso}), ${perfil}, ${S.v.edad} años.`}
+  else{const k=casoDe(),co=casoCorto(k),P=k.P,uso=S.v.segunda?'segunda vivienda':S.v.primera?'primera vivienda':'cambio de casa';
+    t=`Caso ${k.k}${co?` (${co})`:''}: ${P>0?`compra de ${eur(P)}`:k.maxR>=1000?`busco vivienda de hasta ${eur(k.maxR)}${k.ico&&k.m!=='avalmax'?` (con aval ICO, hasta ${eur(Math.floor(k.ico.max/1000)*1000)})`:''}`:'quiero comprar'} en ${joseLugar()} (${S.v.nueva?'obra nueva':'segunda mano'}, ${uso}), ${perfil}, ${S.v.edad} años.`}
   return T(`${JOSE_ORIGEN} ${t}`)}
 const joseQuien=()=>{const n=(S.bro.nombre||'').trim(),e=(S.bro.email||'').trim();return {n,e:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:''}};
 /* Dirección de la reserva: cal.com admite rellenar el formulario por la URL (notes, name, email). El nombre y el correo solo van si los has escrito en la ficha y envías tu caso. */
@@ -2276,6 +2374,8 @@ document.addEventListener('click',e=>{const a=joseA(e);if(!a)return;
   if(!JOSE&&joseCtx()){e.preventDefault();joseModal();return} // primera vez: se enseña lo que se enviaría y se elige
   track('reserva',josePrepara(a)?'con-caso':'sin-datos')},true);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-joseset]');if(!b)return;josePon(b.dataset.joseset);joseModal();toast(JOSE==='si'?'Tu caso irá con la reserva':'Reservarás sin datos')});
+/* Para las pruebas: las funciones del bróker se añaden a window.__FEA cuando ya existe (se crea en la última línea) */
+setTimeout(()=>{if(window.__FEA)Object.assign(window.__FEA,{casoR,casoDe,casoVer,casoCorto,casoFalta,joseCtx,joseTxt,joseHref})},0);
 
 
 /* ---------- versión web / móvil ---------- */
@@ -2400,7 +2500,7 @@ if(GC_CODE&&!window.claude&&/^https?:$/.test(location.protocol)){const s=documen
   s.onload=()=>{const t=setInterval(()=>{if(window.goatcounter&&window.goatcounter.count){clearInterval(t);GCQ.splice(0).forEach(ev=>window.goatcounter.count(ev))}},300);setTimeout(()=>clearInterval(t),8000)};document.head.appendChild(s)}
 /* contexto genérico del clic en el bróker, sin importes */
 function ctaCtx(){const t=S.tab;
-  if(t==='cuanto'&&LAST.r1)return t+'/'+(LAST.r1.ok?'le-llega':'no-le-llega')+(S.v.ico?'/aval':'');
+  if(t==='cuanto'||t==='simple'){const c=casoVer();return t+'/'+(c?c.k:'ejemplo')+(S.v.ico?'/aval':'')}
   if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted&&LAST.r2.sorted[0])return t+'/'+(S.h.offers[LAST.r2.sorted[0].i]||{}).tipo;
   if(t==='alquilar'&&LAST.r3)return t+'/'+(LAST.r3.dif>=0?'comprar':'alquilar');
   if(t==='mihipo'&&LAST.r6)return t+'/'+(LAST.r6.vari?(LAST.r6.dq>0.5?'sube':'no-sube'):'fija');
