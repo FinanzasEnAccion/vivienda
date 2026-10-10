@@ -1,7 +1,7 @@
 {
   "name": "Finanzas en Acción · Vivienda",
   "short_name": "Vivienda FA",
-  "description": "Cuánto puedes comprar, qué hipoteca te sale mejor, comprar o alquilar, cuánto te sube la revisión de tu variable y qué ofrecen hoy los bancos.",
+  "description": "Seis calculadoras de vivienda: cuánto puedes comprar, comprar o alquilar, qué ofrecen hoy los bancos, comparar hipotecas, invertir para alquilar y revisar tu hipoteca.",
   "lang": "es",
   "id": "./",
   "start_url": "./?app=1",
