@@ -999,7 +999,8 @@ const balTecho=()=>/Ibiza|Formentera/.test(S.v.prov)?378211.68:331859.7;
 const R_CYL={suma:31500,minimo:1,txt:'base imponible menos el mínimo personal y familiar de hasta 31.500 € entre todos los compradores'};
 const R_VAL={ind:30000,conj:47000,txt:'base liquidable de hasta 30.000 € (47.000 € en declaración conjunta)'};
 const R_EXT={ind:30000,conj:55000,txt:'base imponible de hasta 30.000 € (55.000 € en declaración conjunta)'};
-const R_GAL=['los topes de precio y de patrimonio suben 30.000 € por cada miembro más de la unidad familiar'],R_GAL_RUR='parroquia de zona poco poblada o área rural (lista oficial de la Xunta)';
+const galTope=()=>240000+30000*Math.max(0,S.a.menores||0);
+const R_GAL=['los topes de precio y de patrimonio suben 30.000 € por cada miembro más de la unidad familiar: aquí se cuentan los hijos menores que indiques; si sois matrimonio, otros 30.000 €'],R_GAL_RUR='parroquia de zona poco poblada o área rural (lista oficial de la Xunta)';
 const ITP={
  'Andalucía':{gen:[[I,7]],src:['Agencia Tributaria de Andalucía','https://www.juntadeandalucia.es/organismos/atrian/areas/informacion-tributaria/impuestos/preguntas-frecuentes/impuestos-transmisiones-actos/beneficios.html'],
   red:[{tipo:3.5,menorDe:35,max:150000},{tipo:6,max:150000}],mas:['3,5 % en municipios con problemas de despoblación']},
@@ -1017,7 +1018,7 @@ const ITP={
  'Cantabria':{gen:[[I,9]],src:['Ley de Cantabria 5/2026 (Boletín Oficial de Cantabria)','https://www.boe.es/ccaa/boct/2026/012/c00001-00117.pdf'],
   red:[{tipo:4,menorDe:40,hasta:300000,resto:9},{tipo:7,hasta:300000,resto:9}]},
  'Castilla y León':{gen:[[250000,8],[I,10]],src:['Junta de Castilla y León, beneficios fiscales','https://tributos.jcyl.es/web/es/beneficios-fiscales/impuesto-sobre-transmisiones-patrimoniales.html'],
-  red:[{tipo:0.01,menorDe:36,primera:1,max:149999.99,rural:'municipio de hasta 10.000 habitantes (3.000 si está a menos de 30 km de la capital)',renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']},
+  red:[{tipo:0.01,menorDe:36,primera:1,max:149999.99,maxTxt:'menos de 150.000 €',rural:'municipio de hasta 10.000 habitantes (3.000 si está a menos de 30 km de la capital)',renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']},
        {tipo:4,menorDe:36,primera:1,renta:R_CYL}]},
  'Castilla-La Mancha':{gen:[[I,9]],src:['Portal Tributario de Castilla-La Mancha','https://portaltributario.jccm.es/print/449'],
   red:[{tipo:3,menorDe:36,primera:1,max:240000,hipMas:50},{tipo:6,primera:1,max:240000,hipMas:50}]},
@@ -1026,15 +1027,15 @@ const ITP={
  'Comunidad Valenciana':{gen:[[1000000,9],[I,11]],prog:false,src:HAC_CCAA,
   red:[{tipo:6,menorDe:35,primera:1,max:180000,renta:R_VAL},{tipo:8,menorDe:35,primera:1,renta:R_VAL}]},
  'Extremadura':{gen:[[360000,8],[600000,10],[I,11]],src:['Portal Tributario de la Junta de Extremadura','https://portaltributario.juntaex.es/PortalTributario/web/guest/itpajd26'],
-  red:[{tipo:4,menorDe:36,max:200000,renta:R_EXT},{tipo:7,max:200000,renta:R_EXT}],mas:['4 % en municipios de menos de 3.000 habitantes']},
+  red:[{tipo:4,menorDe:36,max:200000,renta:R_EXT},{tipo:4,max:200000,renta:R_EXT,rural:'municipio de menos de 3.000 habitantes'},{tipo:7,max:200000,renta:R_EXT}]},
  'Galicia':{gen:[[I,8]],src:['Ley de Galicia 5/2025 (BOE)','https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3385'],
-  red:[{tipo:3,menorDe:36,max:240000,pat:240000,req:R_GAL},{tipo:7,max:240000,pat:240000,req:R_GAL},
-       {bonif:100,menorDe:36,max:240000,pat:240000,rural:R_GAL_RUR,req:R_GAL,txt:'deducción del 100 %'},{tipo:5,max:240000,pat:240000,rural:R_GAL_RUR,req:R_GAL},{tipo:6,rural:R_GAL_RUR}]},
+  red:[{tipo:3,menorDe:36,max:galTope,pat:galTope,req:R_GAL},{tipo:7,max:galTope,pat:galTope,req:R_GAL},
+       {bonif:100,menorDe:36,max:galTope,pat:galTope,rural:R_GAL_RUR,req:R_GAL,txt:'deducción del 100 %'},{tipo:5,max:galTope,pat:galTope,rural:R_GAL_RUR,req:R_GAL},{tipo:6,rural:R_GAL_RUR,noHab:1}]},
  'La Rioja':{gen:[[I,7]],src:['Gobierno de La Rioja','https://www.larioja.org/tributos/es/tributos-cedidos/impuesto-transmisiones-patrimoniales-actos-juridicos-docume/informacion/transmisiones-patrimoniales-onerosas'],
   red:[{tipo:3,menorDe:40,primera:1,rural:'municipio de la lista de pequeños municipios de La Rioja'},{tipo:4,menorDe:40,primera:1}]},
  'Madrid':{gen:[[I,6]],src:['Ley 5/2024 de la Comunidad de Madrid (BOE)','https://www.boe.es/boe/dias/2025/02/20/pdfs/BOE-A-2025-3303.pdf'],
   red:[{bonif:100,menorDe:35,max:250000,rural:'municipio de menos de 2.500 habitantes',txt:'bonificación del 100 %'},{bonif:10,max:250000,txt:'bonificación del 10 % de la cuota'}]},
- 'Murcia':{gen:[[I,7.75]],src:['Agencia Tributaria de la Región de Murcia','https://agenciatributaria.carm.es/en/faqs-itpajd'],
+ 'Murcia':{gen:[[I,7.75]],src:['Agencia Tributaria de la Región de Murcia','https://agenciatributaria.carm.es/faqs-itpajd'],
   red:[{tipo:3,menorDe:41,renta:{ind:40000,minimo:1,txt:'base imponible general menos el mínimo personal y familiar por debajo de 40.000 € y base del ahorro de hasta 1.800 €'}}]},
  'Navarra':{gen:[[I,6]],src:['Texto refundido del ITP y AJD de Navarra (BOE)','https://www.boe.es/buscar/act.php?id=BON-n-1999-90001'],
   red:[{tipo:4,rural:'municipio en riesgo de despoblación (lista oficial de Navarra)'}],mas:['5 % sobre los primeros 180.304 € para familias con dos o más hijos que no tengan otra vivienda en Navarra']},
@@ -1071,13 +1072,13 @@ const AJD_RED={
  'Baleares':[{tipo:0.5,menorDe:36,primera:1,max:270151.2},{tipo:1,primera:1,max:270151.2}],
  'Canarias':[{tipo:0.4,menorDe:41,primera:1,max:200000,renta:{suma:46455,txt:'renta de hasta 46.455 € entre todos los compradores, más 6.825 € por cada hijo o familiar a tu cargo'},req:['no haber sido nunca titular de otro inmueble']}],
  'Cantabria':[{tipo:0.1,menorDe:40,hasta:300000,resto:1.5},{tipo:1,hasta:300000,resto:1.5}],
- 'Castilla y León':[{tipo:0.01,menorDe:36,primera:1,max:149999.99,rural:'municipio de hasta 10.000 habitantes (3.000 si está a menos de 30 km de la capital)',renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']},
+ 'Castilla y León':[{tipo:0.01,menorDe:36,primera:1,max:149999.99,maxTxt:'menos de 150.000 €',rural:'municipio de hasta 10.000 habitantes (3.000 si está a menos de 30 km de la capital)',renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']},
                     {tipo:0.5,menorDe:36,primera:1,renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']}],
  'Castilla-La Mancha':[{tipo:0.25,menorDe:36,primera:1,max:240000,hipMas:50},{tipo:0.75,primera:1,max:240000,hipMas:50}],
  'Cataluña':[{bonif:100,menorDe:36,renta:{ind:36000,minimo:1,txt:'base imponible (general y del ahorro) menos el mínimo personal y familiar de hasta 36.000 €'},txt:'bonificación del 100 %'}],
  'Comunidad Valenciana':[{tipo:0.1}],
  'Extremadura':[{tipo:0.5,max:200000,renta:R_EXT}],
- 'Galicia':[{bonif:100,menorDe:36,max:240000,pat:240000,rural:R_GAL_RUR,req:R_GAL,txt:'deducción del 100 %'},{tipo:0.5,menorDe:36,max:240000,pat:240000,req:R_GAL},{tipo:1,max:240000,pat:240000,req:R_GAL}],
+ 'Galicia':[{bonif:100,menorDe:36,max:galTope,pat:galTope,rural:R_GAL_RUR,req:R_GAL,txt:'deducción del 100 %'},{tipo:0.5,menorDe:36,max:galTope,pat:galTope,req:R_GAL},{tipo:1,max:galTope,pat:galTope,req:R_GAL}],
  'Madrid':[{bonif:100,menorDe:35,max:250000,rural:'municipio de menos de 2.500 habitantes',txt:'bonificación del 100 %'},{bonif:10,max:250000,txt:'bonificación del 10 % de la cuota'}],
  'Murcia':[{tipo:0.1,menorDe:41,renta:{ind:40000,minimo:1,txt:'base imponible general menos el mínimo personal y familiar por debajo de 40.000 € y base del ahorro de hasta 1.800 €'}}]
 };
@@ -1113,7 +1114,7 @@ const rdl29=k=>`<p class="note"><b>Novedad.</b> El <a href="${RDL29.url}" target
 
 const EXAMPLE={
   v:{precio:210000,ccaa:'Asturias',nueva:false,edad:33,primera:true,rural:false,rebaja:true,entrada:20,entUnit:'pct',entradaEur:42000,notaria:1.5,comision:0,fijos:750,tin:3.0,plazo:30,tasacion:0,ico:false,segunda:false,ltv:0,prov:''},
-  a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,alqCobra:0,alqGastos:0,alqPct:70,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false,contrato:'indefinido'},
+  a:{ahorros:70000,colchon:6000,ingresos:3200,deudas:0,alqCobra:0,alqGastos:0,alqPct:70,esfuerzo:35,titulares:1,ahorroMes:500,brutos:30000,patrimonio:20000,icoDatos:false,contrato:'indefinido',menores:0},
   h:{eur:Math.round(DATA0.mercado.eur*100)/100,offers:[
     {nombre:'Banco A · fija bonificada',tipo:'fija',tin:3.10,anos:1,dif:0.60,apertura:0,prods:[
       {n:'Nómina + tarjeta',b:0.20,c:0,s:0,m:0,hasta:30,on:true},
@@ -1250,7 +1251,8 @@ $('g1seg').innerHTML=`<div class="uso-w"><div class="uso-l"><span>¿Para qué es
 $('g1chk').innerHTML=SW('v.rural','Municipio pequeño')+SW('v.ico','Uso el aval ICO');
 /* modo rápido: solo ahorros, ingresos netos, comunidad y edad */
 const QUICK=['a.ahorros','a.ingresos','v.ccaa','v.edad'];
-$('g1ico').innerHTML=F('a.brutos','Ingresos brutos/año','€ por titular','eur','','brutos')+F('a.patrimonio','Patrimonio','€ por titular','eur','','patrimonio');
+$('g1ico').innerHTML=F('a.brutos','Ingresos brutos/año','€ por titular','eur','','brutos')+F('a.patrimonio','Patrimonio','€ por titular','eur','','patrimonio')+F('a.menores','Hijos menores a cargo','','int','','menores');
+DEF.menores=['Hijos menores a cargo','Con hijos menores a cargo el aval ICO no tiene límite de edad y su tope de ingresos sube 2.520 € por cada uno. En Galicia suben además los topes del ITP reducido (30.000 € por hijo).'];LIM['a.menores']=[0,10];
 $('g1b').innerHTML=finChips()+NUEVA+`<div class="g3 wide1"><div style="grid-column:span 2">${CCAA()}</div>${F('v.plazo','Plazo','años','int','','plazo')}<div style="grid-column:span 2">${F('v.precio','Precio','€','eur')}</div>${F('v.entrada','Entrada','%','dec','','entrada')}${F('v.tin','TIN estimado','%','dec','','tin')}${F('v.tasacion','Tasación','€','eur','','tasacion','= precio')}${F('v.notaria','Notaría','%','dec','','notaria')}${F('v.comision','Comisión','%','dec','','comision')}${F('v.fijos','Tasación y fijos','€','eur','','fijos')}</div>`;
 document.querySelectorAll('#p-cuanto .incard [data-bind]').forEach(el=>{if(QUICK.includes(el.dataset.bind))return;const f=el.closest('.fld');f.classList.add('qx');if(f.parentElement.children.length===1&&f.parentElement.style.gridColumn)f.parentElement.classList.add('qx')});
 ['g1chk','g1ico'].forEach(id=>$(id).classList.add('qx'));$('g1b').querySelector('[data-nueva]').parentElement.classList.add('qx');
@@ -1399,18 +1401,24 @@ function rentaVer(r){const q=r.renta;if(!q)return null;const t=rentaTit(),n=t.n,
   else{tope=q.ind+mp;ratio=t.base/tope;if(n===2&&q.conj!=null){const rc=t.base*2/(q.conj+mp);if(rc<ratio){ratio=rc;tope=q.conj+mp}}}
   return {st:ratio<=1-RENTA_MARGEN?'ok':ratio<1+RENTA_MARGEN?'duda':'no',ratio,base:t.base,tope,est:t.est}}
 const maxOf=r=>typeof r.max==='function'?r.max():r.max;
-/* Parte del precio que financia la hipoteca con la entrada que tienes puesta */
-const finPct=()=>100-Math.max(S.v.entrada,100-ltvEf());
+/* Parte del precio que financia la hipoteca. Por defecto, con la entrada que tienes puesta; al buscar el precio máximo o al probar
+   con más entrada se fija la del cálculo en curso (conFin), porque hay rebajas que exigen un mínimo de hipoteca */
+let FIN_OVR=null;
+const finPct=()=>FIN_OVR!=null?FIN_OVR:100-Math.max(S.v.entrada,100-ltvEf());
+const conFin=(pct,fn)=>{const k=FIN_OVR;FIN_OVR=pct;try{return fn()}finally{FIN_OVR=k}};
+/* tope de valor de una rebaja, en palabras («hasta 150.000 €» o, si la ley dice «menos de», eso), y tope de patrimonio */
+const capTxt=r=>r.maxTxt||`hasta ${eur(maxOf(r))}`;
+const patOf=r=>typeof r.pat==='function'?r.pat():r.pat;
 function cumple(r,P){
   const why=[],mx=maxOf(r);
-  if(S.v.segunda)why.push('que sea tu vivienda habitual');
+  if(S.v.segunda&&!r.noHab)why.push('que sea tu vivienda habitual');
   if(r.menorDe!=null&&!(S.v.edad<r.menorDe))why.push(`tener ${r.menorDe-1} años o menos`);
-  if(mx!=null&&P>mx)why.push(`valor de hasta ${eur(mx)}`);
+  if(mx!=null&&P>mx)why.push(`valor de ${capTxt(r)}`);
   if(r.primera&&!S.v.primera)why.push('primera vivienda');
   if(r.rural&&!S.v.rural)why.push(r.rural);
   if(r.hipMas!=null&&!(finPct()>r.hipMas))why.push(`que la hipoteca financie más del ${r.hipMas} % del precio`);
   if(r.hipMin!=null&&!(finPct()>=r.hipMin))why.push(`que la hipoteca financie al menos el ${r.hipMin} % de la tasación`);
-  if(r.pat!=null&&S.a.icoDatos&&S.a.patrimonio*S.a.titulares>r.pat)why.push(`patrimonio de hasta ${eur(r.pat)}`);
+  {const pt=patOf(r);if(pt!=null&&S.a.icoDatos&&S.a.patrimonio*S.a.titulares>pt)why.push(`patrimonio de hasta ${eur(pt)}`)}
   const rv=rentaVer(r);if(rv&&rv.st==='no')why.push(`${r.renta.txt} (con tus ingresos lo superas)`);
   return why;
 }
@@ -1446,10 +1454,10 @@ function impuesto(P){
 }
 const rTxt=r=>r.txt||pctS(r.tipo);
 /* Requisitos de una rebaja, para enseñarlos. rPend: los que aquí no se pueden comprobar del todo (renta, patrimonio y otros) */
-const rCond=r=>{const c=[],mx=maxOf(r);if(r.menorDe!=null)c.push(`${r.menorDe-1} años o menos`);c.push(r.primera?'primera vivienda habitual':'vivienda habitual');if(mx!=null)c.push(`valor de hasta ${eur(mx)}`);
+const rCond=r=>{const c=[],mx=maxOf(r);if(r.menorDe!=null)c.push(`${r.menorDe-1} años o menos`);c.push(r.noHab?'vivienda, sea o no la habitual':r.primera?'primera vivienda habitual':'vivienda habitual');if(mx!=null)c.push(`valor de ${capTxt(r)}`);
   if(r.hasta!=null)c.push(`solo los primeros ${eur(r.hasta)}; el resto, al ${pctS(r.resto)}`);if(r.hipMas!=null)c.push(`hipoteca por más del ${r.hipMas} % del precio`);if(r.hipMin!=null)c.push(`hipoteca de al menos el ${r.hipMin} % de la tasación`);
   if(r.rural)c.push(r.rural);return c.concat(rPend(r))};
-const rPend=r=>{const c=[];if(r.renta)c.push(r.renta.txt);if(r.pat!=null)c.push(`patrimonio de hasta ${eur(r.pat)}`);return c.concat(r.req||[])};
+const rPend=r=>{const c=[],pt=patOf(r);if(r.renta)c.push(r.renta.txt);if(pt!=null)c.push(`patrimonio de hasta ${eur(pt)}`);return c.concat(r.req||[])};
 
 /* ---------- motor común ---------- */
 const tasa=()=>S.v.tasacion>0?S.v.tasacion:S.v.precio;
@@ -1475,17 +1483,18 @@ function pvFor(pay,tinPct,years){const n=Math.round(years*12),r=tinPct/1200;retu
 function compraCostes(P,ePct){const im=impuesto(P);return {entrada:P*(ePct!=null?ePct:P===S.v.precio?entradaEf():S.v.entrada)/100,imp:im.total,im,not:P*S.v.notaria/100,com:P*S.v.comision/100,fijos:S.v.fijos}}
 /* Aval ICO: qué requisitos cumples con los datos que has puesto. Los ingresos brutos, si no los has escrito, se estiman desde el neto */
 function icoInfo(P){const max=icoPrecio(S.v.ccaa),why=[],sd=!S.a.icoDatos,T=icoTope(),rt=rentaTit(),n=S.a.titulares;
-  if(!(S.v.edad<36))why.push(n>1?'que todos los titulares tengan 35 años o menos (o hijos menores a cargo)':'tener 35 años o menos (o hijos menores a cargo)');
+  const men=Math.max(0,S.a.menores||0); // con menores a cargo no hay límite de edad y el tope de ingresos sube 2.520 € por cada uno
+  if(!(S.v.edad<36)&&!men)why.push(n>1?'que todos los titulares tengan 35 años o menos (o hijos menores a cargo)':'tener 35 años o menos (o hijos menores a cargo)');
   if(S.v.segunda)why.push('que sea tu vivienda habitual');
   if(!S.v.primera)why.push('que sea tu primera vivienda');
   if(n>2)why.push('que compréis como mucho dos personas');
   // sin provincia, solo se descarta por encima del tope más alto de la comunidad; con ingresos estimados se deja un margen
-  const lim=T.prov?T.tope:T.max,m=rt.est?RENTA_MARGEN:0,pasa=rt.bruto>lim*(1+m);
+  const masMen=men*ICO_MENOR/Math.max(1,Math.min(2,n)),lim=(T.prov?T.tope:T.max)+masMen,m=rt.est?RENTA_MARGEN:0,pasa=rt.bruto>lim*(1+m);
   if(pasa)why.push(`ingresos brutos de hasta ${eur(lim)} al año por comprador${T.prov&&(PROV[S.v.ccaa]||[]).length>1?' en '+T.prov:''}`);
   if(!sd&&S.a.patrimonio>ICO_PAT)why.push(`patrimonio de hasta ${eur(ICO_PAT)} por titular`);
   if(P>max)why.push(`precio de hasta ${eur(max)} en ${S.v.ccaa}`);
-  const duda=!pasa&&rt.bruto>T.tope*(1-m);
-  return {max,why,ok:!why.length,sinDatos:sd,duda,perfil:S.v.edad<36&&S.v.primera&&!S.v.segunda&&n<=2,tope:T,bruto:rt.bruto,est:rt.est}}
+  const duda=!pasa&&rt.bruto>(T.tope+masMen)*(1-m);
+  return {max,why,ok:!why.length,sinDatos:sd,duda,perfil:(S.v.edad<36||men>0)&&S.v.primera&&!S.v.segunda&&n<=2,tope:T,bruto:rt.bruto,est:rt.est,men,masMen}}
 /* Entrada mínima que pide el banco: lo que no financia del menor entre precio y tasación */
 function entradaMin(P,tas){const base=Math.min(P,tas>0?tas:P),ico=S.v.ico&&icoInfo(P).ok,ltv=ico?1:ltvBanco()/100;return {eur:Math.max(0,P-ltv*base),pct:P>0?Math.max(0,P-ltv*base)/P*100:0,ico,ltv}}
 const sumC=c=>c.entrada+c.imp+c.not+c.com+c.fijos;
@@ -1497,6 +1506,8 @@ function maxConIco(){if(S.v.ico)return null;const k=[S.v.ico,S.v.entrada,S.v.ent
 function provSel(reopen){const L=PROV[S.v.ccaa]||[];if(L.length<2)return '';const isl=S.v.ccaa==='Baleares';
   return `<div class="fld" style="margin:0 0 10px;max-width:280px"><label><span class="lt">${isl?'Isla':'Provincia'}</span></label><div class="inp"><select data-bind="v.prov" data-reopen="${reopen}" aria-label="${isl?'Isla':'Provincia'}"><option value="">${isl?'Mallorca o Menorca':'Elige provincia'}</option>${L.filter(x=>!isl||/Ibiza|Formentera/.test(x)).map(x=>`<option${x===S.v.prov?' selected':''}>${x}</option>`).join('')}</select></div></div>`}
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.reopen;if(k)setTimeout(()=>{X[k]&&X[k]()},0)});
+/* hijos menores a cargo: se eligen dentro de los requisitos del aval ICO, que es donde cambian el resultado */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-men]');if(!b)return;S.a.menores=+b.dataset.men;markTouched&&markTouched();refresh();X.ico&&X.ico()});
 
 /* ---------- modal ---------- */
 const ov=$('ov');
@@ -1515,14 +1526,16 @@ function calc1(){
   const e0=S.v.entrada,reg=ITP[S.v.ccaa];
   // Entrada mínima: la tuya o la que exige el banco si es mayor (aquí se supone que tasa al precio)
   const Emin=P=>Math.max(P*e0/100,entradaMin(P,0).eur);
-  const gastosP=P=>{const k=compraCostes(P,0);return k.imp+k.not+k.com+k.fijos};
+  // impuestos y gastos de comprar por P poniendo `ent` de entrada: la parte que financia la hipoteca cuenta para las rebajas que exigen un mínimo de hipoteca
+  const gastosP=(P,ent)=>conFin(P>0?Math.max(0,P-ent)/P*100:0,()=>{const k=compraCostes(P,0);return k.imp+k.not+k.com+k.fijos});
+  const cero=x=>x>0&&x<1?0:x; // un descuadre de céntimos no es que te falte dinero
   // Busca el mayor precio que cumple ok(P). La condición puede dar saltos en los umbrales
   // (rebaja de ITP, precio máximo del aval), así que se comprueba además cada umbral.
   const ths=[];if(reg&&!S.v.nueva){reg.red.forEach(r=>{const m=maxOf(r);if(m!=null)ths.push(m)});if(reg.prog===false)reg.gen.forEach(g=>{if(isFinite(g[0]))ths.push(g[0])})}
   if(S.v.nueva){const rA=ajdReg(S.v.ccaa);rA.red.concat(indReg(S.v.ccaa).red).forEach(r=>{const m=maxOf(r);if(m!=null)ths.push(m)});rA.gen.forEach(g=>{if(isFinite(g[0]))ths.push(g[0])})}if(S.v.ico)ths.push(icoPrecio(S.v.ccaa));
   const busca=ok=>{if(!ok(0))return 0;let lo=0,hi=5e7;for(let k=0;k<60;k++){const mid=(lo+hi)/2;if(ok(mid))lo=mid;else hi=mid}ths.forEach(t=>{if(t>lo&&ok(t))lo=t});return lo};
   // Tope por ahorros: entrada mínima + impuestos y gastos + colchón caben en tus ahorros
-  const porAhorros=busca(P=>Emin(P)+gastosP(P)+S.a.colchon<=S.a.ahorros);
+  const porAhorros=busca(P=>{const e=Emin(P);return e+gastosP(P,e)+S.a.colchon<=S.a.ahorros});
   // Tope por ingresos: cuota máxima por esfuerzo y por lo que os debe quedar para vivir, al plazo que daría el banco por edad
   const plazoB=Math.max(1,Math.min(S.v.plazo,EDAD_FIN-S.v.edad));
   const cuotaEsf=ingB()*S.a.esfuerzo/100-deudasB(),cuotaRes=ingB()-deudasB()-RESID*S.a.titulares;
@@ -1530,7 +1543,7 @@ function calc1(){
   const hipMax=pvFor(cuotaMax,S.v.tin,plazoB);
   // Las dos cosas a la vez: la hipoteca no pasa de hipMax, y lo que no presta el banco lo pones tú
   const entradaJ=P=>Math.max(Emin(P),P-hipMax);
-  const max=busca(P=>entradaJ(P)+gastosP(P)+S.a.colchon<=S.a.ahorros);
+  const max=busca(P=>{const e=entradaJ(P);return e+gastosP(P,e)+S.a.colchon<=S.a.ahorros});
   const soloIng=busca(P=>P-Emin(P)<=hipMax+0.5);
   const bind=max<porAhorros-1?'ingresos':'ahorros';
   const porIngresos=bind==='ingresos'?max:Math.max(soloIng,max);
@@ -1543,35 +1556,37 @@ function calc1(){
   const esfE=ingB()>0?(cuotaE+deudasB())/ingB()*100:(cuotaE+deudasB()>0?I:0);
   const chk={
     entrada:e0>=em.pct-1e-9,
-    esf:esfuerzo<=S.a.esfuerzo+1e-9,
-    resto:resto>=RESID*S.a.titulares,
+    esf:esfuerzo<=S.a.esfuerzo+0.005,
+    resto:resto>=RESID*S.a.titulares-0.5,
     plazo:S.v.edad+S.v.plazo<=EDAD_FIN,
     estres:esfE<=ESF_BANCO+1e-9};
-  const okB=chk.esf&&chk.resto&&chk.plazo,falta=nd-S.a.ahorros,disp=S.a.ahorros-S.a.colchon;
+  const okB=chk.esf&&chk.resto&&chk.plazo,falta=cero(nd-S.a.ahorros),disp=S.a.ahorros-S.a.colchon;
   const gastos=c.imp+c.not+c.com+c.fijos,entradaHoy=P>0?Math.max(0,Math.min(100,(disp-gastos)/P*100)):0;
   const meses=falta>0&&S.a.ahorroMes>0?Math.ceil(falta/S.a.ahorroMes):null;
   // La misma vivienda con la regla del precio máximo: si la cuota no cuadra y te sobran ahorros, pones más entrada (al plazo que daría el banco).
   // Así «la que miras» y el precio máximo nunca se contradicen: aj.ok equivale a que el precio no pase del máximo.
-  const entA=Math.max(c.entrada,P-hipMax),hipA=Math.max(0,P-entA),needA=entA+gastos+S.a.colchon,faltaA=needA-S.a.ahorros;
-  const aj={ent:entA,pct:P>0?entA/P*100:0,hip:hipA,cuota:cuotaFor(hipA,S.v.tin,plazoB),plazo:plazoB,need:needA,falta:faltaA,ok:faltaA<=0,mas:entA>c.entrada+0.5,meses:faltaA>0&&S.a.ahorroMes>0?Math.ceil(faltaA/S.a.ahorroMes):null};
+  // Con más entrada la hipoteca financia menos: los impuestos se recalculan (hay rebajas que exigen un mínimo de hipoteca). `como` dice qué hay que cambiar.
+  const entA=Math.max(c.entrada,P-hipMax),hipA=Math.max(0,P-entA),masA=entA>c.entrada+0.5,gastosA=masA?gastosP(P,entA):gastos,needA=entA+gastosA+S.a.colchon,faltaA=cero(needA-S.a.ahorros);
+  const como=[masA?'con más entrada':'',S.v.plazo>plazoB?`a ${anos(plazoB)}`:''].filter(Boolean).join(' y ');
+  const aj={ent:entA,pct:P>0?entA/P*100:0,hip:hipA,cuota:cuotaFor(hipA,S.v.tin,plazoB),plazo:plazoB,gastos:gastosA,need:needA,falta:faltaA,ok:faltaA<=0,mas:masA,como,meses:faltaA>0&&S.a.ahorroMes>0?Math.ceil(faltaA/S.a.ahorroMes):null};
   const ingEsf=(cuota+deudasB())/(S.a.esfuerzo/100),ingRes=cuota+deudasB()+RESID*S.a.titulares,ingNec=Math.max(ingEsf,ingRes);
-  return {ingEsf,ingRes,ingNec,e:eEf/100,eEf,porAhorros,cuotaMax,cuotaEsf,cuotaRes,limCuota,plazoB,hipMax,porIngresos,soloIng,icoIng,max,entMax,extraMax,gMax:gastosP(max),bind,P,tas,c,need:nd,hip,cuota,esfuerzo,falta,disp,
+  return {ingEsf,ingRes,ingNec,e:eEf/100,eEf,porAhorros,cuotaMax,cuotaEsf,cuotaRes,limCuota,plazoB,hipMax,porIngresos,soloIng,icoIng,max,entMax,extraMax,gMax:gastosP(max,entMax),bind,P,tas,c,need:nd,hip,cuota,esfuerzo,falta,disp,
     em,ico,ltv,resto,cuotaE,esfE,chk,okB,ok:falta<=0&&okB,gastos,entradaHoy,meses,aj};
 }
 function render1(){
   const R=calc1(),c=R.c,im=c.im,K=R.chk;
   const okA=R.falta<=0,okI=K.esf,ok=R.ok;
   let avisos='';
-  if(!ok&&!R.okB&&R.aj.ok&&R.aj.mas)avisos+=`<div class="alert good"><span>Con <b class="num">${eur(R.aj.ent)}</b> de entrada (${pct(R.aj.pct,0)}) <b>sí te llega</b>: la cuota baja a ${eur(R.aj.cuota)}.</span><button class="btn solid" data-act="entAj">Usar esa entrada</button></div>`;
-  if(im.red&&im.usa)avisos+=`<div class="alert ${im.red.duda?'warn':'good'}"><span>Tienes <b>${im.nomRed} (${im.redTxt})</b> en vez del general: te ahorras <b class="num">${eur(im.general-im.total)}</b>.${im.red.duda?' Tu renta está cerca del tope: compruébalo.':rPend(im.red.r).length?' Comprueba los requisitos.':''}</span><button class="btn" data-x="itp">Requisitos</button></div>`;
-  else if(im.red&&!im.usa)avisos+=`<div class="alert warn"><span>Cumples para el ${im.nomRed.toLowerCase().replace('itp','ITP').replace('ajd','AJD')} (${im.redTxt}) y lo tienes quitado: pagarías ${eur(im.general-im.red.t)} de más.</span><button class="btn" data-act="rebajaOn">Aplicarlo</button></div>`;
+  if(!ok&&!R.okB&&R.aj.ok&&R.aj.mas)avisos+=`<div class="alert good"><span>Con <b class="num">${eur(R.aj.ent)}</b> de entrada (${pct(R.aj.pct,0)}) <b>sí te llega</b>${S.v.plazo>R.aj.plazo?` a ${anos(R.aj.plazo)}`:''}: la cuota baja a ${eur(R.aj.cuota)}.</span><button class="btn solid" data-act="entAj">Usar esa entrada</button></div>`;
+  if(im.red&&im.usa)avisos+=`<div class="alert ${im.red.duda||rPend(im.red.r).length?'warn':'good'}"><span>Tienes <b>${im.nomRed} (${im.redTxt})</b> en vez del general: te ahorras <b class="num">${eur(im.general-im.total)}</b>.${im.red.duda?' Tu renta está cerca del tope: compruébalo.':rPend(im.red.r).length?' Comprueba los requisitos.':''}</span><button class="btn" data-x="itp">Requisitos</button></div>`;
+  else if(im.red&&!im.usa)avisos+=`<div class="alert warn"><span>${im.red.duda||rPend(im.red.r).length?'Puedes optar al':'Cumples para el'} ${im.nomRed.toLowerCase().replace('itp','ITP').replace('ajd','AJD')} (${im.redTxt}) y lo tienes quitado: pagarías ${eur(im.general-im.red.t)} de más.</span><button class="btn" data-act="rebajaOn">Aplicarlo</button></div>`;
   if(!S.v.nueva&&im.red&&im.cerca&&im.cerca.t<im.total-1){const r=im.cerca.r;
-    avisos+=`<div class="alert warn"><span>Si el precio baja a <b class="num">${eur(im.cerca.max)}</b> pasarías a un ITP de ${rTxt(r)}: ${eur(im.cerca.t)} en vez de ${eur(im.total)}.</span><button class="btn" data-x="itp">Requisitos</button></div>`}
+    avisos+=`<div class="alert warn"><span>Si el precio baja a <b class="num">${r.maxTxt||eur(im.cerca.max)}</b> pasarías a un ITP de ${rTxt(r)}: ${eur(im.cerca.t)} en vez de ${eur(im.total)}.</span><button class="btn" data-x="itp">Requisitos</button></div>`}
   if(!S.v.nueva&&!im.red&&im.falla){const r=im.falla.r,mx=maxOf(r),soloPrecio=im.falla.why.length===1&&mx!=null&&R.P>mx;
-    avisos+=`<div class="alert warn"><span><b>Sin ITP reducido.</b> En ${esc(S.v.ccaa)} la rebaja (${rTxt(r)}) exige ${yList(im.falla.why)}${mx!=null&&R.P>mx?`, y la vivienda cuesta ${eur(R.P)}`:''}.${soloPrecio?` Si el precio baja a ${eur(mx)} pagarías ${eur(taxOf(r,mx,im.reg))} de ITP en vez de ${eur(im.general)}.`:''}</span><button class="btn" data-x="itp">Requisitos</button></div>`}
+    avisos+=`<div class="alert warn"><span><b>Sin ITP reducido.</b> En ${esc(S.v.ccaa)} la rebaja (${rTxt(r)}) exige ${yList(im.falla.why)}${mx!=null&&R.P>mx?`, y la vivienda cuesta ${eur(R.P)}`:''}.${soloPrecio?` Si el precio baja a ${r.maxTxt||eur(mx)} pagarías ${eur(taxOf(r,mx,im.reg))} de ITP en vez de ${eur(im.general)}.`:''}</span><button class="btn" data-x="itp">Requisitos</button></div>`}
   else if(!S.v.nueva&&!im.red&&!im.reg.red.length)avisos+=`<div class="alert warn"><span><b>${esc(S.v.ccaa)}</b> no tiene ITP reducido por edad: pagas el tipo general.</span><button class="btn" data-x="itp">Ver</button></div>`;
   // aval ICO
-  if(!S.v.ico&&R.ico.perfil)avisos+=`<div class="alert neutral"><span>Con 35 años o menos y primera vivienda puedes optar al <b>aval ICO</b>: el Estado avala hasta el 20 % y el banco puede financiarte el 100 % (precio máximo en ${esc(S.v.ccaa)}: ${eur(R.ico.max)}).</span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" data-x="ico">Requisitos</button><button class="btn solid" data-act="icoOn">Usar el aval</button></span></div>`;
+  if(!S.v.ico&&R.ico.perfil)avisos+=`<div class="alert neutral"><span>${S.v.edad<36?'Con 35 años o menos':'Con hijos menores a cargo'} y primera vivienda puedes optar al <b>aval ICO</b>: el Estado avala hasta el 20 % y el banco puede financiarte el 100 % (precio máximo en ${esc(S.v.ccaa)}: ${eur(R.ico.max)}).</span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" data-x="ico">Requisitos</button><button class="btn solid" data-act="icoOn">Usar el aval</button></span></div>`;
   if(!K.entrada)avisos+=`<div class="alert warn"><span><b>El banco no te presta tanto.</b> Financia como mucho el ${pct(R.em.ltv*100,0)} del menor entre precio y tasación${R.tas<R.P?` (tasación ${eur(R.tas)})`:''}: necesitas una entrada de ${eur(R.em.eur)}, el ${pct(R.em.pct,0)}. Todo se calcula ya con esa entrada.</span><button class="btn" data-x="bEnt">Ver</button></div>`;
   if(S.v.ico&&R.ico.ok&&R.ico.sinDatos&&!R.ico.duda)avisos+=`<div class="alert warn"><span>Tus ingresos brutos están estimados desde el neto. Pon tus <b>ingresos brutos y tu patrimonio</b> para afinar el aval ICO.</span><button class="btn" data-x="ico">Requisitos</button></div>`;
   if(S.v.ico&&!R.ico.ok)avisos+=`<div class="alert warn"><span><b>Con estos datos no cumples el aval ICO.</b> Pide ${yList(R.ico.why)}. Sin aval, el banco te pide al menos un ${S.v.segunda?100-LTV_SEG:20} % de entrada.</span><button class="btn" data-x="ico">Requisitos</button></div>`;
@@ -1585,12 +1600,12 @@ function render1(){
     <div class="pills">
       <button class="pill neutral" data-x="max">Te limitan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>
       ${S.v.segunda?`<button class="pill warn" data-x="bEnt">Segunda vivienda: el banco financia el ${LTV_SEG} %</button>`:''}
-      <button class="pill ${ok?'good':R.aj.ok?'warn':'bad'}" data-x="${okA&&!R.okB&&!R.aj.ok?'banco':'miras'}">${ok?`La de ${eur(R.P)} te llega`:R.aj.ok?`La de ${eur(R.P)} te llega con más entrada`:okA?`La de ${eur(R.P)}: el banco no la aprobaría`:`La de ${eur(R.P)} no te llega`}</button>
-      <button class="pill ${im.usa?(im.red.duda?'warn':'good'):(im.falla||im.red)?'warn':'neutral'}" data-x="itp">${S.v.nueva?im.ivaN+' y AJD '+pctS(im.tipoEf)+(im.usa?' · con rebaja':''):im.usa?'ITP reducido '+pctS(im.tipoEf):'ITP '+pctS(im.tipoEf)+(im.falla?' · sin rebaja':'')}</button>
+      <button class="pill ${ok?'good':R.aj.ok?'warn':'bad'}" data-x="${okA&&!R.okB&&!R.aj.ok?'banco':'miras'}">${ok?`La de ${eur(R.P)} te llega`:R.aj.ok?`La de ${eur(R.P)} te llega${R.aj.como?' '+R.aj.como:''}`:okA?`La de ${eur(R.P)}: el banco no la aprobaría`:`La de ${eur(R.P)} no te llega`}</button>
+      <button class="pill ${im.usa?(im.red.duda||rPend(im.red.r).length?'warn':'good'):(im.falla||im.red)?'warn':'neutral'}" data-x="itp">${S.v.nueva?im.ivaN+' y AJD '+pctS(im.tipoEf)+(im.usa?' · con rebaja':''):im.usa?'ITP reducido '+pctS(im.tipoEf):'ITP '+pctS(im.tipoEf)+(im.falla?' · sin rebaja':'')}</button>
       ${S.v.ico?`<button class="pill ${R.ico.ok&&!R.ico.duda?'good':'warn'}" data-x="ico">${!R.ico.ok?'Aval ICO: no cumples':R.ico.duda?(R.ico.tope.varios?'Aval ICO: depende de tu provincia':'Aval ICO: cerca del tope de ingresos'):'Con aval ICO'}</button>`:''}
       ${touched?'':`<span class="pill warn" style="white-space:normal">Datos de ejemplo: pon los tuyos</span>`}
     </div>
-    <div class="kpihead">La vivienda que miras: <b class="num">${eur(R.P)}</b>${ok?'':R.aj.ok?' · <span style="color:var(--warn)">te llega con más entrada</span>':' · <span style="color:var(--bad)">no te llega</span>'}</div>
+    <div class="kpihead">La vivienda que miras: <b class="num">${eur(R.P)}</b>${ok?'':R.aj.ok?` · <span style="color:var(--warn)">te llega${R.aj.como?' '+R.aj.como:''}</span>`:' · <span style="color:var(--bad)">no te llega</span>'}</div>
     <div class="kpis">
       <button class="kpi" data-x="hip"><small>Hipoteca que pedirías</small><strong class="num">${eur(R.hip)}</strong><em>${pctS(100-R.eEf)} de ${eur(R.P)}</em></button>
       <button class="kpi" data-x="cuota1"><small>Cuota al mes</small><strong class="num">${eur(R.cuota)}</strong><em>TIN ${pct(S.v.tin)} a ${S.v.plazo} años</em></button>
@@ -1685,7 +1700,7 @@ function render1(){
   X.ico=()=>{const st=b=>b?'<b style="color:var(--good)">✓</b>':'<b style="color:var(--bad)">✕</b>',ic=R.ico,T=ic.tope,bru=Math.round(ic.bruto/100)*100,m=ic.est?RENTA_MARGEN:0,multi=(PROV[S.v.ccaa]||[]).length>1;
     modal('Aval ICO para la primera vivienda',`<p>El Estado avala hasta el 20 % del préstamo (25 % si la vivienda tiene una calificación energética D o mejor), así que el banco puede financiar hasta el 100 % del precio. Los impuestos y gastos de compra sigues pagándolos tú.</p>
     ${S.v.ccaa==='Baleares'?'':provSel('ico')}
-    <div class="steps">${step('35 años o menos al firmar (o cualquier edad con hijos menores a cargo)',st(S.v.edad<36))}${step('Primera vivienda, que será tu casa mientras dure el aval (los 10 primeros años)',st(S.v.primera&&!S.v.segunda))}${step(`Ingresos brutos de hasta ${T.varios?`${eur(T.min)} a ${eur(T.max)} al año por comprador, según la provincia`:`${eur(T.tope)} al año por comprador${T.prov&&multi&&S.v.ccaa!=='Baleares'?' en '+esc(T.prov):''}`}. Tú: ${ic.est?'unos '+eur(bru)+' (estimado desde el neto)':eur(S.a.brutos)}`,ic.bruto>(T.prov?T.tope:T.max)*(1+m)?st(false):ic.duda?`<b style="color:var(--warn)">${T.varios?'según provincia':'cerca del tope'}</b>`:st(true))}${step(`Patrimonio de hasta ${eur(ICO_PAT)} por titular. Tú: ${ic.sinDatos?'sin dato':eur(S.a.patrimonio)}`,ic.sinDatos?'<span class="hint">sin dato</span>':st(S.a.patrimonio<=ICO_PAT))}${step(`Precio de hasta ${eur(ic.max)} en ${esc(S.v.ccaa)}. La que miras: ${eur(R.P)}`,st(R.P<=ic.max))}${S.a.titulares>2?step('Como mucho dos compradores',st(false)):''}</div>
+    <div class="steps">${step(`35 años o menos al firmar, o cualquier edad con hijos menores a cargo <span class="chips" style="margin-left:6px">${[0,1,2,3].map(k=>`<button type="button" class="chip${ic.men===k||(k===3&&ic.men>3)?' on':''}" data-men="${k}">${k===0?'Sin hijos menores':k===3?'3 o más':k}</button>`).join('')}</span>`,st(S.v.edad<36||ic.men>0))}${step('Primera vivienda, que será tu casa mientras dure el aval (los 10 primeros años)',st(S.v.primera&&!S.v.segunda))}${step(`Ingresos brutos de hasta ${T.varios?`${eur(T.min)} a ${eur(T.max)} al año por comprador, según la provincia`:`${eur(T.tope+ic.masMen)} al año por comprador${T.prov&&multi&&S.v.ccaa!=='Baleares'?' en '+esc(T.prov):''}${ic.men?', con los menores a cargo':''}`}. Tú: ${ic.est?'unos '+eur(bru)+' (estimado desde el neto)':eur(S.a.brutos)}`,ic.bruto>((T.prov?T.tope:T.max)+ic.masMen)*(1+m)?st(false):ic.duda?`<b style="color:var(--warn)">${T.varios?'según provincia':'cerca del tope'}</b>`:st(true))}${step(`Patrimonio de hasta ${eur(ICO_PAT)} por titular. Tú: ${ic.sinDatos?'sin dato':eur(S.a.patrimonio)}`,ic.sinDatos?'<span class="hint">sin dato</span>':st(S.a.patrimonio<=ICO_PAT))}${step(`Precio de hasta ${eur(ic.max)} en ${esc(S.v.ccaa)}. La que miras: ${eur(R.P)}`,st(R.P<=ic.max))}${S.a.titulares>2?step('Como mucho dos compradores',st(false)):''}</div>
     <p class="hint">El tope de ingresos sube ${eur(ICO_MENOR)} por cada menor a cargo y hasta un 70 % en familias monoparentales. Si compráis dos, se compara la suma de vuestros ingresos con la suma de los topes, y los dos tenéis que cumplir la edad. También piden dos años de residencia legal en España y no tener otro aval público para la misma compra.</p>
     ${S.v.ico?(ic.sinDatos?'<p>Pon tus ingresos brutos y tu patrimonio en tus datos, debajo de «Uso el aval ICO», para afinarlo.</p>':''):'<p>Activa «Uso el aval ICO» en tus datos para calcular con él.</p>'}
     <h4>Tope de ingresos por provincia</h4><p class="hint">63.000 €: Baleares, Barcelona, Bizkaia, Gipuzkoa, Girona, Madrid, Málaga y Santa Cruz de Tenerife · 54.600 €: Álava · 46.200 €: Alicante, Cádiz, Cantabria, Ceuta, Las Palmas, Melilla, Navarra, Pontevedra, Valencia y Zaragoza · 37.800 €: el resto.</p>
@@ -1703,8 +1718,13 @@ function render1(){
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b||b.closest('.offer'))return;
   const a=b.dataset.act;
-  if(a==='usemax'){const R=calc1(),P=Math.floor(R.max/1000)*1000;S.v.precio=P;const need=P>0?Math.ceil(Math.max(0,P-R.hipMax)/P*1000)/10:0;
-    if(need>S.v.entrada){S.v.entrada=need;entSync();toast(`Precio aplicado y entrada subida al ${String(need).replace('.',',')} % para que la cuota te cuadre`)}else toast('Precio aplicado a las tres calculadoras');refresh()}
+  if(a==='usemax'){const P=Math.floor(calc1().max/1000)*1000;S.v.precio=P;
+    if(S.v.entUnit==='eur'){S.v.entradaEur=Math.min(S.v.entradaEur,P);S.v.entrada=P>0?S.v.entradaEur/P*100:0}else entSync();
+    const R=calc1(),aj=R.aj;let msg='Precio aplicado a las tres calculadoras';
+    if(!R.ok&&aj.ok){ // la misma regla que el precio máximo: la entrada exacta en euros (sin redondear a décimas de punto) y, si hace falta, el plazo que daría el banco
+      if(aj.mas){S.v.entUnit='eur';S.v.entradaEur=Math.ceil(aj.ent);msg=`Precio aplicado, con ${eur(S.v.entradaEur)} de entrada para que la cuota te cuadre`}
+      if(S.v.plazo>aj.plazo){const p0=S.v.plazo;S.v.plazo=aj.plazo;S.h.offers.forEach(o=>o.prods.forEach(q=>{if(q.hasta>=p0)q.hasta=S.v.plazo}));renderOffers();msg+=` · plazo de ${anos(aj.plazo)}`}}
+    refresh();toast(msg)}
   if(a==='tinBest'){const R=LAST.r1||calc1(),ev=()=>OFF.map(x=>({x,c:mcalc(x)})).filter(r=>!r.c.noAcc&&!r.c.ltvKo&&r.x.t==='fija'&&r.c.years>=Math.min(S.v.plazo,R.plazoB)).sort((a,b)=>a.c.ef-b.c.ef);
     const rows=hipoteca()>0?ev():R.max>=1000?conCasa(Math.floor(R.max/1000)*1000,R.entMax,ev):[];
     if(rows[0]){S.v.tin=Math.round(rows[0].c.tin*100)/100;refresh();const nv=vkOf(rows[0].x).length;toast(`Mejor fija de hoy a ${anos(S.v.plazo)}: ${rows[0].x.b}, ${pct(S.v.tin)}${nv?`, con ${nv} producto${nv>1?'s':''} del banco`:', sin productos del banco'}`)}else toast('Ninguna oferta fija encaja con estos datos');return}
@@ -2719,7 +2739,7 @@ function sItp(P,k){const im=impuesto(P),reg=im.reg,t=sTax(im),nom=im.nomRed||'IT
   const g0=reg.gen.find(g=>P<=g[0])||reg.gen[reg.gen.length-1],gen=reg.genTxt||(reg.gen.length===1||P<=reg.gen[0][0]?pctS(reg.gen[0][1]):reg.prog===false?`${pctS(g0[1])} sobre todo el valor`:`por tramos, de media un ${pctS(im.general/P*100)}`),rv=im.red&&im.red.rv;
   const reb=r?`<h4>${t.usa?'Tu rebaja':'Rebaja que podrías tener'}: ${rT(r)}</h4><ul class="checklist">${rCond(r).map(c=>`<li>${c}</li>`).join('')}</ul>
       ${rv?`<p class="note" style="border-left-color:var(--warn)">${im.red.duda?`<b>Tu renta está cerca del tope</b>: al ${pct(rv.ratio*100,0)}, ${rt.est?'estimada desde lo que entra en casa':'con tus ingresos brutos'}. Compruébalo antes de contar con la rebaja.`:`La renta se estima ${rt.est?'desde lo que entra en casa':'con tus ingresos brutos'} y queda al ${pct(rv.ratio*100,0)} del tope. Es una estimación: confírmalo.`}</p>`:''}
-      ${[r.pat!=null?`patrimonio de hasta ${eur(r.pat)}`:''].concat(r.req||[]).filter(Boolean).length?`<p class="note" style="border-left-color:var(--warn)">Aquí no se puede comprobar: ${[r.pat!=null?`patrimonio de hasta ${eur(r.pat)}`:''].concat(r.req||[]).filter(Boolean).join('; ')}. Si no lo cumples, quita la rebaja.</p>`:''}
+      ${[patOf(r)!=null?`patrimonio de hasta ${eur(patOf(r))}`:''].concat(r.req||[]).filter(Boolean).length?`<p class="note" style="border-left-color:var(--warn)">Aquí no se puede comprobar: ${[patOf(r)!=null?`patrimonio de hasta ${eur(patOf(r))}`:''].concat(r.req||[]).filter(Boolean).join('; ')}. Si no lo cumples, quita la rebaja.</p>`:''}
       <p><button class="btn" data-act="sRebaja" data-k="${k}">${t.usa?'Calcular sin la rebaja':'Aplicar la rebaja'}</button></p>`
     :im.falla?`<h4>Sin rebaja</h4><p>En ${esc(S.v.ccaa)} la rebaja (${rT(im.falla.r)}) pide ${yList(im.falla.why)}.</p>`
     :S.v.nueva?'':reg.red.length?'':`<h4>Sin rebaja</h4><p>${esc(S.v.ccaa)} no tiene un tipo reducido para la vivienda habitual.</p>`;
@@ -2765,7 +2785,7 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
   // aval ICO: si ya lo usas, se ve y se puede quitar; si no y con él llegarías claramente más lejos, se dice hasta dónde
   const icoU=S.v.ico?icoInfo(mx):null,mi=S.v.ico||!icoInfo(mx).perfil?null:maxConIco(),miMx=mi?Math.floor(mi.max/1000)*1000:0; // maxConIco() rehace calc1(): solo si el perfil puede optar al aval
   const icoH=icoU?`<div class="bestbar s-ico ${icoU.ok&&!icoU.duda?'good':'warn'}"><button class="lnk" data-x="ico">${!icoU.ok?'Aval ICO: no cumples':icoU.duda?(icoU.tope.varios?'Aval ICO: depende de tu provincia':'Aval ICO: cerca del tope de ingresos'):'Calculado con aval ICO'}</button><button class="lnk" data-act="sIcoOff">Quitar</button></div>`
-    :mi&&miMx>=mx+5000?`<div class="bestbar s-ico${mi.duda?' warn':''}"><button class="lnk" data-x="ico">Con aval ICO: hasta\u00a0<b class="num">${eur(miMx).replace(' €','\u00a0€')}</b></button><button data-act="sIcoOn">Calcular con él</button></div>`:'';
+    :mi&&miMx>=mx+5000?`<div class="bestbar s-ico${mi.duda?' warn':''}"><button class="lnk" data-x="ico">Con aval ICO${mi.duda&&mi.ico.tope.varios?', según la provincia':''}: hasta\u00a0<b class="num">${eur(miMx).replace(' €','\u00a0€')}</b></button><button data-act="sIcoOn">Calcular con él</button></div>`:'';
   // resultado
   $('sO1').innerHTML=`<div class="eyebrow">${!puede?'Con estos datos':touched?'Puedes comprar una vivienda de hasta':'Ejemplo: se puede comprar hasta'}</div>
     ${puede?`<button class="s-big num" data-x="max">${eur(mx)}</button>`:`<div class="s-big" style="font-size:28px">todavía no te llega para comprar</div>`}
@@ -3121,7 +3141,7 @@ function refresh(skip){applyNivel();syncAll();fillBound(skip);save();
   fitSoon()}
 /* Barra de resultado fija en el móvil: el número clave de la pestaña siempre a la vista mientras rellenas datos */
 function renderMres(){const b=$('mres');if(!b)return;const t=S.tab;let h='';
-  if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1;h=`<span>Puedes comprar hasta</span><b class="num">${eur(t==='simple'?Math.floor(R.max/1000)*1000:R.max)}</b>${S.v.precio>0?`<i class="${(t==='simple'?R.aj.ok:R.ok)?'good':R.aj.ok?'warn':'bad'}">${(t==='simple'?R.aj.ok:R.ok)?'La que miras te llega':R.aj.ok?'Te llega con más entrada':'La que miras no te llega'}</i>`:''}`}
+  if((t==='cuanto'||t==='simple')&&LAST.r1){const R=LAST.r1;h=`<span>Puedes comprar hasta</span><b class="num">${eur(t==='simple'?Math.floor(R.max/1000)*1000:R.max)}</b>${S.v.precio>0?`<i class="${(t==='simple'?R.aj.ok:R.ok)?'good':R.aj.ok?'warn':'bad'}">${(t==='simple'?R.aj.ok:R.ok)?'La que miras te llega':R.aj.ok?('Te llega '+(R.aj.como||'')).trim():'La que miras no te llega'}</i>`:''}`}
   else if(t==='hipotecas'&&LAST.r2&&LAST.r2.sorted.length){const w=LAST.r2.sorted[0];h=`<span>${S.h.offers.length>1?'La más barata':'Coste total'}</span><b>${esc(w.n)}</b><i class="good num">${eur(w.c.total)}</i>`}
   else if(t==='alquilar'&&LAST.r3){const R=LAST.r3;h=`<span>A ${anos(R.H)}</span><b>${R.emp?'Prácticamente igual':R.dif>=0?'Compensa comprar':'Compensa alquilar'}</b><i class="${R.emp?'':R.dif>=0?'good':'warn'} num">${R.emp?(R.dif>=0?'comprar ':'alquilar '):''}+${eur(Math.abs(R.dif))}</i>`}
   else if(t==='invertir'&&LAST.r5){const K=LAST.r5;h=`<span>Rentabilidad neta</span><b class="num">${pct(K.netaPct)}</b><i class="${K.caja>=0?'good':'bad'} num">${K.caja>=0?'+':'−'}${eur(Math.abs(K.caja)/12)} al mes</i>`}
