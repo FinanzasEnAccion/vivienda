@@ -698,6 +698,9 @@ html.m .simple{gap:12px}
 .s-sum{grid-column:1;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 .s-mas{display:grid;gap:10px;margin-top:12px}
 .s-o1{display:grid;gap:8px;justify-items:start;min-width:0}.s-o3{display:grid;gap:8px;min-width:0}
+.s-ico{justify-self:stretch;gap:6px}.s-ico .lnk{flex:1;text-align:left;font-weight:600;white-space:normal}.s-ico.good{background:var(--good-soft)}.s-ico.good .lnk{color:var(--good)}.s-ico.warn{background:var(--warn-soft)}.s-ico.warn .lnk{color:var(--warn)}.s-ico [data-act="sIcoOff"]{flex:none;text-decoration:underline}
+.s-links{display:flex;gap:6px;flex-wrap:wrap}.s-links .chip{color:var(--accent)}
+.ay-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ay-h .pill{white-space:normal}.ay-b{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0}
 .s-big{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,52px);line-height:1;border:0;background:none;padding:0;color:var(--ink);text-align:left}
 .s-sem{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;border-radius:999px;padding:6px 12px;border:0}.s-sem i{width:12px;height:12px;border-radius:50%;display:inline-block}
 .s-sem.good{background:var(--good-soft);color:var(--good)}.s-sem.good i{background:var(--good)}.s-sem.warn{background:var(--warn-soft);color:var(--warn)}.s-sem.warn i{background:var(--warn)}.s-sem.bad{background:var(--bad-soft,#fde8e6);color:var(--bad)}.s-sem.bad i{background:var(--bad)}
@@ -2324,6 +2327,40 @@ function render6(){const K=calc6(),M=K.M,mes=MESES[(M.mes||1)-1],eM=MKT.eurMes||
 /* =========================================================
    ESTÁNDAR · una pantalla, tres preguntas, sin jerga
    ========================================================= */
+/* Ayudas para comprar la primera vivienda, contrastadas en fuente oficial a la fecha de AYUDAS_FECHA.
+   Para añadir una comunidad basta una línea más en AYUDAS_CCAA (aval: true si es un aval o garantía, que no se puede sumar al aval ICO).
+   De las comunidades que no están en la tabla no se dice nada. La ventana se abre desde cualquier modo con data-x="ayudas". */
+const AYUDAS_FECHA='10/10/2026';
+const AYUDA_TUCASA={nombre:'Préstamo TU CASA',estado:'Aprobado, pero todavía no se puede pedir',
+  que:'Préstamo del ICO para la primera vivienda habitual comprada con hipoteca: el menor entre el 20 % del valor de la vivienda y 50.000 €, al 0 % y sin comisiones. No se paga mientras dura la hipoteca (hasta 30 años); después hay hasta 10 años para devolverlo. Sin límite de edad.',
+  falta:'Falta que el Congreso lo convalide y que el Consejo de Ministros fije quién puede pedirlo (ingresos, precio máximo) y cómo. No hay fecha.',
+  letra:'La vivienda queda para siempre con precio máximo de reventa (el de compra actualizado con el IPC) y, si se alquila, con renta limitada. No está regulado si es compatible con el aval ICO.',
+  src:['Real Decreto-ley 29/2026, de 6 de octubre, art. 19 (BOE)','https://www.boe.es/buscar/act.php?id=BOE-A-2026-20823']};
+const AYUDA_ICO_URL='https://www.ico.es/linea-avales-hipoteca-primera-vivienda';
+const AYUDAS_CCAA={
+ 'Madrid':{nombre:'Mi Primera Vivienda',que:'Garantía para que el banco financie más del 80 % y hasta el 100 %',edad:'Hasta 40 años (sin límite en familias numerosas o monoparentales)',precio:'390.000 €',estado:'Abierto, en 9 bancos. Ampliación anunciada el 2/9/2026 y aún sin convenios firmados: hasta 50 años y 425.000 € (100 % hasta 40 años, 95 % de 40 a 45, 90 % de 45 a 50)',aval:true,url:'https://www.comunidad.madrid/servicios/vivienda/mi-primera-vivienda'},
+ 'Cataluña':{nombre:'Préstamo Emancipació (ICF)',que:'Préstamo, no aval: hasta el 20 % del menor entre precio y tasación, con máximo de 50.000 €, al 0 %; no se paga mientras dura la hipoteca',edad:'De 18 a 40 años',precio:'Sin precio máximo; ingresos de hasta 83.392 € (una persona) u 85.972 € (dos)',estado:'Abierto. La vivienda pasa a ser protegida para siempre (precio de reventa limitado)',aval:false,url:'https://www.icf.cat/ca/prestecs/habitatge/icf-habitatge-emancipacio'},
+ 'Comunidad Valenciana':{nombre:'Garantías IVF para la compra de vivienda',que:'Aval para que el banco preste más del 80 % y hasta el 100 %',edad:'Hasta 45 años',precio:'311.000 € (con garaje y trastero)',estado:'Abierto. Piden dos años de residencia en la Comunitat',aval:true,url:'https://prestamos.ivf.es/prestamos/programa-garantias-compra-vivienda'},
+ 'Castilla y León':{nombre:'Mi Primera Vivienda (Plan TUYA)',que:'Garantía para una hipoteca de hasta el 97,5 %',edad:'35 años o menos',precio:'240.000 € sin impuestos',estado:'Abierto hasta el 15/12/2026 o hasta agotar el importe. Ingresos de hasta 42.000 € (una persona)',aval:true,url:'https://vivienda.jcyl.es/web/es/vivienda/linea-garantias-primera-vivienda.html'}
+};
+X.ayudas=()=>{const R=LAST.r1||calc1(),mx=Math.floor(R.max/1000)*1000,mi=maxConIco(),miMx=mi?Math.floor(mi.max/1000)*1000:0,ic=icoInfo(S.v.precio>0?S.v.precio:mx),cc=AYUDAS_CCAA[S.v.ccaa],T=AYUDA_TUCASA;
+  const of=(u,t)=>`<p class="hint">Enlace oficial: <a href="${u}" target="_blank" rel="noopener">${esc(t||u.replace(/^https?:\/\/(www\.)?/,'').split('/')[0])}</a> · a ${AYUDAS_FECHA}</p>`;
+  modal('Ayudas para comprar tu primera vivienda',`<div class="ay-h"><h4 style="margin:0">Aval ICO</h4><span class="pill good">Abierto: para hipotecas firmadas hasta el 31/12/2027</span></div>
+    <p>El Estado avala hasta el 20 % de la hipoteca, así que el banco puede financiarte hasta el 100 % del precio. Los impuestos y gastos los sigues pagando tú.</p>
+    ${S.v.ico?`<div class="steps">${step('Lo estás usando',ic.ok?(ic.duda?'<b style="color:var(--warn)">con dudas</b>':'<b style="color:var(--good)">cumples</b>'):'<b style="color:var(--bad)">no cumples</b>','tot')}</div><div class="ay-b"><button class="btn" data-x="ico">Requisitos</button><button class="btn" data-act="sIcoOff">Calcular sin el aval</button></div>`
+      :mi&&miMx>mx?`<div class="steps">${step('Hoy puedes comprar hasta',eur(mx))}${step('Con el aval ICO, hasta',eur(miMx),'tot')}</div><div class="ay-b"><button class="btn solid" data-act="sIcoOn">Calcular con el aval</button><button class="btn" data-x="ico">Requisitos</button></div>`
+      :`<p>${!mi&&ic.why.length?`Con tus datos no encajas: pide ${yList(ic.why)}.`:'Con tus datos, hoy el aval no te sube el precio máximo.'}</p><div class="ay-b"><button class="btn" data-x="ico">Requisitos</button></div>`}
+    ${of(AYUDA_ICO_URL,'ICO, línea de avales para la primera vivienda')}
+    <div class="ay-h" style="margin-top:18px"><h4 style="margin:0">${T.nombre}</h4><span class="pill warn">${T.estado}</span></div>
+    <p>${T.que}</p><p>${T.falta}</p><p class="note">${T.letra}</p>${of(T.src[1],T.src[0])}
+    ${cc?`<div class="ay-h" style="margin-top:18px"><h4 style="margin:0">${esc(S.v.ccaa)}: ${cc.nombre}</h4></div>
+    <div class="steps">${step('Qué cubre',cc.que)}${step('Edad',cc.edad)}${step('Precio máximo',cc.precio)}${step('Estado',cc.estado)}</div>
+    ${cc.aval?'<p class="note">Un aval autonómico y el aval ICO no se pueden usar a la vez para la misma compra.</p>':''}${of(cc.url)}`:''}`);track('ayudas',S.v.ccaa)};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  // con el aval se calcula como en maxConIco(): entrada mínima del 0 % donde la vivienda lo cumple
+  if(a==='sIcoOn'){S.v.ico=true;S.v.entUnit='pct';S.v.entrada=0;S.v.ltv=0;entSync();ov.hidden=true;refresh();toast('Calculado con el aval ICO: el banco puede financiarte hasta el 100 %');track('aval-ico','si')}
+  if(a==='sIcoOff'){S.v.ico=false;S.v.entUnit='pct';S.v.entrada=100-ltvBanco();entSync();ov.hidden=true;refresh();toast(`Sin aval ICO: el banco financia el ${pctS(ltvBanco())}`);track('aval-ico','no')}
+});
 /* Impuestos de la compra en la Estándar, para el precio que se enseña (el máximo o la casa en mente): tipo general,
    rebaja aplicada con sus requisitos o por qué no la hay, botón para quitarla y fuente oficial. k = clave de X que la reabre */
 const sTax=im=>{const usa=!!(im.red&&im.usa),nom=im.nomRed||'ITP reducido',pend=im.red?rPend(im.red.r).length>0:false;
@@ -2368,10 +2405,15 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
   {const l=document.querySelector('#sQ [data-bind="v.edad"]');if(l)l.closest('.fld').querySelector('.lt').textContent=S.a.titulares>1?'Edad del mayor':'Tu edad'}
   $('sMas').hidden=!sOpen;$('sFold').setAttribute('aria-expanded',sOpen);
   $('sFold').innerHTML=`<span class="gtitle">Ajusta tu hipoteca</span><i aria-hidden="true"></i>${sOpen?'':`<span class="s-sum">${[S.v.segunda?'Segunda vivienda':S.v.primera?'Primera casa':'Cambio de casa',pctS(ltvEf()),anos(R.plazoB)+(R.plazoB<S.v.plazo?' por tu edad':''),pct(S.v.tin),deudasB()>0?eur(deudasB())+'/mes de préstamos':''].filter(Boolean).join(' · ')}</span>`}`;
+  // aval ICO: si ya lo usas, se ve y se puede quitar; si no y con él llegarías claramente más lejos, se dice hasta dónde
+  const icoU=S.v.ico?icoInfo(mx):null,mi=S.v.ico?null:maxConIco(),miMx=mi?Math.floor(mi.max/1000)*1000:0;
+  const icoH=icoU?`<div class="bestbar s-ico ${icoU.ok&&!icoU.duda?'good':'warn'}"><button class="lnk" data-x="ico">${!icoU.ok?'Aval ICO: no cumples':icoU.duda?(icoU.tope.varios?'Aval ICO: depende de tu provincia':'Aval ICO: cerca del tope de ingresos'):'Calculado con aval ICO'}</button><button class="lnk" data-act="sIcoOff">Quitar</button></div>`
+    :mi&&miMx>=mx+5000?`<div class="bestbar s-ico${mi.duda?' warn':''}"><button class="lnk" data-x="ico">Con aval ICO: hasta\u00a0<b class="num">${eur(miMx).replace(' €','\u00a0€')}</b></button><button data-act="sIcoOn">Calcular con él</button></div>`:'';
   // resultado
   $('sO1').innerHTML=`<div class="eyebrow">${!puede?'Con estos datos':touched?'Puedes comprar una vivienda de hasta':'Con los datos de ejemplo, una vivienda de hasta'}</div>
     ${puede?`<button class="s-big num" data-x="max">${eur(mx)}</button>`:`<div class="s-big" style="font-size:28px">todavía no te llega para comprar</div>`}
-    <div class="pills"><button class="s-sem ${sem}" data-x="sEsf"><i></i>${semT}</button><button class="pill neutral" data-x="max">Te frenan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>${touched?'':`<button class="pill warn" data-act="sEj">Datos de ejemplo: pon los tuyos</button>`}</div>`;
+    <div class="pills"><button class="s-sem ${sem}" data-x="sEsf"><i></i>${semT}</button><button class="pill neutral" data-x="max">Te frenan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>${touched?'':`<button class="pill warn" data-act="sEj">Datos de ejemplo: pon los tuyos</button>`}</div>${icoH}`;
+  $('sLinks').innerHTML=`<button class="chip" data-x="ayudas">Ayudas para comprar</button><button class="chip" data-x="pasos">Pasos y papeles</button>`;
   $('sO2').hidden=!puede;
   $('sO2').innerHTML=puede?`<button data-x="sCuota"><span>Pagarías al mes</span><b>${eur(cu)}</b></button>
       <button data-x="sNeed"><span>Necesitas tener ahorrado<small>entrada, impuestos, gastos${S.a.colchon>0?` y ${eur(S.a.colchon)} de colchón`:''}</small></span><b>${eur(need)}</b></button>
