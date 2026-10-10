@@ -1910,7 +1910,9 @@ const vkCoste=v=>{const k=VK_COSTE[v.k];return {k:v.k,n:k?(v.k==='pension'&&v.x?
 /* las que el banco exige para el tipo bonificado (las opcionales no cuentan) y si la oferta no dice cuáles son */
 const vkReq=x=>vkOf(x).filter(v=>v.x!=='opcional');
 const vkNd=x=>!Array.isArray(x.vk)&&!(x.v||'').trim();
-function vkOf(x){
+const VK_MEMO=new WeakMap();
+function vkOf(x){let r=VK_MEMO.get(x);if(!r){r=vkLee(x);VK_MEMO.set(x,r)}return r}
+function vkLee(x){
   if(Array.isArray(x.vk))return x.vk.filter(v=>v&&VK_I[v.k]);
   const t=(x.v||'').toLowerCase(),out=[];
   if(/^ninguna/.test(t))return [];
@@ -1939,7 +1941,7 @@ function vkHtml(x,full){const L=vkOf(x),nR=L.filter(v=>v.x!=='opcional').length;
 /* Algunas ofertas cambian el TIN según el plazo: tramos = [[hasta años, TIN], …] */
 function tinPara(x,years){if(Array.isArray(x.tramos)&&x.tramos.length){for(const [h,t] of x.tramos)if(years<=h)return t;return x.tramos[x.tramos.length-1][1]}return x.tin}
 /* Ingresos mínimos: de acceso (sin ellos no te dan la hipoteca) o para la bonificación (nómina domiciliada) */
-function ingOf(x){let v=x.ingMin;if(v==null){const mm=((x.v||'')+' '+(x.n||'')).match(/(?:N[óo]mina|Ingresos)[^,;]*?≥\s*([\d\.]+)\s*€/i);v=mm?pEur(mm[1]):0}
+function ingOf(x){let v=x.ingMin;if(v==null){const mm=((x.v||'')+' '+(x.n||'')).match(/(?:N[óo]mina|Ingresos)[^,;]*?(?:≥|>)\s*([\d\.]+)\s*€/i);v=mm?pEur(mm[1]):0}
   if(S.a.titulares>1&&x.ingMin2)v=x.ingMin2;const minImp=x.minImp||0;
   return {min:v||0,tipo:x.ingReq||(/^Ingresos/i.test(x.n||'')?'acceso':'bonif'),falla:v>0&&S.a.ingresos<v,minImp,fallaImp:minImp>0&&hipoteca()<minImp}}
 /* Comisión de apertura en % del préstamo (apPct, o apEur en euros) */
@@ -1965,8 +1967,14 @@ const taeNum=x=>{const v=parseFloat(String(x.tae||'').replace(',','.'));return i
         cuestan de más que fuera (precios supuestos de VK_COSTE, mantenidos todo el plazo), con el Euríbor que supones cuando toca revisar. Por él se ordena.
    efSin = lo mismo sin contar los productos (lo que antes era ef). extra = sobrecoste del primer año que entra en ef; vinc = el de todo el plazo;
    vk = los productos exigidos con su precio supuesto; nProd = cuántos son.
-   vkNd = la oferta no dice qué exige: su coste comparado no se puede calcular y, para ordenar, ef toma la TAE del banco si es mayor (efTae). */
+   vkNd = la oferta no dice qué exige: su coste comparado no se puede calcular y, para ordenar, ef toma la TAE del banco si es mayor (efTae).
+   En cada refresco la piden tres pantallas: se guarda por oferta mientras no cambie nada de lo que usa. El resultado es de solo lectura. */
+const MC_MEMO=new Map();
 function mcalc(x){
+  const k=[hipoteca(),S.v.plazo,S.h.eur,S.a.ingresos,S.a.titulares,S.v.edad,S.r.ipc,S.v.precio,S.v.tasacion].join('|');
+  let M=MC_MEMO.get(k);if(!M){if(MC_MEMO.size>5)MC_MEMO.delete(MC_MEMO.keys().next().value);M=new Map();MC_MEMO.set(k,M)}
+  let r=M.get(x);if(!r){r=mcalc0(x);M.set(x,r)}return r}
+function mcalc0(x){
   const g=ingOf(x),sinBon=g.falla&&g.tipo==='bonif',noAcc=(g.falla&&g.tipo==='acceso')||g.fallaImp;
   const keep=S.v.plazo,years=Math.min(S.v.plazo,x.pz||S.v.plazo);S.v.plazo=years;
   const tb=tinPara(x,years),bonT=bonOf(x),nd=vkNd(x);
@@ -1976,10 +1984,11 @@ function mcalc(x){
     prods:sinBon?[]:vk.filter(p=>p.c>0).map(p=>({n:p.n,b:0,c:p.c,s:p.s,m:p.m,hasta:years,on:true}))};
   const r=sim(o,o.prods.map(()=>years));
   const t2=r.tramos.find((t,k)=>k>0&&Math.abs(t.cuota-r.cuota)>=1);
-  const efV=tae(r.P,r.ap,r.pays,r.years),efSin=o.prods.length?tae(r.P,r.ap,r.pays):efV;S.v.plazo=keep;
+  const efV=tae(r.P,r.ap,r.pays,r.years);S.v.plazo=keep;
   const base=Math.min(S.v.precio,tasa()),ltvKo=base>0&&r.P/base*100>(x.ltv||80)+0.5;
   const tN=taeNum(x),efTae=nd&&!sinBon&&tN!=null&&tN>efV;
-  return {years,tin:o.tin,cuota:r.cuota,cuota2:t2?t2.cuota:null,desde:t2?Math.ceil(t2.desde/12):null,int:r.int,ef:efTae?tN:efV,efSin,efTae,
+  let eS=o.prods.length?null:efV;   // efSin solo se enseña dentro del clic: se calcula cuando se pide
+  return {years,tin:o.tin,cuota:r.cuota,cuota2:t2?t2.cuota:null,desde:t2?Math.ceil(t2.desde/12):null,int:r.int,ef:efTae?tN:efV,get efSin(){return eS==null?(eS=tae(r.P,r.ap,r.pays)):eS},efTae,
     extra:sinBon?0:vk.reduce((s,p)=>s+p.extra,0),vinc:r.vinc,vk,nProd:vk.length,vkNd:nd,r,sinBon,noAcc,ltvKo,g,ap:r.ap};
 }
 /* fuente y fecha de una oferta; si falta alguna, se dice */
@@ -1996,7 +2005,7 @@ function render4(){
     <button class="kpi" data-x="m_bce"><small>BCE · facilidad de depósito</small><strong class="num">${pct(MKT.bce,2)}</strong><em>${esc(MKT.bceCorto||'')}</em></button>`;
   const FN=MKT.fuenteNombres||{},lk=(k,t)=>MKT.fuentes&&MKT.fuentes[k]?`<a href="${MKT.fuentes[k]}" target="_blank" rel="noopener">${esc(t||FN[k]||k)}</a>`:'';
   $('m4ctx').innerHTML=`<div><b>Qué está pasando</b> · datos a ${esc(MKT_FECHA)}</div><ul>${(MKT.ctx||[]).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
-    <div class="src-line">Fuentes: Euríbor ${lk('eur')} · tipo medio ${lk('ine')} · BCE ${lk('bce')} · ofertas: ${ofFuentes()} (enlace y fecha en cada fila). Se revisan cada semana.</div>`;
+    <div class="src-line">Fuentes: Euríbor ${lk('eur')} · tipo medio ${lk('ine')} · facilidad de depósito ${lk('bce')} · ofertas: ${ofFuentes()} (enlace y fecha en cada fila). Se revisan cada semana.</div>`;
   $('m4filter').innerHTML=[['todas','Todas'],['fija','Fijas'],['mixta','Mixtas'],['variable','Variables']].map(([k,l])=>`<button data-mf="${k}" class="${MF===k?'on':''}">${l}</button>`).join('');
   $('m4hint').textContent=P>0?`Cuotas calculadas para tu hipoteca de ${eur(P)} a ${anos(S.v.plazo)}, con el tipo bonificado y el Euríbor a ${pct(S.h.eur)} cuando toca revisar. Pincha una fila para ver el detalle.`:'Con una entrada del 100 % no hay hipoteca que calcular.';
   const rows=OFF.map((x,i)=>({x,i,c:P>0?mcalc(x):null})).filter(r=>MF==='todas'||r.x.t===MF);
@@ -2042,7 +2051,7 @@ function mDetail(i){const x=OFF[i],c=hipoteca()>0?mcalc(x):null;
     <h4>Comisiones</h4><p>${esc(x.c||'No publicadas')}</p>
     ${x.n?`<p class="note">${esc(x.n)}</p>`:''}
     ${(g=>g.min?`<p class="${g.falla?'note':'hint'}">${g.tipo==='acceso'?`Ingresos mínimos para que te la den: ${eur(g.min)} al mes${x.ingMin2?` (${eur(x.ingMin2)} con dos titulares)`:''}.`:`Para el tipo bonificado pide domiciliar una nómina de al menos ${eur(g.min)} al mes.`} ${g.falla?`Con tus ${eur(S.a.ingresos)} no llegas.`:''}</p>`:'')(ingOf(x))}
-    ${x.t==='variable'?`<p class="hint">Al llevarla al comparador: ${x.anos>1?'para el TIN sin bonificar del periodo inicial':'el banco no publica el TIN del primer año sin bonificar, así que'} suponemos que sube lo mismo que el diferencial (${pct(Math.max(0,(x.difS||x.dif)-x.dif))}).</p>`:''}
+    ${x.t!=='fija'&&!(x.t==='mixta'&&x.tinS)&&bonOf(x)>0?`<p class="hint">Para el TIN ${x.t==='mixta'?'del tramo fijo':x.anos>1?'del periodo inicial':'del primer año'} sin bonificar supongo la misma subida que en el diferencial (${pct(bonOf(x))}).</p>`:''}
     <p class="hint">Fuente: ${x.f?`<a href="${esc(x.f)}" target="_blank" rel="noopener">${esc(hostOf(x))}</a>`:'sin enlace'} · ${sinFecha(x.d)?'dato sin fecha':'dato del '+esc(x.d)}${compOf(x)?' (comparador, no la web del banco)':''}</p>
     <button class="btn solid adv" data-madd="${i}">Llevar al comparador</button>`)}
 /* La cuenta del coste comparado de una oferta, producto a producto (se abre al pinchar la cifra) */
@@ -2800,7 +2809,7 @@ renderOffers();refresh();
 applyModo(MODO||autoModo());
 const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(h)?h:(S.tab||'cuanto'));
 if(PRIMERA_VEZ&&!['hipotecas','invertir','pro'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
-window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf,hTocado,applyData};
+window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,mcalc0,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf,hTocado,applyData};
 })();
 </script>
 
