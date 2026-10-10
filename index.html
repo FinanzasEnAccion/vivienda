@@ -445,6 +445,14 @@ html.m .broker .ctag{display:flex;width:max-content;margin:8px 0 4px;padding:6px
 .broker h3{display:inline}
 @media (min-width:901px){.broker{padding:10px 18px}}
 .broker a.cta{padding:10px 16px}
+/* Escritorio y portátil: el banner en una línea (título, etiqueta del caso y botón); el texto y el aviso legal completos, dentro del clic (X.bro) */
+.broker .dmin,.broker .bq{display:none}
+@media (min-width:801px){html.web .broker{padding:8px 16px}html.web .broker .ic{width:30px;height:30px}html.web .broker .ic svg{width:16px;height:16px}
+  html.web .broker .btxt{display:flex;align-items:center;flex-wrap:wrap;gap:2px 10px;min-width:0}html.web .broker h3{font-size:16px}html.web .broker .ctag{margin-left:0;vertical-align:0}
+  html.web .broker #brokerTxt,html.web .broker .dtx{display:none}html.web .broker .dmin{display:inline}html.web .broker p.disc{margin:0 0 0 auto;font-size:12px}
+  html.web .broker .bq{display:inline-grid;place-items:center;flex:none;width:20px;height:20px;border-radius:50%;border:1px solid rgba(125,211,168,.6);background:transparent;color:var(--mint);font-size:12px;font-weight:800;line-height:1;padding:0}
+  html.web .broker a.cta{padding:7px 14px;font-size:13.5px}}
+@media (hover:hover){.broker .bq:hover{background:rgba(125,211,168,.2)}}
 @media (min-width:801px) and (min-height:540px){  html.web, html.web body{height:100%}
   html.web body{display:flex;flex-direction:column;overflow:hidden}
   html.web .band{flex:none}
@@ -464,6 +472,15 @@ html.m .broker .ctag{display:flex;width:max-content;margin:8px 0 4px;padding:6px
   html.web .addcard{height:100%}
   html.web .card{padding:16px}
   html.web .big{font-size:clamp(34px,4.2vw,46px)}
+}
+/* Sin reducir la página: si el resultado no cabe en alto, sus tarjetas guardan un alto mínimo útil y se desplaza la columna del resultado */
+@media (min-width:801px) and (min-height:540px){
+  html.web .right1{grid-template-rows:auto minmax(250px,1fr);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 6px 6px 0;margin:0 -6px -6px 0}
+  html.web .right3{grid-template-rows:auto auto minmax(250px,1fr);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 6px 6px 0;margin:0 -6px -6px 0}
+  html.web #p-hipotecas{grid-template-rows:auto minmax(280px,1fr);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 6px 6px 0;margin:0 -6px -6px 0}
+}
+@media (min-width:801px) and (min-height:540px) and (max-height:760px){
+  html.web .wrap{padding-block:10px 10px;gap:10px}html.web .card{padding:12px 14px}html.web .big{font-size:34px;line-height:1.1}html.web .kpi{padding:8px 12px}
 }
 @media (max-width:800px),(max-height:539px){.right1{grid-template-columns:1fr}.chartbox{height:260px}}
 
@@ -846,7 +863,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
       <div class="right1">
         <div class="card hero" id="r1hero"></div>
         <div class="card scroll"><h2>Qué te frena antes</h2><div class="limits" id="r1lim"></div><h2 style="margin-top:18px">Lo que mira el banco</h2><div class="bk-list" id="r1bank"></div><h2 style="margin-top:18px">Según el plazo</h2><div id="r1plazo"></div></div>
-        <div class="card scroll"><h2 id="r1useT">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div><h2 style="margin-top:18px">Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px" id="r1src"></div></div>
+        <div class="card scroll"><h2 id="r1useT">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div><h2 style="margin-top:18px" id="r1avT">Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px" id="r1src"></div></div>
       </div>
     </div>
   </section>
@@ -942,7 +959,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 
   <aside class="broker" aria-label="Ayuda de un bróker">
     <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></div>
-    <div class="btxt"><h3 id="brokerT">¿Quieres ayuda del bróker que me ayudó a mí?</h3><button type="button" class="ctag" id="casoTag" data-x="caso" title="Pincha para ver por qué" hidden></button><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button><span id="brokerQuien" hidden> · <button type="button" class="lnkbtn" data-x="quien">Quién es José</button></span></p></div>
+    <div class="btxt"><h3 id="brokerT">¿Quieres ayuda del bróker que me ayudó a mí?</h3><button type="button" class="ctag" id="casoTag" data-x="caso" title="Pincha para ver por qué" hidden></button><button type="button" class="bq" data-x="bro" aria-label="Qué hace el bróker y aviso legal">?</button><p id="brokerTxt"></p><p class="disc"><span class="dtx">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. </span><button type="button" class="lnkbtn dmin" data-x="bro">Cálculos orientativos</button><span class="dmin"> · </span><button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button><span id="brokerQuien" hidden> · <button type="button" class="lnkbtn" data-x="quien">Quién es José</button></span></p></div>
     <a class="cta" id="cta" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Primer contacto gratis con José <span aria-hidden="true">→</span></a>
     <a class="cta" id="ctaAlt" href="#" role="button" data-x="caso" hidden>Ver qué te acerca <span aria-hidden="true">→</span></a>
   </aside>
@@ -1595,6 +1612,7 @@ function render1(){
   if(!K.plazo)avisos+=`<div class="alert warn"><span>Con ${S.v.edad} años y ${anos(S.v.plazo)} de plazo terminarías de pagar a los ${S.v.edad+S.v.plazo}. La mayoría de bancos quieren que acabes antes de los ${EDAD_FIN}: plazo máximo de ${anos(R.plazoB)}.</span><button class="btn solid" data-act="plazoB">Usar ${anos(R.plazoB)}</button></div>`;
   if(R.falta>0)avisos+=`<div class="alert neutral"><span>Hoy tus ahorros dan para una entrada del <b>${pct(R.entradaHoy,0)}</b> después de pagar impuestos y gastos.${R.meses?` Ahorrando ${eur(S.a.ahorroMes)} al mes reúnes lo que falta en <b>${R.meses===1?'1 mes':R.meses+' meses'}</b>${R.meses>=12?` (${nf(1).format(R.meses/12)} años)`:''}.`:' Pon cuánto ahorras al mes para saber cuánto tardarías.'}</span></div>`;
 
+  const nAv=(avisos.match(/class="alert /g)||[]).length; // pastilla que lleva a «Ventajas y avisos», que queda más abajo en su tarjeta
   $('r1hero').innerHTML=`
     <div class="eyebrow">Precio máximo de vivienda que puedes comprar hoy</div>
     <button class="big num" data-x="max">${eur(R.max)}</button>
@@ -1605,6 +1623,7 @@ function render1(){
       <button class="pill ${im.usa?(im.red.duda||rPend(im.red.r).length?'warn':'good'):(im.falla||im.red)?'warn':'neutral'}" data-x="itp">${S.v.nueva?im.ivaN+' y AJD '+pctS(im.tipoEf)+(im.usa?' · con rebaja':''):im.usa?'ITP reducido '+pctS(im.tipoEf):'ITP '+pctS(im.tipoEf)+(im.falla?' · sin rebaja':'')}</button>
       ${S.v.ico?`<button class="pill ${R.ico.ok&&!R.ico.duda?'good':'warn'}" data-x="ico">${!R.ico.ok?'Aval ICO: no cumples':R.ico.duda?(R.ico.tope.varios?'Aval ICO: depende de tu provincia':'Aval ICO: cerca del tope de ingresos'):'Con aval ICO'}</button>`:''}
       ${touched?'':`<span class="pill warn" style="white-space:normal">Datos de ejemplo: pon los tuyos</span>`}
+      ${nAv?`<button class="pill ${/alert warn/.test(avisos)?'warn':'neutral'}" data-irav="1" title="Ventajas y avisos">${nAv===1?'1 aviso':nAv+' avisos'} ↓</button>`:''}
     </div>
     <div class="kpihead">La vivienda que miras: <b class="num">${eur(R.P)}</b>${ok?'':R.aj.ok?` · <span style="color:var(--warn)">te llega${R.aj.como?' '+R.aj.como:''}</span>`:' · <span style="color:var(--bad)">no te llega</span>'}</div>
     <div class="kpis">
@@ -2887,6 +2906,7 @@ function renderBroker(){
   $('cta').hidden=k==='lejos';$('ctaAlt').hidden=k!=='lejos';$('brokerQuien').hidden=!brokerHay();
 }
 /* Resultado de «¿Cuánto puedo comprar?» siempre al día para el banner, el resumen y la ficha, sin depender de qué pestaña se haya pintado. Solo se recalcula si cambian tus datos. */
+document.addEventListener('click',e=>{if(e.target.closest('[data-irav]')){const h=$('r1avT');if(h)h.scrollIntoView({behavior:'smooth',block:'start'})}});
 function casoR(){const k=JSON.stringify([S.v,S.a]);if(casoR.k!==k){casoR.k=k;casoR.c=null;casoR.r=calc1()}return casoR.r}
 
 /* ---------- etiqueta del caso: viable, justo o lejos ----------
@@ -3036,6 +3056,8 @@ function joseModal(){
    :`<p>Todavía no has puesto tus datos, así que la reserva solo dirá de dónde vienes:</p>${caja(JOSE_ORIGEN)}
     <div class="am-bar" style="margin-top:12px"><a class="btn solid" data-jose="${JOSE||'no'}" href="${esc(joseHref(false))}" target="_blank" rel="noopener">Reservar con José →</a></div>${JOSE?ahora:''}${quien}`)}
 X.jose=()=>{joseModal();track('jose-que-recibe')};
+/* Lo que el banner de una línea deja dentro del clic: el texto del caso, el botón y el aviso legal entero */
+X.bro=()=>{const lejos=!$('ctaAlt').hidden,a=$('cta');modal($('brokerT').textContent,`<p>${$('brokerTxt').innerHTML}</p><div class="am-bar" style="margin:12px 0">${lejos?'<button type="button" class="btn solid" data-x="caso">Ver qué te acerca →</button>':`<a class="btn solid" data-cta="banner" href="${esc(a.getAttribute('href'))}" target="_blank" rel="noopener">Primer contacto gratis con José →</a>`}<button type="button" class="btn" data-x="jose">Qué recibe José</button><button type="button" class="btn" data-x="metodo">Cómo lo calculo</button></div><p class="note">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad.</p>`)};
 const esJose=a=>!!a&&/^https:\/\/cal\.com\//.test(a.getAttribute('href')||'');
 const joseA=e=>{const a=e.target&&e.target.closest?e.target.closest('a[href]'):null;return esJose(a)?a:null};
 /* Antes de que el enlace navegue (ratón, dedo o teclado; también «abrir en una pestaña nueva») se le pone la dirección que toca */
@@ -3184,8 +3206,10 @@ $('mres').onclick=()=>{const hero=document.querySelector('.pane:not([hidden]) .h
 /* Encaje en pantalla: si algo no cabe, se reduce la escala hasta un mínimo legible; por debajo, la tarjeta se desplaza por dentro */
 const ONE=matchMedia('(min-width:801px) and (min-height:540px)');let fitT=null,Z=1;
 function need(){let r=1;document.querySelectorAll('.pane:not([hidden]) .incard, .pane:not([hidden]) .offer, .pane:not([hidden]) .chartcard, .pane:not([hidden]) .s-left, .pane:not([hidden]) .s-right').forEach(e=>{if(e.scrollHeight>e.clientHeight+1)r=Math.min(r,e.clientHeight/e.scrollHeight)});return r}
+/* Reducción mínima: la que deja la letra más pequeña a la vista en 10 px, y nunca por debajo del 90 %. Si ni así cabe, no se reduce y la tarjeta se desplaza por dentro. */
+function zMin(){let m=99;document.querySelectorAll('.pane:not([hidden]) *, .broker *, .band *').forEach(e=>{if(!e.offsetWidth)return;for(const n of e.childNodes)if(n.nodeType===3&&n.textContent.trim().length>1){const f=parseFloat(getComputedStyle(e).fontSize);if(f<m)m=f;break}});return Math.min(1,Math.max(0.9,10/m))}
 function fit(){const root=document.documentElement;if(!ONE.matches||root.classList.contains('m')){root.style.zoom='';Z=1;return}
-  root.style.zoom=1;let z=1;if(need()<0.999){let lo=0.78,hi=1;root.style.zoom=lo;if(need()>=0.999){for(let k=0;k<7;k++){const m=(lo+hi)/2;root.style.zoom=m;if(need()>=0.999)lo=m;else hi=m}}z=lo;root.style.zoom=z}
+  root.style.zoom=1;let z=1;if(need()<0.999){let lo=zMin(),hi=1;if(lo<0.995){root.style.zoom=lo;if(need()>=0.999){for(let k=0;k<7;k++){const m=(lo+hi)/2;root.style.zoom=m;if(need()>=0.999)lo=m;else hi=m}z=lo}}root.style.zoom=z}
   Z=z;if(LAST.r3)drawChart3(LAST.r3,false)}
 function fitSoon(){clearTimeout(fitT);fitT=setTimeout(fit,120)}
 addEventListener('resize',fitSoon);
