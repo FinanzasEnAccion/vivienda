@@ -908,6 +908,7 @@ const balTecho=()=>/Ibiza|Formentera/.test(S.v.prov)?378211.68:331859.7;
 const R_CYL={suma:31500,minimo:1,txt:'base imponible menos el mínimo personal y familiar de hasta 31.500 € entre todos los compradores'};
 const R_VAL={ind:30000,conj:47000,txt:'base liquidable de hasta 30.000 € (47.000 € en declaración conjunta)'};
 const R_EXT={ind:30000,conj:55000,txt:'base imponible de hasta 30.000 € (55.000 € en declaración conjunta)'};
+const R_GAL=['los topes de precio y de patrimonio suben 30.000 € por cada miembro más de la unidad familiar'],R_GAL_RUR='parroquia de zona poco poblada o área rural (lista oficial de la Xunta)';
 const ITP={
  'Andalucía':{gen:[[I,7]],src:['Agencia Tributaria de Andalucía','https://www.juntadeandalucia.es/organismos/atrian/areas/informacion-tributaria/impuestos/preguntas-frecuentes/impuestos-transmisiones-actos/beneficios.html'],
   red:[{tipo:3.5,menorDe:35,max:150000},{tipo:6,max:150000}],mas:['3,5 % en municipios con problemas de despoblación']},
@@ -936,16 +937,16 @@ const ITP={
  'Extremadura':{gen:[[360000,8],[600000,10],[I,11]],src:['Portal Tributario de la Junta de Extremadura','https://portaltributario.juntaex.es/PortalTributario/web/guest/itpajd26'],
   red:[{tipo:4,menorDe:36,max:200000,renta:R_EXT},{tipo:7,max:200000,renta:R_EXT}],mas:['4 % en municipios de menos de 3.000 habitantes']},
  'Galicia':{gen:[[I,8]],src:['Ley de Galicia 5/2025 (BOE)','https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-3385'],
-  red:[{tipo:3,menorDe:36,max:240000,pat:240000,req:['los topes de valor y de patrimonio suben 30.000 € por cada miembro más de la unidad familiar']},
-       {tipo:7,max:240000,pat:240000,req:['los topes de valor y de patrimonio suben 30.000 € por cada miembro más de la unidad familiar']}],mas:['Régimen propio para las zonas poco pobladas']},
+  red:[{tipo:3,menorDe:36,max:240000,pat:240000,req:R_GAL},{tipo:7,max:240000,pat:240000,req:R_GAL},
+       {bonif:100,menorDe:36,max:240000,pat:240000,rural:R_GAL_RUR,req:R_GAL,txt:'deducción del 100 %'},{tipo:5,max:240000,pat:240000,rural:R_GAL_RUR,req:R_GAL},{tipo:6,rural:R_GAL_RUR}]},
  'La Rioja':{gen:[[I,7]],src:['Gobierno de La Rioja','https://www.larioja.org/tributos/es/tributos-cedidos/impuesto-transmisiones-patrimoniales-actos-juridicos-docume/informacion/transmisiones-patrimoniales-onerosas'],
   red:[{tipo:3,menorDe:40,primera:1,rural:'municipio de la lista de pequeños municipios de La Rioja'},{tipo:4,menorDe:40,primera:1}]},
  'Madrid':{gen:[[I,6]],src:['Ley 5/2024 de la Comunidad de Madrid (BOE)','https://www.boe.es/boe/dias/2025/02/20/pdfs/BOE-A-2025-3303.pdf'],
   red:[{bonif:100,menorDe:35,max:250000,rural:'municipio de menos de 2.500 habitantes',txt:'bonificación del 100 %'},{bonif:10,max:250000,txt:'bonificación del 10 % de la cuota'}]},
  'Murcia':{gen:[[I,7.75]],src:['Agencia Tributaria de la Región de Murcia','https://agenciatributaria.carm.es/en/faqs-itpajd'],
   red:[{tipo:3,menorDe:41,renta:{ind:40000,minimo:1,txt:'base imponible general menos el mínimo personal y familiar por debajo de 40.000 € y base del ahorro de hasta 1.800 €'}}]},
- 'Navarra':{gen:[[I,6]],src:['Texto refundido del ITP y AJD de Navarra (BOE)','https://www.boe.es/buscar/act.php?id=BON-n-1999-90001'],red:[],
-  mas:['5 % sobre los primeros 180.304 € para familias con dos o más hijos','4 % en municipios en riesgo de despoblación']},
+ 'Navarra':{gen:[[I,6]],src:['Texto refundido del ITP y AJD de Navarra (BOE)','https://www.boe.es/buscar/act.php?id=BON-n-1999-90001'],
+  red:[{tipo:4,rural:'municipio en riesgo de despoblación (lista oficial de Navarra)'}],mas:['5 % sobre los primeros 180.304 € para familias con dos o más hijos que no tengan otra vivienda en Navarra']},
  'País Vasco':{gen:[[I,4]],src:['Diputación Foral de Gipuzkoa','https://www.gipuzkoa.eus/es/web/ogasuna/impuestos/modelo/60t/tipos-impositivos'],
   red:[{tipo:2.5,req:['vivienda de hasta 120 m² construidos (en unifamiliares, parcela de hasta 300 m²), o ser familia numerosa','no tener más del 25 % de otra vivienda en el mismo municipio']}]},
  'Ceuta y Melilla':{gen:[[I,3]],genTxt:'6 % con una bonificación del 50 % por estar el inmueble en Ceuta o Melilla',src:['Agencia Tributaria','https://sede.agenciatributaria.gob.es/Sede/declaraciones-informativas-otros-impuestos-tasas/impuesto-sobre-transmisiones-patrimoniales-actos-juridicos/itp-ajd-transmisiones-derechos-reales-fianzas/base-imponible-tipos-ceuta-melilla.html'],red:[]}
@@ -970,20 +971,21 @@ function icoTope(){const L=PROV[S.v.ccaa]||[],ts=L.map(icoIngProv),p=L.includes(
    AJD_ESC: comunidades donde el tipo general depende del valor (se aplica a todo el valor).
    AJD_RED: tipos reducidos de vivienda habitual, con los mismos campos que los del ITP. */
 const AJD={'Andalucía':1.2,'Aragón':1.5,'Asturias':1.2,'Baleares':1.5,'Canarias':1,'Cantabria':1.5,'Castilla y León':1.5,'Castilla-La Mancha':1.5,'Cataluña':1.5,'Comunidad Valenciana':1.4,'Extremadura':1.5,'Galicia':1.5,'La Rioja':1,'Madrid':0.75,'Murcia':1.5,'Navarra':0.5,'País Vasco':0,'Ceuta y Melilla':0.25};
-const AJD_TXT={'País Vasco':'la primera transmisión de una vivienda está exenta','Canarias':'tipo de las escrituras de operaciones con IGIC','Ceuta y Melilla':'0,5 % con una bonificación del 50 %','Madrid':'0,4 % hasta 120.000 €, 0,5 % hasta 180.000 € y 0,75 % por encima, sobre todo el valor'};
-const AJD_ESC={'Madrid':[[120000,0.4],[180000,0.5],[I,0.75]]};
-const R_GAL=['los topes de valor y de patrimonio suben 30.000 € por cada miembro más de la unidad familiar'];
+const AJD_TXT={'País Vasco':'la primera transmisión de una vivienda está exenta','Canarias':'tipo de las escrituras de operaciones con IGIC','Ceuta y Melilla':'0,5 % con una bonificación del 50 %','Madrid':'0,4 % hasta 120.000 €, 0,5 % hasta 180.000 € y 0,75 % por encima, sobre todo el valor','Baleares':'2 % desde 1.000.000 €'};
+const AJD_ESC={'Madrid':[[120000,0.4],[180000,0.5],[I,0.75]],'Baleares':[[999999.99,1.5],[I,2]]};
 const AJD_RED={
  'Andalucía':[{tipo:0.3,menorDe:35,max:150000},{tipo:1,max:150000}],
  'Aragón':[{bonif:30,menorDe:35,max:100000,txt:'bonificación del 30 % de la cuota'}],
+ 'Baleares':[{tipo:0.5,menorDe:36,primera:1,max:270151.2},{tipo:1,primera:1,max:270151.2}],
  'Canarias':[{tipo:0.4,menorDe:41,primera:1,max:200000,renta:{suma:46455,txt:'renta de hasta 46.455 € entre todos los compradores, más 6.825 € por cada hijo o familiar a tu cargo'},req:['no haber sido nunca titular de otro inmueble']}],
  'Cantabria':[{tipo:0.1,menorDe:40,hasta:300000,resto:1.5},{tipo:1,hasta:300000,resto:1.5}],
  'Castilla y León':[{tipo:0.01,menorDe:36,primera:1,max:149999.99,rural:'municipio de hasta 10.000 habitantes (3.000 si está a menos de 30 km de la capital)',renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']},
                     {tipo:0.5,menorDe:36,primera:1,renta:R_CYL,req:['que todos los compradores tengan menos de 36 años']}],
  'Castilla-La Mancha':[{tipo:0.25,menorDe:36,primera:1,max:240000,hipMas:50},{tipo:0.75,primera:1,max:240000,hipMas:50}],
+ 'Cataluña':[{bonif:100,menorDe:36,renta:{ind:36000,minimo:1,txt:'base imponible (general y del ahorro) menos el mínimo personal y familiar de hasta 36.000 €'},txt:'bonificación del 100 %'}],
  'Comunidad Valenciana':[{tipo:0.1}],
  'Extremadura':[{tipo:0.5,max:200000,renta:R_EXT}],
- 'Galicia':[{tipo:0.5,menorDe:36,max:240000,pat:240000,req:R_GAL},{tipo:1,max:240000,pat:240000,req:R_GAL}],
+ 'Galicia':[{bonif:100,menorDe:36,max:240000,pat:240000,rural:R_GAL_RUR,req:R_GAL,txt:'deducción del 100 %'},{tipo:0.5,menorDe:36,max:240000,pat:240000,req:R_GAL},{tipo:1,max:240000,pat:240000,req:R_GAL}],
  'Madrid':[{bonif:100,menorDe:35,max:250000,rural:'municipio de menos de 2.500 habitantes',txt:'bonificación del 100 %'},{bonif:10,max:250000,txt:'bonificación del 10 % de la cuota'}],
  'Murcia':[{tipo:0.1,menorDe:41,renta:{ind:40000,minimo:1,txt:'base imponible general menos el mínimo personal y familiar por debajo de 40.000 € y base del ahorro de hasta 1.800 €'}}]
 };
@@ -991,10 +993,13 @@ const AJD_RED={
 const ajdReg=c=>({gen:AJD_ESC[c]||[[I,AJD[c]!=null?AJD[c]:1.5]],prog:false,red:AJD_RED[c]||[]});
 /* AJD general de una vivienda nueva (el que paga quien no la compra para vivir en ella) */
 function ajdOf(ccaa,P){const g=itpGen(ajdReg(ccaa),P);return {imp:g,tipo:P>0?g/P*100:(AJD[ccaa]!=null?AJD[ccaa]:1.5),txt:AJD_TXT[ccaa]||''}}
-/* Rebajas de la obra nueva que se enseñan pero no se calculan */
-const NUEVA_MAS={'Canarias':'en vivienda habitual de hasta 200.000 € el IGIC puede bajar al 5 % si no tienes otra vivienda, y al 3 % si además tienes 40 años o menos y no pasas el tope de renta'};
 /* Impuesto indirecto de la obra nueva: IVA en general, IGIC en Canarias, IPSI en Ceuta y Melilla */
 const IND={'Canarias':[7,'IGIC'],'Ceuta y Melilla':[4,'IPSI']};const indOf=c=>IND[c]||[10,'IVA'];
+/* Canarias: IGIC reducido en vivienda habitual de hasta 200.000 € (art. 38 del texto refundido del IGIC, vigente en 2026):
+   5 % si no tienes otra vivienda; 3 % si además tienes 40 años o menos, o la renta de la unidad familiar no pasa del tope */
+const R_CAN_OTRA=['no tener otra vivienda, o venderla en dos años'];
+const IND_RED={'Canarias':[{tipo:3,menorDe:41,max:200000,req:R_CAN_OTRA},{tipo:3,max:200000,renta:{ind:46455,conj:61770,txt:'renta de la unidad familiar de hasta 46.455 € (61.770 € en declaración conjunta)'},req:R_CAN_OTRA},{tipo:5,max:200000,req:R_CAN_OTRA}]};
+const indReg=c=>({gen:[[I,indOf(c)[0]]],prog:false,red:IND_RED[c]||[]});
 /* Criterios habituales de los bancos */
 const LTV_SEG=70,EDAD_FIN=75,RESID=900,ESF_BANCO=40,ESF_AVISO=35,ESTRES=2;
 /* IRPF del ahorro 2026 (ganancias al vender) */
@@ -1261,7 +1266,7 @@ const finPct=()=>100-Math.max(S.v.entrada,100-ltvEf());
 function cumple(r,P){
   const why=[],mx=maxOf(r);
   if(S.v.segunda)why.push('que sea tu vivienda habitual');
-  if(r.menorDe!=null&&!(S.v.edad<r.menorDe))why.push(`tener menos de ${r.menorDe} años`);
+  if(r.menorDe!=null&&!(S.v.edad<r.menorDe))why.push(`tener ${r.menorDe-1} años o menos`);
   if(mx!=null&&P>mx)why.push(`valor de hasta ${eur(mx)}`);
   if(r.primera&&!S.v.primera)why.push('primera vivienda');
   if(r.rural&&!S.v.rural)why.push(r.rural);
@@ -1275,14 +1280,17 @@ function taxOf(r,P,reg){
   if(r.bonif!=null)return itpGen(reg,P)*(1-r.bonif/100);
   if(r.hasta!=null&&P>r.hasta)return r.hasta*r.tipo/100+(P-r.hasta)*r.resto/100;
   return P*r.tipo/100}
+/* La mejor rebaja que cumples de un impuesto con forma de entrada del ITP: lo general (g), la rebaja (red), si se aplica (usa) y lo que pagas (imp) */
+function mejorRebaja(regX,P){const g=itpGen(regX,P);let best=null,falla=null;
+  for(const r of regX.red){const t=taxOf(r,P,regX),why=cumple(r,P);if(!why.length){if(!best||t<best.t)best={r,t}}else if(!falla||why.length<falla.why.length)falla={r,why}}
+  const red=best&&best.t<g-0.5?best:null;if(red){red.rv=rentaVer(red.r);red.duda=!!(red.rv&&red.rv.st==='duda')}
+  const usa=!!(red&&S.v.rebaja);return {g,red,usa,imp:usa?red.t:g,falla:red?null:falla,reg:regX}}
 function impuesto(P){
   const reg=ITP[S.v.ccaa]||ITP['Asturias'];
-  if(S.v.nueva){const regA=ajdReg(S.v.ccaa),[ti,ni]=indOf(S.v.ccaa),gA=itpGen(regA,P),iva=P*ti/100;
-    let best=null,falla=null;
-    for(const r of regA.red){const t=taxOf(r,P,regA),why=cumple(r,P);if(!why.length){if(!best||t<best.t)best={r,t}}else if(!falla||why.length<falla.why.length)falla={r,why}}
-    const red=best&&best.t<gA-0.5?best:null;if(red){red.rv=rentaVer(red.r);red.duda=!!(red.rv&&red.rv.st==='duda')}
-    const usa=!!(red&&S.v.rebaja),ajdImp=usa?red.t:gA,total=iva+ajdImp;
-    return {total,general:iva+gA,tipoEf:P>0?total/P*100:ti,iva,ivaT:ti,ivaN:ni,ajd:P>0?ajdImp/P*100:0,ajdGen:P>0?gA/P*100:0,ajdImp,ajdTxt:AJD_TXT[S.v.ccaa]||'',nombre:ni+' y AJD',nomRed:'AJD reducido',red,usa,cerca:null,reg,regA,falla:red?null:falla}}
+  if(S.v.nueva){const [ti,ni]=indOf(S.v.ccaa),A=mejorRebaja(ajdReg(S.v.ccaa),P),N=mejorRebaja(indReg(S.v.ccaa),P),total=N.imp+A.imp,usa=A.usa||N.usa,r0=A.red||N.red;
+    const red=r0?Object.assign({},r0,{duda:!!((A.usa&&A.red.duda)||(N.usa&&N.red.duda))}):null;
+    return {total,general:N.g+A.g,tipoEf:P>0?total/P*100:ti,iva:N.imp,ivaT:P>0?N.imp/P*100:ti,ivaGen:ti,ivaN:ni,ajd:P>0?A.imp/P*100:0,ajdGen:P>0?A.g/P*100:0,ajdImp:A.imp,ajdTxt:AJD_TXT[S.v.ccaa]||'',nombre:ni+' y AJD',
+      nomRed:A.usa&&N.usa?ni+' y AJD reducidos':N.usa?ni+' reducido':'AJD reducido',redTxt:[N.red?ni+' '+rTxt(N.red.r):'',A.red?'AJD '+rTxt(A.red.r):''].filter(Boolean).join(' y '),red,usa,cerca:null,reg,pA:A,pN:N,falla:red?null:(A.falla||N.falla)}}
   const general=itpGen(reg,P);
   let best=null,cerca=null,falla=null;
   for(const r of reg.red){
@@ -1296,11 +1304,11 @@ function impuesto(P){
   const usa=!!(red&&S.v.rebaja);
   const total=usa?red.t:general;
   if(red&&cerca&&cerca.t>=red.t)cerca=null;
-  return {total,general,tipoEf:P>0?total/P*100:0,nombre:usa?'ITP reducido':'ITP',nomRed:'ITP reducido',red,usa,cerca,reg,falla:red?null:falla};
+  return {total,general,tipoEf:P>0?total/P*100:0,nombre:usa?'ITP reducido':'ITP',nomRed:'ITP reducido',redTxt:red?rTxt(red.r):'',red,usa,cerca,reg,falla:red?null:falla};
 }
 const rTxt=r=>r.txt||pctS(r.tipo);
 /* Requisitos de una rebaja, para enseñarlos. rPend: los que aquí no se pueden comprobar del todo (renta, patrimonio y otros) */
-const rCond=r=>{const c=[],mx=maxOf(r);if(r.menorDe!=null)c.push(`menos de ${r.menorDe} años`);c.push(r.primera?'primera vivienda habitual':'vivienda habitual');if(mx!=null)c.push(`valor de hasta ${eur(mx)}`);
+const rCond=r=>{const c=[],mx=maxOf(r);if(r.menorDe!=null)c.push(`${r.menorDe-1} años o menos`);c.push(r.primera?'primera vivienda habitual':'vivienda habitual');if(mx!=null)c.push(`valor de hasta ${eur(mx)}`);
   if(r.hasta!=null)c.push(`solo los primeros ${eur(r.hasta)}; el resto, al ${pctS(r.resto)}`);if(r.hipMas!=null)c.push(`hipoteca por más del ${r.hipMas} % del precio`);if(r.hipMin!=null)c.push(`hipoteca de al menos el ${r.hipMin} % de la tasación`);
   if(r.rural)c.push(r.rural);return c.concat(rPend(r))};
 const rPend=r=>{const c=[];if(r.renta)c.push(r.renta.txt);if(r.pat!=null)c.push(`patrimonio de hasta ${eur(r.pat)}`);return c.concat(r.req||[])};
@@ -1373,7 +1381,7 @@ function calc1(){
   // Busca el mayor precio que cumple ok(P). La condición puede dar saltos en los umbrales
   // (rebaja de ITP, precio máximo del aval), así que se comprueba además cada umbral.
   const ths=[];if(reg&&!S.v.nueva){reg.red.forEach(r=>{const m=maxOf(r);if(m!=null)ths.push(m)});if(reg.prog===false)reg.gen.forEach(g=>{if(isFinite(g[0]))ths.push(g[0])})}
-  if(S.v.nueva){const rA=ajdReg(S.v.ccaa);rA.red.forEach(r=>{const m=maxOf(r);if(m!=null)ths.push(m)});rA.gen.forEach(g=>{if(isFinite(g[0]))ths.push(g[0])})}if(S.v.ico)ths.push(icoPrecio(S.v.ccaa));
+  if(S.v.nueva){const rA=ajdReg(S.v.ccaa);rA.red.concat(indReg(S.v.ccaa).red).forEach(r=>{const m=maxOf(r);if(m!=null)ths.push(m)});rA.gen.forEach(g=>{if(isFinite(g[0]))ths.push(g[0])})}if(S.v.ico)ths.push(icoPrecio(S.v.ccaa));
   const busca=ok=>{if(!ok(0))return 0;let lo=0,hi=5e7;for(let k=0;k<60;k++){const mid=(lo+hi)/2;if(ok(mid))lo=mid;else hi=mid}ths.forEach(t=>{if(t>lo&&ok(t))lo=t});return lo};
   // Tope por ahorros: entrada mínima + impuestos y gastos + colchón caben en tus ahorros
   const porAhorros=busca(P=>Emin(P)+gastosP(P)+S.a.colchon<=S.a.ahorros);
@@ -1417,8 +1425,8 @@ function render1(){
   const okA=R.falta<=0,okI=K.esf,ok=R.ok;
   let avisos='';
   if(!ok&&!R.okB&&R.aj.ok&&R.aj.mas)avisos+=`<div class="alert good"><span>Con <b class="num">${eur(R.aj.ent)}</b> de entrada (${pct(R.aj.pct,0)}) <b>sí te llega</b>: la cuota baja a ${eur(R.aj.cuota)}.</span><button class="btn solid" data-act="entAj">Usar esa entrada</button></div>`;
-  if(im.red&&im.usa)avisos+=`<div class="alert ${im.red.duda?'warn':'good'}"><span>Tienes <b>${im.nomRed} (${rTxt(im.red.r)})</b> en vez del general: te ahorras <b class="num">${eur(im.general-im.total)}</b>.${im.red.duda?' Tu renta está cerca del tope: compruébalo.':rPend(im.red.r).length?' Comprueba los requisitos.':''}</span><button class="btn" data-x="itp">Requisitos</button></div>`;
-  else if(im.red&&!im.usa)avisos+=`<div class="alert warn"><span>Cumples para el ${im.nomRed.toLowerCase().replace('itp','ITP').replace('ajd','AJD')} (${rTxt(im.red.r)}) y lo tienes quitado: pagarías ${eur(im.general-im.red.t)} de más.</span><button class="btn" data-act="rebajaOn">Aplicarlo</button></div>`;
+  if(im.red&&im.usa)avisos+=`<div class="alert ${im.red.duda?'warn':'good'}"><span>Tienes <b>${im.nomRed} (${im.redTxt})</b> en vez del general: te ahorras <b class="num">${eur(im.general-im.total)}</b>.${im.red.duda?' Tu renta está cerca del tope: compruébalo.':rPend(im.red.r).length?' Comprueba los requisitos.':''}</span><button class="btn" data-x="itp">Requisitos</button></div>`;
+  else if(im.red&&!im.usa)avisos+=`<div class="alert warn"><span>Cumples para el ${im.nomRed.toLowerCase().replace('itp','ITP').replace('ajd','AJD')} (${im.redTxt}) y lo tienes quitado: pagarías ${eur(im.general-im.red.t)} de más.</span><button class="btn" data-act="rebajaOn">Aplicarlo</button></div>`;
   if(!S.v.nueva&&im.red&&im.cerca&&im.cerca.t<im.total-1){const r=im.cerca.r;
     avisos+=`<div class="alert warn"><span>Si el precio baja a <b class="num">${eur(im.cerca.max)}</b> pasarías a un ITP de ${rTxt(r)}: ${eur(im.cerca.t)} en vez de ${eur(im.total)}.</span><button class="btn" data-x="itp">Requisitos</button></div>`}
   if(!S.v.nueva&&!im.red&&im.falla){const r=im.falla.r,mx=maxOf(r),soloPrecio=im.falla.why.length===1&&mx!=null&&R.P>mx;
@@ -1440,7 +1448,7 @@ function render1(){
       <button class="pill neutral" data-x="max">Te limitan ${R.bind==='ahorros'?'los ahorros':'los ingresos'}</button>
       ${S.v.segunda?`<button class="pill warn" data-x="bEnt">Segunda vivienda: el banco financia el ${LTV_SEG} %</button>`:''}
       <button class="pill ${ok?'good':R.aj.ok?'warn':'bad'}" data-x="${okA&&!R.okB&&!R.aj.ok?'banco':'miras'}">${ok?`La de ${eur(R.P)} te llega`:R.aj.ok?`La de ${eur(R.P)} te llega con más entrada`:okA?`La de ${eur(R.P)}: el banco no la aprobaría`:`La de ${eur(R.P)} no te llega`}</button>
-      <button class="pill ${im.usa?(im.red.duda?'warn':'good'):(im.falla||im.red)?'warn':'neutral'}" data-x="itp">${S.v.nueva?im.ivaN+' y AJD '+pctS(im.tipoEf)+(im.usa?' · AJD reducido':''):im.usa?'ITP reducido '+pctS(im.tipoEf):'ITP '+pctS(im.tipoEf)+(im.falla?' · sin rebaja':'')}</button>
+      <button class="pill ${im.usa?(im.red.duda?'warn':'good'):(im.falla||im.red)?'warn':'neutral'}" data-x="itp">${S.v.nueva?im.ivaN+' y AJD '+pctS(im.tipoEf)+(im.usa?' · con rebaja':''):im.usa?'ITP reducido '+pctS(im.tipoEf):'ITP '+pctS(im.tipoEf)+(im.falla?' · sin rebaja':'')}</button>
       ${S.v.ico?`<button class="pill ${R.ico.ok&&!R.ico.duda?'good':'warn'}" data-x="ico">${!R.ico.ok?'Aval ICO: no cumples':R.ico.duda?(R.ico.tope.varios?'Aval ICO: depende de tu provincia':'Aval ICO: cerca del tope de ingresos'):'Con aval ICO'}</button>`:''}
       ${touched?'':`<span class="pill warn" style="white-space:normal">Datos de ejemplo: pon los tuyos</span>`}
     </div>
@@ -1526,9 +1534,9 @@ function render1(){
   X.bPlazo=()=>modal('Edad al terminar de pagar',`<div class="steps">${step('Tu edad',anos(S.v.edad))}${step('+ Plazo',anos(S.v.plazo))}${step('Terminas de pagar a los',anos(S.v.edad+S.v.plazo),'tot')}${step(`Plazo máximo para acabar antes de los ${EDAD_FIN}`,anos(Math.max(0,EDAD_FIN-S.v.edad)),'tot')}</div><p class="note">Algunos bancos llegan a los 80 años, pero lo habitual son 70 o 75. Si firmáis dos, cuenta la edad del mayor.</p>`);
   X.bEst=()=>modal(`Si el tipo sube ${ESTRES} puntos`,`<div class="steps">${step('Cuota con TIN '+pct(S.v.tin),eur(R.cuota))}${step('Cuota con TIN '+pct(S.v.tin+ESTRES),eur(R.cuotaE),'tot')}${step('Parte de tus ingresos',isFinite(R.esfE)?pct(R.esfE,0):'—','tot')}</div><p>Es la prueba de estrés que hacen muchos bancos con las variables y las mixtas: si el Euríbor sube, ¿podrías seguir pagando? ${K.estres?'Con tus datos, sí: no pasarías del 40 %.':'Con tus datos pasarías del 40 % de tus ingresos: con una fija estarías protegido.'}</p><p class="note">En una hipoteca fija la cuota no cambia, así que este riesgo no te afecta.</p>`);
   X.itp=()=>{const reg=im.reg,t=rentaTit(),src=`<p class="hint">Fuentes: <a href="${reg.src[1]}" target="_blank" rel="noopener">${esc(reg.src[0])}</a>${reg.src!==HAC_CCAA?` · <a href="${HAC_CCAA[1]}" target="_blank" rel="noopener">${HAC_CCAA[0]}</a>`:''}. Revisado el 9 de octubre de 2026.</p>`;
-    modal(S.v.nueva?im.ivaN+' y AJD de vivienda nueva':`ITP en ${S.v.ccaa}`,S.v.nueva?`<div class="steps">${step(im.ivaN+' '+pctS(im.ivaT)+' × '+eur(R.P),eur(im.iva))}${step(`AJD ${pctS(im.ajd)} en ${esc(S.v.ccaa)}${im.usa?' (reducido)':im.ajdTxt?` (${im.ajdTxt})`:''}`,eur(im.ajdImp))}${step('Total',eur(c.imp),'tot')}</div>
-    ${im.regA.red.length?`<h4>Rebajas del AJD para vivienda habitual</h4><div class="steps">${step(`Tipo general${im.ajdTxt?` (${im.ajdTxt})`:''}`,pctS(im.ajdGen))}${im.regA.red.map(r=>{const why=cumple(r,R.P),rv=rentaVer(r),es=!!(im.red&&im.red.r===r);return `<div class="step${es?' tot':''}"><span><b>${rTxt(r)}</b><br><span class="hint">${rCond(r).join(' · ')}</span>${why.length?`<br><span class="hint" style="color:var(--bad)">Te falta: ${why.join(', ')}</span>`:rv&&rv.st==='duda'?'<br><span class="hint" style="color:var(--warn)">Tu renta está cerca del tope: compruébalo</span>':''}</span><span>${why.length?'':es?eur(taxOf(r,R.P,im.regA)):'Cumples'}</span></div>`}).join('')}</div>${im.red?`<button class="btn" data-act="rebajaTog">${im.usa?'Calcular sin la rebaja':'Aplicar la rebaja'}</button>`:''}`:''}
-    <p class="note">El AJD (actos jurídicos documentados) se paga por la escritura de compra. Tipos de 2026, orientativos: los topes de valor se miden sobre el valor declarado y la renta se estima; el resto de requisitos no se puede comprobar aquí, y hay más rebajas (familia numerosa, discapacidad, vivienda protegida) que no se incluyen. En Canarias se paga IGIC (7 %) y en Ceuta y Melilla IPSI (4 %) en vez de IVA. Las rebajas del ITP no se aplican a la obra nueva.</p>${NUEVA_MAS[S.v.ccaa]?`<p class="hint">Aquí no se calcula: ${NUEVA_MAS[S.v.ccaa]}.</p>`:''}${src}`:
+    modal(S.v.nueva?im.ivaN+' y AJD de vivienda nueva':`ITP en ${S.v.ccaa}`,S.v.nueva?`<div class="steps">${step(`${im.ivaN} ${pctS(im.ivaT)}${im.pN.usa?' (reducido)':''} × ${eur(R.P)}`,eur(im.iva))}${step(`AJD ${pctS(im.ajd)} en ${esc(S.v.ccaa)}${im.pA.usa?' (reducido)':im.ajdTxt?` (${im.ajdTxt})`:''}`,eur(im.ajdImp))}${step('Total',eur(c.imp),'tot')}</div>
+    ${[[im.pN,im.ivaN,pctS(im.ivaGen)],[im.pA,'AJD',pctS(im.ajdGen)+(im.ajdTxt?` (${im.ajdTxt})`:'')]].map(([Q,nom,gen])=>Q.reg.red.length?`<h4>Rebajas del ${nom} para vivienda habitual</h4><div class="steps">${step('Tipo general',gen)}${Q.reg.red.map(r=>{const why=cumple(r,R.P),rv=rentaVer(r),es=!!(Q.red&&Q.red.r===r);return `<div class="step${es?' tot':''}"><span><b>${rTxt(r)}</b><br><span class="hint">${rCond(r).join(' · ')}</span>${why.length?`<br><span class="hint" style="color:var(--bad)">Te falta: ${why.join(', ')}</span>`:rv&&rv.st==='duda'?'<br><span class="hint" style="color:var(--warn)">Tu renta está cerca del tope: compruébalo</span>':''}</span><span>${why.length?'':es?eur(taxOf(r,R.P,Q.reg)):'Cumples'}</span></div>`}).join('')}</div>`:'').join('')}${im.red?`<button class="btn" data-act="rebajaTog">${im.usa?'Calcular sin la rebaja':'Aplicar la rebaja'}</button>`:''}
+    <p class="note">El AJD (actos jurídicos documentados) se paga por la escritura de compra. Tipos de 2026, orientativos: los topes de valor se miden sobre el valor declarado y la renta se estima; el resto de requisitos no se puede comprobar aquí, y hay más rebajas (familia numerosa, discapacidad, vivienda protegida) que no se incluyen. En Canarias se paga IGIC y en Ceuta y Melilla IPSI (4 %) en vez de IVA. Las rebajas del ITP no se aplican a la obra nueva.</p>${src}`:
     `<h4>Tipo general</h4><div class="steps">${reg.genTxt?step(reg.genTxt,pctS(reg.gen[0][1])):reg.gen.map(([h,tp],k)=>step(reg.prog===false?(isFinite(h)?`Si vale hasta ${eur(h)}: sobre todo el valor`:'Si vale más: sobre todo el valor'):k===0?(isFinite(h)?`Hasta ${eur(h)}`:'Cualquier precio'):`De ${eur(reg.gen[k-1][0])} ${isFinite(h)?'a '+eur(h):'en adelante'}`,pctS(tp))).join('')}${step('ITP general para '+eur(R.P),eur(im.general),'tot')}</div>
     <h4>Rebajas para vivienda habitual</h4>${S.v.ccaa==='Baleares'?provSel('itp'):''}${reg.red.length?`<div class="steps">${reg.red.map(r=>{const why=cumple(r,R.P),rv=rentaVer(r),es=!!(im.red&&im.red.r===r);return `<div class="step${es?' tot':''}"><span><b>${rTxt(r)}</b><br><span class="hint">${rCond(r).join(' · ')}</span>${why.length?`<br><span class="hint" style="color:var(--bad)">Te falta: ${why.join(', ')}</span>`:rv&&rv.st==='duda'?'<br><span class="hint" style="color:var(--warn)">Tu renta está cerca del tope: compruébalo</span>':''}</span><span>${why.length?'':es?eur(taxOf(r,R.P,reg)):'Cumples'}</span></div>`}).join('')}</div>`:'<p>Esta comunidad no tiene un tipo reducido por edad.</p>'}
     ${reg.red.some(r=>r.renta)?`<p class="hint">Para los topes de renta ${t.est?`se estima una base imponible de unos ${eur(Math.round(t.base/100)*100)} por titular, a partir de ${eur(S.a.ingresos)} netos al mes${t.n>1?` entre ${t.n}`:''}`:`se usa una base imponible de unos ${eur(Math.round(t.base/100)*100)} por titular, con ${eur(S.a.brutos)} brutos al año`}. Cerca del tope, la rebaja se aplica y se avisa; si lo superas con claridad, no se aplica.</p>`:''}${reg.mas?`<p class="hint">Otras rebajas que aquí no se calculan: ${reg.mas.join('; ')}.</p>`:''}
@@ -2821,7 +2829,7 @@ renderOffers();refresh();
 applyModo(MODO||autoModo());
 const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(h)?h:(S.tab||'cuanto'));
 if(PRIMERA_VEZ&&!['hipotecas','invertir','pro'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
-window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,alDia,pendientes,ajdReg,P:{render1,render2,render3,render4,render5,render6,renderS,renderPro,renderBroker,renderMres,fillBound,syncAll},itpGen,taxOf,cumple,ajdOf,icoInfo,icoTope,rentaTit,rentaVer,netoDe,brutoDe,maxConIco,conCasa,ITP,PROV};
+window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,alDia,pendientes,ajdReg,indReg,mejorRebaja,P:{render1,render2,render3,render4,render5,render6,renderS,renderPro,renderBroker,renderMres,fillBound,syncAll},itpGen,taxOf,cumple,ajdOf,icoInfo,icoTope,rentaTit,rentaVer,netoDe,brutoDe,maxConIco,conCasa,ITP,PROV};
 })();
 </script>
 
