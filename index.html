@@ -1035,7 +1035,7 @@ const ITP={
   red:[{tipo:3,menorDe:40,primera:1,rural:'municipio de la lista de pequeños municipios de La Rioja'},{tipo:4,menorDe:40,primera:1}]},
  'Madrid':{gen:[[I,6]],src:['Ley 5/2024 de la Comunidad de Madrid (BOE)','https://www.boe.es/boe/dias/2025/02/20/pdfs/BOE-A-2025-3303.pdf'],
   red:[{bonif:100,menorDe:35,max:250000,rural:'municipio de menos de 2.500 habitantes',txt:'bonificación del 100 %'},{bonif:10,max:250000,txt:'bonificación del 10 % de la cuota'}]},
- 'Murcia':{gen:[[I,7.75]],src:['Agencia Tributaria de la Región de Murcia','https://agenciatributaria.carm.es/faqs-itpajd'],
+ 'Murcia':{gen:[[I,7.75]],src:['Agencia Tributaria de la Región de Murcia, novedades de 2025','https://agenciatributaria.carm.es/-/novedades-en-materia-de-tributos-aprobadas-en-la-ley-de-presupuestos-generales-de-la-comunidad-autonoma-de-la-region-de-murcia-para-el-ano-2025'],
   red:[{tipo:3,menorDe:41,renta:{ind:40000,minimo:1,txt:'base imponible general menos el mínimo personal y familiar por debajo de 40.000 € y base del ahorro de hasta 1.800 €'}}]},
  'Navarra':{gen:[[I,6]],src:['Texto refundido del ITP y AJD de Navarra (BOE)','https://www.boe.es/buscar/act.php?id=BON-n-1999-90001'],
   red:[{tipo:4,rural:'municipio en riesgo de despoblación (lista oficial de Navarra)'}],mas:['5 % sobre los primeros 180.304 € para familias con dos o más hijos que no tengan otra vivienda en Navarra']},
@@ -1102,7 +1102,7 @@ const PLUSV_TIPO=30; // tipo máximo de la plusvalía municipal: se usa como est
 const RED_OPC=[[0,'0 % · temporada, habitaciones o turístico'],[50,'50 % · general'],[60,'60 % · contrato anterior al 26/05/2023, u obras de rehabilitación en los 2 años anteriores'],[70,'70 % · vivienda asequible o alquiler a una Administración; en zona tensionada, también inquilino de 18 a 35 años en el primer alquiler de la vivienda'],[90,'90 % · zona tensionada: bajas la renta más de un 5 % respecto al contrato anterior']];
 /* Real Decreto-ley 29/2026: solo avisos, dentro de cada clic. Si se convalida, cambia o decae, se actualiza aquí */
 const RDL29={url:'https://www.boe.es/buscar/act.php?id=BOE-A-2026-20823',nom:'Real Decreto-ley 29/2026, de 6 de octubre',est:'en vigor desde el 8 de octubre de 2026 y pendiente de convalidación',
-  red:'cambia la escala para los contratos que se firmen desde el 1 de diciembre de 2026, si no eres gran tenedor. En el primer alquiler de la vivienda: 100 % si la renta queda por debajo del índice de referencia y 50 % si no (del 95 al 85 % en zona tensionada o con inquilino de 18 a 35 años). Si ya la alquilabas y firmas un contrato nuevo: del 100 al 70 % si bajas la renta más de un 5 %, 50 % si no la subes y del 40 al 15 % si la subes. Los contratos anteriores siguen con la escala actual, que es la que se aplica aquí',
+  red:'cambia la escala para los contratos que se firmen después del 1 de diciembre de 2026, si no eres gran tenedor. En el primer alquiler de la vivienda: 100 % si la renta queda por debajo del índice de referencia y 50 % si no (del 95 al 85 % en zona tensionada o con inquilino de 18 a 35 años). Si ya la alquilabas y firmas un contrato nuevo: del 100 al 70 % si bajas la renta más de un 5 %, 50 % si no la subes y del 40 al 15 % si la subes. Los contratos anteriores siguen con la escala actual, que es la que se aplica aquí',
   tope:'limita la actualización anual de la renta hasta el 31/12/2027: como mucho un 2 % si no hay un pacto nuevo, y ninguna subida si la renta supera el índice de referencia',
   plusv:'cambia desde el 1 de diciembre de 2026 los coeficientes máximos de la plusvalía municipal por el método del valor catastral. Aquí se usa el otro método (la ganancia real con el tipo máximo), que es el techo de lo que pagarías',
   ded:'crea una deducción del 10 % del alquiler de la vivienda habitual para inquilinos con base imponible inferior a 33.007,20 €, con un máximo de 1.163 € al año. No está incluida en este cálculo'};
@@ -1407,7 +1407,8 @@ let FIN_OVR=null;
 const finPct=()=>FIN_OVR!=null?FIN_OVR:100-Math.max(S.v.entrada,100-ltvEf());
 const conFin=(pct,fn)=>{const k=FIN_OVR;FIN_OVR=pct;try{return fn()}finally{FIN_OVR=k}};
 /* tope de valor de una rebaja, en palabras («hasta 150.000 €» o, si la ley dice «menos de», eso), y tope de patrimonio */
-const capTxt=r=>r.maxTxt||`hasta ${eur(maxOf(r))}`;
+const eurC=v=>Math.abs(v-Math.round(v))<0.005?eur(v):nf(2).format(v)+' €';
+const capTxt=r=>r.maxTxt||`hasta ${eurC(maxOf(r))}`;
 const patOf=r=>typeof r.pat==='function'?r.pat():r.pat;
 function cumple(r,P){
   const why=[],mx=maxOf(r);
@@ -1455,7 +1456,7 @@ function impuesto(P){
 const rTxt=r=>r.txt||pctS(r.tipo);
 /* Requisitos de una rebaja, para enseñarlos. rPend: los que aquí no se pueden comprobar del todo (renta, patrimonio y otros) */
 const rCond=r=>{const c=[],mx=maxOf(r);if(r.menorDe!=null)c.push(`${r.menorDe-1} años o menos`);c.push(r.noHab?'vivienda, sea o no la habitual':r.primera?'primera vivienda habitual':'vivienda habitual');if(mx!=null)c.push(`valor de ${capTxt(r)}`);
-  if(r.hasta!=null)c.push(`solo los primeros ${eur(r.hasta)}; el resto, al ${pctS(r.resto)}`);if(r.hipMas!=null)c.push(`hipoteca por más del ${r.hipMas} % del precio`);if(r.hipMin!=null)c.push(`hipoteca de al menos el ${r.hipMin} % de la tasación`);
+  if(r.hasta!=null)c.push(`solo los primeros ${eurC(r.hasta)}; el resto, al ${pctS(r.resto)}`);if(r.hipMas!=null)c.push(`hipoteca por más del ${r.hipMas} % del precio`);if(r.hipMin!=null)c.push(`hipoteca de al menos el ${r.hipMin} % de la tasación`);
   if(r.rural)c.push(r.rural);return c.concat(rPend(r))};
 const rPend=r=>{const c=[],pt=patOf(r);if(r.renta)c.push(r.renta.txt);if(pt!=null)c.push(`patrimonio de hasta ${eur(pt)}`);return c.concat(r.req||[])};
 
@@ -3404,7 +3405,7 @@ X.metodo=()=>{const L=(u,t)=>`<a href="${u}" target="_blank" rel="noopener">${t}
    ['Lo que mira el banco','Cuotas hasta el 35 % de los ingresos netos (40 % como mucho), 900 € al mes por titular, terminar antes de los 75 y prueba con el tipo 2 puntos más alto.','Criterios habituales de los bancos (orientativo)','—'],
    ['Tu caso: viable, a un paso o lejos',`Viable: te llega con lo habitual. A un paso: te llega con aval ICO, con más financiación o con cuotas de hasta el ${CASO_ESF} %; te falta menos del ${CASO_FALTA_PCT} % del precio o lo reúnes en ${CASO_MESES} meses o menos; o tu contrato es temporal o eres autónomo. Lejos: el resto.`,'Criterio propio (orientativo)','—'],
    ['IRPF del ahorro','19 % hasta 6.000 €, 21 % hasta 50.000 €, 23 % hasta 200.000 €, 27 % hasta 300.000 € y 30 % por encima.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764','Ley del IRPF'),'2026'],
-   ['Reducción por alquilar','0 %, 50 %, 60 %, 70 % o 90 % del rendimiento neto positivo según el contrato. La escala cambia para los contratos firmados desde el 1/12/2026.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764','Art. 23.2 de la Ley del IRPF')+' · '+L('https://www.boe.es/buscar/act.php?id=BOE-A-2023-12203','Ley 12/2023')+' · '+L(RDL29.url,'RDL 29/2026 (pendiente de convalidación)'),'Contratos desde 26/05/2023'],
+   ['Reducción por alquilar','0 %, 50 %, 60 %, 70 % o 90 % del rendimiento neto positivo según el contrato. La escala cambia para los contratos firmados después del 1/12/2026.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764','Art. 23.2 de la Ley del IRPF')+' · '+L('https://www.boe.es/buscar/act.php?id=BOE-A-2023-12203','Ley 12/2023')+' · '+L(RDL29.url,'RDL 29/2026 (pendiente de convalidación)'),'Contratos desde 26/05/2023'],
    ['Plusvalía municipal','Estimación prudente con el tipo máximo (30 %) sobre la parte de suelo de la subida. No usa los coeficientes del valor catastral, que cambian el 1/12/2026.',L('https://www.boe.es/buscar/act.php?id=BOE-A-2004-4214','Ley de Haciendas Locales')+' · '+L(RDL29.url,'RDL 29/2026'),'—'],
    ['Comprar o alquilar','Patrimonio de cada caso: casa neta de venta, deuda e impuestos frente a la cartera invertida. Quien paga menos cada mes invierte la diferencia.','Cálculo propio con tus supuestos','—'],
    ['Amortizar o invertir','Lo que tendrías al acabar la hipoteca pagando lo mismo cada mes: el ahorro de cuota o de plazo se invierte a la rentabilidad que pones, tras IRPF.','Cálculo propio con tus supuestos','—']];
