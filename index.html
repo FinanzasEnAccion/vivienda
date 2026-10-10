@@ -753,7 +753,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
       <div class="right1">
         <div class="card hero" id="r1hero"></div>
         <div class="card scroll"><h2>Qué te frena antes</h2><div class="limits" id="r1lim"></div><h2 style="margin-top:18px">Lo que mira el banco</h2><div class="bk-list" id="r1bank"></div><h2 style="margin-top:18px">Según el plazo</h2><div id="r1plazo"></div></div>
-        <div class="card scroll"><h2 id="r1useT">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div><h2 style="margin-top:18px">Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px">Fuentes: <a href="https://hipotips.com/wp-content/uploads/2026/01/Tabla-oficial-de-ITP-por-CCAA-2026-tipos-generales-y-reducidos-.pdf" target="_blank" rel="noopener">tabla ITP 2026 por comunidades (Hipotips)</a> · <a href="https://www.inmofiscal.com/itp-comunidades-autonomas" target="_blank" rel="noopener">InmoFiscal</a> · aval ICO: <a href="https://www.ico.es/en/linea-avales-hipoteca-primera-vivienda" target="_blank" rel="noopener">ICO</a>, <a href="https://www.merca2.es/2026/06/25/avales-ico-2026-criterios-jovenes-2404920/" target="_blank" rel="noopener">Merca2</a></div></div>
+        <div class="card scroll"><h2 id="r1useT">Lo que necesitas</h2><div class="grp" style="gap:12px" id="r1use"></div><h2 style="margin-top:18px">Ventajas y avisos</h2><div class="alerts" id="r1alerts"></div><div class="src-line" style="margin-top:10px" id="r1src"></div></div>
       </div>
     </div>
   </section>
@@ -961,6 +961,7 @@ const ICO_PRECIO={'Madrid':325000,'Cataluña':300000,'País Vasco':300000,'Navar
 const icoPrecio=c=>ICO_PRECIO[c]||250000;
 const ICO_ING=[[63000,['Mallorca','Menorca','Ibiza','Formentera','Barcelona','Bizkaia','Gipuzkoa','Girona','Madrid','Málaga','Santa Cruz de Tenerife']],[54600,['Álava']],[46200,['Alicante','Cádiz','Cantabria','Ceuta','Las Palmas','Melilla','Navarra','Pontevedra','Valencia','Zaragoza']]];
 const ICO_ING_RESTO=37800,ICO_PAT=150000,ICO_MENOR=2520;
+const ICO_URL='https://www.ico.es/linea-avales-hipoteca-primera-vivienda',ICO_BOE='https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-14404';
 const icoIngProv=p=>{for(const [t,L] of ICO_ING)if(L.includes(p))return t;return ICO_ING_RESTO};
 /* Tope de ingresos del aval: el de tu provincia. Si no la has dicho y en tu comunidad hay varios, se trabaja con el más bajo y se avisa */
 function icoTope(){const L=PROV[S.v.ccaa]||[],ts=L.map(icoIngProv),p=L.includes(S.v.prov)?S.v.prov:L.length===1?L[0]:'';
@@ -1463,6 +1464,7 @@ function render1(){
   $('r1alerts').innerHTML=(avisos||'<p class="hint">Con estos datos no hay rebajas de impuestos ni aval que puedas aprovechar. Prueba a cambiar tu edad, la comunidad o si es tu primera vivienda.</p>')+
     (R.max>0&&Math.floor(R.max/1000)*1000!==R.P?`<div class="alert neutral"><span>Tu precio máximo es <b class="num">${eur(R.max)}</b>. Úsalo como precio en las otras dos calculadoras.</span><button class="btn solid" data-act="usemax">Usar ${eur(Math.floor(R.max/1000)*1000)}</button></div>`:'')+
     `<div class="alert neutral"><span><b>Pasos y papeles.</b> Qué documentos te pedirá el banco y en qué orden va todo, de la reserva a la firma.</span><button class="btn" data-x="pasos">Ver la lista</button></div>`;
+  $('r1src').innerHTML=`Fuentes: impuestos: <a href="${im.reg.src[1]}" target="_blank" rel="noopener">${esc(im.reg.src[0])}</a>${im.reg.src!==HAC_CCAA?` · <a href="${HAC_CCAA[1]}" target="_blank" rel="noopener">${HAC_CCAA[0]}</a>`:''} · aval ICO: <a href="${ICO_URL}" target="_blank" rel="noopener">ICO</a>, <a href="${ICO_BOE}" target="_blank" rel="noopener">BOE</a>`;
   {const inc=document.querySelector('#p-cuanto .incard'),rap=!!S.rapido||S.nivel==='sencilla';inc.classList.toggle('rapido',rap);
    $('qhint').innerHTML=rap?`El resto usa valores habituales: entrada del ${pctS(S.v.entrada)}, TIN del ${pct(S.v.tin)} y ${anos(S.v.plazo)}.${deudasB()>0||alqB()>0?` Cuenta con ${[deudasB()>0?eur(deudasB())+'/mes de otras cuotas':'',alqB()>0?eur(alqB())+'/mes de alquiler neto':''].filter(Boolean).join(' y ')}.`:''} <button type="button" class="lnkbtn" data-rapido="0">¿Pagas otros préstamos o cobras un alquiler? Añádelos</button>`:'';}
   $('g1ico').hidden=!S.v.ico;{const l=document.querySelector('#g1a [data-bind="v.edad"]');if(l){const t=l.closest('.fld').querySelector('.lt');t.textContent=S.a.titulares>1?'Edad del mayor':'Edad'}}
