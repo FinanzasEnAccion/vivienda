@@ -1038,8 +1038,8 @@ const DEF={
  objetivo:['Objetivo','La rentabilidad neta mínima que le pides al piso.'],
  reinv:['Reinvertir al vender','Si vendes tu vivienda habitual y con el dinero compras otra vivienda habitual, la ganancia no paga IRPF (art. 38 de la Ley del IRPF). La plusvalía municipal se paga igualmente.'],
  tensionada:['Zona tensionada','Zona declarada así por su comunidad (Ley de Vivienda 12/2023). En un contrato nuevo, la renta no puede pasar de la del contrato anterior, y si eres gran tenedor tampoco del índice de referencia. A cambio, la reducción del IRPF puede llegar al 70 o 90 %.'],
- tae:['TAE','Tasa anual equivalente: el coste anual del préstamo con intereses, comisiones y el precio de los productos que te obliga a contratar el banco. Es la que publica el banco; en mixtas y variables supone que el Euríbor no se mueve.'],
- comparado:['Coste comparado','Nuestra versión de la TAE: el interés anual equivalente de todo lo que pagas, sumando solo lo que los seguros del banco cuestan de más que fuera, año a año. Sirve para comparar ofertas con vinculaciones distintas.']
+ tae:['TAE del banco','La tasa anual equivalente que publica cada banco: intereses, comisiones y el precio entero de los productos que exige. Es la de su ejemplo (su importe y su plazo, no los tuyos) y, en mixtas y variables, con el Euríbor del mes en que la publicó, como si no se moviera. Es la referencia oficial; para tu hipoteca y el Euríbor que supones, mira el coste comparado.'],
+ comparado:['Coste comparado','El tipo anual equivalente de todo lo que pagas: cuotas, comisión de apertura y lo que los productos exigidos cuestan de más que contratándolos fuera del banco, con el Euríbor que supones cuando toca revisar. Es lo mismo en «Bancos hoy», con precios supuestos de los productos, y en «Comparar ofertas», con los que pongas tú. Sirve para comparar fijas, mixtas y variables entre sí.']
 };
 const Q=k=>DEF[k]?`<button type="button" class="q" data-def="${k}" title="${esc(DEF[k][1])}" aria-label="Qué es: ${esc(DEF[k][0])}">?</button>`:'';
 document.addEventListener('click',e=>{const q=e.target.closest('[data-def]');if(!q)return;e.preventDefault();e.stopPropagation();const d=DEF[q.dataset.def];modal(d[0],`<p>${esc(d[1])}</p>`)},true);
@@ -1914,19 +1914,19 @@ function vkOf(x){
   if(Array.isArray(x.vk))return x.vk.filter(v=>v&&VK_I[v.k]);
   const t=(x.v||'').toLowerCase(),out=[];
   if(/^ninguna/.test(t))return [];
-  const m=(x.v||'').match(/(?:N[óo]mina|Ingresos)[^,;]*?≥\s*([\d\.]+)\s*€/i);
+  const m=(x.v||'').match(/(?:N[óo]mina|Ingresos)[^,;]*?(≥|>)\s*([\d\.]+)\s*€/i);
   const opc=re=>new RegExp('(?:'+re+')[^,;]*opcional').test(t)?'opcional':'';
   // «Bizum o tarjeta» y «nómina o saldo» son una sola exigencia, no dos
   const tarjBiz=/bizum o (la |una )?tarjeta|tarjeta[^,;]*? o (el |un )?bizum/.test(t),nomSaldo=/n[óo]mina[^,;]*? o [^,;]*?saldo|saldo[^,;]*? o [^,;]*?n[óo]mina/.test(t);
   const hayNom=/n[óo]mina|ingresos|pensi[óo]n domic/.test(t);
   if(/cuenta/.test(t)&&(!hayNom||/no[- ]n[óo]mina/.test(t)))out.push({k:'cuenta'});
-  else if(hayNom)out.push({k:'nomina',x:m?`≥ ${m[1]} €`:nomSaldo?'o saldo mínimo':''});
+  else if(hayNom)out.push({k:'nomina',x:m?`${m[1]} ${m[2]} €`:nomSaldo?'o saldo mínimo':''});
   if(/tarjeta/.test(t))out.push({k:'tarjeta',x:tarjBiz?'o Bizum':''});
   if(/recibos/.test(t))out.push({k:'recibos'});
   if(/hogar|seguros?(?! de vida)/.test(t)&&/hogar|seguros/.test(t))out.push({k:'hogar',x:opc('hogar')});
   if(/vida|seguros/.test(t))out.push({k:'vida',x:opc('vida')});
   if(/pensiones|epsv|(plan|fondo)s? de (ahorro|inversi)/.test(t))out.push({k:'pension',x:opc('pensiones|epsv|(plan|fondo)s? de (ahorro|inversi)')||(/inversi/.test(t)?'de inversión':/ahorro/.test(t)?'de ahorro':'de pensiones')});
-  if(/protecci[óo]n de (pagos|pr[ée]stamos?)/.test(t))out.push({k:'proteccion',x:opc('protecci[óo]n de (pagos|pr[ée]stamos?)')});
+  if(/protecci[óo]n (de )?(pagos|pr[ée]stamos?)/.test(t))out.push({k:'proteccion',x:opc('protecci[óo]n (de )?(pagos|pr[ée]stamos?)')});
   if(/alarma/.test(t))out.push({k:'alarma',x:opc('alarma')});
   if(/bizum/.test(t)&&!tarjBiz)out.push({k:'bizum'});
   if(/saldo m/.test(t)&&!nomSaldo)out.push({k:'saldo'});
@@ -1992,7 +1992,7 @@ function render4(){
   const P=hipoteca();
   $('m4kpis').innerHTML=`
     <button class="kpi" data-x="m_eur"><small>Euríbor oficial · ${esc(MKT.eurMes||'')}</small><strong class="num" style="color:${MKT.eur>MKT.eurAnt?'var(--bad)':'var(--good)'}">${pct(MKT.eur,3)}</strong><em>${MKT.eur>MKT.eurAnt?'▲':'▼'} desde ${pct(MKT.eurAnt,2)} hace un año · Banco de España</em></button>
-    <button class="kpi" data-x="m_ine"><small>Tipo medio firmado (INE, ${MKT.ineMes})</small><strong class="num">${pct(MKT.ine)}</strong><em>fijas ${pct(MKT.ineFija)} · variables ${pct(MKT.ineVar)}</em></button>
+    <button class="kpi" data-x="m_ine"><small>Tipo medio firmado (INE${MKT.ineMes?', '+esc(MKT.ineMes):''})</small><strong class="num">${pct(MKT.ine)}</strong><em>fijas ${pct(MKT.ineFija)} · variables ${pct(MKT.ineVar)}</em></button>
     <button class="kpi" data-x="m_bce"><small>BCE · facilidad de depósito</small><strong class="num">${pct(MKT.bce,2)}</strong><em>${esc(MKT.bceCorto||'')}</em></button>`;
   const FN=MKT.fuenteNombres||{},lk=(k,t)=>MKT.fuentes&&MKT.fuentes[k]?`<a href="${MKT.fuentes[k]}" target="_blank" rel="noopener">${esc(t||FN[k]||k)}</a>`:'';
   $('m4ctx').innerHTML=`<div><b>Qué está pasando</b> · datos a ${esc(MKT_FECHA)}</div><ul>${(MKT.ctx||[]).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
@@ -2020,9 +2020,9 @@ function render4(){
       <td><button class="addc" data-madd="${r.i}" title="Llevar esta oferta al comparador">Comparar →</button></td></tr>`}).join('')}</tbody></table>
     ${edadKo&&P>0?`<p class="ingw" style="margin-top:10px">Con ${S.v.edad} años, a ${anos(S.v.plazo)} terminarías de pagar a los ${S.v.edad+S.v.plazo}: la mayoría de bancos solo llegan a los ${EDAD_FIN}. <button class="btn" data-act="plazoB">Usar ${anos(Math.max(1,EDAD_FIN-S.v.edad))}</button></p>`:''}
     <p class="hint" style="margin-top:10px">Ordenadas por coste comparado: el tipo anual de todo lo que pagas (cuotas, apertura y lo que los productos exigidos cuestan de más que fuera del banco, con precios supuestos). Pincha la cifra para ver la cuenta. Condiciones publicadas a ${esc(MKT_FECHA)}; cambian a menudo y dependen de tu perfil: confírmalas con el banco.</p>`;
-  X.m_eur=()=>modal('Euríbor a 12 meses',`<div class="steps">${step(esc(MKT.eurMes||'')+' (media mensual)',pct(MKT.eur,3),'tot')}${step(esc(MKT.eurAgoMes||'Mes anterior'),pct(MKT.eurAgo,3))}${step(esc(MKT.eurAntMes||'Hace un año'),pct(MKT.eurAnt,3))}</div><p>Es la media mensual oficial del Euríbor a un año, la que usan los bancos para revisar las hipotecas variables y las mixtas tras el tramo fijo. En «Comparar» puedes poner el Euríbor que supones para el futuro (ahora ${pct(S.h.eur)}).</p><p class="hint">Fuente: <a href="${MKT.fuentes.eur}" target="_blank" rel="noopener">${esc(MKT.eurOficial||'Banco de España')}</a>${MKT.fuentes.eurAgo?` · mes anterior: <a href="${MKT.fuentes.eurAgo}" target="_blank" rel="noopener">${esc(MKT.eurAgoOficial||'BOE')}</a>`:''}</p>`);
-  X.m_ine=()=>modal('Tipo medio de las hipotecas firmadas',`<div class="steps">${step('Todas',pct(MKT.ine),'tot')}${step('Tipo fijo'+(pctFija()!=null?` (${pctS(pctFija())} de las firmas)`:''),pct(MKT.ineFija))}${step('Tipo variable',pct(MKT.ineVar))}</div><p>Es lo que se firmó de media en ${MKT.ineMes}. Si te ofrecen bastante más, negocia o compara.</p><p class="hint">Fuente: <a href="${MKT.fuentes.ine}" target="_blank" rel="noopener">INE, Estadística de Hipotecas (${esc(MKT.ineMes)})</a></p>`);
-  X.m_bce=()=>modal('Tipo del BCE: facilidad de depósito',`<div class="steps">${step('Facilidad de depósito',pct(MKT.bce,2),'tot')}</div><p>${esc(MKT.bceNota||'')}</p><p class="hint">Es lo que el BCE paga a los bancos por el dinero que le dejan de un día para otro, y el tipo con el que hoy dirige su política monetaria.</p><p class="hint">Fuentes: ${[lk('bce'),lk('cambios')].filter(Boolean).join(' · ')}</p>`);
+  X.m_eur=()=>modal('Euríbor a 12 meses',`<div class="steps">${step(esc(MKT.eurMes||'')+' (media mensual)',pct(MKT.eur,3),'tot')}${step(esc(MKT.eurAgoMes||'Mes anterior'),pct(MKT.eurAgo,3))}${step(esc(MKT.eurAntMes||'Hace un año'),pct(MKT.eurAnt,3))}</div><p>Es la media mensual oficial del Euríbor a un año, la que usan los bancos para revisar las hipotecas variables y las mixtas tras el tramo fijo. En «Comparar» puedes poner el Euríbor que supones para el futuro (ahora ${pct(S.h.eur)}).</p><p class="hint">Fuente: ${lk('eur',MKT.eurOficial||'Banco de España')||esc(MKT.eurOficial||'Banco de España')}${lk('eurAgo')?` · mes anterior: ${lk('eurAgo',MKT.eurAgoOficial||'BOE')}`:''}</p>`);
+  X.m_ine=()=>modal('Tipo medio de las hipotecas firmadas',`<div class="steps">${step('Todas',pct(MKT.ine),'tot')}${step('Tipo fijo'+(pctFija()!=null?` (${pctS(pctFija())} de las firmas)`:''),pct(MKT.ineFija))}${step('Tipo variable',pct(MKT.ineVar))}</div><p>Es lo que se firmó de media${MKT.ineMes?' en '+esc(MKT.ineMes):''}. Si te ofrecen bastante más, negocia o compara.</p><p class="hint">Fuente: ${(t=>lk('ine',t)||esc(t))('INE, Estadística de Hipotecas'+(MKT.ineMes?` (${MKT.ineMes})`:''))}</p>`);
+  X.m_bce=()=>modal('Tipo del BCE: facilidad de depósito',`<div class="steps">${step('Facilidad de depósito',pct(MKT.bce,2),'tot')}</div><p>${esc(MKT.bceNota||'')}</p><p class="hint">Es lo que el BCE paga a los bancos por el dinero que le dejan de un día para otro, y el tipo con el que hoy dirige su política monetaria.</p>${lk('bce')||lk('cambios')?`<p class="hint">Fuentes: ${[lk('bce'),lk('cambios')].filter(Boolean).join(' · ')}</p>`:''}`);
   return rows;
 }
 function mDetail(i){const x=OFF[i],c=hipoteca()>0?mcalc(x):null;
