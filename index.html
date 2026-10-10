@@ -184,6 +184,7 @@ a{color:inherit}
 .x:hover{background:var(--field);color:var(--bad)}
 .sec{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:flex;justify-content:space-between;align-items:center}
 .sec button{border:0;background:transparent;color:var(--accent);font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;padding:2px 4px}
+.sec .supt{margin:0 auto 0 8px;text-transform:none;letter-spacing:0;font-weight:600;color:var(--warn)}
 .prods{display:grid;gap:10px}
 .prod{display:grid;gap:8px;padding:10px;border-radius:14px;background:var(--field);min-width:0}
 .prod .pill{white-space:normal;text-align:left}
@@ -336,6 +337,7 @@ tr+tr td{border-top:1px solid var(--line)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tp.fija{background:#1C3350;color:#8DBBEF}:root:not([data-theme="light"]) .tp.variable{background:#2E2340;color:#C7A8EE}}
 .addc{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;white-space:nowrap}
 .addc:hover{border-color:var(--accent);color:var(--accent)}
+.toast.largo{border-radius:17px;width:max-content;max-width:min(620px,calc(100vw - 24px));line-height:1.35}
 .mkt .ccb{border:0;background:none;padding:0;font:inherit;color:inherit;text-align:inherit}
 .mkt .nd{color:var(--muted);font-size:12px}
 .mkt th .q{margin-left:4px;vertical-align:-2px}
@@ -957,7 +959,7 @@ const EXAMPLE={
   r:{alquiler:850,ipc:2.5,reval:2.5,rent:5,horizonte:15,ibi:350,comunidad:60,seguro:250,mant:0.5,venta:3,reinvierte:true},
   lk:{'i.ccaa':true,'i.nueva':true,'i.precio':true,'i.tin':true,'i.plazo':true,'i.alquiler':true,'i.ibi':true,'i.comunidad':true,'i.mant':true},
   m:{tipo:'variable',capital:150000,anos:22,tin:2.9,dif:0.75,mes:1,extra:10000,comAm:0.25,rent:5},
-  mTouched:false,rapido:false,nivel:'completa',cart:[],proTab:'cartera',
+  mTouched:false,hTouched:false,rapido:false,nivel:'completa',cart:[],proTab:'cartera',
   fein:{imp:168000,plazo:30,tipo:'fija',tin:2.75,anos:5,dif:0.6,cuotaF:0,taeF:0,apert:0,tasa:350,segHogar:300,segVida:400,otros:0,amortPct:2},
   bro:{nombre:'',nota:''},
   iTouched:false,mf2:{dan:false,sinv:false},ct:{pre:true,com:true,int:true,prop:true,mant:true},
@@ -1497,6 +1499,12 @@ function analyse(o){
   return {cur,H,marg,best:B,bestT:sim(o,B).total};
 }
 const offersEl=$('offers');
+/* ¿Has tocado las ofertas del comparador? (editado alguna o traído una de «Bancos hoy»). Mientras no, el informe PDF no enseña las de ejemplo.
+   S.hTouched se pone al tocarlas; por si el estado viene de antes de existir la marca, también cuenta que no sean ya las de ejemplo (sin mirar los años, que siguen al plazo) */
+const hFirma=L=>JSON.stringify(L.map(o=>[o.nombre,o.tipo,o.tin,o.anos,o.dif,o.apertura,o.prods.map(p=>[p.n,p.b,p.c,p.s,p.m,p.on])]));
+const hTocado=()=>!!S.hTouched||hFirma(S.h.offers)!==hFirma(EXAMPLE.h.offers);
+/* un producto traído de «Bancos hoy» lleva un asterisco al final del nombre mientras sus cifras (precio, rebaja) sean las supuestas; al cambiárselas, se quita */
+const esSup=n=>/\*$/.test(n),sinSup=n=>n.replace(/\*$/,'');
 const dv=v=>String(v).replace('.',',');
 function renderOffers(){
   offersEl.innerHTML='';
@@ -1517,7 +1525,7 @@ function renderOffers(){
         <div class="fld"><label><span class="lt">Diferencial sin bonificar</span>${Q('dif')}</label><div class="inp"><span style="padding:0 3px 0 0">Euríbor +</span><input data-k="dif" inputmode="decimal" value="${dv(o.dif)}" aria-label="Diferencial sobre Euríbor"><span>%</span></div></div>`:''}
       </div>
       <div class="prods">
-        <div class="sec">Vinculaciones<button data-act="addp">+ Añadir</button></div>
+        <div class="sec">Vinculaciones${o.prods.some(p=>esSup(p.n))?`<span class="supt" title="Precios típicos, no los de este banco, y rebaja repartida a partes iguales entre los productos: pon los de tu oferta">* cifras supuestas</span>`:''}<button data-act="addp">+ Añadir</button></div>
         ${o.prods.length?'':'<div class="hint">Sin vinculaciones.</div>'}
         ${o.prods.map((p,j)=>`
         <div class="prow ${p.on?'':'off'}" data-j="${j}">
@@ -1528,19 +1536,19 @@ function renderOffers(){
       </div>`;
     offersEl.appendChild(d);
   });
-  if(S.h.offers.length<3){const a=document.createElement('button');a.className='addcard';a.textContent='+ Añadir otra oferta';a.onclick=()=>{S.h.offers.push({nombre:'Banco '+letter(S.h.offers.length),tipo:'fija',tin:3.0,anos:1,dif:0.6,apertura:0,prods:[{n:'Nómina',b:0.2,c:0,s:0,m:0,hasta:S.v.plazo,on:true}]});renderOffers();refresh()};offersEl.appendChild(a)}
+  if(S.h.offers.length<3){const a=document.createElement('button');a.className='addcard';a.textContent='+ Añadir otra oferta';a.onclick=()=>{S.hTouched=true;S.h.offers.push({nombre:'Banco '+letter(S.h.offers.length),tipo:'fija',tin:3.0,anos:1,dif:0.6,apertura:0,prods:[{n:'Nómina',b:0.2,c:0,s:0,m:0,hasta:S.v.plazo,on:true}]});renderOffers();refresh()};offersEl.appendChild(a)}
 }
 offersEl.addEventListener('input',e=>{
-  const card=e.target.closest('.offer');if(!card)return;const o=S.h.offers[+card.dataset.i];
+  const card=e.target.closest('.offer');if(!card)return;const o=S.h.offers[+card.dataset.i];S.hTouched=true;
   if(e.target.classList.contains('o-name')){o.nombre=e.target.value;refresh();return}
   const k=e.target.dataset.k;if(k){let v=Math.max(0,pDec(e.target.value));if(k==='anos')v=Math.round(v);if(k==='apertura')v=Math.min(10,v);if(k==='tin'||k==='dif')v=Math.min(30,v);o[k]=v;refresh();return}
 });
 let AN=[];
-function applyHold(i,j,y){const p=S.h.offers[i].prods[j];p.on=y>0;if(y>0)p.hasta=y;ov.hidden=true;renderOffers();refresh();toast(y>0?`${p.n}: lo mantienes ${anos(y)}`:`${p.n}: fuera`)}
+function applyHold(i,j,y){const p=S.h.offers[i].prods[j];S.hTouched=true;p.on=y>0;if(y>0)p.hasta=y;ov.hidden=true;renderOffers();refresh();toast(y>0?`${p.n}: lo mantienes ${anos(y)}`:`${p.n}: fuera`)}
 offersEl.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;const card=b.closest('.offer');if(!card)return;const i=+card.dataset.i,o=S.h.offers[i];
-  if(b.dataset.tipo){o.tipo=b.dataset.tipo;if(o.tipo==='variable'&&o.anos>2)o.anos=1;if(o.tipo==='mixta'&&o.anos<2)o.anos=5;renderOffers();refresh();return}
-  const a=b.dataset.act;
+  if(b.dataset.tipo){S.hTouched=true;o.tipo=b.dataset.tipo;if(o.tipo==='variable'&&o.anos>2)o.anos=1;if(o.tipo==='mixta'&&o.anos<2)o.anos=5;renderOffers();refresh();return}
+  const a=b.dataset.act;if(a&&a!=='exp')S.hTouched=true;
   if(a==='del'){S.h.offers.splice(i,1);renderOffers();refresh()}
   else if(a==='addp'){o.prods.push({n:'Nuevo producto',b:0.1,c:0,s:0,m:0,hasta:S.v.plazo,on:true});renderOffers();refresh();explain2(i,'prod',o.prods.length-1)}
   else if(a==='tog'){const p=o.prods[+b.closest('.prow').dataset.j];p.on=!p.on;if(p.on&&!p.hasta)p.hasta=S.v.plazo;renderOffers();refresh()}
@@ -1655,6 +1663,7 @@ Coste comparado = (1 + i)^12 − 1</div><p>Es el interés anual equivalente de t
     const fe=(k,label,unit,val,mode='decimal')=>`<div class="fld"><label>${label}</label><div class="inp"><input data-pe="${k}" inputmode="${mode}" value="${val}" aria-label="${label}"><span>${unit}</span></div></div>`;
     modal(`${p.n} · ${o.nombre}`,`
       <div class="pe" data-pi="${i}" data-pj="${j}">
+        ${esSup(p.n)?`<p class="note sup" style="margin:0 0 10px">* ${p.c>0?'Precio supuesto (lo típico, no lo que cobra este banco) y rebaja repartida a partes iguales entre los productos. Pon los de tu oferta.':'Rebaja supuesta: va repartida a partes iguales entre los productos. Pon la de tu oferta.'}</p>`:''}
         <div class="fld" style="margin-bottom:10px"><label>Producto</label><div class="inp"><input data-pe="n" value="${esc(p.n)}" aria-label="Producto"></div></div>
         <div class="g5">
           ${fe('b','Rebaja del TIN','%',dv(p.b))}
@@ -1692,7 +1701,8 @@ function prodAnalysis(i,j){
 }
 $('mBody').addEventListener('input',e=>{
   const el=e.target,k=el.dataset.pe;if(!k)return;const pe=el.closest('.pe');const i=+pe.dataset.pi,j=+pe.dataset.pj,p=S.h.offers[i].prods[j];
-  if(k==='hasta'&&el.value.trim()==='')return;
+  if(k==='hasta'&&el.value.trim()==='')return;S.hTouched=true;
+  if(k!=='n'&&k!=='hasta'&&esSup(p.n)){p.n=sinSup(p.n);const ni=pe.querySelector('[data-pe="n"]'),nt=pe.querySelector('.sup');if(ni)ni.value=p.n;if(nt)nt.remove();$('mTitle').textContent=`${p.n} · ${S.h.offers[i].nombre}`}
   p[k]=k==='n'?el.value:(k==='c'||k==='m')?Math.max(0,pEur(el.value)):k==='hasta'?Math.max(1,Math.min(S.v.plazo,Math.round(pDec(el.value)))):Math.max(0,Math.min(k==='b'?5:100,pDec(el.value)));
   if(k==='n')$('mTitle').textContent=`${p.n} · ${S.h.offers[i].nombre}`;
   renderOffers();refresh();prodAnalysis(i,j);
@@ -1701,8 +1711,8 @@ $('mBody').addEventListener('focusout',e=>{const el=e.target,k=el.dataset&&el.da
 $('mBody').addEventListener('click',e=>{
   const lt=e.target.closest('.lnk-step[data-what]');if(lt){explain2(+lt.dataset.i,lt.dataset.what);return}
   const b=e.target.closest('[data-pe-act],[data-act2]');if(!b)return;
-  if(b.dataset.act2==='best'){const i=+b.dataset.i,o=S.h.offers[i];AN[i].best.forEach((y,j)=>{const p=o.prods[j];p.on=y>0;if(y>0)p.hasta=y});ov.hidden=true;renderOffers();refresh();toast('Aplicada la mejor estrategia');return}
-  const pe=b.closest('.pe');const i=+pe.dataset.pi,j=+pe.dataset.pj,o=S.h.offers[i];
+  if(b.dataset.act2==='best'){const i=+b.dataset.i,o=S.h.offers[i];S.hTouched=true;AN[i].best.forEach((y,j)=>{const p=o.prods[j];p.on=y>0;if(y>0)p.hasta=y});ov.hidden=true;renderOffers();refresh();toast('Aplicada la mejor estrategia');return}
+  const pe=b.closest('.pe');const i=+pe.dataset.pi,j=+pe.dataset.pj,o=S.h.offers[i];S.hTouched=true;
   if(b.dataset.peAct==='del'){o.prods.splice(j,1);ov.hidden=true;renderOffers();refresh();return}
   if(b.dataset.peAct==='tog'){const p=o.prods[j];p.on=!p.on;if(p.on&&!p.hasta)p.hasta=S.v.plazo;renderOffers();refresh();explain2(i,'prod',j)}
 });
@@ -2044,12 +2054,20 @@ function mCoste(i){const x=OFF[i];if(!x||hipoteca()<=0)return;const c=mcalc(x),a
     ${c.extra>0?`<p class="note">Los precios de los productos son <b>supuestos</b>: lo típico, no lo que cobra este banco. Supongo que suben con el IPC (${pctS(S.r.ipc)})${c.vk.some(p=>p.k==='vida')?', y el de vida con tu edad y con lo que debes':''}${sub.length?`, y que el banco sube además el ${yList(sub)} al año`:', igual dentro que fuera del banco'}.</p>
     <button class="btn solid adv" data-madd="${i}">Poner el precio real de mis seguros en el comparador</button>`:''}`;
   modal(`Coste comparado · ${x.b}`,h+pie)}
-function mAdd(i){const x=OFF[i],tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo));
-  const b=x.t==='variable'?Math.max(0,(x.difS||x.dif)-x.dif):Math.max(0,(x.tinS||x.tin)-x.tin);
-  const o={nombre:`${x.b} · ${x.t}`,tipo:x.t,tin:tp+b,anos:x.t==='fija'?1:x.anos,dif:x.difS||x.dif||0.6,apertura:Math.round(apOf(x)*100)/100,
-    prods:b>0?[{n:'Vinculaciones del banco',b:Math.round(b*100)/100,c:0,s:0,m:0,hasta:S.v.plazo,on:true}]:[]};
-  if(S.h.offers.length>=3)S.h.offers[2]=o;else S.h.offers.push(o);
-  ov.hidden=true;renderOffers();refresh();showTab('hipotecas');toast(`${x.b} añadido al comparador. Pon el precio de sus seguros para ver el coste total.`)}
+/* Lleva una oferta al comparador con un producto por cada vinculación exigida: su precio supuesto (VK_COSTE) y la rebaja repartida a partes iguales
+   (los bancos no publican cuánto rebaja cada producto). Así el comparador da desde el principio el mismo coste comparado que la tabla. */
+function mAdd(i){const x=OFF[i];if(!x)return;const tp=tinPara(x,Math.min(S.v.plazo,x.pz||S.v.plazo)),g=ingOf(x),sinBon=g.falla&&g.tipo==='bonif';
+  const req=vkReq(x).map(vkCoste),n=req.length,B=Math.round(bonOf(x)*100),q=n?Math.floor(B/n):0,resto=n?B-q*n:0,r4=v=>Math.round(v*1e4)/1e4;
+  const rep=B>0&&n>1,prods=n?req.map((p,j)=>({n:p.n+(p.c>0||rep?'*':''),b:(q+(j<resto?1:0))/100,c:p.c,s:p.s,m:p.m,hasta:S.v.plazo,on:!sinBon})).filter(p=>p.b>0||p.c>0)
+    :B>0?[{n:'Vinculaciones del banco',b:B/100,c:0,s:0,m:0,hasta:S.v.plazo,on:!sinBon}]:[];
+  const o={nombre:`${x.b} · ${x.t}`,tipo:x.t,tin:r4(tp+B/100),anos:x.t==='fija'?1:x.anos,dif:x.t==='fija'?0.6:r4((x.dif||0)+B/100),apertura:r4(apOf(x)),prods};
+  const prev=clone(S.h.offers),prevT=S.hTouched;
+  if(S.h.offers.length>=3)S.h.offers[2]=o;else S.h.offers.push(o);S.hTouched=true;
+  const sup=prods.some(p=>p.c>0);
+  ov.hidden=true;renderOffers();refresh();showTab('hipotecas');$('toast').classList.add('largo');
+  toast(`${x.b}, en el comparador`+(sup||rep?` con ${[sup&&'precios supuestos',rep&&'la rebaja repartida a partes iguales'].filter(Boolean).join(' y ')} (*): pon los de tu oferta.`:'.')
+    +(vkNd(x)?' No dice qué productos exige: añádelos tú.':'')+(sinBon?' Van sin contratar: no llegas a la nómina que pide.':'')+(x.pz&&x.pz<S.v.plazo?` Su plazo máximo son ${anos(x.pz)} y aquí va a ${S.v.plazo}.`:''),
+    ()=>{S.h.offers=prev;S.hTouched=prevT;renderOffers();refresh()})}
 document.addEventListener('click',e=>{
   const f=e.target.closest('[data-mf]');if(f){MF=f.dataset.mf;render4();fitSoon();return}
   const f2=e.target.closest('[data-mf2]');if(f2){const k=f2.dataset.mf2;S.mf2[k]=!S.mf2[k];save();render4();fitSoon();return}
@@ -2756,7 +2774,7 @@ renderOffers();refresh();
 applyModo(MODO||autoModo());
 const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(h)?h:(S.tab||'cuanto'));
 if(PRIMERA_VEZ&&!['hipotecas','invertir','pro'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
-window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf};
+window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf,hTocado};
 })();
 </script>
 
