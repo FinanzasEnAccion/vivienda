@@ -856,7 +856,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
 
   <aside class="broker" aria-label="Ayuda de un bróker">
     <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></div>
-    <div class="btxt"><h3>¿Quieres ayuda del bróker que me ayudó a mí?</h3><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button></p></div>
+    <div class="btxt"><h3>¿Quieres ayuda del bróker que me ayudó a mí?</h3><p id="brokerTxt"></p><p class="disc">Cálculos orientativos: no son asesoramiento financiero ni fiscal. Confirma la FEIN del banco y los requisitos de tu comunidad. <button type="button" class="lnkbtn" data-x="metodo">Cómo lo calculo</button> · <button type="button" class="lnkbtn" data-x="jose">Qué recibe José</button></p></div>
     <a class="cta" id="cta" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Primer contacto gratis con José <span aria-hidden="true">→</span></a>
   </aside>
 </main>
@@ -2217,6 +2217,65 @@ function renderBroker(){
   else txt='Si decides comprar, te acompaña desde la búsqueda de la hipoteca hasta la firma.';
   $('brokerTxt').textContent=txt+' Es quien llevó mi hipoteca. El primer contacto es gratis: le cuentas tu caso y te dice qué puedes conseguir.';
 }
+/* Resultado de «¿Cuánto puedo comprar?» siempre al día para el banner, el resumen y la ficha, sin depender de qué pestaña se haya pintado. Solo se recalcula si cambian tus datos. */
+function casoR(){const k=JSON.stringify([S.v,S.a]);if(casoR.k!==k){casoR.k=k;casoR.r=calc1()}return casoR.r}
+
+/* ---------- enlaces a José (cal.com): de dónde viene la reserva y, con tu permiso, el resumen del caso ----------
+   Todos los enlaces a cal.com de la página pasan por aquí con un manejador delegado: no hay que tocarlos uno a uno.
+   La primera vez se enseña exactamente lo que se enviaría y se elige. La elección se recuerda en este navegador
+   (JOSE_KEY: 'si' = con el resumen, 'no' = solo el origen) y se cambia en «Qué recibe José», en el banner.
+   No se usa window.open (dentro de Claude no es fiable): se cambia el href y navega el propio enlace.
+   La analítica solo recibe qué se eligió: nunca el resumen ni importes. */
+const JOSE_URL='https://cal.com/jose-perales-asesor/9zfdea',JOSE_KEY='fea-jose',JOSE_ORIGEN='Vengo de Finanzas en Acción.';
+let JOSE=null;try{const v=localStorage.getItem(JOSE_KEY);JOSE=v==='si'||v==='no'?v:null}catch(e){}
+const josePon=v=>{JOSE=v==='si'||v==='no'?v:null;try{if(JOSE)localStorage.setItem(JOSE_KEY,JOSE);else localStorage.removeItem(JOSE_KEY)}catch(e){}};
+const CONTRATO={indefinido:'contrato indefinido',temporal:'contrato temporal',autonomo:'autónomo',funcionario:'funcionario'};
+/* ¿Has cambiado algo de esta parte de los datos respecto al ejemplo? Solo se resume lo que es tuyo. */
+const difiere=(sec,omit)=>Object.keys(EXAMPLE[sec]).some(k=>!(omit&&omit.includes(k))&&JSON.stringify(S[sec][k])!==JSON.stringify(EXAMPLE[sec][k]));
+/* De qué va tu caso, según la pestaña y lo que has rellenado: 'compra', 'inv' (comprar para alquilar), 'hipo' (la hipoteca que ya tienes) o null si no hay nada tuyo que contar */
+function joseCtx(){
+  if(typeof touched!=='undefined'&&!touched)return null;
+  const t=S.tab,enInv=t==='invertir'||(t==='pro'&&S.proTab==='cartera'),compra=difiere('v')||difiere('a'),hipo=S.mTouched||difiere('m');
+  const inv=S.iTouched||difiere('i',Object.keys(LINKS).filter(k=>S.lk[k]!==false).map(k=>k.slice(2)));
+  if(t==='mihipo')return hipo?'hipo':compra?'compra':null;
+  if(enInv)return inv||compra?'inv':hipo?'hipo':null;
+  return compra?'compra':hipo?'hipo':inv?'inv':null}
+const joseLugar=()=>[(S.bro.muni||'').trim(),S.v.prov&&S.v.prov!==S.v.ccaa?S.v.prov:'',S.v.ccaa].filter(Boolean).join(', ');
+/* Texto exacto que se propone en las notas de la reserva: con=true, el resumen de tu caso; con=false, solo de dónde vienes */
+function joseTxt(con){
+  const c=con?joseCtx():null;if(!c)return JOSE_ORIGEN;
+  const perfil=`${eur(S.a.ahorros)} ahorrados, ${eur(S.a.ingresos)} netos al mes${S.a.titulares>1?` entre ${S.a.titulares} titulares`:''}, ${CONTRATO[S.a.contrato]||CONTRATO.indefinido}`;
+  let t;
+  if(c==='hipo'){const m=S.m;t=`Ya tengo hipoteca ${m.tipo==='fija'?'fija':'variable o mixta'}: ${eur(m.capital)} pendientes, ${anos(m.anos)}, TIN ${pct(m.tin)}${m.tipo==='fija'?'':` (Euríbor + ${pct(m.dif)})`}.`}
+  else if(c==='inv'){const i=S.i;t=`Compra para alquilar de ${eur(i.precio)} en ${i.ccaa}${i.contado?', al contado':`, con hipoteca del ${pctS(i.fin)}`}, alquiler previsto de ${eur(i.alquiler)} al mes; ${perfil}.`}
+  else{const P=S.v.precio,uso=S.v.segunda?'segunda vivienda':S.v.primera?'primera vivienda':'cambio de casa';
+    t=`${P>0?`Compra de ${eur(P)}`:`Busco vivienda de hasta ${eur(Math.floor(casoR().max/1000)*1000)}`} en ${joseLugar()} (${S.v.nueva?'obra nueva':'segunda mano'}, ${uso}), ${perfil}, ${S.v.edad} años.`}
+  return T(`${JOSE_ORIGEN} ${t}`)}
+const joseQuien=()=>{const n=(S.bro.nombre||'').trim(),e=(S.bro.email||'').trim();return {n,e:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:''}};
+/* Dirección de la reserva: cal.com admite rellenar el formulario por la URL (notes, name, email). El nombre y el correo solo van si los has escrito en la ficha y envías tu caso. */
+function joseHref(con){const q=['notes='+encodeURIComponent(joseTxt(con))];
+  if(con&&joseCtx()){const {n,e}=joseQuien();if(n)q.push('name='+encodeURIComponent(n));if(e)q.push('email='+encodeURIComponent(e))}
+  return JOSE_URL+'?'+q.join('&')}
+function joseModal(){
+  const hay=!!joseCtx(),{n,e}=joseQuien(),caja=t=>`<div class="formula" style="white-space:pre-wrap;word-break:break-word">${esc(t)}</div>`;
+  const ahora=JOSE?`<p class="hint" style="margin-top:10px">Ahora ${JOSE==='si'?'tu caso va con la reserva':'reservas sin datos'}. <button type="button" class="lnkbtn" data-joseset="${JOSE==='si'?'no':'si'}">${JOSE==='si'?'Dejar de enviarlo':'Enviar mi caso'}</button></p>`:'<p class="hint" style="margin-top:10px">Recuerdo lo que elijas en este navegador. Lo cambias cuando quieras en «Qué recibe José».</p>';
+  modal('Lo que recibe José con tu reserva',hay?`<p>Esto se escribe en las notas de la reserva. Lo ves allí y lo puedes cambiar antes de confirmar.</p>${caja(joseTxt(true))}
+    ${n||e?`<div class="steps">${n?step('Nombre',esc(n)):''}${e?step('Correo',esc(e)):''}</div>`:''}
+    <div class="am-bar" style="margin-top:12px"><a class="btn solid" data-jose="si" href="${esc(joseHref(true))}" target="_blank" rel="noopener">Enviar mi caso con la reserva</a><a class="btn" data-jose="no" href="${esc(joseHref(false))}" target="_blank" rel="noopener">Reservar sin datos</a></div>
+    <p class="note">Sin datos, la reserva solo dice «${JOSE_ORIGEN}»</p>${ahora}`
+   :`<p>Todavía no has puesto tus datos, así que la reserva solo dirá de dónde vienes:</p>${caja(JOSE_ORIGEN)}
+    <div class="am-bar" style="margin-top:12px"><a class="btn solid" data-jose="${JOSE||'no'}" href="${esc(joseHref(false))}" target="_blank" rel="noopener">Reservar con José →</a></div>${JOSE?ahora:''}`)}
+X.jose=()=>{joseModal();track('jose-que-recibe')};
+const esJose=a=>!!a&&/^https:\/\/cal\.com\//.test(a.getAttribute('href')||'');
+const joseA=e=>{const a=e.target&&e.target.closest?e.target.closest('a[href]'):null;return esJose(a)?a:null};
+/* Antes de que el enlace navegue (ratón, dedo o teclado; también «abrir en una pestaña nueva») se le pone la dirección que toca */
+function josePrepara(a){const con=(a.dataset.jose||JOSE)==='si'&&!!joseCtx();a.href=joseHref(con);return con}
+['pointerdown','auxclick','contextmenu'].forEach(ev=>document.addEventListener(ev,e=>{const a=joseA(e);if(a)josePrepara(a)},true));
+document.addEventListener('click',e=>{const a=joseA(e);if(!a)return;
+  if(a.dataset.jose){if(joseCtx())josePon(a.dataset.jose);const con=josePrepara(a);ov.hidden=true;track('reserva',con?'con-caso':'sin-datos');return} // elegido en la ventana: navega el propio enlace
+  if(!JOSE&&joseCtx()){e.preventDefault();joseModal();return} // primera vez: se enseña lo que se enviaría y se elige
+  track('reserva',josePrepara(a)?'con-caso':'sin-datos')},true);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-joseset]');if(!b)return;josePon(b.dataset.joseset);joseModal();toast(JOSE==='si'?'Tu caso irá con la reserva':'Reservarás sin datos')});
 
 
 /* ---------- versión web / móvil ---------- */
