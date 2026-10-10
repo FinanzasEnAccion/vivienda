@@ -778,7 +778,7 @@ html.s-ojo body:has(#p-simple:not([hidden])) .mres i.good{background:var(--warn-
   .s-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
   .s-card{grid-template-columns:minmax(0,1fr);gap:2px}.s-card .sq,.s-card .sc-2{grid-column:1;grid-row:auto;text-align:left}.s-card .sc-w,.s-card small.sc-p{display:none}.s-card .sc-ps{display:inline}.s-card .sq{white-space:normal}.s-card.none{grid-template-columns:minmax(0,1fr)}.s-card.none small{grid-column:1}
 }
-.s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);width:100%}#sAlqV .s-verd{margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.warn{background:var(--warn-soft)}.s-verd.bad{background:var(--bad-soft)}.s-verd small{color:var(--muted);font-size:12px}
+.s-verd{display:grid;gap:4px;border:0;border-radius:12px;padding:12px 14px;text-align:left;font-size:15px;color:var(--ink);width:100%}#sAlqV .s-verd{margin-top:10px}.s-verd.good{background:var(--good-soft)}.s-verd.eq{background:var(--field)}.s-verd.warn{background:var(--warn-soft)}.s-verd.bad{background:var(--bad-soft)}.s-verd small{color:var(--muted);font-size:12px}
 html .tab.old{display:none!important}
 html.m:not(.sencilla) .mnav{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 .subnav{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap;padding:8px 0 10px}.subnav[hidden]{display:none}
@@ -2832,8 +2832,8 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
   // comprar o alquilar, con una pregunta
   // «unos» va redondeado (a miles desde 10.000 €, a cientos por debajo); al lado, el caso prudente: la vivienda no sube de precio
   const R3=LAST.r3,rv3=S.r.reval,R0=R3&&rv3>0?(R3.R0||calc3({reval:0})):null,unos=v=>{const a=Math.abs(v);return eu(a>=10000?Math.round(a/1000)*1000:Math.round(a/100)*100)},igual=v=>Math.abs(v)<50;
-  $('sAlqV').innerHTML=R3&&tieneCasa?`<button class="s-verd ${R3.dif>=0?'good':'warn'}" data-x="fin3"><span>Si vives ${anos(R3.H)} en ella, ${igual(R3.dif)?'<b>comprar y alquilar salen parecido</b>':`<b>te compensa ${R3.dif>=0?'comprar':'alquilar'}</b>: unos ${unos(R3.dif)} más`}</span><small>${rv3>0?`Si la vivienda sube un ${pctS(rv3)} al año`:rv3<0?`Si la vivienda baja un ${pctS(-rv3)} al año`:'Si la vivienda no sube de precio'} · ${R3.be?`comprar gana desde el año ${R3.be}`:'comprar no llega a ganar'}</small></button>
-    ${R0?`<button class="s-prud" data-x="eq3"><span>Si no sube de precio</span><b>${igual(R0.dif)?'salen parecido':`${R0.dif>=0?'comprar':'alquilar'}: unos ${unos(R0.dif)} más`}</b></button>`:''}`:'<p class="hint" style="margin:8px 0 0">Pon una casa en mente para compararlo.</p>';
+  $('sAlqV').innerHTML=R3&&tieneCasa?`<button class="s-verd ${R3.emp||igual(R3.dif)?'eq':R3.dif>=0?'good':'warn'}" data-x="fin3"><span>Si vives ${anos(R3.H)} en ella, ${R3.emp||igual(R3.dif)?'<b>comprar y alquilar salen parecido</b>':`<b>te compensa ${R3.dif>=0?'comprar':'alquilar'}</b>: unos ${unos(R3.dif)} más`}</span><small>${rv3>0?`Si la vivienda sube un ${pctS(rv3)} al año`:rv3<0?`Si la vivienda baja un ${pctS(-rv3)} al año`:'Si la vivienda no sube de precio'} · ${R3.be?`comprar gana desde el año ${R3.be}`:'comprar no llega a ganar'}</small></button>
+    ${R0?`<button class="s-prud" data-x="eq3"><span>Si no sube de precio</span><b>${R0.emp||igual(R0.dif)?'salen parecido':`${R0.dif>=0?'comprar':'alquilar'}: unos ${unos(R0.dif)} más`}</b></button>`:''}`:'<p class="hint" style="margin:8px 0 0">Pon una casa en mente para compararlo.</p>';
 }
 document.addEventListener('click',e=>{const d=e.target.closest('[data-mdet]');if(d){sCon(()=>mDetail(+d.dataset.mdet));track('estandar-oferta',OFF[+d.dataset.mdet].t)}});
 
