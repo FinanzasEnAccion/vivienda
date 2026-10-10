@@ -1231,7 +1231,9 @@ function netoDe(bruto){const ss=Math.min(bruto,SS_BASE_MAX)*SS_TRAB/100,rn=Math.
   const base=Math.max(0,rn-red),cuota=Math.max(0,escala(base,IRPF_EST)-MIN_PERS*0.19);
   return {neto:bruto-ss-cuota,base,ss,cuota}}
 function brutoDe(neto){if(!(neto>0))return 0;let lo=neto,hi=neto*2.3+2000;for(let k=0;k<45;k++){const m=(lo+hi)/2;if(netoDe(m).neto<neto)lo=m;else hi=m}return (lo+hi)/2}
-function rentaTit(){const n=Math.max(1,S.a.titulares),est=!S.a.icoDatos,bruto=est?brutoDe(S.a.ingresos*12/n):S.a.brutos;return {bruto,base:netoDe(bruto).base,est,n}}
+let RT_K='',RT_V=null; // se guarda el último resultado: se consulta cientos de veces en cada búsqueda del precio máximo
+function rentaTit(){const n=Math.max(1,S.a.titulares),est=!S.a.icoDatos,k=n+'|'+est+'|'+(est?S.a.ingresos:S.a.brutos);if(k===RT_K)return RT_V;
+  const bruto=est?brutoDe(S.a.ingresos*12/n):S.a.brutos;RT_K=k;return RT_V={bruto,base:netoDe(bruto).base,est,n}}
 /* ¿Cumples el tope de renta de una rebaja? ok, duda (cerca del tope: se aplica y se avisa) o no (lo superas con claridad: no se aplica) */
 function rentaVer(r){const q=r.renta;if(!q)return null;const t=rentaTit(),n=t.n,mp=q.minimo?MIN_PERS:0;let ratio,tope;
   if(q.suma!=null){tope=q.suma+mp*n;ratio=t.base*n/tope}
@@ -2361,8 +2363,19 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-nivel]');i
   const t=e.target.closest('[data-cta]');if(t)track('cta-jose',t.dataset.cta)});
 /* Pintores añadidos por cada zona: se registran con AFTER.push(fn) junto a su código y se llaman al final de cada refresco */
 const AFTER=[];
-function refresh(skip){applyNivel();syncAll();fillBound(skip);save();LAST.r1=render1();LAST.r2=render2();LAST.r3=render3();LAST.r4=render4();LAST.r5=render5();LAST.r6=render6();renderS();renderPro();renderBroker();renderMres();
+/* En cada tecla solo se repinta la pestaña que se ve (y Mi presupuesto, de la que beben el banner y la versión Estándar).
+   El resto queda marcado como pendiente y se pone al día en un respiro, al cambiar de pestaña o antes de leer sus resultados (alDia). */
+const PINTA={r1:()=>render1(),r2:()=>render2(),r3:()=>render3(),r4:()=>render4(),r5:()=>render5(),r6:()=>render6(),s:()=>renderS(),pro:()=>renderPro()};
+const DEP={simple:['r1','r3','s'],cuanto:['r1'],alquilar:['r1','r3'],hipotecas:['r1','r2'],bancos:['r1','r4'],invertir:['r1','r5'],mihipo:['r1','r6'],pro:['r1','pro']};
+const SUCIO={};let tResto=null;
+function pinta(ks){ks.forEach(k=>{if(SUCIO[k]!==false){SUCIO[k]=false;LAST[k]=PINTA[k]()}})}
+const pendientes=()=>Object.keys(PINTA).filter(k=>SUCIO[k]!==false);
+function alDia(){clearTimeout(tResto);const q=pendientes();if(!q.length)return;pinta(q);renderBroker();renderMres()}
+function resto(){const q=pendientes();if(!q.length)return;pinta([q[0]]);tResto=setTimeout(resto,30)}
+function refresh(skip){applyNivel();syncAll();fillBound(skip);save();
+  Object.keys(PINTA).forEach(k=>{SUCIO[k]=true});pinta(DEP[S.tab]||['r1']);renderBroker();renderMres();
   AFTER.forEach(f=>{try{f()}catch(e){console.error(e)}});
+  clearTimeout(tResto);tResto=setTimeout(resto,350);
   fitSoon()}
 /* Barra de resultado fija en el móvil: el número clave de la pestaña siempre a la vista mientras rellenas datos */
 function renderMres(){const b=$('mres');if(!b)return;const t=S.tab;let h='';
@@ -2395,7 +2408,7 @@ function renderSub(){const sn=$('subnav');if(!sn)return;const g=S.nivel==='senci
 document.addEventListener('click',e=>{const s=e.target.closest('[data-sub]');if(s){goSub(s.dataset.sub);return}});
 function showTab(t){if(!['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(t))t='cuanto';if(S.nivel==='sencilla'&&['cuanto','alquilar','bancos','hipotecas','invertir','pro'].includes(t)){if(['hipotecas','invertir','pro'].includes(t)){S.nivel='completa';applyNivel()}else t='simple'}if(S.nivel!=='sencilla'&&t==='simple')t='cuanto';if(S.tab!==t||!showTab.done)track('pestana',t);showTab.done=true;S.tab=t;
   document.querySelectorAll('.tab[data-tab]').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});setTimeout(renderSub,0);
-  document.querySelectorAll('.pane').forEach(p=>p.hidden=p.id!=='p-'+t);renderBroker();renderMres();save();fit();if(document.documentElement.classList.contains('m'))scrollTo(0,0);if(t==='alquilar'&&LAST.r3)drawChart3(LAST.r3)}
+  pinta(DEP[t]||['r1']);document.querySelectorAll('.pane').forEach(p=>p.hidden=p.id!=='p-'+t);renderBroker();renderMres();save();fit();if(document.documentElement.classList.contains('m'))scrollTo(0,0);if(t==='alquilar'&&LAST.r3)drawChart3(LAST.r3)}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>b.dataset.grp?goGrp(b.dataset.grp):showTab(b.dataset.tab));
 document.addEventListener('click',e=>{const g=e.target.closest('[data-gotab]');if(g){showTab(g.dataset.gotab);if(!document.documentElement.classList.contains('m'))return;scrollTo(0,0)}});
 function toast(t,undo){const e=$('toast');e.textContent=t;if(undo){const b=document.createElement('button');b.className='undo';b.textContent='Deshacer';b.onclick=()=>{undo();e.hidden=true};e.appendChild(b)}e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,undo?7000:2000)}
@@ -2545,6 +2558,7 @@ function loadScript(src){return new Promise((ok,ko)=>{const s=document.createEle
 async function libs(){if(!window.jspdf)await loadScript(LIBS[0]);if(!(window.jspdf&&window.jspdf.jsPDF.API.autoTable))await loadScript(LIBS[1])}
 const T=x=>String(x).replace(/−/g,'-').replace(/[   ]/g,' ').replace(/→/g,'>').replace(/≈/g,'aprox.');
 function buildPdf(){
+  alDia(); // el informe lee los resultados de todas las pestañas
   const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'});
   const G=[11,61,46],M=[125,211,168],INK=[16,38,30],MUT=[91,110,102],W=210,L=16,CW=W-2*L;
   let y=0;
@@ -2784,7 +2798,7 @@ renderOffers();refresh();
 applyModo(MODO||autoModo());
 const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(h)?h:(S.tab||'cuanto'));
 if(PRIMERA_VEZ&&!['hipotecas','invertir','pro'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
-window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,itpGen,taxOf,cumple,ajdOf,icoInfo,icoTope,rentaTit,rentaVer,netoDe,brutoDe,maxConIco,conCasa,ITP,PROV};
+window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,tinPara,ingOf,OFF:()=>OFF,alDia,pendientes,P:{render1,render2,render3,render4,render5,render6,renderS,renderPro,renderBroker,renderMres,fillBound,syncAll},itpGen,taxOf,cumple,ajdOf,icoInfo,icoTope,rentaTit,rentaVer,netoDe,brutoDe,maxConIco,conCasa,ITP,PROV};
 })();
 </script>
 
