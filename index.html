@@ -2238,7 +2238,7 @@ function render6(){const K=calc6(),M=K.M,mes=MESES[(M.mes||1)-1],eM=MKT.eurMes||
     <button class="pill neutral" data-x="m_rev">TIN ${pct(M.tin)} → ${pct(K.tinN)}</button>
     <button class="pill neutral" data-x="m_eur">Euríbor oficial ${pct(K.eO,3)}</button></div>
     <div class="kpis"><button class="kpi" data-x="m_rev"><small>Cuota hoy</small><strong class="num">${eur(K.qA)}</strong><em>TIN ${pct(M.tin)}</em></button>
-    <button class="kpi" data-x="m_rev"><small>Próximos 12 meses</small><strong class="num" style="color:${up?'var(--bad)':dn?'var(--good)':'inherit'}">${up||dn?(K.dif12>=0?'+':'−')+eur(Math.abs(K.dif12)):'igual'}</strong><em>${K.kRev?`${K.kRev} ${K.kRev===1?'cuota':'cuotas'} a ${eur(K.qA)} y ${12-K.kRev} a ${eur(K.qN)}`:`12 cuotas a ${eur(K.qN)}`}</em></button>
+    <button class="kpi" data-x="m_rev"><small>Próximos 12 meses</small><strong class="num" style="color:${up?'var(--bad)':dn?'var(--good)':'inherit'}">${up||dn?(K.dif12>=0?'+':'−')+eur(Math.abs(K.dif12)):'igual'}</strong><em>${!(up||dn)?'sin cambio':K.kRev?`${K.kRev} ${K.kRev===1?'cuota':'cuotas'} a ${eur(K.qA)} y ${12-K.kRev} a ${eur(K.qN)}`:`12 cuotas a ${eur(K.qN)}`}</em></button>
     <button class="kpi" data-x="m_int"><small>Intereses que te quedan</small><strong class="num">${eur(K.intBase)}</strong><em>si el tipo no cambia</em></button>
     <button class="kpi" data-x="m_tabla"><small>Cuadro de amortización</small><strong class="num" style="font-size:16px">Ver mes a mes</strong><em>y descargarlo</em></button></div>`
    :`<div class="eyebrow">Tienes una hipoteca fija</div><button class="big num" data-x="m_rev">${eur(K.qA)}<span style="font-size:.45em;font-weight:700"> al mes</span></button>
