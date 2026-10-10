@@ -1905,6 +1905,9 @@ const VK_COSTE={
  proteccion:{n:'Seguro de protección de pagos',c:250,m:0,s:0},
  alarma:{n:'Alarma',c:480,m:0,s:0}
 };
+/* los supuestos, en una frase: van en la definición del coste comparado (el «?» de la tabla) y sirven para «Cómo lo calculo» */
+const vkSupTxt=()=>Object.values(VK_COSTE).map(k=>`${k.n.toLowerCase()}, ${eur(k.c)}${k.m?` en el banco y ${eur(k.m)} fuera`:''}${k.s?` (y sube un ${pctS(k.s)} más al año)`:''}`).join('; ');
+DEF.comparado[1]+=` Precios supuestos en «Bancos hoy», al año: ${vkSupTxt()}.`;
 /* una vinculación, como producto con su precio supuesto */
 const vkCoste=v=>{const k=VK_COSTE[v.k];return {k:v.k,n:k?(v.k==='pension'&&v.x?`Plan ${v.x} (comisiones)`:k.n):VK_L[v.k]+(v.x?' '+v.x:''),c:k?k.c:0,m:k?k.m:0,s:k?k.s:0}};
 /* las que el banco exige para el tipo bonificado (las opcionales no cuentan) y si la oferta no dice cuáles son */
@@ -2809,7 +2812,7 @@ renderOffers();refresh();
 applyModo(MODO||autoModo());
 const h=(location.hash||'').slice(1);showTab(['simple','cuanto','hipotecas','alquilar','bancos','invertir','mihipo','pro'].includes(h)?h:(S.tab||'cuanto'));
 if(PRIMERA_VEZ&&!['hipotecas','invertir','pro'].includes(h))setTimeout(()=>{modal('¿Cómo la quieres usar?',`<div class="nivch"><button data-nivelch="sencilla"><b>Estándar</b><span>Tres preguntas y te digo cuánto puedes comprar, qué pagarías al mes y qué ofrecen hoy los bancos.</span></button><button data-nivelch="completa"><b>Profesional</b><span>Para inversores y profesionales: comparar ofertas con sus seguros, invertir para alquilar y todo el detalle.</span></button></div><p class="hint" style="margin:10px 0 0">Puedes cambiar cuando quieras arriba, en «Estándar · Profesional».</p>`);try{localStorage.setItem('fea-nivel','1')}catch(e){}},400);
-window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,mcalc0,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,bonOf,hTocado,applyData};
+window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,holdsOf,escala,inv,invTax,taxAhorro,revalEquilibrio,alqEquilibrio,mcalc,mcalc0,tinPara,ingOf,OFF:()=>OFF,vkOf,vkReq,vkCoste,vkSupTxt,bonOf,hTocado,applyData};
 })();
 </script>
 
