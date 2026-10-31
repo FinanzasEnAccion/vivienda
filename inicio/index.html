@@ -208,6 +208,41 @@ footer{padding:30px 0 60px;color:rgba(242,238,227,.55);font-size:14px;border-top
 footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 footer a{color:var(--mint);font-weight:600}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:10px}
+
+/* ---------- Móvil: menos efectos ligados al scroll, nada que se tape ---------- */
+@media(max-width:760px){
+  body{font-size:16px}
+  section{padding:76px 0}
+  .sh{margin-bottom:30px}
+  .sh h2{font-size:clamp(34px,10vw,44px)}
+  .nav{top:10px;background:rgba(8,37,28,.96)}
+  .nav .mk{font-size:14px}
+  .hero{padding:160px 0 70px;min-height:auto}
+  .hero p{font-size:17px}
+  .band .row{font-size:26px}
+  .band{padding:12px 0}
+  .blk{min-height:0;padding:24px}
+  .blk.big{min-height:0;padding:28px 24px}
+  .blk.big .ill{display:none}
+  .blk.big p{font-size:16px}
+  .nums{gap:12px}
+  .num{padding:22px 18px}
+  .num b{font-size:34px}
+  .bro{min-height:0;padding:28px}
+  .bro .big{font-size:96px}
+  .bro h3{font-size:26px;margin-top:16px}
+  .card{position:relative;top:auto!important;margin-bottom:14px;padding:26px;box-shadow:none}
+  .card .yr{font-size:56px}
+  .card h3{font-size:26px}
+  .card p{font-size:16px}
+  .quote{margin-top:56px;font-size:34px}
+  .jose{border-radius:28px}
+  .jose h2{font-size:38px}
+  .jose p{font-size:16.5px}
+  .open{padding:20px 0 76px}
+  .ch b{font-size:18px}
+  .ch{padding:18px}
+}
 </style>
 </head>
 <body>
@@ -396,6 +431,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const ver=x=>!x.pendiente||MOSTRAR_PENDIENTES;
 const $=id=>document.getElementById(id);
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOV=matchMedia('(max-width:760px)').matches;
 $('y').textContent=new Date().getFullYear();
 $('joseurl').href=JOSE.url;
 
@@ -421,7 +457,7 @@ extras.forEach((t,i)=>{
 
 /* Quiénes somos */
 $('duo').innerHTML=NOSOTROS.filter(ver).map((n,i)=>`
-  <article class="bro ${i%2?'b':'a'}${n.pendiente?' pend':''}" data-side="${i%2?1:-1}">
+  <article class="bro ${i%2?'b':'a'}${MOV?(i%2?' fx r':' fx l'):''}${n.pendiente?' pend':''}" data-side="${i%2?1:-1}">
     ${n.pendiente?'<span class="pt">Pendiente</span>':''}
     <div class="big">${esc(n.ini)}</div>
     <h3>${esc(n.rol)}</h3><p>${esc(n.texto)}</p>
@@ -430,7 +466,7 @@ $('duo').innerHTML=NOSOTROS.filter(ver).map((n,i)=>`
 
 /* Historia */
 $('stack').innerHTML=HISTORIA.filter(ver).map((h,i)=>`
-  <article class="card${h.pendiente?' pend':''}" style="top:${110+i*14}px">
+  <article class="card${MOV?' fx z':''}${h.pendiente?' pend':''}" style="top:${110+i*14}px">
     <div class="yr">${esc(h.cuando)}</div>
     <div>${h.pendiente?'<span class="pt">Por escribir</span><br>':''}<h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></div>
   </article>`).join('');
@@ -479,7 +515,7 @@ document.querySelectorAll('[data-n]').forEach(el=>io2.observe(el));
 /* Movimiento ligado al scroll: bandas, chips de la portada, hermanos que se juntan, tarjetas que se apilan y bloque de José que se abre */
 if(!RM){
   const rows=[...document.querySelectorAll('.band .row')], chips=[...document.querySelectorAll('.chip')];
-  const bros=[...document.querySelectorAll('.bro')], cards=[...document.querySelectorAll('.card')], jose=$('jose');
+  const bros=MOV?[]:[...document.querySelectorAll('.bro')], cards=MOV?[]:[...document.querySelectorAll('.card')], jose=$('jose');
   let mx=0,my=0;
   addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;tick()},{passive:true});
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
