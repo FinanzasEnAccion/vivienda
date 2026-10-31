@@ -2,210 +2,212 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Finanzas en Acción · @BuscandolaLF</title>
-<meta name="description" content="Herramientas gratuitas de finanzas personales, mi historia y los productos que uso de verdad. Por @BuscandolaLF.">
+<meta name="description" content="Dos hermanos controllers financieros. Herramientas gratis, nuestra historia y lo que usamos de verdad, contado como lo haríamos en una memoria anual.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Finanzas en Acción">
 <meta property="og:title" content="Finanzas en Acción · @BuscandolaLF">
-<meta property="og:description" content="Herramientas gratuitas de finanzas personales, mi historia y los productos que uso de verdad.">
+<meta property="og:description" content="Dos hermanos controllers financieros. Herramientas gratis, nuestra historia y lo que usamos de verdad.">
 <meta property="og:image" content="https://finanzasenaccion.github.io/vivienda/og.png">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@BuscandolaLF">
-<meta name="theme-color" content="#0B3D2E">
+<meta name="theme-color" content="#F3EEE2">
 <link rel="icon" type="image/png" href="../icon-192.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
-<link rel="preload" href="../fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/fraunces-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:"Bricolage Grotesque";font-weight:600 800;font-display:swap;src:url(../fonts/bricolage-grotesque-latin-opsz-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Bricolage Grotesque";font-weight:600 800;font-display:swap;src:url(../fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
-@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:swap;src:url(../fonts/instrument-sans-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:swap;src:url(../fonts/instrument-sans-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+/* Tipografías propias (carpeta fonts/, licencia OFL): no se pide nada a terceros. */
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:400 800;font-display:swap;src:url(../fonts/fraunces-latin-normal.woff2) format("woff2")}
+@font-face{font-family:"Fraunces";font-style:italic;font-weight:400 700;font-display:swap;src:url(../fonts/fraunces-latin-italic.woff2) format("woff2")}
+@font-face{font-family:"Plex Mono";font-weight:400;font-display:swap;src:url(../fonts/ibm-plex-mono-latin-400.woff2) format("woff2")}
+@font-face{font-family:"Plex Mono";font-weight:600;font-display:swap;src:url(../fonts/ibm-plex-mono-latin-600.woff2) format("woff2")}
+@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:swap;src:url(../fonts/instrument-sans-latin-wght-normal.woff2) format("woff2")}
 
+/* Concepto: la web como la memoria anual de una empresa. Papel, tinta verde, cifras en mono, notas al pie. */
 :root{
-  --brand:#0B3D2E;--brand-2:#0F4A38;--cream:#F0ECE0;--mint:#7DD3A8;--mint-2:#A8E6C6;
-  --bg:#F4F1E8;--card:#FFFFFF;--ink:#10261E;--muted:#5B6E66;--line:#DED9CB;
-  --gold:#E0A030;--r:22px;
-  --fd:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
-  --fb:"Instrument Sans","Segoe UI",system-ui,sans-serif;
-  --shadow:0 1px 2px rgba(16,38,30,.05),0 12px 32px rgba(16,38,30,.08);
+  --paper:#F3EEE2;--paper-2:#EAE3D2;--ink:#0B3D2E;--ink-2:#2C5546;--soft:#6E7F74;--rule:#CFC6AF;
+  --hl:#B9EBCF;--red:#B5402F;--gold:#C8902A;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --mono:"Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Instrument Sans","Segoe UI",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 var(--fb);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 var(--sans);-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(rgba(11,61,46,.035) 1px,transparent 1px);background-size:4px 4px}
 a{color:inherit}
-img{max-width:100%;display:block}
-.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
-h1,h2,h3{font-family:var(--fd);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:0}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
-.eyebrow::before{content:"";width:22px;height:2px;background:currentColor;border-radius:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.mono{font-family:var(--mono)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 2px}
 
-/* ---------- Barra ---------- */
-.nav{position:sticky;top:0;z-index:20;background:rgba(11,61,46,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);color:var(--cream)}
-.nav .wrap{display:flex;align-items:center;gap:18px;height:62px}
-.brandmark{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 17px var(--fd)}
-.brandmark img{width:34px;height:34px;border-radius:9px}
-.nav nav{margin-left:auto;display:flex;gap:4px}
-.nav nav a{text-decoration:none;font-weight:600;font-size:14px;padding:8px 12px;border-radius:999px;opacity:.85}
-.nav nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
-.xpill{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px;background:var(--cream);color:var(--brand)}
-.xpill svg{width:15px;height:15px}
-@media(max-width:760px){.nav nav{display:none}.nav .xpill{margin-left:auto}}
+/* ---------- Cinta de mercado ---------- */
+.tape{background:var(--ink);color:var(--paper);font:500 13px var(--mono);overflow:hidden;white-space:nowrap;border-bottom:1px solid #000}
+.tape .run{display:inline-flex;gap:42px;padding:9px 0;animation:run 46s linear infinite}
+.tape span b{color:var(--hl);font-weight:600}
+.tape .up{color:#F2A091}.tape .dn{color:var(--hl)}
+@keyframes run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.tape .run{animation:none}}
+
+/* ---------- Cabecera ---------- */
+.mast{border-bottom:2px solid var(--ink)}
+.mast .wrap{display:flex;align-items:center;gap:20px;height:70px}
+.seal{display:flex;align-items:center;gap:12px;text-decoration:none}
+.seal img{width:38px;height:38px;border-radius:50%;box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--ink)}
+.seal b{font:700 20px var(--serif);letter-spacing:-.01em}
+.mast nav{margin-left:auto;display:flex;gap:2px;font:500 13px var(--mono);text-transform:uppercase;letter-spacing:.04em}
+.mast nav a{text-decoration:none;padding:8px 10px}
+.mast nav a:hover{background:var(--hl)}
+.mast nav a i{font-style:normal;color:var(--soft);margin-right:4px}
+.follow{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font:600 13px var(--mono);text-transform:uppercase;padding:9px 14px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper)}
+.follow:hover{background:transparent;color:var(--ink)}
+.follow svg{width:13px;height:13px}
+@media(max-width:900px){.mast nav{display:none}.follow{margin-left:auto}}
 
 /* ---------- Portada ---------- */
-.hero{position:relative;overflow:hidden;background:var(--brand);color:var(--cream);padding:72px 0 96px;margin-top:-62px;padding-top:134px}
-.hero::before{content:"";position:absolute;inset:0;background:
-  radial-gradient(700px 400px at 85% 10%,rgba(125,211,168,.22),transparent 60%),
-  radial-gradient(500px 360px at 0% 100%,rgba(224,160,48,.12),transparent 60%)}
-.hero::after{content:"";position:absolute;inset:0;opacity:.07;background-image:linear-gradient(rgba(240,236,224,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(240,236,224,.6) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
-.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
-.hero .eyebrow{color:var(--mint)}
-.hero h1{font-size:clamp(42px,6.4vw,78px);margin:18px 0 20px}
-.hero h1 em{font-style:normal;color:var(--mint)}
-.hero p.lead{font-size:19px;max-width:560px;color:rgba(240,236,224,.82);margin:0 0 30px}
-.ctas{display:flex;flex-wrap:wrap;gap:12px}
-.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;padding:14px 22px;border-radius:999px;transition:transform .15s ease,box-shadow .15s ease;border:0;cursor:pointer;font-family:inherit}
-.btn:hover{transform:translateY(-2px)}
-.btn.mint{background:var(--mint);color:var(--brand);box-shadow:0 8px 24px rgba(125,211,168,.25)}
-.btn.ghost{background:transparent;color:var(--cream);box-shadow:inset 0 0 0 1.5px rgba(240,236,224,.35)}
-.btn.dark{background:var(--brand);color:var(--cream)}
-.stats{display:flex;gap:30px;margin-top:40px;flex-wrap:wrap}
-.stat b{display:block;font:800 30px var(--fd);color:var(--cream)}
-.stat span{font-size:13.5px;color:rgba(240,236,224,.65)}
+.cover{padding:64px 0 40px;border-bottom:1px solid var(--rule)}
+.cover .wrap{display:grid;grid-template-columns:1fr 340px;gap:56px}
+.kicker{font:600 12.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:flex;gap:14px;align-items:center}
+.kicker::after{content:"";flex:1;height:1px;background:var(--rule)}
+.cover h1{font:400 clamp(46px,7.2vw,104px)/.96 var(--serif);letter-spacing:-.035em;margin:26px 0 28px;font-variation-settings:"opsz" 144}
+.cover h1 em{font-style:italic;font-weight:500;color:var(--ink-2)}
+.cover h1 .u{position:relative;white-space:nowrap}
+.cover h1 .u svg{position:absolute;left:-2%;bottom:-.12em;width:104%;height:.32em;color:var(--gold)}
+.cover .lead{font-size:20px;line-height:1.55;max-width:640px;color:var(--ink-2);margin:0 0 32px}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.b{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:600 14px var(--mono);text-transform:uppercase;letter-spacing:.03em;padding:15px 20px;border:1.5px solid var(--ink);transition:transform .15s,box-shadow .15s}
+.b.solid{background:var(--ink);color:var(--paper);box-shadow:5px 5px 0 var(--hl)}
+.b.solid:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--hl)}
+.b.line:hover{background:var(--hl)}
 
-/* tarjeta de ejemplo de la calculadora */
-.mock{position:relative;justify-self:center;width:100%;max-width:380px}
-.mock .phone{background:#E9EFEA;border-radius:34px;padding:12px;box-shadow:0 30px 80px rgba(0,0,0,.35);transform:rotate(3deg)}
-.mock .screen{background:#fff;border-radius:24px;padding:22px;color:var(--ink)}
-.mock .small{font-size:13px;color:var(--muted)}
-.mock .big{font:800 40px var(--fd);margin:4px 0 12px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;background:#E0F3E9;color:#1E6E4B}
-.chip i{width:8px;height:8px;border-radius:50%;background:#1E8A5A}
-.row{display:flex;justify-content:space-between;align-items:center;background:#F2F5F2;border-radius:14px;padding:13px 15px;margin-top:9px;font-size:14.5px}
-.row b{font:800 19px var(--fd)}
-.row b.g{color:#1E8A5A}
-.float{position:absolute;left:-34px;bottom:-22px;background:var(--cream);color:var(--brand);border-radius:16px;padding:12px 16px;box-shadow:0 16px 40px rgba(0,0,0,.25);font-weight:700;font-size:14px;transform:rotate(-4deg);display:flex;gap:10px;align-items:center}
-.float svg{width:20px;height:20px}
-@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.mock{max-width:330px;margin-top:10px}.float{left:-10px}}
+/* Índice */
+.toc{border:1.5px solid var(--ink);background:var(--paper);padding:22px 22px 14px;align-self:start;position:relative}
+.toc::before{content:"";position:absolute;inset:6px -8px -8px 6px;border:1.5px solid var(--ink);z-index:-1;background:var(--paper-2)}
+.toc h2{font:600 12.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px;display:flex;justify-content:space-between}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc li a{display:flex;align-items:baseline;gap:8px;text-decoration:none;padding:7px 0;font:500 16px var(--serif)}
+.toc li a:hover{color:var(--ink-2)}
+.toc li a .n{font:500 12px var(--mono);color:var(--soft);width:24px}
+.toc li a .dots{flex:1;border-bottom:1.5px dotted var(--rule);transform:translateY(-4px)}
+.toc li a .p{font:500 12px var(--mono);color:var(--soft)}
+@media(max-width:960px){.cover .wrap{grid-template-columns:1fr}.toc{max-width:420px}}
 
 /* ---------- Secciones ---------- */
-section{padding:92px 0}
-.sh{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:38px;flex-wrap:wrap}
-.sh h2{font-size:clamp(32px,4.4vw,52px);margin-top:14px;max-width:680px}
-.sh p{max-width:420px;color:var(--muted);margin:0}
+section.s{padding:84px 0;border-bottom:1px solid var(--rule)}
+.head{display:grid;grid-template-columns:150px 1fr;gap:24px;margin-bottom:40px;align-items:start}
+.head .no{font:400 64px/0.9 var(--serif);font-style:italic;color:var(--ink-2)}
+.head .lab{font:600 12.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.head h2{font:400 clamp(32px,4.4vw,54px)/1.04 var(--serif);letter-spacing:-.025em;margin:8px 0 0;max-width:820px}
+.head p{margin:14px 0 0;color:var(--ink-2);max-width:640px}
+.body{margin-left:174px}
+@media(max-width:820px){.head{grid-template-columns:1fr;gap:6px}.head .no{font-size:44px}.body{margin-left:0}}
 
-/* Herramientas: bento */
-.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
-.tile{position:relative;background:var(--card);border-radius:var(--r);padding:26px;box-shadow:var(--shadow);text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform .18s ease,box-shadow .18s ease;overflow:hidden}
-a.tile:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(16,38,30,.06),0 22px 44px rgba(16,38,30,.13)}
-.tile h3{font-size:22px}
-.tile p{margin:0;color:var(--muted);font-size:15px}
-.tile .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#E2EFE8;color:var(--brand)}
-.tile .ic svg{width:24px;height:24px}
-.tile .go{margin-top:auto;padding-top:8px;font-weight:700;font-size:14px;color:var(--brand);display:flex;align-items:center;gap:6px}
-.tile.feature{grid-column:span 4;grid-row:span 2;background:var(--brand);color:var(--cream);padding:34px}
-.tile.feature h3{font-size:clamp(28px,3.2vw,40px)}
-.tile.feature p{color:rgba(240,236,224,.78);font-size:16.5px;max-width:520px}
-.tile.feature .go{color:var(--mint)}
-.tile.feature .ic{background:rgba(125,211,168,.16);color:var(--mint)}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.tags span{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(240,236,224,.08);box-shadow:inset 0 0 0 1px rgba(240,236,224,.16)}
-.tile.s2{grid-column:span 2}
-.tile.s3{grid-column:span 3}
-.badge{position:absolute;top:18px;right:18px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--mint);color:var(--brand)}
-.badge.soon{background:#F3E7CC;color:#8A5A0C}
-@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.tile.feature,.tile.s3{grid-column:span 2}.tile.s2{grid-column:span 1}}
-@media(max-width:560px){.bento{grid-template-columns:1fr}.tile.feature,.tile.s3,.tile.s2{grid-column:span 1}}
+/* 01 Cifras clave */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.kpi{padding:26px 22px 24px;border-right:1px solid var(--rule)}
+.kpi:last-child{border-right:0}
+.kpi .v{font:500 clamp(34px,4vw,50px)/1 var(--mono);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:.5em;letter-spacing:0}
+.kpi .l{margin-top:12px;font-size:14.5px;color:var(--ink-2)}
+.kpi .f{margin-top:8px;font:500 11.5px var(--mono);color:var(--soft);text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(2){border-right:0}.kpi:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
 
-/* Historia */
-.story{background:var(--cream)}
-.story .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
-.story .intro{position:sticky;top:96px}
-.story .intro p{font-size:18px;color:#33463E}
-.quote{margin-top:26px;padding:22px 24px;border-radius:var(--r);background:var(--brand);color:var(--cream);font:700 21px/1.3 var(--fd)}
-.quote small{display:block;margin-top:10px;font:500 14px var(--fb);color:var(--mint)}
-.tl{list-style:none;margin:0;padding:0;position:relative}
-.tl::before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--brand),rgba(11,61,46,.15))}
-.tl li{position:relative;padding:0 0 30px 54px}
-.tl li::before{content:"";position:absolute;left:6px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--cream);box-shadow:inset 0 0 0 5px var(--brand)}
-.tl li:last-child::before{background:var(--mint)}
-.tl .when{font:700 13px var(--fb);letter-spacing:.06em;text-transform:uppercase;color:var(--brand)}
-.tl h3{font-size:22px;margin:6px 0 6px}
-.tl p{margin:0;color:#3F5149}
-@media(max-width:900px){.story .grid{grid-template-columns:1fr}.story .intro{position:static}}
+/* 02 Activos (herramientas) como libro mayor */
+.ledger{border-top:2px solid var(--ink)}
+.asset{display:grid;grid-template-columns:70px 1fr 170px 40px;gap:20px;align-items:center;padding:24px 4px;border-bottom:1px solid var(--rule);text-decoration:none;transition:background .15s}
+a.asset:hover{background:rgba(185,235,207,.35)}
+.asset .code{font:500 13px var(--mono);color:var(--soft)}
+.asset h3{font:500 26px/1.15 var(--serif);margin:0 0 4px;letter-spacing:-.015em}
+.asset p{margin:0;color:var(--ink-2);font-size:15.5px}
+.asset .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.asset .tags span{font:500 12px var(--mono);padding:3px 8px;border:1px solid var(--rule);background:var(--paper)}
+.stamp{justify-self:start;font:600 11.5px var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:6px 10px;border:2px solid currentColor;transform:rotate(-4deg);color:var(--ink)}
+.stamp.dev{color:var(--gold)}
+.stamp.soon{color:var(--soft)}
+.asset .arr{font:400 26px var(--serif);justify-self:end}
+.asset.main h3{font-size:clamp(30px,3.4vw,40px)}
+.asset.main{padding:34px 4px}
+@media(max-width:760px){.asset{grid-template-columns:1fr;gap:10px}.asset .arr{display:none}}
 
-/* Lo que uso (referidos) */
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-.filters button{font:600 14px var(--fb);padding:9px 16px;border-radius:999px;border:0;background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer}
-.filters button[aria-pressed="true"]{background:var(--brand);color:var(--cream);box-shadow:none}
-.refs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.ref{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
-.ref header{display:flex;gap:14px;align-items:center}
-.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font:800 18px var(--fd);color:#fff;flex:none}
-.ref h3{font-size:19px}
-.ref .cat{font-size:12.5px;font-weight:600;color:var(--muted)}
-.ref p{margin:0;color:#3F5149;font-size:15px}
-.bonus{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:#FFF6E3;color:#6B4708;font-size:14px;font-weight:600}
-.bonus svg{flex:none;width:18px;height:18px;margin-top:1px}
-.ref .actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
-.ref .actions .btn{padding:11px 16px;font-size:14.5px}
-.code{display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border-radius:999px;border:1.5px dashed var(--brand);background:transparent;font:700 14px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--brand);cursor:pointer}
-.code.ok{border-style:solid;background:#E0F3E9}
-.ref.pend{background:transparent;box-shadow:none;border:2px dashed #C9C2AE}
-.ref.pend .logo{background:#CFC8B4!important}
-.pendtag{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8A5A0C;background:#F3E7CC;padding:4px 9px;border-radius:999px;align-self:flex-start}
-@media(max-width:900px){.refs{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.refs{grid-template-columns:1fr}}
-.disclose{margin-top:26px;display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);color:#3F5149;font-size:14.5px}
-.disclose svg{flex:none;width:22px;height:22px;color:var(--brand);margin-top:1px}
+/* 03 Órganos de gobierno */
+.board{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.member{border:1.5px solid var(--ink);padding:28px;background:var(--paper);position:relative}
+.member .role{font:600 12.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.member h3{font:500 30px var(--serif);margin:6px 0 10px;letter-spacing:-.02em}
+.member p{margin:0;color:var(--ink-2)}
+.member ul{margin:16px 0 0;padding:0;list-style:none}
+.member li{font-size:14.5px;padding:6px 0;border-top:1px dashed var(--rule);display:flex;gap:10px}
+.member li::before{content:"—";color:var(--soft)}
+.sign{margin-top:34px;display:flex;align-items:end;gap:14px}
+.sign svg{width:150px;height:46px;color:var(--ink-2)}
+.sign div{flex:1;border-top:1.5px solid var(--ink);padding-top:6px;font:500 12px var(--mono);color:var(--soft);text-transform:uppercase;letter-spacing:.06em}
+.member.pend{border-style:dashed;opacity:.75}
+@media(max-width:820px){.board{grid-template-columns:1fr}}
 
-/* Asesoría */
-.advice{background:var(--brand);color:var(--cream);border-radius:32px;padding:52px;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;position:relative;overflow:hidden}
-.advice::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(125,211,168,.28),transparent 65%)}
-.advice h2{font-size:clamp(30px,3.8vw,46px);margin:14px 0 14px}
-.advice .eyebrow{color:var(--mint)}
-.advice p{color:rgba(240,236,224,.8);margin:0;max-width:560px}
-.advice ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
-.advice li{display:flex;gap:10px;align-items:center}
-.advice li svg{width:18px;height:18px;color:var(--mint);flex:none}
-.advice .side{position:relative;z-index:1;justify-self:end;text-align:center}
-@media(max-width:820px){.advice{grid-template-columns:1fr;padding:34px}.advice .side{justify-self:start;text-align:left}}
+/* 04 Hechos relevantes */
+.facts{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start}
+.fact{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:22px 0;border-top:1px solid var(--rule)}
+.fact:first-child{border-top:2px solid var(--ink)}
+.fact .d{font:600 15px var(--mono)}
+.fact h3{font:500 23px/1.2 var(--serif);margin:0 0 6px}
+.fact p{margin:0;color:var(--ink-2)}
+.pull{position:sticky;top:30px;padding:34px 30px;background:var(--ink);color:var(--paper)}
+.pull q{display:block;font:italic 400 clamp(28px,3vw,38px)/1.15 var(--serif);quotes:none}
+.pull .who{margin-top:20px;font:500 12.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--hl)}
+.pull .mini{margin-top:26px;padding-top:18px;border-top:1px solid rgba(243,238,226,.2);font-size:14.5px;color:rgba(243,238,226,.78)}
+@media(max-width:960px){.facts{grid-template-columns:1fr}.pull{position:static}.fact{grid-template-columns:1fr;gap:4px}}
 
-/* Newsletter / redes */
-.social{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.soc{display:flex;align-items:center;gap:14px;padding:18px;border-radius:18px;background:#fff;box-shadow:var(--shadow);text-decoration:none;transition:transform .15s}
-.soc:hover{transform:translateY(-3px)}
-.soc .logo{width:44px;height:44px}
-.soc b{display:block;font:700 16px var(--fd)}
-.soc span{font-size:13.5px;color:var(--muted)}
-.soc.pend{background:transparent;box-shadow:none;border:2px dashed #C9C2AE}
-@media(max-width:900px){.social{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.social{grid-template-columns:1fr}}
+/* 05 Proveedores */
+table.prov{width:100%;border-collapse:collapse;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.prov th{text-align:left;font:600 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);padding:14px 12px;border-bottom:1px solid var(--ink)}
+.prov td{padding:20px 12px;border-bottom:1px solid var(--rule);vertical-align:top;font-size:15.5px}
+.prov tr:last-child td{border-bottom:0}
+.prov td.n{font:500 21px var(--serif);white-space:nowrap}
+.prov td.c{font:500 12.5px var(--mono);text-transform:uppercase;color:var(--soft)}
+.prov td.g b{background:linear-gradient(transparent 55%,var(--hl) 55%)}
+.prov .go{display:inline-flex;gap:8px;white-space:nowrap;text-decoration:none;font:600 13px var(--mono);text-transform:uppercase;padding:9px 12px;border:1.5px solid var(--ink)}
+.prov .go:hover{background:var(--ink);color:var(--paper)}
+.prov .code{margin-top:8px;display:inline-block;font:600 13px var(--mono);border:1.5px dashed var(--ink);padding:6px 10px;background:none;cursor:pointer;color:var(--ink)}
+.prov tr.pend td{color:var(--soft)}
+.prov tr.pend td.n::after{content:" · falta el enlace";font:500 11px var(--mono);color:var(--red);text-transform:uppercase}
+@media(max-width:820px){
+  .prov thead{display:none}.prov tr{display:block;padding:18px 0;border-bottom:1px solid var(--rule)}
+  .prov,.prov tbody{display:block}.prov td{display:block;padding:4px 0;border:0}.prov td.n{white-space:normal}
+}
+.note{margin-top:20px;font-size:14px;color:var(--ink-2);display:flex;gap:10px}
+.note sup{font:600 12px var(--mono)}
 
-footer{padding:46px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
-footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
-footer a{color:var(--brand);font-weight:600}
+/* 06 Hecho posterior: la hipoteca */
+.after{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:40px;border:2px solid var(--ink);background:var(--hl);position:relative}
+.after::before{content:"HECHO POSTERIOR";position:absolute;top:-12px;left:28px;background:var(--paper);padding:0 10px;font:600 12px var(--mono);letter-spacing:.14em}
+.after h3{font:400 clamp(30px,3.6vw,46px)/1.05 var(--serif);margin:0 0 12px;letter-spacing:-.02em}
+.after p{margin:0 0 10px;max-width:640px}
+.after .fine{font-size:13.5px;color:var(--ink-2);margin-top:14px}
+@media(max-width:820px){.after{grid-template-columns:1fr;padding:30px 22px}}
 
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
-.reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
-:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:8px}
+/* 07 Canales */
+.chan{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.chan a{display:block;padding:24px 20px;border-right:1px solid var(--rule);text-decoration:none;transition:background .15s}
+.chan a:last-child{border-right:0}
+.chan a:hover{background:var(--hl)}
+.chan .k{font:600 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.chan b{display:block;font:500 22px var(--serif);margin:8px 0 2px}
+.chan span{font-size:14px;color:var(--ink-2)}
+.chan a.pend{color:var(--soft);background:repeating-linear-gradient(-45deg,transparent 0 8px,rgba(11,61,46,.04) 8px 9px)}
+@media(max-width:900px){.chan{grid-template-columns:1fr 1fr}.chan a:nth-child(2n){border-right:0}.chan a{border-bottom:1px solid var(--rule)}}
 
-/* Quiénes somos */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.who{background:var(--card);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);display:flex;gap:20px;align-items:flex-start}
-.who .av{flex:none;width:64px;height:64px;border-radius:20px;background:var(--brand);color:var(--mint);display:grid;place-items:center;font:800 26px var(--fd);position:relative}
-.who .av::after{content:"";position:absolute;inset:-5px;border-radius:24px;box-shadow:inset 0 0 0 2px var(--mint);opacity:.5}
-.who h3{font-size:22px;margin-bottom:6px}
-.who p{margin:0 0 12px;color:#3F5149}
-.who ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-.who li{font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;background:#E2EFE8;color:var(--brand)}
-.who.pend{background:transparent;box-shadow:none;border:2px dashed #C9C2AE}
-.who.pend .av{background:#CFC8B4;color:#fff}
-@media(max-width:760px){.duo{grid-template-columns:1fr}}
-.advice .fine{margin-top:18px;font-size:13.5px;color:rgba(240,236,224,.6)}
+footer{padding:40px 0 70px;font:500 12.5px var(--mono);color:var(--soft);text-transform:uppercase;letter-spacing:.05em}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:var(--ink)}
+.pendtag{display:inline-block;font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:2px 6px;margin-bottom:6px}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -263,145 +265,138 @@ const REDES = [
 const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
 </script>
 
-<header class="nav">
+<div class="tape" aria-label="Datos de mercado"><div class="run" id="tape"></div></div>
+
+<header class="mast">
   <div class="wrap">
-    <a class="brandmark" href="#top"><img src="../logo.png" alt="" width="34" height="34">Finanzas en Acción</a>
-    <nav aria-label="Secciones">
-      <a href="#herramientas">Herramientas</a>
-      <a href="#nosotros">Quiénes somos</a>
-      <a href="#historia">Historia</a>
-      <a href="#uso">Lo que usamos</a>
-      <a href="#hipoteca">Hipoteca</a>
+    <a class="seal" href="#top"><img src="../logo.png" alt="" width="38" height="38"><b>Finanzas en Acción</b></a>
+    <nav aria-label="Índice">
+      <a href="#activos"><i>02</i>Herramientas</a>
+      <a href="#gobierno"><i>03</i>Quiénes somos</a>
+      <a href="#hechos"><i>04</i>Historia</a>
+      <a href="#proveedores" data-nav="uso"><i>05</i>Lo que usamos</a>
+      <a href="#hipoteca"><i>06</i>Hipoteca</a>
     </nav>
-    <a class="xpill" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>Seguir</a>
+    <a class="follow" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>Seguir</a>
   </div>
 </header>
 
 <main id="top">
 <!-- PORTADA -->
-<section class="hero">
+<section class="cover">
   <div class="wrap">
     <div>
-      <span class="eyebrow">Dos hermanos controllers</span>
-      <h1>Decide con <em>tus</em> números, no con los de otros.</h1>
-      <p class="lead">Somos dos hermanos y los dos somos controllers financieros. Contamos con números reales cómo compramos vivienda, invertimos y ordenamos nuestro dinero. Aquí tienes nuestras herramientas gratis y lo que usamos de verdad.</p>
-      <div class="ctas">
-        <a class="btn mint" href="../">Abrir las calculadoras <span aria-hidden="true">→</span></a>
-        <a class="btn ghost" href="#historia">Nuestra historia</a>
-      </div>
-      <div class="stats">
-        <div class="stat"><b>+700.000</b><span>visualizaciones del hilo de la hipoteca</span></div>
-        <div class="stat"><b>+2.000</b><span>en El Club de la Hipoteca</span></div>
-        <div class="stat"><b>6</b><span>calculadoras gratis</span></div>
+      <div class="kicker">Memoria · Ejercicio <span id="ej">2026</span></div>
+      <h1>Dos controllers <em>auditando</em> su propio <span class="u">dinero.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14C40 4 90 2 198 10" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></span></h1>
+      <p class="lead">Somos dos hermanos y los dos trabajamos como controllers financieros. Aplicamos a nuestras finanzas el mismo método que en el trabajo y lo contamos en abierto: <mark>con números reales, con su fuente y sin vender humo</mark>.</p>
+      <div class="btns">
+        <a class="b solid" href="../">Abrir las calculadoras →</a>
+        <a class="b line" href="#hechos">Leer nuestra historia</a>
       </div>
     </div>
-    <div class="mock" aria-hidden="true">
-      <div class="phone"><div class="screen">
-        <div class="small">Ejemplo: se puede comprar hasta</div>
-        <div class="big">230.000 €</div>
-        <span class="chip"><i></i>Cómodo</span>
-        <div class="row"><span>Pagarías al mes</span><b>776 €</b></div>
-        <div class="row"><span>Parte de lo que entra en casa</span><b class="g">24 %</b></div>
-        <div class="row"><span>Necesitas tener ahorrado</span><b>70.000 €</b></div>
-      </div></div>
-      <div class="float"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>Tus datos no salen de tu navegador</div>
+    <aside class="toc">
+      <h2><span>Índice</span><span>Pág.</span></h2>
+      <ol>
+        <li><a href="#cifras"><span class="n">01</span>Cifras clave<span class="dots"></span><span class="p">2</span></a></li>
+        <li><a href="#activos"><span class="n">02</span>Herramientas<span class="dots"></span><span class="p">3</span></a></li>
+        <li><a href="#gobierno"><span class="n">03</span>Quiénes somos<span class="dots"></span><span class="p">4</span></a></li>
+        <li><a href="#hechos"><span class="n">04</span>Hechos relevantes<span class="dots"></span><span class="p">5</span></a></li>
+        <li data-nav="uso"><a href="#proveedores"><span class="n">05</span>Lo que usamos<span class="dots"></span><span class="p">6</span></a></li>
+        <li><a href="#hipoteca"><span class="n">06</span>Hecho posterior<span class="dots"></span><span class="p">7</span></a></li>
+        <li><a href="#canales"><span class="n">07</span>Dónde seguirnos<span class="dots"></span><span class="p">8</span></a></li>
+      </ol>
+    </aside>
+  </div>
+</section>
+
+<!-- 01 CIFRAS -->
+<section class="s" id="cifras" style="padding-top:56px">
+  <div class="wrap">
+    <div class="head rv"><div class="no">01</div><div><div class="lab">Cifras clave</div><h2>Lo que llevamos, en cuatro números.</h2></div></div>
+    <div class="kpis rv">
+      <div class="kpi"><div class="v">710<small>.000</small></div><div class="l">visualizaciones del hilo de nuestra hipoteca</div><div class="f">Fuente: X</div></div>
+      <div class="kpi"><div class="v">+2.000</div><div class="l">miembros en El Club de la Hipoteca</div><div class="f">Comunidad en X</div></div>
+      <div class="kpi"><div class="v">6</div><div class="l">calculadoras de vivienda gratis</div><div class="f">Sin registro ni cookies</div></div>
+      <div class="kpi"><div class="v">0,00<small> €</small></div><div class="l">lo que te cuesta usarlas</div><div class="f">Ni ahora ni después</div></div>
     </div>
   </div>
 </section>
 
-<!-- HERRAMIENTAS -->
-<section id="herramientas">
+<!-- 02 ACTIVOS -->
+<section class="s" id="activos">
   <div class="wrap">
-    <div class="sh reveal">
-      <div><span class="eyebrow">Herramientas</span><h2>Gratis, sin registro y explicando cada cifra.</h2></div>
-      <p>Toca cualquier resultado y te enseña cómo está calculado y de dónde sale el dato. Se instalan en el móvil y funcionan sin conexión.</p>
-    </div>
-    <div class="bento" id="bento">
-      <a class="tile feature reveal" href="../">
-        <span class="badge">Disponible</span>
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></div>
-        <h3>Calculadoras de vivienda</h3>
-        <p>Todo lo que necesitas antes de firmar una hipoteca: cuánto puedes comprar, qué te cobra hoy cada banco, si te compensa alquilar y cuánto te cambiará la cuota en la revisión.</p>
-        <div class="tags"><span>Mi presupuesto</span><span>Comprar o alquilar</span><span>Bancos hoy</span><span>Comparar ofertas</span><span>Invertir en un piso</span><span>Mi hipoteca</span></div>
-        <span class="go">Abrir las calculadoras →</span>
+    <div class="head rv"><div class="no">02</div><div><div class="lab">Activos · Herramientas</div><h2>Herramientas gratis que explican cada cifra.</h2><p>Toca cualquier resultado y te enseña cómo está calculado y de dónde sale el dato. Lo que escribes no sale de tu navegador.</p></div></div>
+    <div class="ledger body" id="ledger">
+      <a class="asset main rv" href="../">
+        <span class="code">A-01</span>
+        <div><h3>Calculadoras de vivienda</h3><p>Cuánto puedes comprar, qué te cobra hoy cada banco, si te compensa alquilar, cuánto rinde un piso y cuánto cambiará tu cuota en la revisión.</p>
+          <div class="tags"><span>Mi presupuesto</span><span>Comprar o alquilar</span><span>Bancos hoy</span><span>Comparar ofertas</span><span>Invertir en un piso</span><span>Mi hipoteca</span></div></div>
+        <span class="stamp">En producción</span><span class="arr">→</span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- QUIÉNES SOMOS -->
-<section id="nosotros" style="padding-top:20px">
+<!-- 03 GOBIERNO -->
+<section class="s" id="gobierno">
   <div class="wrap">
-    <div class="sh reveal">
-      <div><span class="eyebrow">Quiénes somos</span><h2>Dos hermanos, dos controllers, una cuenta.</h2></div>
-      <p>Firmamos como Finanzas en Acción y no enseñamos nombres ni caras: lo que importa son los números.</p>
-    </div>
-    <div class="duo" id="duo"></div>
+    <div class="head rv"><div class="no">03</div><div><div class="lab">Órganos de gobierno · Quiénes somos</div><h2>Dos hermanos, dos controllers, una cuenta.</h2><p>Firmamos como Finanzas en Acción y no enseñamos nombres ni caras: lo que importa son los números.</p></div></div>
+    <div class="board body" id="board"></div>
   </div>
 </section>
 
-<!-- HISTORIA -->
-<section class="story" id="historia">
-  <div class="wrap grid">
-    <div class="intro reveal">
-      <span class="eyebrow">Nuestra historia</span>
-      <h2 style="font-size:clamp(32px,4.4vw,52px);margin:14px 0 18px">De cuadrar las cuentas de empresas a cuadrar las nuestras.</h2>
-      <p>Nuestro trabajo es que los números de una empresa cuenten la verdad. Un día empezamos a aplicar el mismo método a nuestro propio dinero, y a contarlo en X por si le servía a alguien más.</p>
-      <div class="quote" id="cita"></div>
-    </div>
-    <ol class="tl" id="timeline"></ol>
-  </div>
-</section>
-
-<!-- LO QUE USAMOS -->
-<section id="uso">
+<!-- 04 HECHOS -->
+<section class="s" id="hechos">
   <div class="wrap">
-    <div class="sh reveal">
-      <div><span class="eyebrow">Lo que usamos</span><h2>Nuestros bancos y brókers. Con ventaja si entras por nuestro enlace.</h2></div>
-      <p>Solo ponemos lo que usamos nosotros. Si te apuntas con nuestro enlace, normalmente ganamos los dos.</p>
-    </div>
-    <div class="filters" id="filters" role="group" aria-label="Filtrar por categoría"></div>
-    <div class="refs" id="refs"></div>
-    <div class="disclose reveal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <span><b>Transparencia.</b> Los enlaces de esta sección son de referido: si te das de alta con ellos, podemos recibir una recompensa. No condiciona lo que recomendamos. Nada de esto es asesoramiento financiero ni una recomendación personalizada: compara y decide según tu caso.</span>
+    <div class="head rv"><div class="no">04</div><div><div class="lab">Hechos relevantes · Nuestra historia</div><h2>De cuadrar las cuentas de empresas a cuadrar las nuestras.</h2></div></div>
+    <div class="facts body">
+      <div id="facts"></div>
+      <aside class="pull rv"><q id="cita"></q><div class="who" id="firma"></div>
+        <div class="mini">Nuestro trabajo es que los números de una empresa cuenten la verdad. Un día empezamos a aplicar el mismo método a nuestro dinero, y a contarlo por si le servía a alguien más.</div></aside>
     </div>
   </div>
 </section>
 
-<!-- HIPOTECA -->
-<section id="hipoteca" style="padding-top:20px">
+<!-- 05 PROVEEDORES -->
+<section class="s" id="proveedores">
   <div class="wrap">
-    <div class="advice reveal">
-      <div style="position:relative;z-index:1">
-        <span class="eyebrow">¿Vas a pedir una hipoteca?</span>
-        <h2>Que te mejoren la oferta antes de firmar.</h2>
-        <p>Las ofertas publicadas son genéricas. Con tu perfil se pueden mejorar: José, el bróker que nos consiguió nuestra hipoteca, revisa tu caso y negocia con los bancos. El primer contacto es gratis.</p>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Lleva el informe en PDF que sale de las calculadoras</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Revisión de la FEIN antes de ir a notaría</li>
-        </ul>
-        <p class="fine">Transparencia: si firmas tu hipoteca con José, él nos paga una parte de sus honorarios.</p>
-      </div>
-      <div class="side">
-        <a class="btn mint" id="jose" href="#" target="_blank" rel="noopener">Primer contacto gratis con José <span aria-hidden="true">→</span></a>
+    <div class="head rv"><div class="no">05</div><div><div class="lab">Proveedores · Lo que usamos</div><h2>Lo que usamos de verdad, con ventaja si entras por nuestro enlace.<sup class="mono" style="font-size:.4em">(1)</sup></h2></div></div>
+    <div class="body">
+      <table class="prov rv"><thead><tr><th>Proveedor</th><th>Tipo</th><th>Para qué lo usamos</th><th>Ventaja para ti</th><th></th></tr></thead><tbody id="prov"></tbody></table>
+      <p class="note"><sup>(1)</sup><span>Son enlaces de referido: si te das de alta con ellos, podemos recibir una recompensa. No condiciona lo que recomendamos. Nada de esto es asesoramiento financiero ni una recomendación personalizada: compara y decide según tu caso.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 HIPOTECA -->
+<section class="s" id="hipoteca">
+  <div class="wrap">
+    <div class="head rv"><div class="no">06</div><div><div class="lab">Hecho posterior · ¿Vas a pedir hipoteca?</div><h2>Antes de firmar, que te mejoren la oferta.</h2></div></div>
+    <div class="body">
+      <div class="after rv">
+        <div>
+          <h3>El bróker que nos salvó la hipoteca el día antes de firmar.</h3>
+          <p>Las ofertas publicadas son genéricas: con tu perfil se pueden mejorar. José revisa tu caso, negocia con los bancos y te revisa la FEIN antes de ir a notaría. Llévale el informe en PDF que sale de las calculadoras.</p>
+          <p class="fine"><sup class="mono">(2)</sup> Si firmas tu hipoteca con José, él nos paga una parte de sus honorarios.</p>
+        </div>
+        <a class="b solid" id="jose" href="#" target="_blank" rel="noopener">Primer contacto gratis →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- REDES -->
-<section style="padding-top:20px">
+<!-- 07 CANALES -->
+<section class="s" id="canales" style="border-bottom:0">
   <div class="wrap">
-    <div class="sh reveal"><div><span class="eyebrow">Síguenos</span><h2>Donde contamos lo que vamos haciendo.</h2></div></div>
-    <div class="social" id="social"></div>
+    <div class="head rv"><div class="no">07</div><div><div class="lab">Dónde seguirnos</div><h2>Lo contamos cada semana.</h2></div></div>
+    <div class="chan body rv" id="chan"></div>
   </div>
 </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>© <span id="y"></span> Finanzas en Acción · <a href="https://x.com/BuscandolaLF" target="_blank" rel="noopener">@BuscandolaLF</a></span>
+    <span>Formulada por Finanzas en Acción · <a href="https://x.com/BuscandolaLF" target="_blank" rel="noopener">@BuscandolaLF</a> · <span id="y"></span></span>
     <span>Contenido divulgativo: no es asesoramiento financiero ni fiscal.</span>
   </div>
 </footer>
@@ -409,65 +404,81 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
 <script>
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ver=x=>!x.pendiente||MOSTRAR_PENDIENTES;
-const ext=u=>u?`href="${esc(u)}" target="_blank" rel="noopener sponsored"`:'href="#" aria-disabled="true"';
-const GIFT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
+const $=id=>document.getElementById(id);
+const nf=(n,d)=>n.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d});
+const year=new Date().getFullYear();
+$('y').textContent=year;$('ej').textContent=year;
+$('jose').href=JOSE.url;
+$('cita').textContent=CITA.texto.replace(/^«|»$/g,'');$('firma').textContent='— '+CITA.firma;
 
-document.getElementById('y').textContent=new Date().getFullYear();
-document.getElementById('jose').href=JOSE.url;
-document.getElementById('cita').innerHTML=`${esc(CITA.texto)}<small>${esc(CITA.firma)}</small>`;
+/* Cinta: lee los datos de mercado de las calculadoras; si no puede, usa esta copia. */
+const MERCADO0={eur:3.247,eurAgo:2.954,eurAnt:2.172,eurMes:'septiembre de 2026',ine:3.01,ineMes:'julio de 2026',inePctFija:62.3,bce:2.5,fecha:'15 de octubre de 2026'};
+function cinta(m){
+  const d=m.eur-m.eurAgo,da=m.eur-m.eurAnt;
+  const it=[
+    `EURÍBOR 12M <b>${nf(m.eur,3)} %</b> <span class="${d>=0?'up':'dn'}">${d>=0?'▲':'▼'} ${nf(Math.abs(d),3)}</span> · ${esc(m.eurMes)}`,
+    `HACE UN AÑO <b>${nf(m.eurAnt,3)} %</b> <span class="${da>=0?'up':'dn'}">${da>=0?'▲':'▼'} ${nf(Math.abs(da),3)}</span>`,
+    `TIPO BCE <b>${nf(m.bce,2)} %</b>`,
+    `TIPO MEDIO HIPOTECAS (INE) <b>${nf(m.ine,2)} %</b> · ${esc(m.ineMes)}`,
+    `HIPOTECAS A TIPO FIJO <b>${nf(m.inePctFija,1)} %</b>`,
+    `DATOS A ${esc(m.fecha).toUpperCase()}`,
+    `CALCULA LA TUYA → FINANZASENACCION.GITHUB.IO/VIVIENDA`];
+  const one=it.map(t=>`<span>${t}</span>`).join('');
+  $('tape').innerHTML=one+one;
+}
+cinta(MERCADO0);
+fetch('https://finanzasenaccion.github.io/vivienda/data.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{
+  if(!j||!j.mercado)return;const m=j.mercado;
+  if(['eur','eurAgo','eurAnt','ine','bce','inePctFija'].every(k=>typeof m[k]==='number'))cinta({...m,fecha:j.fecha||MERCADO0.fecha});
+}).catch(()=>{});
 
-document.getElementById('timeline').innerHTML=HISTORIA.filter(ver).map(h=>`
-  <li class="reveal"><div class="when">${esc(h.cuando)}${h.pendiente?' <span class="pendtag">Por escribir</span>':''}</div>
-  <h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></li>`).join('');
-
-const bento=document.getElementById('bento');
-const ICON={chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',sheet:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>',doc:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>'};
-const extras=HERRAMIENTAS_EXTRA.filter(ver);
-extras.forEach((t,i)=>{
-  const cls=extras.length===3?'s2':(i===0?'s2':'s2');
-  bento.insertAdjacentHTML('beforeend',`<a class="tile ${cls} reveal" ${t.url?`href="${esc(t.url)}" target="_blank" rel="noopener"`:''} ${t.pendiente?'style="background:transparent;box-shadow:none;border:2px dashed #C9C2AE"':''}>
-    ${t.etiqueta?`<span class="badge${t.url?'':' soon'}">${esc(t.etiqueta)}</span>`:''}
-    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[t.icono]||ICON.doc}</svg></div>
-    <h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p></a>`);
+/* 02 Activos */
+const EST={'En desarrollo':'dev','Próximamente':'soon'};
+HERRAMIENTAS_EXTRA.filter(ver).forEach((t,i)=>{
+  const tag=t.url?'a':'div';
+  $('ledger').insertAdjacentHTML('beforeend',`<${tag} class="asset rv" ${t.url?`href="${esc(t.url)}" target="_blank" rel="noopener"`:''}>
+    <span class="code">A-0${i+2}</span>
+    <div>${t.pendiente?'<span class="pendtag">Falta el enlace</span>':''}<h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p></div>
+    <span class="stamp ${EST[t.etiqueta]||''}">${esc(t.etiqueta||'')}</span><span class="arr">${t.url?'→':''}</span></${tag}>`);
 });
 
-document.getElementById('duo').innerHTML=NOSOTROS.filter(ver).map(n=>`
-  <article class="who reveal${n.pendiente?' pend':''}"><div class="av">${esc(n.ini)}</div>
-  <div>${n.pendiente?'<span class="pendtag">Pendiente</span>':''}<h3>${esc(n.rol)}</h3><p>${esc(n.texto)}</p>
-  ${n.aporta&&n.aporta.length?`<ul>${n.aporta.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}</div></article>`).join('');
-
-const refs=REFERIDOS.filter(ver);
-document.getElementById('uso').hidden=!refs.length;if(!refs.length)document.querySelector('a[href="#uso"]').hidden=true;
-const cats=['Todo',...new Set(refs.map(r=>r.cat))];
-const fEl=document.getElementById('filters');
-fEl.innerHTML=cats.map((c,i)=>`<button type="button" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
-const pintaRefs=c=>{
-  document.getElementById('refs').innerHTML=refs.filter(r=>c==='Todo'||r.cat===c).map(r=>`
-  <article class="ref${r.pendiente?' pend':''}">
-    ${r.pendiente?'<span class="pendtag">Falta el enlace</span>':''}
-    <header><div class="logo" style="background:${esc(r.color||'#1F6E54')}">${esc(r.ini||r.nombre[0])}</div>
-      <div><h3>${esc(r.nombre)}</h3><div class="cat">${esc(r.cat)}</div></div></header>
-    <p>${esc(r.porque)}</p>
-    ${r.ventaja?`<div class="bonus">${GIFT}<span>${esc(r.ventaja)}</span></div>`:''}
-    <div class="actions">
-      <a class="btn dark" ${ext(r.url)}>Abrir con nuestro enlace →</a>
-      ${r.codigo?`<button type="button" class="code" data-code="${esc(r.codigo)}" title="Copiar código">${esc(r.codigo)} ⧉</button>`:''}
-    </div>
+/* 03 Gobierno */
+const FIRMA=['M8 34c10-20 18-24 20-14s-6 18 2 10 12-22 18-18-2 16 6 12 10-14 16-10 2 10 10 6 14-8 22-10 12 2 20 0','M6 30c14-6 16-22 26-20s-10 24 0 22 16-18 22-14-4 12 6 10 12-10 20-8 6 8 14 6 18-6 28-6'];
+$('board').innerHTML=NOSOTROS.filter(ver).map((n,i)=>`
+  <article class="member rv${n.pendiente?' pend':''}">
+    ${n.pendiente?'<span class="pendtag">Pendiente</span>':''}
+    <div class="role">Consejero ${i+1} de 2</div><h3>${esc(n.rol)}</h3><p>${esc(n.texto)}</p>
+    ${n.aporta&&n.aporta.length?`<ul>${n.aporta.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}
+    <div class="sign"><svg viewBox="0 0 170 46" aria-hidden="true"><path d="${FIRMA[i%2]}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div>Firmado · Hermano ${i+1}</div></div>
   </article>`).join('');
-};
-pintaRefs('Todo');
-fEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  fEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));pintaRefs(b.dataset.c)});
+
+/* 04 Hechos */
+$('facts').innerHTML=HISTORIA.filter(ver).map(h=>`
+  <div class="fact rv"><div class="d">${esc(h.cuando)}</div><div>${h.pendiente?'<span class="pendtag">Por escribir</span>':''}<h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></div></div>`).join('');
+
+/* 05 Proveedores */
+const refs=REFERIDOS.filter(ver);
+if(!refs.length){$('proveedores').hidden=true;document.querySelectorAll('[data-nav="uso"]').forEach(e=>e.hidden=true)}
+$('prov').innerHTML=refs.map(r=>`
+  <tr class="${r.pendiente?'pend':''}">
+    <td class="n">${esc(r.nombre)}</td><td class="c">${esc(r.cat)}</td><td>${esc(r.porque)}</td>
+    <td class="g">${r.ventaja?`<b>${esc(r.ventaja)}</b>`:'—'}</td>
+    <td>${r.url?`<a class="go" href="${esc(r.url)}" target="_blank" rel="noopener sponsored">Abrir →</a>`:'<span class="go" style="opacity:.4">Abrir →</span>'}
+      ${r.codigo?`<br><button type="button" class="code" data-code="${esc(r.codigo)}">${esc(r.codigo)} ⧉</button>`:''}</td>
+  </tr>`).join('');
 document.addEventListener('click',e=>{const b=e.target.closest('.code');if(!b)return;
-  navigator.clipboard?.writeText(b.dataset.code).then(()=>{const t=b.textContent;b.textContent='¡Copiado!';b.classList.add('ok');setTimeout(()=>{b.textContent=t;b.classList.remove('ok')},1500)})});
-document.addEventListener('click',e=>{const a=e.target.closest('a[aria-disabled="true"]');if(a)e.preventDefault()});
+  navigator.clipboard?.writeText(b.dataset.code).then(()=>{const t=b.textContent;b.textContent='¡Copiado!';setTimeout(()=>b.textContent=t,1500)}).catch(()=>{})});
 
-document.getElementById('social').innerHTML=REDES.filter(ver).map(s=>`
-  <a class="soc${s.pendiente?' pend':''}" ${ext(s.url)}><div class="logo" style="background:${esc(s.color)}">${esc(s.ini)}</div>
-  <div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></div></a>`).join('');
+/* 07 Canales */
+$('chan').innerHTML=REDES.filter(ver).map(s=>{
+  const k={'X / Twitter':'X','Newsletter':'Substack','GitHub':'Código'}[s.nombre]||'Comunidad';
+  return s.url&&!s.pendiente
+    ?`<a href="${esc(s.url)}" target="_blank" rel="noopener"><div class="k">${esc(k)} ↗</div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></a>`
+    :`<a class="pend" href="#canales" onclick="return false"><div class="k">${esc(k)} · falta el enlace</div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></a>`;
+}).join('');
 
-const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.12}):null;
-document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'));
+const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.1}):null;
+document.querySelectorAll('.rv').forEach(el=>io?io.observe(el):el.classList.add('in'));
 </script>
 </body>
 </html>
