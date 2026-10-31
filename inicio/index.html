@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Finanzas en Acción · @BuscandolaLF</title>
+<meta name="description" content="Herramientas gratuitas de finanzas personales, mi historia y los productos que uso de verdad. Por @BuscandolaLF.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Finanzas en Acción">
+<meta property="og:title" content="Finanzas en Acción · @BuscandolaLF">
+<meta property="og:description" content="Herramientas gratuitas de finanzas personales, mi historia y los productos que uso de verdad.">
+<meta property="og:image" content="https://finanzasenaccion.github.io/vivienda/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@BuscandolaLF">
+<meta name="theme-color" content="#0B3D2E">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preload" href="../fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-weight:600 800;font-display:swap;src:url(../fonts/bricolage-grotesque-latin-opsz-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Bricolage Grotesque";font-weight:600 800;font-display:swap;src:url(../fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:swap;src:url(../fonts/instrument-sans-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:swap;src:url(../fonts/instrument-sans-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+
+:root{
+  --brand:#0B3D2E;--brand-2:#0F4A38;--cream:#F0ECE0;--mint:#7DD3A8;--mint-2:#A8E6C6;
+  --bg:#F4F1E8;--card:#FFFFFF;--ink:#10261E;--muted:#5B6E66;--line:#DED9CB;
+  --gold:#E0A030;--r:22px;
+  --fd:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --fb:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --shadow:0 1px 2px rgba(16,38,30,.05),0 12px 32px rgba(16,38,30,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 var(--fb);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:var(--fd);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor;border-radius:2px}
+
+/* ---------- Barra ---------- */
+.nav{position:sticky;top:0;z-index:20;background:rgba(11,61,46,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);color:var(--cream)}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:62px}
+.brandmark{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 17px var(--fd)}
+.brandmark img{width:34px;height:34px;border-radius:9px}
+.nav nav{margin-left:auto;display:flex;gap:4px}
+.nav nav a{text-decoration:none;font-weight:600;font-size:14px;padding:8px 12px;border-radius:999px;opacity:.85}
+.nav nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
+.xpill{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px;background:var(--cream);color:var(--brand)}
+.xpill svg{width:15px;height:15px}
+@media(max-width:760px){.nav nav{display:none}.nav .xpill{margin-left:auto}}
+
+/* ---------- Portada ---------- */
+.hero{position:relative;overflow:hidden;background:var(--brand);color:var(--cream);padding:72px 0 96px;margin-top:-62px;padding-top:134px}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(700px 400px at 85% 10%,rgba(125,211,168,.22),transparent 60%),
+  radial-gradient(500px 360px at 0% 100%,rgba(224,160,48,.12),transparent 60%)}
+.hero::after{content:"";position:absolute;inset:0;opacity:.07;background-image:linear-gradient(rgba(240,236,224,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(240,236,224,.6) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero .eyebrow{color:var(--mint)}
+.hero h1{font-size:clamp(42px,6.4vw,78px);margin:18px 0 20px}
+.hero h1 em{font-style:normal;color:var(--mint)}
+.hero p.lead{font-size:19px;max-width:560px;color:rgba(240,236,224,.82);margin:0 0 30px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;padding:14px 22px;border-radius:999px;transition:transform .15s ease,box-shadow .15s ease;border:0;cursor:pointer;font-family:inherit}
+.btn:hover{transform:translateY(-2px)}
+.btn.mint{background:var(--mint);color:var(--brand);box-shadow:0 8px 24px rgba(125,211,168,.25)}
+.btn.ghost{background:transparent;color:var(--cream);box-shadow:inset 0 0 0 1.5px rgba(240,236,224,.35)}
+.btn.dark{background:var(--brand);color:var(--cream)}
+.stats{display:flex;gap:30px;margin-top:40px;flex-wrap:wrap}
+.stat b{display:block;font:800 30px var(--fd);color:var(--cream)}
+.stat span{font-size:13.5px;color:rgba(240,236,224,.65)}
+
+/* tarjeta de ejemplo de la calculadora */
+.mock{position:relative;justify-self:center;width:100%;max-width:380px}
+.mock .phone{background:#E9EFEA;border-radius:34px;padding:12px;box-shadow:0 30px 80px rgba(0,0,0,.35);transform:rotate(3deg)}
+.mock .screen{background:#fff;border-radius:24px;padding:22px;color:var(--ink)}
+.mock .small{font-size:13px;color:var(--muted)}
+.mock .big{font:800 40px var(--fd);margin:4px 0 12px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;background:#E0F3E9;color:#1E6E4B}
+.chip i{width:8px;height:8px;border-radius:50%;background:#1E8A5A}
+.row{display:flex;justify-content:space-between;align-items:center;background:#F2F5F2;border-radius:14px;padding:13px 15px;margin-top:9px;font-size:14.5px}
+.row b{font:800 19px var(--fd)}
+.row b.g{color:#1E8A5A}
+.float{position:absolute;left:-34px;bottom:-22px;background:var(--cream);color:var(--brand);border-radius:16px;padding:12px 16px;box-shadow:0 16px 40px rgba(0,0,0,.25);font-weight:700;font-size:14px;transform:rotate(-4deg);display:flex;gap:10px;align-items:center}
+.float svg{width:20px;height:20px}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.mock{max-width:330px;margin-top:10px}.float{left:-10px}}
+
+/* ---------- Secciones ---------- */
+section{padding:92px 0}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:38px;flex-wrap:wrap}
+.sh h2{font-size:clamp(32px,4.4vw,52px);margin-top:14px;max-width:680px}
+.sh p{max-width:420px;color:var(--muted);margin:0}
+
+/* Herramientas: bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.tile{position:relative;background:var(--card);border-radius:var(--r);padding:26px;box-shadow:var(--shadow);text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform .18s ease,box-shadow .18s ease;overflow:hidden}
+a.tile:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(16,38,30,.06),0 22px 44px rgba(16,38,30,.13)}
+.tile h3{font-size:22px}
+.tile p{margin:0;color:var(--muted);font-size:15px}
+.tile .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#E2EFE8;color:var(--brand)}
+.tile .ic svg{width:24px;height:24px}
+.tile .go{margin-top:auto;padding-top:8px;font-weight:700;font-size:14px;color:var(--brand);display:flex;align-items:center;gap:6px}
+.tile.feature{grid-column:span 4;grid-row:span 2;background:var(--brand);color:var(--cream);padding:34px}
+.tile.feature h3{font-size:clamp(28px,3.2vw,40px)}
+.tile.feature p{color:rgba(240,236,224,.78);font-size:16.5px;max-width:520px}
+.tile.feature .go{color:var(--mint)}
+.tile.feature .ic{background:rgba(125,211,168,.16);color:var(--mint)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tags span{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(240,236,224,.08);box-shadow:inset 0 0 0 1px rgba(240,236,224,.16)}
+.tile.s2{grid-column:span 2}
+.tile.s3{grid-column:span 3}
+.badge{position:absolute;top:18px;right:18px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--mint);color:var(--brand)}
+.badge.soon{background:#F3E7CC;color:#8A5A0C}
+@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.tile.feature,.tile.s3{grid-column:span 2}.tile.s2{grid-column:span 1}}
+@media(max-width:560px){.bento{grid-template-columns:1fr}.tile.feature,.tile.s3,.tile.s2{grid-column:span 1}}
+
+/* Historia */
+.story{background:var(--cream)}
+.story .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.story .intro{position:sticky;top:96px}
+.story .intro p{font-size:18px;color:#33463E}
+.quote{margin-top:26px;padding:22px 24px;border-radius:var(--r);background:var(--brand);color:var(--cream);font:700 21px/1.3 var(--fd)}
+.quote small{display:block;margin-top:10px;font:500 14px var(--fb);color:var(--mint)}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--brand),rgba(11,61,46,.15))}
+.tl li{position:relative;padding:0 0 30px 54px}
+.tl li::before{content:"";position:absolute;left:6px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--cream);box-shadow:inset 0 0 0 5px var(--brand)}
+.tl li:last-child::before{background:var(--mint)}
+.tl .when{font:700 13px var(--fb);letter-spacing:.06em;text-transform:uppercase;color:var(--brand)}
+.tl h3{font-size:22px;margin:6px 0 6px}
+.tl p{margin:0;color:#3F5149}
+@media(max-width:900px){.story .grid{grid-template-columns:1fr}.story .intro{position:static}}
+
+/* Lo que uso (referidos) */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.filters button{font:600 14px var(--fb);padding:9px 16px;border-radius:999px;border:0;background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--brand);color:var(--cream);box-shadow:none}
+.refs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ref{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.ref header{display:flex;gap:14px;align-items:center}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font:800 18px var(--fd);color:#fff;flex:none}
+.ref h3{font-size:19px}
+.ref .cat{font-size:12.5px;font-weight:600;color:var(--muted)}
+.ref p{margin:0;color:#3F5149;font-size:15px}
+.bonus{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:#FFF6E3;color:#6B4708;font-size:14px;font-weight:600}
+.bonus svg{flex:none;width:18px;height:18px;margin-top:1px}
+.ref .actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+.ref .actions .btn{padding:11px 16px;font-size:14.5px}
+.code{display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border-radius:999px;border:1.5px dashed var(--brand);background:transparent;font:700 14px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--brand);cursor:pointer}
+.code.ok{border-style:solid;background:#E0F3E9}
+.ref.pend{background:transparent;box-shadow:none;border:2px dashed #C9C2AE}
+.ref.pend .logo{background:#CFC8B4!important}
+.pendtag{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8A5A0C;background:#F3E7CC;padding:4px 9px;border-radius:999px;align-self:flex-start}
+@media(max-width:900px){.refs{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.refs{grid-template-columns:1fr}}
+.disclose{margin-top:26px;display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);color:#3F5149;font-size:14.5px}
+.disclose svg{flex:none;width:22px;height:22px;color:var(--brand);margin-top:1px}
+
+/* Asesoría */
+.advice{background:var(--brand);color:var(--cream);border-radius:32px;padding:52px;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;position:relative;overflow:hidden}
+.advice::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(125,211,168,.28),transparent 65%)}
+.advice h2{font-size:clamp(30px,3.8vw,46px);margin:14px 0 14px}
+.advice .eyebrow{color:var(--mint)}
+.advice p{color:rgba(240,236,224,.8);margin:0;max-width:560px}
+.advice ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
+.advice li{display:flex;gap:10px;align-items:center}
+.advice li svg{width:18px;height:18px;color:var(--mint);flex:none}
+.advice .side{position:relative;z-index:1;justify-self:end;text-align:center}
+@media(max-width:820px){.advice{grid-template-columns:1fr;padding:34px}.advice .side{justify-self:start;text-align:left}}
+
+/* Newsletter / redes */
+.social{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.soc{display:flex;align-items:center;gap:14px;padding:18px;border-radius:18px;background:#fff;box-shadow:var(--shadow);text-decoration:none;transition:transform .15s}
+.soc:hover{transform:translateY(-3px)}
+.soc .logo{width:44px;height:44px}
+.soc b{display:block;font:700 16px var(--fd)}
+.soc span{font-size:13.5px;color:var(--muted)}
+.soc.pend{background:transparent;box-shadow:none;border:2px dashed #C9C2AE}
+@media(max-width:900px){.social{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.social{grid-template-columns:1fr}}
+
+footer{padding:46px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
+footer a{color:var(--brand);font-weight:600}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:8px}
+</style>
+</head>
+<body>
+
+<script>
+/* =====================================================================
+   TODO LO QUE CAMBIA ESTÁ AQUÍ.
+   - Cualquier entrada con  pendiente:true  se ve como hueco punteado mientras
+     MOSTRAR_PENDIENTES sea true (para revisar el diseño). Ponlo a false al publicar
+     y los huecos sin rellenar desaparecen solos.
+   - Para un enlace de referido: url, codigo (opcional), ventaja (lo que gana quien se apunta)
+     y porque (por qué lo usas tú). Quita  pendiente:true  cuando esté completo.
+   ===================================================================== */
+const MOSTRAR_PENDIENTES = true;
+
+const PERFIL = {
+  usuario: 'BuscandolaLF',
+  x: 'https://x.com/BuscandolaLF',
+};
+
+/* Mi historia: cada hito, de más antiguo a más reciente. */
+const HISTORIA = [
+  {cuando:'El principio', titulo:'Controller financiero de oficio', texto:'Paso el día entre cierres, previsiones de caja y presupuestos. Aprendí que los números solo sirven si alguien los entiende y actúa con ellos.'},
+  {cuando:'[Año]', titulo:'[El momento que lo cambió todo]', texto:'[Cuenta aquí qué te llevó a ordenar tus propias finanzas: una hipoteca, una deuda, un objetivo…]', pendiente:true},
+  {cuando:'[Año]', titulo:'Nace @BuscandolaLF', texto:'[Por qué empezaste a contarlo en X y qué buscas: ¿la libertad financiera? Cuéntalo en dos frases.]', pendiente:true},
+  {cuando:'2026', titulo:'Finanzas en Acción', texto:'Las calculadoras de vivienda: seis herramientas gratis, sin registro y sin cookies, donde cada cifra enseña su cálculo y su fuente.'},
+  {cuando:'Ahora', titulo:'Lo siguiente', texto:'Más herramientas con el mismo criterio: claras, con fuentes y pensadas para decidir, no para vender.'},
+];
+const CITA = {texto:'«Las finanzas no se entienden leyendo: se entienden haciendo números con tu caso.»', firma:'@BuscandolaLF'};
+
+/* Productos que uso, con mi enlace de referido. Categorías libres: se crean los filtros solas. */
+const REFERIDOS = [
+  {nombre:'[Banco / cuenta remunerada]', cat:'Banco', ini:'B', color:'#1F6E54', porque:'[Por qué la usas tú]', ventaja:'[Lo que gana quien se apunta con tu enlace]', url:'', codigo:'', pendiente:true},
+  {nombre:'[Bróker / fondos indexados]', cat:'Inversión', ini:'I', color:'#0B3D2E', porque:'[Por qué lo usas tú]', ventaja:'[Bonificación]', url:'', codigo:'', pendiente:true},
+  {nombre:'[Roboadvisor]', cat:'Inversión', ini:'R', color:'#8C6BB8', porque:'[Por qué lo usas tú]', ventaja:'[Ej.: X € sin comisiones]', url:'', codigo:'', pendiente:true},
+  {nombre:'[Tarjeta / cashback]', cat:'Ahorro', ini:'T', color:'#D9822B', porque:'[Por qué la usas tú]', ventaja:'[Bonificación]', url:'', codigo:'', pendiente:true},
+  {nombre:'[Cripto / exchange]', cat:'Cripto', ini:'C', color:'#E0A030', porque:'[Por qué lo usas tú]', ventaja:'[Bonificación]', url:'', codigo:'', pendiente:true},
+  {nombre:'[Herramienta de presupuesto]', cat:'Ahorro', ini:'P', color:'#5B6E66', porque:'[Por qué la usas tú]', ventaja:'[Bonificación]', url:'', codigo:'', pendiente:true},
+];
+
+/* Otras herramientas tuyas, además de las de vivienda. */
+const HERRAMIENTAS_EXTRA = [
+  {titulo:'[Tu próxima herramienta]', texto:'[Qué responde en una frase]', url:'', pronto:true, pendiente:true},
+];
+
+/* Redes y canales. */
+const REDES = [
+  {nombre:'X / Twitter', sub:'@BuscandolaLF', url:'https://x.com/BuscandolaLF', ini:'𝕏', color:'#10261E'},
+  {nombre:'[Newsletter]', sub:'[Substack, Beehiiv…]', url:'', ini:'N', color:'#E0A030', pendiente:true},
+  {nombre:'[YouTube]', sub:'[@canal]', url:'', ini:'▶', color:'#C2413A', pendiente:true},
+  {nombre:'[Telegram / comunidad]', sub:'[Enlace]', url:'', ini:'T', color:'#1F6E54', pendiente:true},
+];
+
+const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
+</script>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brandmark" href="#top"><img src="../logo.png" alt="" width="34" height="34">Finanzas en Acción</a>
+    <nav aria-label="Secciones">
+      <a href="#herramientas">Herramientas</a>
+      <a href="#historia">Mi historia</a>
+      <a href="#uso">Lo que uso</a>
+      <a href="#hipoteca">Hipoteca</a>
+    </nav>
+    <a class="xpill" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>Seguir</a>
+  </div>
+</header>
+
+<main id="top">
+<!-- PORTADA -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Finanzas personales, con números de verdad</span>
+      <h1>Decide con <em>tus</em> números, no con los de otros.</h1>
+      <p class="lead">Soy controller financiero y comparto en X lo que aprendo ordenando mi dinero. Aquí tienes mis herramientas gratuitas, mi historia y los productos que uso de verdad.</p>
+      <div class="ctas">
+        <a class="btn mint" href="../">Abrir las calculadoras <span aria-hidden="true">→</span></a>
+        <a class="btn ghost" href="#historia">Conoce mi historia</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>6</b><span>calculadoras de vivienda</span></div>
+        <div class="stat"><b>0</b><span>registros y cookies</span></div>
+        <div class="stat"><b>100 %</b><span>cifras con su fuente</span></div>
+      </div>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="phone"><div class="screen">
+        <div class="small">Ejemplo: se puede comprar hasta</div>
+        <div class="big">230.000 €</div>
+        <span class="chip"><i></i>Cómodo</span>
+        <div class="row"><span>Pagarías al mes</span><b>776 €</b></div>
+        <div class="row"><span>Parte de lo que entra en casa</span><b class="g">24 %</b></div>
+        <div class="row"><span>Necesitas tener ahorrado</span><b>70.000 €</b></div>
+      </div></div>
+      <div class="float"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>Tus datos no salen de tu navegador</div>
+    </div>
+  </div>
+</section>
+
+<!-- HERRAMIENTAS -->
+<section id="herramientas">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div><span class="eyebrow">Herramientas</span><h2>Gratis, sin registro y explicando cada cifra.</h2></div>
+      <p>Toca cualquier resultado y te enseña cómo está calculado y de dónde sale el dato. Se instalan en el móvil y funcionan sin conexión.</p>
+    </div>
+    <div class="bento" id="bento">
+      <a class="tile feature reveal" href="../">
+        <span class="badge">Disponible</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></div>
+        <h3>Calculadoras de vivienda</h3>
+        <p>Todo lo que necesitas antes de firmar una hipoteca: cuánto puedes comprar, qué te cobra hoy cada banco, si te compensa alquilar y cuánto te cambiará la cuota en la revisión.</p>
+        <div class="tags"><span>Mi presupuesto</span><span>Comprar o alquilar</span><span>Bancos hoy</span><span>Comparar ofertas</span><span>Invertir en un piso</span><span>Mi hipoteca</span></div>
+        <span class="go">Abrir las calculadoras →</span>
+      </a>
+      <a class="tile s2 reveal" href="../">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Modo Estándar</h3><p>Lo justo para saber cuánto puedes comprar y qué pagarías, en dos pestañas.</p>
+      </a>
+      <a class="tile s2 reveal" href="../">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Modo Profesional</h3><p>Todo el detalle: informe para el bróker, revisar la FEIN y cartera de pisos.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section class="story" id="historia">
+  <div class="wrap grid">
+    <div class="intro reveal">
+      <span class="eyebrow">Mi historia</span>
+      <h2 style="font-size:clamp(32px,4.4vw,52px);margin:14px 0 18px">De cuadrar las cuentas de empresas a cuadrar las mías.</h2>
+      <p>Mi trabajo es que los números de una empresa cuenten la verdad. Un día empecé a aplicar el mismo método a mi propio dinero, y a contarlo en X por si le servía a alguien más.</p>
+      <div class="quote" id="cita"></div>
+    </div>
+    <ol class="tl" id="timeline"></ol>
+  </div>
+</section>
+
+<!-- LO QUE USO -->
+<section id="uso">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div><span class="eyebrow">Lo que uso</span><h2>Mis bancos, brókers y apps. Con ventaja si entras por mi enlace.</h2></div>
+      <p>Solo pongo lo que uso yo. Si te apuntas con mi enlace, normalmente ganamos los dos y a ti no te cuesta más.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrar por categoría"></div>
+    <div class="refs" id="refs"></div>
+    <div class="disclose reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span><b>Transparencia.</b> Los enlaces de esta sección son de referido: si te das de alta con ellos, yo puedo recibir una recompensa. No cambia lo que pagas ni condiciona lo que recomiendo. Nada de esto es asesoramiento financiero: compara y decide según tu caso.</span>
+    </div>
+  </div>
+</section>
+
+<!-- HIPOTECA -->
+<section id="hipoteca" style="padding-top:20px">
+  <div class="wrap">
+    <div class="advice reveal">
+      <div style="position:relative;z-index:1">
+        <span class="eyebrow">¿Vas a pedir una hipoteca?</span>
+        <h2>Que te mejoren la oferta antes de firmar.</h2>
+        <p>Las ofertas publicadas son genéricas. Con tu perfil se pueden mejorar: José revisa tu caso y negocia con los bancos. El primer contacto es gratis.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Lleva el informe en PDF que sale de las calculadoras</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Revisión de la FEIN antes de ir a notaría</li>
+        </ul>
+      </div>
+      <div class="side">
+        <a class="btn mint" id="jose" href="#" target="_blank" rel="noopener">Primer contacto gratis con José <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REDES -->
+<section style="padding-top:20px">
+  <div class="wrap">
+    <div class="sh reveal"><div><span class="eyebrow">Sígueme</span><h2>Donde cuento lo que voy haciendo.</h2></div></div>
+    <div class="social" id="social"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="y"></span> Finanzas en Acción · <a href="https://x.com/BuscandolaLF" target="_blank" rel="noopener">@BuscandolaLF</a></span>
+    <span>Contenido divulgativo: no es asesoramiento financiero ni fiscal.</span>
+  </div>
+</footer>
+
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ver=x=>!x.pendiente||MOSTRAR_PENDIENTES;
+const ext=u=>u?`href="${esc(u)}" target="_blank" rel="noopener sponsored"`:'href="#" aria-disabled="true"';
+const GIFT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
+
+document.getElementById('y').textContent=new Date().getFullYear();
+document.getElementById('jose').href=JOSE.url;
+document.getElementById('cita').innerHTML=`${esc(CITA.texto)}<small>${esc(CITA.firma)}</small>`;
+
+document.getElementById('timeline').innerHTML=HISTORIA.filter(ver).map(h=>`
+  <li class="reveal"><div class="when">${esc(h.cuando)}${h.pendiente?' <span class="pendtag">Por escribir</span>':''}</div>
+  <h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></li>`).join('');
+
+const bento=document.getElementById('bento');
+HERRAMIENTAS_EXTRA.filter(ver).forEach(t=>{
+  bento.insertAdjacentHTML('beforeend',`<a class="tile s2 reveal" ${t.url?`href="${esc(t.url)}"`:''} ${t.pendiente?'style="background:transparent;box-shadow:none;border:2px dashed #C9C2AE"':''}>
+    ${t.pronto?'<span class="badge soon">Próximamente</span>':''}
+    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
+    <h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p></a>`);
+});
+
+const refs=REFERIDOS.filter(ver);
+const cats=['Todo',...new Set(refs.map(r=>r.cat))];
+const fEl=document.getElementById('filters');
+fEl.innerHTML=cats.map((c,i)=>`<button type="button" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+const pintaRefs=c=>{
+  document.getElementById('refs').innerHTML=refs.filter(r=>c==='Todo'||r.cat===c).map(r=>`
+  <article class="ref${r.pendiente?' pend':''}">
+    ${r.pendiente?'<span class="pendtag">Pendiente de tu enlace</span>':''}
+    <header><div class="logo" style="background:${esc(r.color||'#1F6E54')}">${esc(r.ini||r.nombre[0])}</div>
+      <div><h3>${esc(r.nombre)}</h3><div class="cat">${esc(r.cat)}</div></div></header>
+    <p>${esc(r.porque)}</p>
+    ${r.ventaja?`<div class="bonus">${GIFT}<span>${esc(r.ventaja)}</span></div>`:''}
+    <div class="actions">
+      <a class="btn dark" ${ext(r.url)}>Abrir con mi enlace →</a>
+      ${r.codigo?`<button type="button" class="code" data-code="${esc(r.codigo)}" title="Copiar código">${esc(r.codigo)} ⧉</button>`:''}
+    </div>
+  </article>`).join('');
+};
+pintaRefs('Todo');
+fEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  fEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));pintaRefs(b.dataset.c)});
+document.addEventListener('click',e=>{const b=e.target.closest('.code');if(!b)return;
+  navigator.clipboard?.writeText(b.dataset.code).then(()=>{const t=b.textContent;b.textContent='¡Copiado!';b.classList.add('ok');setTimeout(()=>{b.textContent=t;b.classList.remove('ok')},1500)})});
+document.addEventListener('click',e=>{const a=e.target.closest('a[aria-disabled="true"]');if(a)e.preventDefault()});
+
+document.getElementById('social').innerHTML=REDES.filter(ver).map(s=>`
+  <a class="soc${s.pendiente?' pend':''}" ${ext(s.url)}><div class="logo" style="background:${esc(s.color)}">${esc(s.ini)}</div>
+  <div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></div></a>`).join('');
+
+const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.12}):null;
+document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'));
+</script>
+</body>
+</html>
