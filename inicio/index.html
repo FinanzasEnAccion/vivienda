@@ -225,7 +225,7 @@ const MOSTRAR_PENDIENTES = true;
 /* Quiénes somos: anónimos, se firma «Finanzas en Acción». */
 const NOSOTROS = [
   {ini:'1', rol:'Controller financiero', texto:'Unos 5 años en consolidación y reporting para fondos de capital riesgo. Firmó su primera hipoteca en 2025 y lo contó paso a paso en X.', aporta:['La historia de la hipoteca','Calculadoras y Mi patrimonio','La newsletter']},
-  {ini:'2', rol:'Controller financiero', texto:'[Sector y años de experiencia, sin nombrar la empresa]', aporta:['[Qué aporta a Finanzas en Acción]'], pendiente:true},
+  {ini:'2', rol:'Controller financiero', texto:'El mismo oficio y la misma forma de mirar el dinero: primero los números, luego la decisión.', aporta:['Cliente de Indexa desde hace más de 3 años']},
 ];
 
 /* Nuestra historia, de más antiguo a más reciente. */
@@ -434,7 +434,7 @@ extras.forEach((t,i)=>{
 document.getElementById('duo').innerHTML=NOSOTROS.filter(ver).map(n=>`
   <article class="who reveal${n.pendiente?' pend':''}"><div class="av">${esc(n.ini)}</div>
   <div>${n.pendiente?'<span class="pendtag">Pendiente</span>':''}<h3>${esc(n.rol)}</h3><p>${esc(n.texto)}</p>
-  <ul>${n.aporta.map(a=>`<li>${esc(a)}</li>`).join('')}</ul></div></article>`).join('');
+  ${n.aporta&&n.aporta.length?`<ul>${n.aporta.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}</div></article>`).join('');
 
 const refs=REFERIDOS.filter(ver);
 document.getElementById('uso').hidden=!refs.length;if(!refs.length)document.querySelector('a[href="#uso"]').hidden=true;
