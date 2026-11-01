@@ -503,6 +503,10 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
 .mh-foot{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--soft)}
 .mh-foot span{max-width:640px}
 @media(max-width:900px){.mh{grid-template-columns:1fr}}
+
+.mh-aviso{display:flex;gap:12px;align-items:flex-start;margin:-14px 0 20px;padding:14px 18px;border-radius:16px;background:var(--mint-2);color:var(--ink);font-size:14.5px;line-height:1.5}
+.mh-aviso svg{flex:none;width:20px;height:20px;color:var(--acc);margin-top:1px}
+.mh-aviso a{font-weight:700;color:var(--acc);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -647,6 +651,8 @@ const GC_CODE='';
   <div class="wrap">
     <div class="sh"><div><div class="lab fx l">Mejores hipotecas del mes</div><h2 class="fx l" style="--dl:.08s" id="mhT">Las mejores hipotecas del mes</h2></div>
       <p class="fx r" id="mhP">La oferta con la TAE más baja de cada tipo entre las que publican los bancos, con sus condiciones. Los mismos datos que usan las calculadoras.</p></div>
+    <div class="mh-aviso fx u"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span><b>Ofertas públicas y genéricas.</b> Son las condiciones que publica cada banco para un perfil estándar, no una oferta para ti. Con tus ingresos, tus ahorros y lo que contrates pueden salir mejores o peores. <a href="#hipoteca">Que te mejoren la tuya →</a></span></div>
     <div class="mh" id="mh"></div>
     <div class="mh-foot fx u"><span id="mhF"></span><a class="btn d" href="/vivienda/#bancos">Ver todas las ofertas en las calculadoras →</a></div>
   </div>
@@ -951,7 +957,7 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
         <ul><li>${esc(vinc)}</li>${req.map(r=>`<li>${esc(r)}</li>`).join('')}${o.pz?`<li>Hasta ${o.pz} años</li>`:''}</ul>
         ${o.f?`<a class="src" href="${esc(o.f)}" target="_blank" rel="noopener" data-ev="mejores/${esc(o.t)}">Ver la oferta en ${esc(o.b)} ↗</a>`:''}
       </article>`}).join('');
-    $('mhF').textContent=`Datos a ${D.fecha||D.actualizado}, tal como los publica cada banco para un perfil estándar. La TAE incluye los productos que pide cada uno; no es una recomendación personalizada.`;
+    $('mhF').textContent=`Datos a ${D.fecha||D.actualizado}, tal como los publica cada banco para un perfil estándar. Son ofertas genéricas: la TAE incluye los productos que pide cada uno y no es una recomendación personalizada.`;
     if(typeof fxs!=='undefined'){box.querySelectorAll('.fx').forEach(el=>fxs.push(el));if(typeof revela==='function')revela()}
   }
   pinta(MH0);
