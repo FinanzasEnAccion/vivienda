@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Finanzas en Acción · @BuscandolaLF</title>
+<meta name="description" content="Dos hermanos controllers financieros. Herramientas gratis, nuestra historia y lo que usamos de verdad.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Finanzas en Acción">
+<meta property="og:title" content="Finanzas en Acción · @BuscandolaLF">
+<meta property="og:description" content="Dos hermanos controllers financieros. Herramientas gratis, nuestra historia y lo que usamos de verdad.">
+<meta property="og:image" content="https://finanzasenaccion.github.io/vivienda/og.png">
+<meta property="og:locale" content="es_ES">
+<link rel="canonical" href="https://finanzasenaccion.com/">
+<meta property="og:url" content="https://finanzasenaccion.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@BuscandolaLF">
+<meta name="theme-color" content="#08251C">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Tipografías propias (carpeta fonts/, licencia OFL). */
+@font-face{font-family:"Bricolage Grotesque";font-weight:200 800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format("woff2")}
+@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:swap;src:url(fonts/instrument-sans-latin-wght-normal.woff2) format("woff2")}
+@font-face{font-family:"Plex Mono";font-weight:400;font-display:swap;src:url(fonts/ibm-plex-mono-latin-400.woff2) format("woff2")}
+@font-face{font-family:"Plex Mono";font-weight:600;font-display:swap;src:url(fonts/ibm-plex-mono-latin-600.woff2) format("woff2")}
+
+/* Concepto: la página se construye por bloques. Entran por los lados, desde el fondo hacia delante, y se apilan al bajar. */
+:root{
+  --night:#08251C;--deep:#0B3D2E;--deep-2:#11503D;--cream:#F2EEE3;--paper:#FBF9F4;
+  --mint:#7DD3A8;--mint-2:#C4F0D9;--gold:#E5B04A;--ink:#0C2219;--soft:#5F7268;
+  --d:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --b:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --m:"Plex Mono",ui-monospace,Menlo,monospace;
+  --r:28px;--ease:cubic-bezier(.16,.84,.24,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--night);color:var(--cream);font:17px/1.55 var(--b);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--d);margin:0;letter-spacing:-.035em;line-height:.98}
+.lab{font:600 12.5px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+
+/* ---------- Animaciones de entrada ---------- */
+.fx{transition:transform 1.1s var(--ease),opacity .9s ease,filter .9s ease;transition-delay:var(--dl,0s);will-change:transform,opacity}
+.fx.l{transform:translate3d(-28vw,0,0) rotate(-4deg);opacity:0}
+.fx.r{transform:translate3d(28vw,0,0) rotate(4deg);opacity:0}
+.fx.z{transform:perspective(1200px) translate3d(0,40px,-520px) rotateX(14deg);opacity:0;filter:blur(10px)}
+.fx.u{transform:translate3d(0,90px,0);opacity:0}
+.fx.on{transform:none;opacity:1;filter:none}
+@media(prefers-reduced-motion:reduce){.fx{transition:none!important;transform:none!important;opacity:1!important;filter:none!important}}
+
+/* ---------- Barra ---------- */
+.nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:6px;padding:7px 7px 7px 10px;border-radius:999px;background:rgba(8,37,28,.72);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 0 0 1px rgba(242,238,227,.1),0 10px 30px rgba(0,0,0,.25);width:max-content;max-width:calc(100% - 24px)}
+.nav .mk{display:flex;align-items:center;gap:9px;text-decoration:none;font:700 15px var(--d);padding-right:8px}
+.nav .mk img{width:30px;height:30px;border-radius:50%}
+.nav a.i{text-decoration:none;font-weight:600;font-size:14px;padding:8px 13px;border-radius:999px;color:rgba(242,238,227,.78)}
+.nav a.i:hover{background:rgba(242,238,227,.08);color:var(--cream)}
+.nav .x{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:700;font-size:14px;padding:9px 15px;border-radius:999px;background:var(--mint);color:var(--night)}
+.nav .x svg{width:13px;height:13px}
+@media(max-width:820px){.nav a.i{display:none}}
+
+/* ---------- Portada ---------- */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:center;overflow:hidden;padding:120px 0 80px;perspective:1200px}
+.hero::before{content:"";position:absolute;inset:-20%;background:radial-gradient(40% 40% at 70% 30%,rgba(125,211,168,.20),transparent 70%),radial-gradient(35% 35% at 20% 80%,rgba(229,176,74,.10),transparent 70%)}
+.hero .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(242,238,227,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(242,238,227,.05) 1px,transparent 1px);background-size:64px 64px;transform:perspective(600px) rotateX(58deg) translateY(30%) scale(2.2);transform-origin:50% 100%;mask-image:linear-gradient(transparent,#000 40%,#000 70%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 40%,#000 70%,transparent)}
+.hero .c{position:relative;z-index:2;text-align:center;max-width:1000px;padding:0 20px}
+.hero h1{font-size:clamp(50px,9.6vw,148px);font-weight:800}
+.hero h1 .ln{display:block;overflow:visible}
+.hero h1 .ln > span{display:inline-block}
+.hero h1 .m{color:var(--mint)}
+.hero h1 .o{-webkit-text-stroke:2px var(--cream);color:transparent}
+.hero p{max-width:620px;margin:26px auto 34px;font-size:19px;color:rgba(242,238,227,.78)}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;padding:16px 24px;border-radius:999px;transition:transform .2s var(--ease),box-shadow .2s}
+.btn:hover{transform:translateY(-3px)}
+.btn.p{background:var(--mint);color:var(--night);box-shadow:0 12px 40px rgba(125,211,168,.3)}
+.btn.g{box-shadow:inset 0 0 0 1.5px rgba(242,238,227,.35)}
+.btn.d{background:var(--deep);color:var(--cream)}
+
+/* Bloques flotantes que llegan desde el fondo */
+.chips{position:absolute;inset:0;z-index:1;pointer-events:none;transform-style:preserve-3d}
+.chip{position:absolute;padding:14px 18px;border-radius:18px;background:rgba(242,238,227,.06);box-shadow:inset 0 0 0 1px rgba(242,238,227,.14),0 20px 50px rgba(0,0,0,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fromback 1.6s var(--ease) both;animation-delay:var(--dl)}
+.chip b{display:block;font:700 24px var(--d);letter-spacing:-.02em;color:var(--cream)}
+.chip span{font:500 11.5px var(--m);text-transform:uppercase;letter-spacing:.08em;color:var(--mint)}
+.chip.solid{background:var(--mint)}.chip.solid b{color:var(--night)}.chip.solid span{color:var(--deep)}
+@keyframes fromback{from{opacity:0;transform:translate3d(0,0,-900px) scale(.6);filter:blur(14px)}to{opacity:1;transform:translate3d(0,0,0);filter:none}}
+@media(max-width:820px){.chip{display:none}.chip.k{display:block;padding:9px 12px;top:84px!important;bottom:auto!important}.chip.k:first-child{left:14px!important}.chip.k:not(:first-child){right:14px!important;left:auto!important}.chip.k b{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.chip{animation:none}}
+
+/* ---------- Banda de texto en movimiento ---------- */
+.band{background:var(--mint);color:var(--night);overflow:hidden;padding:18px 0;transform:rotate(-2deg) scale(1.04);margin:-10px 0 0;position:relative;z-index:3}
+.band.two{background:var(--cream);transform:rotate(1.5deg) scale(1.04);margin-top:-14px}
+.band .row{display:flex;gap:40px;white-space:nowrap;font:800 clamp(28px,4vw,52px) var(--d);letter-spacing:-.03em;will-change:transform}
+.band .row i{font-style:normal;color:var(--deep-2);opacity:.45}
+
+/* ---------- Secciones ---------- */
+section{position:relative;padding:120px 0}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:48px;flex-wrap:wrap}
+.sh h2{font-size:clamp(38px,6vw,84px);font-weight:800;max-width:780px;margin-top:14px}
+.sh p{max-width:380px;margin:0;color:rgba(242,238,227,.7)}
+.light{background:var(--paper);color:var(--ink)}
+.light .lab{color:var(--deep-2)}
+.light .sh p{color:var(--soft)}
+
+/* Herramientas: bloques */
+.blocks{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.blk{position:relative;border-radius:var(--r);padding:30px;text-decoration:none;overflow:hidden;display:flex;flex-direction:column;gap:12px;min-height:260px;background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(12,34,25,.06),0 18px 40px rgba(12,34,25,.08);transition:transform 1.1s var(--ease),opacity .9s ease,filter .9s ease,box-shadow .3s}
+a.blk:hover{box-shadow:0 2px 4px rgba(12,34,25,.08),0 30px 60px rgba(12,34,25,.16)}
+.blk h3{font-size:clamp(26px,2.6vw,36px);font-weight:800}
+.blk p{margin:0;color:var(--soft)}
+.blk .tag{align-self:flex-start;font:600 11.5px var(--m);text-transform:uppercase;letter-spacing:.1em;padding:6px 10px;border-radius:999px;background:var(--mint-2);color:var(--deep)}
+.blk .tag.dev{background:#FBEBC8;color:#7A5410}
+.blk .tag.soon{background:#ECEAE3;color:var(--soft)}
+.blk .go{margin-top:auto;font-weight:700;color:var(--deep)}
+.blk.big{grid-column:span 7;grid-row:span 2;background:var(--deep);color:var(--cream);min-height:540px;padding:40px}
+.blk.big h3{font-size:clamp(38px,4.4vw,64px)}
+.blk.big p{color:rgba(242,238,227,.78);font-size:18px;max-width:520px}
+.blk.big .go{color:var(--mint)}
+.blk.big .ill{position:absolute;right:-40px;bottom:-40px;width:360px;opacity:.95}
+.blk.big .pills{display:flex;flex-wrap:wrap;gap:8px;max-width:520px}
+.blk.big .pills span{font-size:13.5px;font-weight:600;padding:8px 13px;border-radius:999px;background:rgba(242,238,227,.08);box-shadow:inset 0 0 0 1px rgba(242,238,227,.16)}
+.blk.s5{grid-column:span 5}.blk.s4{grid-column:span 4}.blk.s6{grid-column:span 6}
+.blk.pend{background:transparent;box-shadow:none;border:2px dashed #CFC7B2}
+@media(max-width:900px){.blk.big,.blk.s5,.blk.s4,.blk.s6{grid-column:span 12}.blk.big{min-height:460px}.blk.big .ill{width:240px}}
+
+/* Quiénes somos: dos bloques que se juntan en el centro al bajar */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.bro{border-radius:var(--r);padding:38px;min-height:380px;display:flex;flex-direction:column;will-change:transform}
+.bro.a{background:var(--mint);color:var(--night)}
+.bro.b{background:var(--cream);color:var(--night)}
+.bro .big{font:800 clamp(120px,14vw,200px)/.8 var(--d);letter-spacing:-.06em;opacity:.9}
+.bro h3{font-size:32px;margin:24px 0 10px}
+.bro p{margin:0;opacity:.8}
+.bro ul{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.bro li{font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(8,37,28,.08)}
+.bro.pend{background:transparent;border:2px dashed rgba(242,238,227,.3);color:var(--cream)}
+.meet{text-align:center;margin-top:34px;font:800 clamp(26px,3.4vw,44px) var(--d);letter-spacing:-.03em}
+.meet span{color:var(--mint)}
+@media(max-width:760px){.duo{grid-template-columns:1fr}}
+
+/* Historia: tarjetas que se apilan, cada una sale del fondo */
+.story{background:var(--deep)}
+.stack{position:relative}
+.card{position:sticky;top:110px;margin-bottom:28px;border-radius:var(--r);padding:44px;min-height:340px;display:grid;grid-template-columns:240px 1fr;gap:36px;align-items:center;transform-origin:50% 0;will-change:transform;box-shadow:0 -20px 50px rgba(0,0,0,.25)}
+.card:nth-child(4n+1){background:var(--cream);color:var(--ink)}
+.card:nth-child(4n+2){background:var(--mint);color:var(--night)}
+.card:nth-child(4n+3){background:#fff;color:var(--ink)}
+.card:nth-child(4n+4){background:var(--gold);color:var(--night)}
+.card .yr{font:800 clamp(64px,8vw,120px)/.85 var(--d);letter-spacing:-.05em}
+.card h3{font-size:clamp(28px,3vw,40px);margin-bottom:12px}
+.card p{margin:0;font-size:18px;opacity:.85;max-width:620px}
+.card.pend{background:var(--deep-2)!important;color:var(--cream)!important;border:2px dashed rgba(242,238,227,.35)}
+.quote{margin-top:80px;text-align:center;font:800 clamp(36px,6vw,88px)/1 var(--d);letter-spacing:-.04em}
+.quote em{font-style:normal;color:var(--mint)}
+.quote small{display:block;margin-top:18px;font:500 13px var(--m);letter-spacing:.12em;text-transform:uppercase;color:rgba(242,238,227,.6)}
+@media(max-width:760px){.card{grid-template-columns:1fr;gap:12px;padding:30px;top:90px;min-height:0}}
+
+/* Cifras */
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.num{border-radius:var(--r);padding:30px 26px;background:#fff;box-shadow:0 18px 40px rgba(12,34,25,.08)}
+.num b{display:block;font:800 clamp(42px,4.6vw,68px)/1 var(--d);letter-spacing:-.05em;color:var(--deep);font-variant-numeric:tabular-nums}
+.num span{display:block;margin-top:12px;color:var(--soft);font-size:15px}
+.num:nth-child(2){background:var(--deep)}.num:nth-child(2) b{color:var(--mint)}.num:nth-child(2) span{color:rgba(242,238,227,.75)}
+@media(max-width:900px){.nums{grid-template-columns:1fr 1fr}}
+
+/* Lo que usamos */
+.refs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ref{border-radius:var(--r);padding:28px;background:#fff;color:var(--ink);display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 40px rgba(12,34,25,.08)}
+.ref .top{display:flex;align-items:center;gap:14px}
+.ref .lg{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;font:800 18px var(--d);flex:none}
+.ref h3{font-size:22px}
+.ref .cat{font:600 11.5px var(--m);text-transform:uppercase;letter-spacing:.1em;color:var(--soft)}
+.ref p{margin:0;color:#3D5148}
+.ref .gift{padding:12px 14px;border-radius:14px;background:#FFF4DC;color:#6B4708;font-weight:600;font-size:14.5px}
+.ref .act{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+.ref .act .btn{padding:12px 18px;font-size:14.5px}
+.ref .code{font:600 13.5px var(--m);border:1.5px dashed var(--deep);border-radius:999px;padding:11px 14px;background:none;color:var(--deep);cursor:pointer}
+.ref.pend{background:transparent;box-shadow:none;border:2px dashed #CFC7B2}
+.ref.pend .lg{background:#CFC7B2!important}
+.pt{font:600 10.5px var(--m);letter-spacing:.08em;text-transform:uppercase;color:#A0441F;background:#FBE3D6;padding:4px 8px;border-radius:999px;align-self:flex-start}
+.note{margin-top:22px;padding:18px 22px;border-radius:18px;background:#F1EEE6;color:#3D5148;font-size:14.5px}
+@media(max-width:900px){.refs{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.refs{grid-template-columns:1fr}}
+
+/* Hipoteca: bloque que se abre al bajar */
+.open{padding:40px 0 120px}
+.jose{position:relative;border-radius:40px;background:var(--mint);color:var(--night);padding:clamp(34px,6vw,80px);overflow:hidden;will-change:clip-path}
+.jose h2{font-size:clamp(40px,6.4vw,96px);font-weight:800;max-width:900px}
+.jose p{font-size:19px;max-width:620px;margin:22px 0 30px;color:#163D2F}
+.jose .fine{font-size:13.5px;margin:22px 0 0;color:#2D5546}
+.jose .house{position:absolute;right:-30px;top:-30px;width:300px;opacity:.18}
+.jose .btn.d{box-shadow:0 14px 34px rgba(8,37,28,.3)}
+
+/* Canales */
+.chan{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.ch{border-radius:22px;padding:24px;text-decoration:none;background:rgba(242,238,227,.06);box-shadow:inset 0 0 0 1px rgba(242,238,227,.12);transition:background .2s}
+a.ch:hover{background:rgba(125,211,168,.14)}
+.ch .k{font:600 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--mint)}
+.ch b{display:block;font:800 22px var(--d);letter-spacing:-.02em;margin:10px 0 2px}
+.ch span{font-size:14px;color:rgba(242,238,227,.6)}
+.ch.pend{box-shadow:none;border:2px dashed rgba(242,238,227,.25);background:none}
+@media(max-width:900px){.chan{grid-template-columns:1fr 1fr}}
+
+footer{padding:30px 0 60px;color:rgba(242,238,227,.55);font-size:14px;border-top:1px solid rgba(242,238,227,.1)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:var(--mint);font-weight:600}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:10px}
+
+/* ---------- Móvil: menos efectos ligados al scroll, nada que se tape ---------- */
+@media(max-width:760px){
+  body{font-size:16px}
+  section{padding:76px 0}
+  .sh{margin-bottom:30px}
+  .sh h2{font-size:clamp(34px,10vw,44px)}
+  .nav{top:10px;background:rgba(8,37,28,.96)}
+  .nav .mk{font-size:14px}
+  .hero{padding:160px 0 70px;min-height:auto}
+  .hero p{font-size:17px}
+  .band .row{font-size:26px}
+  .band{padding:12px 0}
+  .blk{min-height:0;padding:24px}
+  .blk.big{min-height:0;padding:28px 24px}
+  .blk.big .ill{display:none}
+  .blk.big p{font-size:16px}
+  .nums{gap:12px}
+  .num{padding:22px 18px}
+  .num b{font-size:34px}
+  .bro{min-height:0;padding:28px}
+  .bro .big{font-size:96px}
+  .bro h3{font-size:26px;margin-top:16px}
+  .card{position:relative;top:auto!important;margin-bottom:14px;padding:26px;box-shadow:none}
+  .card .yr{font-size:56px}
+  .card h3{font-size:26px}
+  .card p{font-size:16px}
+  .quote{margin-top:56px;font-size:34px}
+  .jose{border-radius:28px}
+  .jose h2{font-size:38px}
+  .jose p{font-size:16.5px}
+  .open{padding:20px 0 76px}
+  .ch b{font-size:18px}
+  .ch{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<script>
+/* =====================================================================
+   TODO LO QUE CAMBIA ESTÁ AQUÍ.
+   - Cualquier entrada con  pendiente:true  se ve como hueco punteado mientras
+     MOSTRAR_PENDIENTES sea true (vista previa). Ponlo a false al publicar
+     y lo que no esté completo desaparece solo.
+   - Para un enlace de referido: url, codigo (opcional), ventaja y porque.
+     Quita  pendiente:true  cuando esté el enlace.
+   - Ojo, sin datos personales: ni nombres, ni caras, ni empresa, ni ciudad.
+   ===================================================================== */
+const MOSTRAR_PENDIENTES = false;
+
+/* Quiénes somos: anónimos, se firma «Finanzas en Acción». */
+const NOSOTROS = [
+  {ini:'1', rol:'Controller financiero', texto:'Unos 5 años en consolidación y reporting para fondos de capital riesgo. Firmó su primera hipoteca en 2025 y lo contó paso a paso en X.', aporta:['La historia de la hipoteca','Calculadoras y Mi patrimonio','La newsletter']},
+  {ini:'2', rol:'Controller financiero', texto:'El mismo oficio y la misma forma de mirar el dinero: primero los números, luego la decisión.', aporta:['Cliente de Indexa desde hace más de 3 años']},
+];
+
+/* Nuestra historia, de más antiguo a más reciente. */
+const HISTORIA = [
+  {cuando:'[Año]', titulo:'Empezamos a ordenar nuestro dinero', texto:'[Cómo empezasteis: qué os hizo poneros en serio con vuestras finanzas]', pendiente:true},
+  {cuando:'2024', titulo:'Nace @BuscandolaLF', texto:'Empezamos a contar en X lo que hacemos con nuestro dinero, con números reales y sin vender humo.'},
+  {cuando:'2025', titulo:'La primera vivienda', texto:'Un piso de 128.000 €. El banco se echa atrás el día antes de firmar y, en el último momento, el bróker consigue una fija al 2,30 % financiando el 90 % y sin vinculaciones. El hilo con el paso a paso pasó de las 700.000 visualizaciones.'},
+  {cuando:'2025', titulo:'Comprar para alquilar, vivir de alquiler', texto:'Desde septiembre el piso está alquilado por habitaciones y su dueño vive de alquiler. La vivienda como inversión, no como destino.'},
+  {cuando:'2026', titulo:'Finanzas en Acción', texto:'Las calculadoras de vivienda, El Club de la Hipoteca en X y la newsletter de los viernes. Todo con el mismo criterio: números claros, con su fuente, para que decidas tú.'},
+];
+const CITA = {texto:'«Comprar para alquilar, vivir de alquiler.»', firma:'Finanzas en Acción'};
+
+/* Productos que usamos. Categorías libres: los filtros se crean solos. */
+const REFERIDOS = [
+  {nombre:'Indexa Capital', cat:'Inversión', ini:'IC', color:'#1F4E8C', porque:'Los dos somos clientes desde hace más de 3 años: fondos indexados, comisiones bajas y cero tiempo de gestión.', ventaja:'[Importe gestionado sin comisiones y plazo, p. ej. 15.000 € durante X meses]', url:'', codigo:'', pendiente:true},
+  {nombre:'Plan de pensiones de Indexa', cat:'Inversión', ini:'IP', color:'#2F6FB0', porque:'Para la jubilación, con la misma filosofía indexada y de bajo coste.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
+  {nombre:'Revolut', cat:'Banco', ini:'R', color:'#10261E', porque:'Para comprar acciones, ETF y bitcoin desde el móvil.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
+];
+
+/* Herramientas, además de las calculadoras de vivienda (que van fijas en la página). */
+const HERRAMIENTAS_EXTRA = [
+  {titulo:'Mi patrimonio', texto:'Controla tus gastos y tu patrimonio en el navegador, sin registro. Lee tus fotos de tickets y tus Excel.', url:'', etiqueta:'En desarrollo', icono:'chart'},
+  {titulo:'Plantillas de Excel', texto:'«Control y Análisis - Compra Vivienda» (más de 450 descargas) y tres comparadores de hipotecas.', url:'', etiqueta:'Gumroad', icono:'sheet', pendiente:true},
+  {titulo:'Mejores hipotecas del mes', texto:'Un PDF con las mejores ofertas, el primer viernes de cada mes en la newsletter.', url:'', etiqueta:'Próximamente', icono:'doc'},
+];
+
+/* Redes y canales. */
+const REDES = [
+  {nombre:'X / Twitter', sub:'@BuscandolaLF', url:'https://x.com/BuscandolaLF', ini:'𝕏', color:'#10261E'},
+  {nombre:'Newsletter', sub:'Cada viernes en Substack', url:'https://finanzasenaccion.substack.com', ini:'N', color:'#E0A030', pendiente:true},
+  {nombre:'El Club de la Hipoteca', sub:'Comunidad en X · +2.000', url:'', ini:'⌂', color:'#1F6E54', pendiente:true},
+  {nombre:'GitHub', sub:'Código abierto', url:'https://github.com/FinanzasEnAccion', ini:'GH', color:'#5B6E66'},
+];
+
+const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
+</script>
+
+<nav class="nav" aria-label="Secciones">
+  <a class="mk" href="#top"><img src="logo.png" alt="" width="30" height="30">Finanzas en Acción</a>
+  <a class="i" href="#herramientas">Herramientas</a>
+  <a class="i" href="#nosotros">Quiénes somos</a>
+  <a class="i" href="#historia">Historia</a>
+  <a class="i" href="#uso" data-nav="uso">Lo que usamos</a>
+  <a class="x" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>Seguir</a>
+</nav>
+
+<main id="top">
+<!-- PORTADA -->
+<header class="hero" id="hero">
+  <div class="grid" aria-hidden="true"></div>
+  <div class="chips" id="chips" aria-hidden="true">
+    <div class="chip k" style="left:6%;top:22%;--dl:.5s" data-p="-0.35"><b id="ceur">3,247 %</b><span>Euríbor hoy</span></div>
+    <div class="chip solid" style="right:7%;top:20%;--dl:.7s" data-p="-0.55"><b>2,30 %</b><span>Nuestra fija</span></div>
+    <div class="chip" style="left:9%;bottom:18%;--dl:.9s" data-p="-0.25"><b>128.000 €</b><span>Primer piso</span></div>
+    <div class="chip k" style="right:9%;bottom:20%;--dl:1.1s" data-p="-0.45"><b>710.000</b><span>Vistas del hilo</span></div>
+    <div class="chip" style="left:44%;top:12%;--dl:1.3s" data-p="-0.7"><b>0 cookies</b><span>Tus datos, tuyos</span></div>
+  </div>
+  <div class="c">
+    <div class="lab fx z on" style="--dl:.1s">Dos hermanos · Dos controllers</div>
+    <h1 style="margin-top:22px">
+      <span class="ln"><span class="fx l" style="--dl:.15s">Tus números,</span></span>
+      <span class="ln"><span class="fx r m" style="--dl:.3s">tu decisión.</span></span>
+    </h1>
+    <p class="fx u" style="--dl:.55s">Somos dos hermanos y los dos trabajamos como controllers financieros. Contamos con números reales cómo compramos vivienda e invertimos, y hacemos herramientas gratis para que decidas con los tuyos.</p>
+    <div class="btns fx u" style="--dl:.7s">
+      <a class="btn p" href="/vivienda/">Abrir las calculadoras <span aria-hidden="true">→</span></a>
+      <a class="btn g" href="#historia">Nuestra historia</a>
+    </div>
+  </div>
+</header>
+
+<div class="band" aria-hidden="true"><div class="row" data-dir="-1" id="b1"></div></div>
+<div class="band two" aria-hidden="true"><div class="row" data-dir="1" id="b2"></div></div>
+
+<!-- HERRAMIENTAS -->
+<section class="light" id="herramientas">
+  <div class="wrap">
+    <div class="sh"><div><div class="lab fx l">Herramientas</div><h2 class="fx l" style="--dl:.08s">Gratis. Sin registro. Cada cifra, explicada.</h2></div>
+      <p class="fx r">Toca cualquier resultado y te enseña cómo está calculado y de dónde sale el dato. Lo que escribes no sale de tu navegador.</p></div>
+    <div class="blocks" id="blocks">
+      <a class="blk big fx z" href="/vivienda/">
+        <span class="tag">Disponible</span>
+        <h3>Calculadoras de vivienda</h3>
+        <p>Cuánto puedes comprar, qué te cobra hoy cada banco, si te compensa alquilar, cuánto rinde un piso y cuánto cambiará tu cuota.</p>
+        <div class="pills"><span>Mi presupuesto</span><span>Comprar o alquilar</span><span>Bancos hoy</span><span>Comparar ofertas</span><span>Invertir en un piso</span><span>Mi hipoteca</span></div>
+        <span class="go">Abrir las calculadoras →</span>
+        <svg class="ill" viewBox="0 0 200 200" aria-hidden="true"><rect x="40" y="70" width="120" height="110" rx="10" fill="#11503D"/><path d="M20 84 100 22l80 62" fill="none" stroke="#7DD3A8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><rect x="62" y="98" width="30" height="30" rx="5" fill="#7DD3A8" opacity=".5"/><rect x="108" y="98" width="30" height="30" rx="5" fill="#E5B04A" opacity=".7"/><rect x="85" y="140" width="30" height="40" rx="5" fill="#F2EEE3" opacity=".25"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CIFRAS -->
+<section class="light" style="padding-top:0">
+  <div class="wrap">
+    <div class="nums">
+      <div class="num fx l"><b data-n="710000">0</b><span>visualizaciones del hilo de nuestra hipoteca</span></div>
+      <div class="num fx z" style="--dl:.1s"><b data-n="2000" data-pre="+">0</b><span>miembros en El Club de la Hipoteca</span></div>
+      <div class="num fx z" style="--dl:.2s"><b data-n="6">0</b><span>calculadoras gratis</span></div>
+      <div class="num fx r" style="--dl:.3s"><b data-n="0" data-suf=" €">0</b><span>lo que te cuesta usarlas</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIÉNES SOMOS -->
+<section id="nosotros">
+  <div class="wrap">
+    <div class="sh"><div><div class="lab fx l">Quiénes somos</div><h2 class="fx l" style="--dl:.08s">Dos hermanos. Dos controllers. Una cuenta.</h2></div>
+      <p class="fx r">Firmamos como Finanzas en Acción y no enseñamos nombres ni caras: lo que importa son los números.</p></div>
+    <div class="duo" id="duo"></div>
+    <div class="meet fx u">Primero los números. <span>Luego la decisión.</span></div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section class="story" id="historia">
+  <div class="wrap">
+    <div class="sh"><div><div class="lab fx l">Nuestra historia</div><h2 class="fx l" style="--dl:.08s">De cuadrar cuentas de empresas a cuadrar las nuestras.</h2></div></div>
+    <div class="stack" id="stack"></div>
+    <div class="quote fx z" id="cita"></div>
+  </div>
+</section>
+
+<!-- LO QUE USAMOS -->
+<section class="light" id="uso">
+  <div class="wrap">
+    <div class="sh"><div><div class="lab fx l">Lo que usamos</div><h2 class="fx l" style="--dl:.08s">Lo que usamos de verdad. Con ventaja si entras por nuestro enlace.</h2></div>
+      <p class="fx r">Solo ponemos lo que usamos nosotros. Si te apuntas con nuestro enlace, normalmente ganamos los dos.</p></div>
+    <div class="refs" id="refs"></div>
+    <div class="note fx u"><b>Transparencia.</b> Son enlaces de referido: si te das de alta con ellos, podemos recibir una recompensa. No condiciona lo que recomendamos. Nada de esto es asesoramiento financiero ni una recomendación personalizada.</div>
+  </div>
+</section>
+
+<!-- HIPOTECA -->
+<section class="light open" id="hipoteca">
+  <div class="wrap">
+    <div class="jose" id="jose">
+      <svg class="house" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 46 50 12l42 34" fill="none" stroke="#08251C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="lab" style="color:var(--deep)">¿Vas a pedir hipoteca?</div>
+      <h2 style="margin-top:14px">Antes de firmar, que te mejoren la oferta.</h2>
+      <p>José es el bróker que nos salvó la hipoteca el día antes de firmar. Revisa tu caso, negocia con los bancos y te revisa la FEIN antes de ir a notaría. Llévale el informe en PDF de las calculadoras.</p>
+      <a class="btn d" id="joseurl" href="#" target="_blank" rel="noopener">Primer contacto gratis con José →</a>
+      <p class="fine">Transparencia: si firmas tu hipoteca con José, él nos paga una parte de sus honorarios.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CANALES -->
+<section style="padding-top:100px">
+  <div class="wrap">
+    <div class="sh"><div><div class="lab fx l">Síguenos</div><h2 class="fx l" style="--dl:.08s">Lo contamos cada semana.</h2></div></div>
+    <div class="chan" id="chan"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="y"></span> Finanzas en Acción · <a href="https://x.com/BuscandolaLF" target="_blank" rel="noopener">@BuscandolaLF</a></span>
+    <span>Contenido divulgativo: no es asesoramiento financiero ni fiscal.</span>
+  </div>
+</footer>
+
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ver=x=>!x.pendiente||MOSTRAR_PENDIENTES;
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOV=matchMedia('(max-width:760px)').matches;
+$('y').textContent=new Date().getFullYear();
+$('joseurl').href=JOSE.url;
+
+/* Euríbor del día en la portada (lo lee de las calculadoras; si no puede, se queda el de la copia). */
+fetch('/vivienda/data.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null)
+  .then(j=>{const e=j&&j.mercado&&j.mercado.eur;if(typeof e==='number')$('ceur').textContent=e.toLocaleString('es-ES',{minimumFractionDigits:3})+' %'}).catch(()=>{});
+
+/* Bandas */
+const B1=['Comprar para alquilar','Vivir de alquiler','Números reales','Con su fuente','Sin vender humo'];
+const B2=['Calculadoras gratis','El Club de la Hipoteca','Newsletter cada viernes','Dos controllers','Finanzas en Acción'];
+const band=(a)=>{const s=a.map(t=>`<span>${t}</span><i>✦</i>`).join('');return s+s+s};
+$('b1').innerHTML=band(B1);$('b2').innerHTML=band(B2);
+
+/* Herramientas extra: entran alternando por la izquierda y la derecha */
+const EST={'En desarrollo':'dev','Próximamente':'soon'};
+const extras=HERRAMIENTAS_EXTRA.filter(ver);
+extras.forEach((t,i)=>{
+  const tag=t.url?'a':'div', side=i%2?'r':'l', span=extras.length===1?'s5':'s5';
+  $('blocks').insertAdjacentHTML('beforeend',`<${tag} class="blk ${span} fx ${side}${t.pendiente?' pend':''}" style="--dl:${.1+i*.12}s" ${t.url?`href="${esc(t.url)}" target="_blank" rel="noopener"`:''}>
+    <span class="tag ${EST[t.etiqueta]||''}">${esc(t.etiqueta||'')}${t.pendiente?' · falta el enlace':''}</span>
+    <h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p>${t.url?'<span class="go">Abrir →</span>':''}</${tag}>`);
+});
+
+/* Quiénes somos */
+$('duo').innerHTML=NOSOTROS.filter(ver).map((n,i)=>`
+  <article class="bro ${i%2?'b':'a'}${MOV?(i%2?' fx r':' fx l'):''}${n.pendiente?' pend':''}" data-side="${i%2?1:-1}">
+    ${n.pendiente?'<span class="pt">Pendiente</span>':''}
+    <div class="big">${esc(n.ini)}</div>
+    <h3>${esc(n.rol)}</h3><p>${esc(n.texto)}</p>
+    ${n.aporta&&n.aporta.length?`<ul>${n.aporta.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}
+  </article>`).join('');
+
+/* Historia */
+$('stack').innerHTML=HISTORIA.filter(ver).map((h,i)=>`
+  <article class="card${MOV?' fx z':''}${h.pendiente?' pend':''}" style="top:${110+i*14}px">
+    <div class="yr">${esc(h.cuando)}</div>
+    <div>${h.pendiente?'<span class="pt">Por escribir</span><br>':''}<h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></div>
+  </article>`).join('');
+const cita=CITA.texto.replace(/^«|»$/g,'').replace(/\.$/,'');
+const [c1,c2]=cita.split(',');
+$('cita').innerHTML=`${esc(c1)}${c2?`,<br><em>${esc(c2.trim())}.</em>`:''}<small>— ${esc(CITA.firma)}</small>`;
+
+/* Lo que usamos */
+const refs=REFERIDOS.filter(ver);
+if(!refs.length){$('uso').hidden=true;document.querySelectorAll('[data-nav="uso"]').forEach(e=>e.hidden=true)}
+$('refs').innerHTML=refs.map((r,i)=>`
+  <article class="ref fx z${r.pendiente?' pend':''}" style="--dl:${i*.12}s">
+    ${r.pendiente?'<span class="pt">Falta el enlace</span>':''}
+    <div class="top"><div class="lg" style="background:${esc(r.color||'#0B3D2E')}">${esc(r.ini||r.nombre[0])}</div><div><h3>${esc(r.nombre)}</h3><div class="cat">${esc(r.cat)}</div></div></div>
+    <p>${esc(r.porque)}</p>
+    ${r.ventaja?`<div class="gift">🎁 ${esc(r.ventaja)}</div>`:''}
+    <div class="act">${r.url?`<a class="btn d" href="${esc(r.url)}" target="_blank" rel="noopener sponsored">Abrir con nuestro enlace →</a>`:''}
+      ${r.codigo?`<button type="button" class="code" data-code="${esc(r.codigo)}">${esc(r.codigo)} ⧉</button>`:''}</div>
+  </article>`).join('');
+document.addEventListener('click',e=>{const b=e.target.closest('.code');if(!b)return;
+  navigator.clipboard?.writeText(b.dataset.code).then(()=>{const t=b.textContent;b.textContent='¡Copiado!';setTimeout(()=>b.textContent=t,1500)}).catch(()=>{})});
+
+/* Canales */
+$('chan').innerHTML=REDES.filter(ver).map((s,i)=>{
+  const ok=s.url&&!s.pendiente, side=['l','z','z','r'][i%4];
+  return `<${ok?'a':'div'} class="ch fx ${side}${ok?'':' pend'}" style="--dl:${i*.08}s" ${ok?`href="${esc(s.url)}" target="_blank" rel="noopener"`:''}>
+    <div class="k">${ok?'Abrir ↗':'Falta el enlace'}</div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></${ok?'a':'div'}>`}).join('');
+
+/* Entradas: cada bloque entra cuando aparece en pantalla */
+/* Se mide la posición sin el desplazamiento de la animación (offsetTop), para que lo que entra por los lados también se active. */
+let fxs=[...document.querySelectorAll('.fx:not(.on)')];
+const absTop=el=>{let t=0;for(let e=el;e;e=e.offsetParent)t+=e.offsetTop;return t};
+const revela=()=>{const lim=scrollY+innerHeight*.9;fxs=fxs.filter(el=>{if(RM||absTop(el)<lim){el.classList.add('on');return false}return true})};
+revela();addEventListener('scroll',revela,{passive:true});addEventListener('resize',revela);
+requestAnimationFrame(()=>document.querySelectorAll('.hero .fx').forEach(el=>el.classList.add('on')));
+
+/* Contadores */
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const cnt=el=>{const n=+el.dataset.n,pre=el.dataset.pre||'',suf=el.dataset.suf||'';
+  if(RM||!n){el.textContent=pre+fmt(n)+suf;return}
+  const t0=performance.now(),D=1600;const f=t=>{const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,4);
+    el.textContent=pre+fmt(Math.round(n*e))+suf;if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)};
+const io2=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){cnt(en.target);io2.unobserve(en.target)}}),{threshold:.6});
+document.querySelectorAll('[data-n]').forEach(el=>io2.observe(el));
+
+/* Movimiento ligado al scroll: bandas, chips de la portada, hermanos que se juntan, tarjetas que se apilan y bloque de José que se abre */
+if(!RM){
+  const rows=[...document.querySelectorAll('.band .row')], chips=[...document.querySelectorAll('.chip')];
+  const bros=MOV?[]:[...document.querySelectorAll('.bro')], cards=MOV?[]:[...document.querySelectorAll('.card')], jose=$('jose');
+  let mx=0,my=0;
+  addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;tick()},{passive:true});
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  let pend=false;
+  function tick(){if(pend)return;pend=true;requestAnimationFrame(frame)}
+  function frame(){
+    pend=false;const y=scrollY,H=innerHeight;
+    rows.forEach(r=>{r.style.transform=`translate3d(${(+r.dataset.dir)*(y*.35)%2000-600}px,0,0)`});
+    chips.forEach(c=>{const p=+c.dataset.p;c.style.translate=`${mx*p*-60}px ${y*p+my*p*-60}px`});
+    bros.forEach(b=>{const r=b.getBoundingClientRect(),k=clamp((H-r.top)/(H*.75),0,1),s=+b.dataset.side;
+      b.style.transform=`translate3d(${(1-k)*s*38}vw,0,0) rotate(${(1-k)*s*6}deg)`;b.style.opacity=.25+.75*k});
+    cards.forEach((c,i)=>{const nx=cards[i+1];if(!nx){c.style.transform='';return}
+      const a=c.getBoundingClientRect(),b=nx.getBoundingClientRect(),k=clamp(1-(b.top-a.top)/a.height,0,1);
+      c.style.transform=`scale(${1-k*.06})`;c.style.filter=`brightness(${1-k*.25})`});
+    if(jose){const r=jose.getBoundingClientRect(),k=clamp((H-r.top)/(H*.8),0,1),ins=(1-k)*14;
+      jose.style.clipPath=`inset(${ins}% ${ins}% ${ins}% ${ins}% round ${40+(1-k)*60}px)`}
+  }
+  addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);frame();
+}
+</script>
+</body>
+</html>
