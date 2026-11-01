@@ -242,6 +242,7 @@ footer a{color:var(--mint);font-weight:600}
 .chan.duo2 .ch:nth-child(1){background:var(--mint)}
 .chan.duo2 .ch:nth-child(2){background:var(--gold)}
 .chan.duo2 .ch:nth-child(3){background:var(--cream)}
+.chan.duo2 .ch:nth-child(4){background:var(--sand,#D1CABA)}
 .chan.duo2 .ch .k{color:var(--deep)}
 .chan.duo2 .ch b{font-size:clamp(28px,3.4vw,42px);margin:10px 0 4px}
 .chan.duo2 .ch span{color:#163D2F;font-size:16px}
@@ -646,6 +647,7 @@ const HERRAMIENTAS_EXTRA = [
 /* Redes y canales. */
 const REDES = [
   {nombre:'X / Twitter', sub:'@BuscandolaLF', url:'https://x.com/BuscandolaLF', ini:'𝕏', color:'#10261E'},
+  {nombre:'Instagram', sub:'@buscandolalf', url:'https://www.instagram.com/buscandolalf/', ini:'◎', color:'#2F6B57'},
   {nombre:'Newsletter', sub:'Cada viernes en Substack', url:'https://substack.com/@finanzasenaccion', ini:'N', color:'#E0A030'},
   {nombre:'El Club de la Hipoteca', sub:'Comunidad en X · +2.000 miembros', url:'https://x.com/i/communities/1884593569224171756', ini:'⌂', color:'#1F6E54'},
 ];
@@ -835,7 +837,7 @@ const GC_CODE='finanzasenaccion';
 
 <footer>
   <div class="wrap">
-    <span>© <span id="y"></span> Finanzas en Acción · <a href="https://x.com/BuscandolaLF" target="_blank" rel="noopener">@BuscandolaLF</a></span>
+    <span>© <span id="y"></span> Finanzas en Acción · <a href="https://x.com/BuscandolaLF" target="_blank" rel="noopener">X</a> · <a href="https://www.instagram.com/buscandolalf/" target="_blank" rel="noopener">Instagram</a> · <a href="https://substack.com/@finanzasenaccion" target="_blank" rel="noopener">Newsletter</a></span>
     <span>Colaboraciones: <a href="mailto:info@somosfinanzasenaccion.es">info@somosfinanzasenaccion.es</a> · <a href="aviso-legal.html">Aviso legal y privacidad</a></span>
     <p class="fine-print">Contenido divulgativo: no es asesoramiento financiero, fiscal ni de inversión. Por las recomendaciones de esta web (enlaces, códigos y servicios) podemos recibir una compensación; no cambia lo que contamos de ellas.</p>
   </div>
@@ -923,6 +925,7 @@ document.addEventListener('click',e=>{
   else if(/cal\.com\/jose/.test(h))track('jose/'+(a.closest('section')?.id||'otro'));
   else if(/x\.com\/i\/communities/.test(h))track('canal/club');
   else if(/substack\.com/.test(h))track('canal/newsletter');
+  else if(/instagram\.com/.test(h))track('canal/instagram');
   else if(/x\.com\/BuscandolaLF/.test(h))track('canal/x-'+(a.closest('nav')?'menu':'pie'));
 },true);
 
@@ -1041,8 +1044,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('.code,.cp');if(!
 const redes=REDES.filter(ver);
 if(redes.length===1&&redes[0].url){const r0=redes[0];$('chan').classList.add('solo');
   $('chan').innerHTML=`<a class="ch fx z" href="${esc(r0.url)}" target="_blank" rel="noopener"><div><div class="k">Síguenos en ${esc(r0.nombre.split(' ')[0])}</div><b>${esc(r0.sub)}</b><span>Lo que hacemos con nuestro dinero, con números reales.</span></div><span class="arr">↗</span></a>`}
-else{if(redes.length<=3){$('chan').classList.add('duo2');$('chan').style.setProperty('--n',redes.length)}$('chan').innerHTML=redes.map((s,i)=>{
-  const ok=s.url&&!s.pendiente, side=redes.length<=3?(['l','z','r'][i]):['l','z','z','r'][i%4];
+else{if(redes.length<=4){$('chan').classList.add('duo2');$('chan').style.setProperty('--n',redes.length===4?2:redes.length)}$('chan').innerHTML=redes.map((s,i)=>{
+  const ok=s.url&&!s.pendiente, side=redes.length===4?(['l','r','l','r'][i]):redes.length<=3?(['l','z','r'][i]):['l','z','z','r'][i%4];
   return `<${ok?'a':'div'} class="ch fx ${side}${ok?'':' pend'}" style="--dl:${i*.08}s" ${ok?`href="${esc(s.url)}" target="_blank" rel="noopener"`:''}>
     <div class="k">${ok?'Abrir ↗':'Falta el enlace'}</div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></${ok?'a':'div'}>`}).join('');}
 
