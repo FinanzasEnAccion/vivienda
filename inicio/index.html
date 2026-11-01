@@ -383,6 +383,8 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
 .ref .code{display:flex;justify-content:center;align-items:center;gap:8px;border-color:var(--acc);color:var(--acc)}
 .ref .code span{font:600 10.5px var(--m);letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 .ref .code.ok{background:var(--mint-2);border-style:solid}
+
+@media(min-width:601px){.refs.two{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -424,7 +426,7 @@ const REFERIDOS = [
   {nombre:'MyInvestor', cat:'Inversión', ini:'MI', color:'#5E8C78', porque:'Donde tenemos parte de nuestros ahorros e inversiones.', ventaja:'25 € al abrir tu cuenta si traes 1.000 €, contratas un depósito o inviertes 100 €', caduca:'', url:'https://newapp.myinvestor.es/do/SIGNUP?promotionalCode=3W2ZC', codigo:'3W2ZC'},
   {nombre:'Indexa Capital', cat:'Inversión', ini:'IC', color:'#1F4E8C', porque:'Los dos somos clientes desde hace más de 3 años: fondos indexados, comisiones bajas y cero tiempo de gestión.', ventaja:'[Importe gestionado sin comisiones y plazo, p. ej. 15.000 € durante X meses]', url:'', codigo:'', pendiente:true},
   {nombre:'Plan de pensiones de Indexa', cat:'Inversión', ini:'IP', color:'#2F6FB0', porque:'Para la jubilación, con la misma filosofía indexada y de bajo coste.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
-  {nombre:'Revolut', cat:'Banco', ini:'R', color:'#10261E', porque:'Para comprar acciones, ETF y bitcoin desde el móvil.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
+  {nombre:'Revolut', cat:'Banco', ini:'R', color:'#5E8C78', porque:'Para comprar acciones, ETF y bitcoin desde el móvil.', ventaja:'', caduca:'', url:'https://revolut.com/referral/?referral-code=jess94v!NOV1-26-AR-CRY-CH1H2&geo-redirect', codigo:''},
 ];
 
 /* Herramientas, además de las calculadoras de vivienda (que van fijas en la página). */
@@ -679,6 +681,7 @@ $('refs').innerHTML=refs.map((r,i)=>`
       :(r.codigo&&r.boton?`<button type="button" class="btn d cp" data-code="${esc(r.codigo)}">${esc(r.boton)}</button>`:'')}
       ${(r.codigos||(r.codigo?[{etq:'Código',codigo:r.codigo}]:[])).map(c=>`<button type="button" class="code" data-code="${esc(c.codigo)}" aria-label="Copiar el código ${esc(c.codigo)}"><span>${esc(c.etq)}</span> ${esc(c.codigo)} <i aria-hidden="true">⧉</i></button>`).join('')}</div>
   </article>`).join('');
+if(refs.length===2||refs.length===4)$('refs').classList.add('two');
 document.addEventListener('click',e=>{const b=e.target.closest('.code,.cp');if(!b)return;
   const done=()=>{const t=b.innerHTML;b.innerHTML=b.classList.contains('cp')?'Código copiado ✓ · ábrelo en la app de BBVA':'¡Copiado! ✓';b.classList.add('ok');setTimeout(()=>{b.innerHTML=t;b.classList.remove('ok')},2200)};
   try{navigator.clipboard.writeText(b.dataset.code).then(done,()=>done())}catch(_){done()}});
