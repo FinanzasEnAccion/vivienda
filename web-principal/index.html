@@ -394,6 +394,20 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
 @media(min-width:1101px){.refs.four .ref .code{flex-direction:column;gap:2px;padding:9px 12px;border-radius:18px}.refs.four .ref .code span{white-space:normal}}
 
 @media(min-width:1101px){.refs.four .ref .code{position:relative;padding-right:30px;padding-left:30px}.refs.four .ref .code i{position:absolute;right:12px;top:50%;transform:translateY(-50%)}}
+
+/* Dónde estoy: barra de progreso y sección marcada */
+.prog{position:fixed;top:0;left:0;right:0;height:4px;z-index:60;background:rgba(30,43,38,.08)}
+.prog i{display:block;height:100%;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--mint),var(--acc));border-radius:0 4px 4px 0}
+.nav a.i{position:relative;transition:background .25s,color .25s}
+.nav a.i.act{background:var(--mint-2);color:var(--acc)}
+.mkt{position:relative;display:inline-grid}
+.mkt>span{grid-area:1/1;transition:opacity .35s ease,transform .45s var(--ease);white-space:nowrap}
+.mkt .where{opacity:0;transform:translateY(60%);color:var(--acc)}
+@media(max-width:820px){
+  .nav.has-where .mkt .brand{opacity:0;transform:translateY(-60%)}
+  .nav.has-where .mkt .where{opacity:1;transform:none}
+  .nav .mkt{min-width:150px}
+}
 </style>
 </head>
 <body>
@@ -456,8 +470,9 @@ const REDES = [
 const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
 </script>
 
+<div class="prog" aria-hidden="true"><i id="prog"></i></div>
 <nav class="nav" aria-label="Secciones">
-  <a class="mk" href="#top"><img src="logo.png" alt="" width="30" height="30">Finanzas en Acción</a>
+  <a class="mk" href="#top"><img src="logo.png" alt="" width="30" height="30"><span class="mkt"><span class="brand">Finanzas en Acción</span><span class="where" id="where" aria-live="polite"></span></span></a>
   <a class="i" href="#herramientas">Herramientas</a>
   <a class="i" href="#invertimos">Invertimos</a>
   <a class="i" href="#nosotros">Quiénes somos</a>
@@ -581,7 +596,7 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
 </section>
 
 <!-- CANALES -->
-<section style="padding-top:100px">
+<section id="canales" style="padding-top:100px">
   <div class="wrap">
     <div class="sh"><div><div class="lab fx l">Síguenos</div><h2 class="fx l" style="--dl:.08s">Lo contamos cada semana.</h2></div></div>
     <div class="chan" id="chan"></div>
@@ -641,6 +656,25 @@ const DECK=[
     setTimeout(()=>{order=[...rest,order[0]];front.style.transition='none';front.classList.remove('gone');pos(front,order.length-1);void front.offsetWidth;front.style.transition=''},850);
   };
   setInterval(next,2800);
+})();
+
+
+/* Dónde estoy */
+(()=>{
+  const SECS=[['herramientas','Herramientas'],['hipoteca','Hipoteca'],['invertimos','Invertimos'],['nosotros','Quiénes somos'],['historia','Nuestra historia'],['uso','Promociones'],['canales','Síguenos']];
+  const nav=document.querySelector('.nav'),where=$('where'),bar=$('prog');
+  const links=[...document.querySelectorAll('.nav a.i')];
+  let last='';
+  const upd=()=>{
+    const max=document.documentElement.scrollHeight-innerHeight;bar.style.transform=`scaleX(${max>0?Math.min(1,scrollY/max):0})`;
+    let cur='',name='';
+    for(const [id,n] of SECS){const el=$(id);if(!el||el.hidden)continue;if(el.getBoundingClientRect().top<=innerHeight*.35){cur=id;name=n}}
+    if(cur===last)return;last=cur;
+    links.forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+cur));
+    nav.classList.toggle('has-where',!!cur);
+    if(name)where.textContent=name;
+  };
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
 })();
 
 /* Bandas */
