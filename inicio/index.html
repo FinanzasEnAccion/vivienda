@@ -230,14 +230,15 @@ footer a{color:var(--mint);font-weight:600}
 .chan.solo .ch span{color:var(--deep);font-size:16px}
 .chan.solo .ch .arr{font:800 clamp(34px,5vw,60px) var(--d)}
 
-.chan.duo2{grid-template-columns:1fr 1fr;gap:18px}
+.chan.duo2{grid-template-columns:repeat(var(--n,2),1fr);gap:18px}
 .chan.duo2 .ch{padding:34px 32px;box-shadow:none;color:var(--night)}
 .chan.duo2 .ch:nth-child(1){background:var(--mint)}
 .chan.duo2 .ch:nth-child(2){background:var(--gold)}
+.chan.duo2 .ch:nth-child(3){background:var(--cream)}
 .chan.duo2 .ch .k{color:var(--deep)}
 .chan.duo2 .ch b{font-size:clamp(28px,3.4vw,42px);margin:10px 0 4px}
 .chan.duo2 .ch span{color:#163D2F;font-size:16px}
-@media(max-width:760px){.chan.duo2{grid-template-columns:1fr}}
+@media(max-width:900px){.chan.duo2{grid-template-columns:1fr}}
 /* ---------- Móvil: menos efectos ligados al scroll, nada que se tape ---------- */
 @media(max-width:760px){
   body{font-size:16px}
@@ -321,7 +322,7 @@ const HERRAMIENTAS_EXTRA = [
 const REDES = [
   {nombre:'X / Twitter', sub:'@BuscandolaLF', url:'https://x.com/BuscandolaLF', ini:'𝕏', color:'#10261E'},
   {nombre:'Newsletter', sub:'Cada viernes en Substack', url:'https://substack.com/@finanzasenaccion', ini:'N', color:'#E0A030'},
-  {nombre:'El Club de la Hipoteca', sub:'Comunidad en X · +2.000', url:'', ini:'⌂', color:'#1F6E54', pendiente:true},
+  {nombre:'El Club de la Hipoteca', sub:'Comunidad en X · +2.000 miembros', url:'https://x.com/i/communities/1884593569224171756', ini:'⌂', color:'#1F6E54'},
 ];
 
 const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
@@ -387,7 +388,7 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
 <section class="light" style="padding-top:0">
   <div class="wrap">
     <div class="nums">
-      <div class="num fx l"><b data-n="2000" data-pre="+">0</b><span>miembros en El Club de la Hipoteca</span></div>
+      <a class="num fx l" style="text-decoration:none" href="https://x.com/i/communities/1884593569224171756" target="_blank" rel="noopener"><b data-n="2000" data-pre="+">0</b><span>miembros en El Club de la Hipoteca ↗</span></a>
       <div class="num fx z" style="--dl:.2s"><b data-n="6">0</b><span>calculadoras gratis</span></div>
       <div class="num fx r" style="--dl:.3s"><b data-n="0" data-suf=" €">0</b><span>lo que te cuesta usarlas</span></div>
     </div>
@@ -535,8 +536,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('.code');if(!b)re
 const redes=REDES.filter(ver);
 if(redes.length===1&&redes[0].url){const r0=redes[0];$('chan').classList.add('solo');
   $('chan').innerHTML=`<a class="ch fx z" href="${esc(r0.url)}" target="_blank" rel="noopener"><div><div class="k">Síguenos en ${esc(r0.nombre.split(' ')[0])}</div><b>${esc(r0.sub)}</b><span>Lo que hacemos con nuestro dinero, con números reales.</span></div><span class="arr">↗</span></a>`}
-else{if(redes.length===2)$('chan').classList.add('duo2');else if(redes.length<4&&innerWidth>900)$('chan').style.gridTemplateColumns=`repeat(${redes.length},1fr)`;$('chan').innerHTML=redes.map((s,i)=>{
-  const ok=s.url&&!s.pendiente, side=redes.length===2?(i?'r':'l'):['l','z','z','r'][i%4];
+else{if(redes.length<=3){$('chan').classList.add('duo2');$('chan').style.setProperty('--n',redes.length)}$('chan').innerHTML=redes.map((s,i)=>{
+  const ok=s.url&&!s.pendiente, side=redes.length<=3?(['l','z','r'][i]):['l','z','z','r'][i%4];
   return `<${ok?'a':'div'} class="ch fx ${side}${ok?'':' pend'}" style="--dl:${i*.08}s" ${ok?`href="${esc(s.url)}" target="_blank" rel="noopener"`:''}>
     <div class="k">${ok?'Abrir ↗':'Falta el enlace'}</div><b>${esc(s.nombre)}</b><span>${esc(s.sub)}</span></${ok?'a':'div'}>`}).join('');}
 
