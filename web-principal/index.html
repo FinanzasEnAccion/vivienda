@@ -568,6 +568,22 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
 
 footer .wrap{flex-wrap:wrap}
 .fine-print{flex-basis:100%;margin:6px 0 0;font-size:12px;line-height:1.5;color:var(--soft);opacity:.85}
+
+/* Newsletter */
+.nl-sec{padding:0 0 30px}
+.nl{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;padding:clamp(28px,5vw,52px);border-radius:32px;background:var(--acc);color:var(--cream);position:relative;overflow:hidden}
+.nl::after{content:"";position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(207,227,216,.35),transparent 65%)}
+.nl .lab{color:var(--mint-2)}
+.nl h2{font-size:clamp(32px,4.4vw,52px);font-weight:800;margin:10px 0 12px;color:var(--cream)}
+.nl p{margin:0;color:rgba(244,241,234,.82);max-width:520px}
+.nl-f{position:relative;z-index:1;display:grid;gap:10px}
+.nl-f input{font:600 17px var(--b);padding:16px 18px;border-radius:16px;border:0;background:var(--cream);color:var(--ink);outline:none}
+.nl-f input:focus{box-shadow:0 0 0 3px var(--mint)}
+.nl-f .btn{justify-content:center;background:var(--mint-2);color:var(--ink);border:0;cursor:pointer;font-family:inherit;font-size:16px}
+.nl-m{font-size:13px!important;color:rgba(244,241,234,.75)!important}
+.nl-m.err{color:#FFD2C9!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:820px){.nl{grid-template-columns:1fr;gap:20px}}
 </style>
 </head>
 <body>
@@ -628,6 +644,8 @@ const REDES = [
 ];
 
 const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
+/* Newsletter: dirección de la publicación en Substack (la del botón «Suscribirme»). */
+const SUBSTACK='https://finanzasenaccion.substack.com';
 
 /* Analítica sin cookies (GoatCounter). Solo cuenta visitas y clics: qué promoción se abre o qué código se copia,
    los botones a las calculadoras y a José, y los canales. Nunca datos personales ni importes.
@@ -775,6 +793,25 @@ const GC_CODE='finanzasenaccion';
   </div>
 </section>
 
+<!-- NEWSLETTER -->
+<section class="nl-sec" id="newsletter">
+  <div class="wrap">
+    <div class="nl fx z">
+      <div class="nl-t">
+        <div class="lab">Newsletter · cada viernes</div>
+        <h2>Nuestros números, en tu correo.</h2>
+        <p>Lo que hacemos con nuestro dinero, las mejores hipotecas del mes y las promociones que merecen la pena. Gratis, se lee en 5 minutos.</p>
+      </div>
+      <form class="nl-f" id="nlForm" novalidate>
+        <label for="nlEmail" class="sr">Tu correo</label>
+        <input id="nlEmail" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.com" required>
+        <button class="btn p" type="submit" data-ev="newsletter/suscribir">Suscribirme gratis →</button>
+        <p class="nl-m" id="nlMsg" role="status">Te llevamos a Substack para confirmar. Sin spam: te das de baja con un clic.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- CANALES -->
 <section id="canales" style="padding-top:100px">
   <div class="wrap">
@@ -847,7 +884,7 @@ const DECK=[
 
 /* Dónde estoy */
 (()=>{
-  const SECS=[['herramientas','Herramientas'],['mejores','Mejores hipotecas'],['hipoteca','Hipoteca'],['invertimos','Invertimos'],['nosotros','Quiénes somos'],['historia','Nuestra historia'],['uso','Promociones'],['canales','Síguenos']];
+  const SECS=[['herramientas','Herramientas'],['mejores','Mejores hipotecas'],['hipoteca','Hipoteca'],['invertimos','Invertimos'],['nosotros','Quiénes somos'],['historia','Nuestra historia'],['uso','Promociones'],['newsletter','Newsletter'],['canales','Síguenos']];
   const nav=document.querySelector('.nav'),where=$('where'),bar=$('prog');
   const links=[...document.querySelectorAll('.nav a.i')];
   let last='';
@@ -906,6 +943,14 @@ document.addEventListener('click',e=>{
   }
   inp.addEventListener('input',calc);inp.addEventListener('change',()=>{if(typeof track==='function'&&inp.value)track('mini-calc/usada')});
 })();
+
+
+/* Newsletter: el correo se pasa a Substack, que pide la confirmación */
+(()=>{const f=$('nlForm');if(!f)return;f.addEventListener('submit',e=>{e.preventDefault();const em=$('nlEmail').value.trim(),m=$('nlMsg');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){m.textContent='Revisa el correo: parece que falta algo.';m.className='nl-m err';$('nlEmail').focus();return}
+  m.className='nl-m';m.textContent='Abriendo Substack para confirmar tu suscripción…';
+  window.open(`${SUBSTACK}/subscribe?email=${encodeURIComponent(em)}&utm_source=web&utm_medium=formulario`,'_blank','noopener');
+  setTimeout(()=>{m.textContent='Listo: confirma en la pestaña de Substack y revisa tu correo.';},800)})})();
 
 /* Bandas */
 const B1=['Comprar para alquilar','Vivir de alquiler','Números reales','Con su fuente','Sin vender humo'];
