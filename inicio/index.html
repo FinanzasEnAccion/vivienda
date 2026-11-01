@@ -359,6 +359,16 @@ body{color:var(--ink);background:var(--greige)}
 .blk.pend,.ref.pend{border-color:var(--card-2)}
 footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
 @media(max-width:760px){.nav{background:rgba(244,241,234,.97)}}
+
+@media(max-width:760px){
+  .jose .house{display:none}
+  .jose{clip-path:none!important}
+  .dk .top span:first-child{display:none}
+  .dk .top{justify-content:flex-end}
+  .dk .cat{margin-bottom:10px}
+  .dk svg.ic{margin-top:4px}
+  .btn{padding:15px 22px}
+}
 </style>
 </head>
 <body>
@@ -696,7 +706,7 @@ if(!RM){
     cards.forEach((c,i)=>{const nx=cards[i+1];if(!nx){c.style.transform='';return}
       const a=c.getBoundingClientRect(),b=nx.getBoundingClientRect(),k=clamp(1-(b.top-a.top)/a.height,0,1);
       c.style.transform=`scale(${1-k*.06})`;c.style.filter=`brightness(${1-k*.25})`});
-    if(jose){const r=jose.getBoundingClientRect(),k=clamp((H-r.top)/(H*.8),0,1),ins=(1-k)*14;
+    if(jose&&!MOV){const r=jose.getBoundingClientRect(),k=clamp((H-r.top)/(H*.8),0,1),ins=(1-k)*14;
       jose.style.clipPath=`inset(${ins}% ${ins}% ${ins}% ${ins}% round ${40+(1-k)*60}px)`}
   }
   addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);frame();
