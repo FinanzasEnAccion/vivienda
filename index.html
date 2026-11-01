@@ -3014,13 +3014,13 @@ const BLOGO={'Openbank':['openbank.svg','w'],'CaixaBank':['caixabank.svg','w'],'
 const bkName=b=>{const L=BLOGO[b];if(!L)return esc(b);const img=`<img src="logos/bancos/${L[0]}" alt="${L[1]==='w'?esc(b):''}" loading="lazy" onerror="this.parentNode.outerHTML='${esc(b).replace(/'/g,'')}'">`;
   return L[1]==='w'?`<span class="bklogo w" title="${esc(b)}">${img}</span>`:`<span class="bklogo i">${img}</span>${esc(b)}`};
 const JOSE_URL='https://cal.com/jose-perales-asesor/9zfdea',JOSE_KEY='fea-jose',JOSE_ORIGEN='Vengo de Finanzas en Acción.';
-/* Quién es José y el acuerdo de referidos. Solo Alejandro puede dar estos datos: mientras estén vacíos, no se enseña nada.
+/* Quién es José. Mientras estos datos estén vacíos, no se enseña nada.
    En cuanto haya alguno aparece «Quién es José» en el banner y en la ventana de la reserva, con lo que esté relleno.
      nombre:     nombre y apellidos del bróker
      empresa:    empresa o marca con la que trabaja
      registro:   número de inscripción en el registro del Banco de España como intermediario de crédito inmobiliario
      honorarios: cuánto cobra y quién lo paga (por ejemplo, si cobra del banco o del cliente, y cuándo)
-     acuerdo:    la frase del acuerdo de referidos (por ejemplo: «Si firmas con él, Finanzas en Acción cobra una comisión; a ti no te cuesta más») */
+     acuerdo:    una frase opcional de transparencia */
 const BROKER_INFO={nombre:'',empresa:'',registro:'',honorarios:'',acuerdo:''};
 const brokerHay=()=>Object.keys(BROKER_INFO).some(k=>String(BROKER_INFO[k]||'').trim());
 X.quien=()=>{const B=BROKER_INFO,f=(l,v)=>String(v||'').trim()?step(l,esc(v)):'';

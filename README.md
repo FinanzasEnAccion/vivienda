@@ -50,7 +50,7 @@ Está escrita y apagada. Usa GoatCounter, sin cookies, y solo cuenta qué se usa
 
 ## Bróker
 
-Los datos del bróker (nombre, empresa, número de registro en el Banco de España, honorarios y el acuerdo que tiene con Finanzas en Acción) irán en la constante `BROKER_INFO` de `index.html`. Mientras esté vacía, la web no enseña nada de eso.
+Los datos del bróker (nombre, empresa, número de registro en el Banco de España, honorarios y una frase opcional) irán en la constante `BROKER_INFO` de `index.html`. Mientras esté vacía, la web no enseña nada de eso.
 
 ## Qué revisar cuando cambie una norma
 
