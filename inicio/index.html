@@ -284,9 +284,8 @@ const REFERIDOS = [
 
 /* Herramientas, además de las calculadoras de vivienda (que van fijas en la página). */
 const HERRAMIENTAS_EXTRA = [
-  {titulo:'Mi patrimonio', texto:'Controla tus gastos y tu patrimonio en el navegador, sin registro. Lee tus fotos de tickets y tus Excel.', url:'', etiqueta:'En desarrollo', icono:'chart'},
-  {titulo:'Plantillas de Excel', texto:'«Control y Análisis - Compra Vivienda» (más de 450 descargas) y tres comparadores de hipotecas.', url:'', etiqueta:'Gumroad', icono:'sheet', pendiente:true},
-  {titulo:'Mejores hipotecas del mes', texto:'Un PDF con las mejores ofertas, el primer viernes de cada mes en la newsletter.', url:'', etiqueta:'Próximamente', icono:'doc'},
+  {titulo:'Mi patrimonio', texto:'Controla tus gastos y tu patrimonio en el navegador, sin registro. Lee tus fotos de tickets y tus Excel.', url:'', etiqueta:'En desarrollo', icono:'chart', pendiente:true},
+  {titulo:'Mejores hipotecas del mes', texto:'Un PDF con las mejores ofertas, el primer viernes de cada mes en la newsletter.', url:'', etiqueta:'Próximamente', icono:'doc', pendiente:true},
 ];
 
 /* Redes y canales. */
@@ -448,6 +447,7 @@ $('b1').innerHTML=band(B1);$('b2').innerHTML=band(B2);
 /* Herramientas extra: entran alternando por la izquierda y la derecha */
 const EST={'En desarrollo':'dev','Próximamente':'soon'};
 const extras=HERRAMIENTAS_EXTRA.filter(ver);
+if(!extras.length){const bg=document.querySelector('.blk.big');if(bg){bg.style.gridColumn='1/-1';bg.style.minHeight='420px'}}
 extras.forEach((t,i)=>{
   const tag=t.url?'a':'div', side=i%2?'r':'l', span=extras.length===1?'s5':'s5';
   $('blocks').insertAdjacentHTML('beforeend',`<${tag} class="blk ${span} fx ${side}${t.pendiente?' pend':''}" style="--dl:${.1+i*.12}s" ${t.url?`href="${esc(t.url)}" target="_blank" rel="noopener"`:''}>
