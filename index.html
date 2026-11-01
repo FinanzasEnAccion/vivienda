@@ -30,7 +30,12 @@
 <link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
 <meta name="theme-color" content="#0B3D2E">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;background:#EEF2EF}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif;background:#EEF2EF}img{max-width:100%}[hidden]{display:none!important}
+.bklogo{flex:none;display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(16,38,30,.1);vertical-align:middle}
+.bklogo.i{width:26px;height:26px;margin-right:7px;padding:2px}.bklogo.i img{width:100%;height:100%;object-fit:contain}
+.bklogo.w{height:26px;padding:0 8px}.bklogo.w img{height:15px;width:auto;max-width:90px;display:block}
+.bkn{display:inline-flex;align-items:center}
+</style>
 <style>
 /* Tipografías servidas desde el propio sitio (carpeta fonts/, licencia OFL): al cargar no se pide nada a terceros.
    Mismas familias y ejes que antes se pedían a Google Fonts. Bricolage Grotesque (tamaño óptico y peso) se declara con dos caras, 600 y 800,
@@ -2367,7 +2372,7 @@ function render4(){
   MLAST=rows;const edadKo=S.v.edad+S.v.plazo>EDAD_FIN;
   $('m4table').innerHTML=`<table><thead><tr><th>Banco</th><th>Tipo</th><th>TIN bonificado</th><th>Después</th><th>TAE del banco${Q('tae')}</th><th>Tu cuota</th><th>Coste comparado${Q('comparado')}</th><th>Intereses totales</th><th>Lo que te piden</th><th></th></tr></thead><tbody>
     ${rows.map((r,k)=>{const x=r.x,c=r.c;return `<tr data-m="${r.i}" class="${k===0&&P>0&&!c.noAcc?'best':''}${c&&c.noAcc?' noacc':''}">
-      <td class="bk">${esc(x.b)}<span class="pr">${esc(x.p||'')}</span>${srcHtml(x)}</td>
+      <td class="bk"><span class="bkn">${bkName(x.b)}</span><span class="pr">${esc(x.p||'')}</span>${srcHtml(x)}</td>
       <td><span class="tp ${x.t}">${x.t[0].toUpperCase()+x.t.slice(1)}</span></td>
       <td class="num"><b>${pct(c?c.tin:x.tin)}</b>${x.t==='fija'?'':x.t==='mixta'?` · ${anosTxt(x.anos)}`:x.anos>1?` · primeros ${anosTxt(x.anos)}`:' · 1.er año'}${x.tramos?`<span class="pr">a ${anos(c?c.years:S.v.plazo)}</span>`:''}${c&&c.sinBon?`<span class="pr" style="color:var(--warn)">sin bonificar: ${c.sN?`con nómina menor de ${eur(c.g.min)}`:c.tinS?`${pct(c.tinS)} ${desdeTxt(c.promoM+1)}`:'no llegas a la nómina que pide'}</span>`:x.tinS&&x.tinS>x.tin&&x.t!=='variable'?`<span class="pr">sin bonificar ${pct(x.tinS+((c?c.tin:x.tin)-x.tin))}</span>`:''}</td>
       <td class="num">${x.t==='fija'?'—':`Euríbor + ${pct(c&&c.sinBon?c.dif:x.dif)}`}</td>
@@ -2873,7 +2878,7 @@ function renderS(){const R=LAST.r1||calc1();if(!R)return;
   const card=([t,n,d])=>{const b=rows.filter(r=>r.x.t===t).sort((a,b)=>a.c.ef-b.c.ef)[0];
     if(!b)return `<div class="s-card none"><span class="tp ${t}" title="${d}">${n}</span><small>Ninguna encaja con tus datos</small></div>`;
     const x=b.x,c=b.c,np=c.nProd!=null?c.nProd:vkOf(x).length,per=x.anos>1?`los primeros ${anosTxt(x.anos)}`:'el primer año';
-    return `<button class="s-card" data-mdet="${b.i}" title="${d}"><span class="sc-h"><span class="tp ${t}">${n}</span><b>${esc(x.b)}</b></span>
+    return `<button class="s-card" data-mdet="${b.i}" title="${d}"><span class="sc-h"><span class="tp ${t}">${n}</span><b class="bkn">${bkName(x.b)}</b></span>
       <span class="sq">${eur(c.cuota)}<small> al mes${c.years<sBk.pz?`<i class="sc-ps">, a ${anos(c.years)}</i>`:''}</small></span><span class="sc-2">${c.cuota2?`→ ${eur(c.cuota2)} desde el año ${c.desde}`:t==='fija'?'no cambia':'después, parecida'}</span>
       <small class="sc-i"><span class="sc-w">Interés </span>${pct(c.tin)}${t==='fija'?' fijo':' '+per}${c.sinBon?' · sin bonificar':''}</small>${c.years<sBk.pz?`<small class="sc-p">a ${anos(c.years)}, su máximo</small>`:''}
       <small class="sc-d">${c.vkNd?'productos: sin dato':np?`${np} producto${np>1?'s':''}`:'sin productos'}${x.tae?` · TAE ${esc(x.tae)}${x.taeF?'*':''}`:''}</small></button>`};
@@ -3003,6 +3008,11 @@ $('mBody').addEventListener('click',e=>{if(e.target.closest('[data-act="usemax"]
    (JOSE_KEY: 'si' = con el resumen, 'no' = solo el origen) y se cambia en «Qué recibe José», en el banner.
    No se usa window.open (dentro de Claude no es fiable): se cambia el href y navega el propio enlace.
    La analítica solo recibe qué se eligió: nunca el resumen ni importes. */
+/* Logos oficiales de los bancos (carpeta logos/bancos). Sin logo, solo el nombre. */
+/* w: el logo ya dice el nombre (sustituye al texto); i: símbolo que va junto al nombre */
+const BLOGO={'Openbank':['openbank.svg','w'],'CaixaBank':['caixabank.svg','w'],'BBVA':['bbva.svg','w'],'Banco Santander':['santander.svg','w'],'COINC':['coinc.png','w'],'MyInvestor':['myinvestor.png','i'],'Banco Sabadell':['sabadell.png','i'],'Unicaja':['unicaja.png','i'],'Ibercaja':['ibercaja.png','i']};
+const bkName=b=>{const L=BLOGO[b];if(!L)return esc(b);const img=`<img src="logos/bancos/${L[0]}" alt="${L[1]==='w'?esc(b):''}" loading="lazy" onerror="this.parentNode.outerHTML='${esc(b).replace(/'/g,'')}'">`;
+  return L[1]==='w'?`<span class="bklogo w" title="${esc(b)}">${img}</span>`:`<span class="bklogo i">${img}</span>${esc(b)}`};
 const JOSE_URL='https://cal.com/jose-perales-asesor/9zfdea',JOSE_KEY='fea-jose',JOSE_ORIGEN='Vengo de Finanzas en Acción.';
 /* Quién es José y el acuerdo de referidos. Solo Alejandro puede dar estos datos: mientras estén vacíos, no se enseña nada.
    En cuanto haya alguno aparece «Quién es José» en el banner y en la ventana de la reserva, con lo que esté relleno.
