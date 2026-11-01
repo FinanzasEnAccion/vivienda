@@ -943,7 +943,9 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
   const fresco=D=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(D&&D.actualizado||'');if(!m)return false;return (Date.now()-new Date(+m[1],+m[2]-1,+m[3]).getTime())/864e5<=MH_DIAS};
   function pinta(D){
     sec.hidden=!fresco(D);if(sec.hidden)return;
-    const ofs=(D.ofertas||[]).filter(o=>o&&o.tae&&isFinite(num(o.tae)));
+    /* Solo ofertas comprobadas en los últimos 14 días (campo d, «dd/mm/aaaa») */
+    const reciente=o=>{const m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(o.d||'');return !!m&&(Date.now()-new Date(+m[3],+m[2]-1,+m[1]).getTime())/864e5<=14};
+    const ofs=(D.ofertas||[]).filter(o=>o&&o.tae&&isFinite(num(o.tae))&&reciente(o));
     const best=['fija','mixta','variable'].map(t=>ofs.filter(o=>o.t===t).sort((a,b)=>num(a.tae)-num(b.tae))[0]).filter(Boolean);
     if(!best.length)return;
     const m=/^(\d{4})-(\d{2})/.exec(D.actualizado||'');if(m){$('mhT').textContent=`Las mejores hipotecas de ${MES[+m[2]-1]}`}
@@ -954,7 +956,7 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
       return `<article class="mo t-${o.t} fx ${['l','z','r'][i]}" style="--dl:${i*.1}s">
         <span class="ty">Mejor ${o.t}</span>
         <div class="bk">${esc(o.b)}</div><div class="pr">${esc(o.p)}</div>
-        <div class="rate"><b>${esc(o.tae)}</b><span>TAE${o.taeF?' (comparador)':''}</span></div>
+        <div class="rate"><b>${esc(o.tae)}</b><span>TAE${o.taeF?' (según '+esc(String(o.taeF).split(',')[0])+')':''}</span></div>
         <div class="tin">${esc(tin)}</div>
         <ul><li>${esc(vinc)}</li>${req.map(r=>`<li>${esc(r)}</li>`).join('')}${o.pz?`<li>Hasta ${o.pz} años</li>`:''}</ul>
         ${o.f?`<a class="src" href="${esc(o.f)}" target="_blank" rel="noopener" data-ev="mejores/${esc(o.t)}">Ver la oferta en ${esc(o.b)} ↗</a>`:''}
