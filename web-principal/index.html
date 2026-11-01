@@ -408,6 +408,56 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
   .nav.has-where .mkt .where{opacity:1;transform:none}
   .nav .mkt{min-width:150px}
 }
+
+/* Promociones compactas: cupones con la cifra en grande + lista */
+#refs{display:block}
+.tickets{display:grid;gap:14px}
+.tk{display:grid;grid-template-columns:190px 1fr auto;align-items:stretch;border-radius:22px;background:var(--greige);overflow:hidden;position:relative}
+.tk .stub{position:relative;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:20px 22px;color:var(--cream)}
+.tk.t0 .stub{background:var(--acc)}.tk.t1 .stub{background:var(--gold);color:var(--ink)}.tk.t2 .stub{background:#5E8C78}
+.tk .stub::after{content:"";position:absolute;right:-1px;top:10px;bottom:10px;border-right:3px dotted var(--paper)}
+.tk::before,.tk::after{content:"";position:absolute;left:181px;width:18px;height:18px;border-radius:50%;background:var(--paper);z-index:1}
+.tk::before{top:-9px}.tk::after{bottom:-9px}
+.tk .gl{font:600 10.5px var(--m);letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.tk .stub b{font:800 clamp(30px,3.2vw,42px)/1 var(--d);letter-spacing:-.04em}
+.tk .cad{font:600 10.5px var(--m);text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.tk .tb{padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0}
+.tk .tn{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tk h3{font-size:24px}
+.cat{font:600 10.5px var(--m);text-transform:uppercase;letter-spacing:.1em;color:var(--soft)}
+.tk .cond{margin:0;font-weight:600;color:var(--ink);font-size:15.5px}
+.tk .why{margin:0;color:var(--soft);font-size:14.5px}
+.tk .ta{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px 22px 18px 0;min-width:230px}
+.tk .ta .btn{justify-content:center;text-align:center;padding:12px 18px;font-size:14.5px;border:0;cursor:pointer;font-family:inherit}
+.code{display:flex;justify-content:center;align-items:center;gap:8px;font:600 13px var(--m);border:1.5px dashed var(--acc);border-radius:999px;padding:9px 14px;background:none;color:var(--acc);cursor:pointer;white-space:nowrap}
+.code span{font:600 10px var(--m);letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.code.ok{background:var(--mint-2);border-style:solid}
+.btn.cp.ok{background:var(--ink)}
+.also{margin-top:26px}
+.alsoh{font:600 12px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:12px}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 16px;border-radius:18px;background:rgba(30,43,38,.04);box-shadow:inset 0 0 0 1px rgba(30,43,38,.08)}
+.row .lg{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff;font:800 15px var(--d)}
+.row h3{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.row p{margin:2px 0 0;color:var(--soft);font-size:14px;line-height:1.4}
+.row .ra{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.row .code{padding:7px 10px;font-size:12px;border-radius:12px;flex-direction:column;gap:0}
+.mini{display:inline-flex;justify-content:center;text-decoration:none;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;background:var(--acc);color:var(--cream);white-space:nowrap}
+@media(max-width:980px){.tk{grid-template-columns:150px 1fr}.tk::before,.tk::after{left:141px}.tk .ta{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;padding:0 22px 18px}.tk .ta>*{flex:1 1 auto}.rows{grid-template-columns:1fr}}
+@media(max-width:560px){
+  .tk{grid-template-columns:1fr}
+  .tk .stub{flex-direction:row;align-items:baseline;gap:12px;padding:16px 20px}
+  .tk .stub::after{right:16px;left:16px;top:auto;bottom:-1px;border-right:0;border-bottom:3px dotted var(--paper)}
+  .tk::before,.tk::after{display:none}
+  .tk .ta{flex-direction:column;padding:0 20px 18px}
+  .tk .stub{justify-content:flex-start}
+  .row{grid-template-columns:40px 1fr auto;padding:12px 14px;gap:12px}
+  .row .lg{width:40px;height:40px}
+  .row.hascode{grid-template-columns:40px 1fr}
+  .row.hascode .ra{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}
+  .row.hascode .ra>*{flex:1 1 auto}
+  .mini{padding:9px 14px;font-size:13.5px}
+}
 </style>
 </head>
 <body>
@@ -443,10 +493,10 @@ const CITA = {texto:'«Comprar para alquilar, vivir de alquiler.»', firma:'Fina
 /* Productos que usamos. Categorías libres: los filtros se crean solos. */
 const REFERIDOS = [
   /* Promociones. Campos: regalo (va en grande), caduca (opcional, p. ej. '31 de diciembre de 2026'), url y/o codigo, boton (texto del botón, opcional). */
-  {nombre:'iGraal', cat:'Cashback', ini:'iG', color:'#9C8A66', porque:'Lo usamos para ganar cashback en nuestras compras online.', ventaja:'10 € al registrarte con nuestro enlace', caduca:'', url:'https://es.igraal.com/padrinazgo?padrino=gjAZDKmN&utm_medium=inf&utm_source=premium', codigo:''},
-  {nombre:'BBVA', cat:'Banco', ini:'B', color:'#2F6B57', porque:'Nuestra cuenta del día a día.', ventaja:'Hasta 50 € por pagar con la tarjeta de débito y hasta 400 € por traer la nómina o tus ahorros', caduca:'', url:'', codigo:'53340042299915', boton:'Abre tu cuenta en BBVA y usa nuestro código'},
+  {nombre:'iGraal', cifra:'10 €', cat:'Cashback', ini:'iG', color:'#9C8A66', porque:'Lo usamos para ganar cashback en nuestras compras online.', ventaja:'10 € al registrarte con nuestro enlace', caduca:'', url:'https://es.igraal.com/padrinazgo?padrino=gjAZDKmN&utm_medium=inf&utm_source=premium', codigo:''},
+  {nombre:'BBVA', cifra:'50 € + 400 €', cat:'Banco', ini:'B', color:'#2F6B57', porque:'Nuestra cuenta del día a día.', ventaja:'Hasta 50 € por pagar con la tarjeta de débito y hasta 400 € por traer la nómina o tus ahorros', caduca:'', url:'', codigo:'53340042299915', boton:'Abre tu cuenta en BBVA y usa nuestro código'},
   {nombre:'Santander', cat:'Banco', ini:'S', color:'#9C8A66', porque:'Hazte cliente con uno de nuestros códigos del Plan Amigo: el de la campaña 840 o el de la campaña iPhone 18 Pro.', ventaja:'', caduca:'', url:'', codigos:[{etq:'Campaña 840',codigo:'MGM840-GJR60'},{etq:'Campaña iPhone 18 Pro',codigo:'MGMIPHONE18-QP7D2'}], boton:''},
-  {nombre:'MyInvestor', cat:'Inversión', ini:'MI', color:'#5E8C78', porque:'Donde tenemos parte de nuestros ahorros e inversiones.', ventaja:'25 € al abrir tu cuenta si traes 1.000 €, contratas un depósito o inviertes 100 €', caduca:'', url:'https://newapp.myinvestor.es/do/SIGNUP?promotionalCode=3W2ZC', codigo:'3W2ZC'},
+  {nombre:'MyInvestor', cifra:'25 €', cat:'Inversión', ini:'MI', color:'#5E8C78', porque:'Donde tenemos parte de nuestros ahorros e inversiones.', ventaja:'25 € al abrir tu cuenta si traes 1.000 €, contratas un depósito o inviertes 100 €', caduca:'', url:'https://newapp.myinvestor.es/do/SIGNUP?promotionalCode=3W2ZC', codigo:'3W2ZC'},
   {nombre:'Indexa Capital', cat:'Inversión', ini:'IC', color:'#1F4E8C', porque:'Los dos somos clientes desde hace más de 3 años: fondos indexados, comisiones bajas y cero tiempo de gestión.', ventaja:'[Importe gestionado sin comisiones y plazo, p. ej. 15.000 € durante X meses]', url:'', codigo:'', pendiente:true},
   {nombre:'Plan de pensiones de Indexa', cat:'Inversión', ini:'IP', color:'#2F6FB0', porque:'Para la jubilación, con la misma filosofía indexada y de bajo coste.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
   {nombre:'Crescenta', cat:'Private equity', ini:'C', color:'#2F6B57', porque:'Donde invertimos en private equity.', ventaja:'', caduca:'', url:'https://login.crescenta.com/createAccount?hs=b2179fb3-17b6-48b6-aae9-e1e68079e1a0', codigo:''},
@@ -716,18 +766,23 @@ $('cita').innerHTML=`${esc(c1)}${c2?`,<br><em>${esc(c2.trim())}.</em>`:''}<small
 /* Lo que usamos */
 const refs=REFERIDOS.filter(ver);
 if(!refs.length){$('uso').hidden=true;document.querySelectorAll('[data-nav="uso"]').forEach(e=>e.hidden=true)}
-$('refs').innerHTML=refs.map((r,i)=>`
-  <article class="ref fx z${r.pendiente?' pend':''}" style="--dl:${i*.12}s">
-    ${r.pendiente?'<span class="pt">Falta el enlace</span>':''}
-    <div class="top"><div class="lg" style="background:${esc(r.color||'#2F6B57')}">${esc(r.ini||r.nombre[0])}</div><div><h3>${esc(r.nombre)}</h3><div class="cat">${esc(r.cat)}</div></div></div>
-    ${r.ventaja?`<div class="gift"><span class="gl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>Tu regalo</span><b>${esc(r.ventaja)}</b>${r.caduca?`<span class="cad">Hasta el ${esc(r.caduca)}</span>`:''}</div>`:''}
-    <p>${esc(r.porque)}</p>
-    <div class="act">${r.url?`<a class="btn d" href="${esc(r.url)}" target="_blank" rel="noopener sponsored">${esc(r.boton||'Abrir con nuestro enlace')} →</a>`
-      :(r.codigo&&r.boton?`<button type="button" class="btn d cp" data-code="${esc(r.codigo)}">${esc(r.boton)}</button>`:'')}
-      ${(r.codigos||(r.codigo?[{etq:'Código',codigo:r.codigo}]:[])).map(c=>`<button type="button" class="code" data-code="${esc(c.codigo)}" aria-label="Copiar el código ${esc(c.codigo)}"><span>${esc(c.etq)}</span> ${esc(c.codigo)} <i aria-hidden="true">⧉</i></button>`).join('')}</div>
-  </article>`).join('');
-if(refs.length===2||refs.length===4)$('refs').classList.add('two');
-if(refs.length===7||refs.length===8)$('refs').classList.add('four');
+const codes=r=>(r.codigos||(r.codigo?[{etq:'Código',codigo:r.codigo}]:[])).map(c=>`<button type="button" class="code" data-code="${esc(c.codigo)}" aria-label="Copiar el código ${esc(c.codigo)}"><span>${esc(c.etq)}</span> ${esc(c.codigo)} <i aria-hidden="true">⧉</i></button>`).join('');
+const cta=r=>r.url?`<a class="btn d" href="${esc(r.url)}" target="_blank" rel="noopener sponsored">${esc(r.boton||'Abrir con nuestro enlace')} →</a>`:(r.codigo&&r.boton?`<button type="button" class="btn d cp" data-code="${esc(r.codigo)}">${esc(r.boton)}</button>`:'');
+const conRegalo=refs.filter(r=>r.ventaja&&!r.pendiente), sinRegalo=refs.filter(r=>!(r.ventaja&&!r.pendiente));
+$('refs').innerHTML=
+ `<div class="tickets">${conRegalo.map((r,i)=>`
+  <article class="tk fx ${i%2?'r':'l'} t${i%3}" style="--dl:${i*.1}s">
+    <div class="stub"><span class="gl">Tu regalo</span><b>${esc(r.cifra||'🎁')}</b>${r.caduca?`<span class="cad">Hasta el ${esc(r.caduca)}</span>`:''}</div>
+    <div class="tb"><div class="tn"><h3>${esc(r.nombre)}</h3><span class="cat">${esc(r.cat)}</span></div>
+      <p class="cond">${esc(r.ventaja)}</p><p class="why">${esc(r.porque)}</p></div>
+    <div class="ta">${cta(r)}${codes(r)}</div>
+  </article>`).join('')}</div>`+
+ (sinRegalo.length?`<div class="also"><div class="alsoh">También usamos</div><div class="rows">${sinRegalo.map((r,i)=>`
+  <article class="row fx z${r.pendiente?' pend':''}${(r.codigos||r.codigo)?' hascode':''}" style="--dl:${i*.06}s">
+    <div class="lg" style="background:${esc(r.color||'#2F6B57')}">${esc(r.ini||r.nombre[0])}</div>
+    <div class="rb"><h3>${esc(r.nombre)} <span class="cat">${esc(r.cat)}</span></h3><p>${esc(r.porque)}</p></div>
+    <div class="ra">${r.url?`<a class="mini" href="${esc(r.url)}" target="_blank" rel="noopener sponsored">Abrir →</a>`:''}${codes(r)}</div>
+  </article>`).join('')}</div></div>`:'');
 document.addEventListener('click',e=>{const b=e.target.closest('.code,.cp');if(!b)return;
   const done=()=>{const t=b.innerHTML;b.innerHTML=b.classList.contains('cp')?'Código copiado ✓ · ábrelo en la app de BBVA':'¡Copiado! ✓';b.classList.add('ok');setTimeout(()=>{b.innerHTML=t;b.classList.remove('ok')},2200)};
   try{navigator.clipboard.writeText(b.dataset.code).then(done,()=>done())}catch(_){done()}});
