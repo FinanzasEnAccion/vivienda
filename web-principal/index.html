@@ -387,6 +387,13 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
 .ref .code.ok{background:var(--mint-2);border-style:solid}
 
 @media(min-width:601px){.refs.two{grid-template-columns:1fr 1fr}}
+
+@media(min-width:1101px){.refs.four{grid-template-columns:repeat(4,1fr);gap:16px}.refs.four .ref{padding:24px}.refs.four .ref .gift b{font-size:20px}}
+
+.ref .code{white-space:nowrap}
+@media(min-width:1101px){.refs.four .ref .code{flex-direction:column;gap:2px;padding:9px 12px;border-radius:18px}.refs.four .ref .code span{white-space:normal}}
+
+@media(min-width:1101px){.refs.four .ref .code{position:relative;padding-right:30px;padding-left:30px}.refs.four .ref .code i{position:absolute;right:12px;top:50%;transform:translateY(-50%)}}
 </style>
 </head>
 <body>
@@ -424,7 +431,7 @@ const REFERIDOS = [
   /* Promociones. Campos: regalo (va en grande), caduca (opcional, p. ej. '31 de diciembre de 2026'), url y/o codigo, boton (texto del botón, opcional). */
   {nombre:'iGraal', cat:'Cashback', ini:'iG', color:'#9C8A66', porque:'Lo usamos para ganar cashback en nuestras compras online.', ventaja:'10 € al registrarte con nuestro enlace', caduca:'', url:'https://es.igraal.com/padrinazgo?padrino=gjAZDKmN&utm_medium=inf&utm_source=premium', codigo:''},
   {nombre:'BBVA', cat:'Banco', ini:'B', color:'#2F6B57', porque:'Nuestra cuenta del día a día.', ventaja:'Hasta 50 € por pagar con la tarjeta de débito y hasta 400 € por traer la nómina o tus ahorros', caduca:'', url:'', codigo:'53340042299915', boton:'Abre tu cuenta en BBVA y usa nuestro código'},
-  {nombre:'Santander', cat:'Banco', ini:'S', color:'#9C8A66', porque:'[Para qué lo usáis]', ventaja:'[Qué gana quien se apunta con vuestro código]', caduca:'', url:'', codigos:[{etq:'Campaña 840',codigo:'MGM840-GJR60'},{etq:'Campaña iPhone 18 Pro',codigo:'MGMIPHONE18-QP7D2'}], boton:'', pendiente:true},
+  {nombre:'Santander', cat:'Banco', ini:'S', color:'#9C8A66', porque:'Hazte cliente con uno de nuestros códigos del Plan Amigo: el de la campaña 840 o el de la campaña iPhone 18 Pro.', ventaja:'', caduca:'', url:'', codigos:[{etq:'Campaña 840',codigo:'MGM840-GJR60'},{etq:'Campaña iPhone 18 Pro',codigo:'MGMIPHONE18-QP7D2'}], boton:''},
   {nombre:'MyInvestor', cat:'Inversión', ini:'MI', color:'#5E8C78', porque:'Donde tenemos parte de nuestros ahorros e inversiones.', ventaja:'25 € al abrir tu cuenta si traes 1.000 €, contratas un depósito o inviertes 100 €', caduca:'', url:'https://newapp.myinvestor.es/do/SIGNUP?promotionalCode=3W2ZC', codigo:'3W2ZC'},
   {nombre:'Indexa Capital', cat:'Inversión', ini:'IC', color:'#1F4E8C', porque:'Los dos somos clientes desde hace más de 3 años: fondos indexados, comisiones bajas y cero tiempo de gestión.', ventaja:'[Importe gestionado sin comisiones y plazo, p. ej. 15.000 € durante X meses]', url:'', codigo:'', pendiente:true},
   {nombre:'Plan de pensiones de Indexa', cat:'Inversión', ini:'IP', color:'#2F6FB0', porque:'Para la jubilación, con la misma filosofía indexada y de bajo coste.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
@@ -686,6 +693,7 @@ $('refs').innerHTML=refs.map((r,i)=>`
       ${(r.codigos||(r.codigo?[{etq:'Código',codigo:r.codigo}]:[])).map(c=>`<button type="button" class="code" data-code="${esc(c.codigo)}" aria-label="Copiar el código ${esc(c.codigo)}"><span>${esc(c.etq)}</span> ${esc(c.codigo)} <i aria-hidden="true">⧉</i></button>`).join('')}</div>
   </article>`).join('');
 if(refs.length===2||refs.length===4)$('refs').classList.add('two');
+if(refs.length===7||refs.length===8)$('refs').classList.add('four');
 document.addEventListener('click',e=>{const b=e.target.closest('.code,.cp');if(!b)return;
   const done=()=>{const t=b.innerHTML;b.innerHTML=b.classList.contains('cp')?'Código copiado ✓ · ábrelo en la app de BBVA':'¡Copiado! ✓';b.classList.add('ok');setTimeout(()=>{b.innerHTML=t;b.classList.remove('ok')},2200)};
   try{navigator.clipboard.writeText(b.dataset.code).then(done,()=>done())}catch(_){done()}});
