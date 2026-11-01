@@ -556,6 +556,9 @@ footer{color:var(--soft);border-top-color:rgba(30,43,38,.12)}
   .row.wide .rb{grid-column:1/-1;grid-row:2}
   .row.wide .ra{grid-column:1/-1;grid-row:3}
 }
+
+.plate.word[style*=background] img{max-height:32px;max-width:120px}
+@media(max-width:560px){.plate.word[style*=background] img{max-height:28px;max-width:96px}}
 </style>
 </head>
 <body>
@@ -597,7 +600,7 @@ const REFERIDOS = [
   {nombre:'MyInvestor', logo:'logos/myinvestor.png', cifra:'25 €', cat:'Inversión', ini:'MI', color:'#5E8C78', porque:'Donde tenemos parte de nuestros ahorros e inversiones.', ventaja:'25 € al abrir tu cuenta si traes 1.000 €, contratas un depósito o inviertes 100 €', caduca:'', url:'https://newapp.myinvestor.es/do/SIGNUP?promotionalCode=3W2ZC', codigo:'3W2ZC'},
   {nombre:'Indexa Capital', logo:'logos/indexa.png', cat:'Inversión', ini:'IC', color:'#1F4E8C', porque:'Los dos somos clientes desde hace más de 3 años: fondos indexados, comisiones bajas y cero tiempo de gestión.', ventaja:'[Importe gestionado sin comisiones y plazo, p. ej. 15.000 € durante X meses]', url:'', codigo:'', pendiente:true},
   {nombre:'Plan de pensiones de Indexa', logo:'logos/indexa.png', cat:'Inversión', ini:'IP', color:'#2F6FB0', porque:'Para la jubilación, con la misma filosofía indexada y de bajo coste.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
-  {nombre:'Crescenta', logo:'logos/crescenta.png', logoTipo:'palabra', cat:'Private equity', ini:'C', color:'#2F6B57', porque:'Donde invertimos en private equity.', ventaja:'', caduca:'', url:'https://login.crescenta.com/createAccount?hs=b2179fb3-17b6-48b6-aae9-e1e68079e1a0', codigo:''},
+  {nombre:'Crescenta', logo:'logos/crescenta.png', logoTipo:'palabra', logoFondo:'#0B1C30', cat:'Private equity', ini:'C', color:'#2F6B57', porque:'Donde invertimos en private equity.', ventaja:'', caduca:'', url:'https://login.crescenta.com/createAccount?hs=b2179fb3-17b6-48b6-aae9-e1e68079e1a0', codigo:''},
   {nombre:'Revolut', logo:'logos/revolut.svg', logoTipo:'palabra', cat:'Banco', ini:'R', color:'#5E8C78', porque:'Para comprar acciones, ETF y bitcoin desde el móvil.', ventaja:'', caduca:'', url:'https://revolut.com/referral/?referral-code=jess94v!NOV1-26-AR-CRY-CH1H2&geo-redirect', codigo:''},
   {nombre:'Octopus Energy', logo:'logos/octopus.svg', cat:'Energía', ini:'OE', color:'#9C8A66', porque:'Nuestra compañía de luz.', ventaja:'', caduca:'', url:'https://share.octopusenergy.es/cream-safari-177', codigo:''},
 ];
@@ -948,7 +951,7 @@ const MOVIL=`<svg class="movil" viewBox="0 0 120 200" aria-hidden="true">
 const LOGO=r=>{const fb=`<div class="plate ini" style="background:${esc(r.color||'#2F6B57')}">${esc(r.ini||r.nombre[0])}</div>`;
   if(!r.logo)return fb;
   const w=r.logoTipo==='palabra';
-  return `<div class="plate ${w?'word':'icon'}" data-ini="${esc(r.ini||r.nombre[0])}" data-color="${esc(r.color||'#2F6B57')}"><img src="${esc(r.logo)}" alt="${esc(r.nombre)}" loading="lazy" onerror="const d=this.parentNode;d.className='plate ini';d.style.background=d.dataset.color;d.textContent=d.dataset.ini;const h=d.parentNode.querySelector('.nm.sr');if(h)h.classList.remove('sr')"></div>`};
+  return `<div class="plate ${w?'word':'icon'}"${r.logoFondo?` style="background:${esc(r.logoFondo)};padding:0 8px"`:''} data-ini="${esc(r.ini||r.nombre[0])}" data-color="${esc(r.color||'#2F6B57')}"><img src="${esc(r.logo)}" alt="${esc(r.nombre)}" loading="lazy" onerror="const d=this.parentNode;d.className='plate ini';d.style.background=d.dataset.color;d.textContent=d.dataset.ini;const h=d.parentNode.querySelector('.nm.sr');if(h)h.classList.remove('sr')"></div>`};
 const NOMBRE=r=>`<h3 class="nm${r.logo&&r.logoTipo==='palabra'?' sr':''}">${esc(r.nombre)}</h3>`;
 const codes=r=>(r.codigos||(r.codigo?[{etq:'Código',codigo:r.codigo}]:[])).map(c=>`<button type="button" class="code" data-code="${esc(c.codigo)}" data-ev="promo-codigo/${esc(r.nombre)}-${esc(c.etq)}" aria-label="Copiar el código ${esc(c.codigo)}"><span>${esc(c.etq)}</span> ${esc(c.codigo)} <i aria-hidden="true">⧉</i></button>`).join('');
 const cta=r=>r.url?`<a class="btn d" href="${esc(r.url)}" target="_blank" rel="noopener sponsored" data-ev="promo-abrir/${esc(r.nombre)}">${esc(r.boton||'Abrir con nuestro enlace')} →</a>`:(r.codigo&&r.boton?`<button type="button" class="btn d cp" data-code="${esc(r.codigo)}" data-ev="promo-codigo/${esc(r.nombre)}">${esc(r.boton)}</button>`:'');

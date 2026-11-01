@@ -10,4 +10,7 @@ Logos oficiales de cada empresa, solo para identificar a quién enlazamos. Son m
 | myinvestor.png | myinvestor.es (icono oficial de su web) |
 | octopus.svg | octopusenergy.es (logotipo de su web) |
 
-Faltan igraal.png, crescenta.png e indexa.png: sus webs bloquean las descargas automáticas. Mientras falten, la web enseña las iniciales.
+| igraal.png | Imagen oficial que nos pasó Alejandro (recortada) |
+| crescenta.png | Imagen oficial que nos pasó Alejandro (recortada, con su fondo) |
+
+Falta indexa.png: mientras falte, la web enseña las iniciales.
