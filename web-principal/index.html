@@ -429,6 +429,7 @@ const REFERIDOS = [
   {nombre:'Indexa Capital', cat:'Inversión', ini:'IC', color:'#1F4E8C', porque:'Los dos somos clientes desde hace más de 3 años: fondos indexados, comisiones bajas y cero tiempo de gestión.', ventaja:'[Importe gestionado sin comisiones y plazo, p. ej. 15.000 € durante X meses]', url:'', codigo:'', pendiente:true},
   {nombre:'Plan de pensiones de Indexa', cat:'Inversión', ini:'IP', color:'#2F6FB0', porque:'Para la jubilación, con la misma filosofía indexada y de bajo coste.', ventaja:'[Lo que gana quien se apunta]', url:'', codigo:'', pendiente:true},
   {nombre:'Revolut', cat:'Banco', ini:'R', color:'#5E8C78', porque:'Para comprar acciones, ETF y bitcoin desde el móvil.', ventaja:'', caduca:'', url:'https://revolut.com/referral/?referral-code=jess94v!NOV1-26-AR-CRY-CH1H2&geo-redirect', codigo:''},
+  {nombre:'Octopus Energy', cat:'Energía', ini:'OE', color:'#9C8A66', porque:'Nuestra compañía de luz.', ventaja:'', caduca:'', url:'https://share.octopusenergy.es/cream-safari-177', codigo:''},
 ];
 
 /* Herramientas, además de las calculadoras de vivienda (que van fijas en la página). */
@@ -467,7 +468,7 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
       <h1>
         <span class="ln"><span class="fx l" style="--dl:.12s">Invertimos en</span></span>
         <span class="ln rot fx l" style="--dl:.24s" aria-live="polite"><span class="w" id="word">inmobiliario</span></span>
-        <span class="ln"><span class="fx l dim" style="--dl:.36s">con cabeza de controller.</span></span>
+        <span class="ln"><span class="fx l dim" style="--dl:.36s">con mente de controller.</span></span>
       </h1>
       <p class="fx u" style="--dl:.5s">Somos dos hermanos y los dos trabajamos como controllers financieros. Contamos con números reales lo que hacemos con nuestro dinero y creamos herramientas gratis para que decidas con los tuyos.</p>
       <div class="btns fx u" style="--dl:.62s">
@@ -515,6 +516,19 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
   </div>
 </section>
 
+<!-- HIPOTECA -->
+<section class="light open" id="hipoteca" style="padding-top:0">
+  <div class="wrap">
+    <div class="jose" id="jose">
+      <svg class="house" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 46 50 12l42 34" fill="none" stroke="#08251C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="lab" style="color:var(--deep)">¿Vas a pedir hipoteca?</div>
+      <h2 style="margin-top:14px">Antes de firmar, que te mejoren la oferta.</h2>
+      <p>José es el bróker que nos salvó la hipoteca el día antes de firmar. Revisa tu caso, negocia con los bancos y te revisa la FEIN antes de ir a notaría. Llévale el informe en PDF de las calculadoras.</p>
+      <a class="btn d" id="joseurl" href="#" target="_blank" rel="noopener">Primer contacto gratis con José →</a>
+    </div>
+  </div>
+</section>
+
 <!-- EN QUÉ INVERTIMOS -->
 <section id="invertimos" style="padding-top:110px">
   <div class="wrap">
@@ -555,19 +569,6 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
       <p class="fx r">Solo ponemos lo que usamos nosotros. Si te apuntas con nuestro enlace, normalmente ganamos los dos.</p></div>
     <div class="refs" id="refs"></div>
     <div class="note fx u"><b>Transparencia.</b> Son enlaces y códigos de referido: si te das de alta con ellos, podemos recibir una recompensa. Las condiciones de cada promoción las pone cada empresa y pueden cambiar: revísalas antes de darte de alta. No condiciona lo que recomendamos. Nada de esto es asesoramiento financiero ni una recomendación personalizada.</div>
-  </div>
-</section>
-
-<!-- HIPOTECA -->
-<section class="light open" id="hipoteca">
-  <div class="wrap">
-    <div class="jose" id="jose">
-      <svg class="house" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 46 50 12l42 34" fill="none" stroke="#08251C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div class="lab" style="color:var(--deep)">¿Vas a pedir hipoteca?</div>
-      <h2 style="margin-top:14px">Antes de firmar, que te mejoren la oferta.</h2>
-      <p>José es el bróker que nos salvó la hipoteca el día antes de firmar. Revisa tu caso, negocia con los bancos y te revisa la FEIN antes de ir a notaría. Llévale el informe en PDF de las calculadoras.</p>
-      <a class="btn d" id="joseurl" href="#" target="_blank" rel="noopener">Primer contacto gratis con José →</a>
-    </div>
   </div>
 </section>
 
@@ -733,7 +734,7 @@ if(!RM){
       const a=c.getBoundingClientRect(),b=nx.getBoundingClientRect(),k=clamp(1-(b.top-a.top)/a.height,0,1);
       c.style.transform=`scale(${1-k*.06})`;c.style.filter=`brightness(${1-k*.25})`});
     if(jose&&!MOV){const r=jose.getBoundingClientRect(),k=clamp((H-r.top)/(H*.8),0,1),ins=(1-k)*14;
-      jose.style.clipPath=`inset(${ins}% ${ins}% ${ins}% ${ins}% round ${40+(1-k)*60}px)`}
+      jose.style.transform=`scale(${.9+.1*k})`;jose.style.borderRadius=`${40+(1-k)*30}px`}
   }
   addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);frame();
 }
