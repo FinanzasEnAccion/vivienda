@@ -241,6 +241,52 @@ footer a{color:var(--mint);font-weight:600}
 .chan.duo2 .ch b{font-size:clamp(28px,3.4vw,42px);margin:10px 0 4px}
 .chan.duo2 .ch span{color:#163D2F;font-size:16px}
 @media(max-width:900px){.chan.duo2{grid-template-columns:1fr}}
+
+/* ---------- Portada: texto con palabra que rota + baraja de tarjetas en 3D ---------- */
+.hero.h2{display:block;place-items:initial;padding:110px 0 70px}
+.hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;min-height:calc(100svh - 180px)}
+.htext h1{font-size:clamp(44px,6vw,90px);font-weight:800;margin-top:22px;text-align:left}
+.htext h1 .ln{display:block}
+.htext h1 .dim{color:rgba(242,238,227,.55)}
+.htext h1 .rot{position:relative;height:1.04em;overflow:hidden;white-space:nowrap}
+.htext h1 .rot .w{display:inline-block;color:var(--mint);transition:transform .55s var(--ease),opacity .4s ease,filter .4s}
+.htext h1 .rot .w.out{transform:translateY(-105%) rotateX(60deg);opacity:0;filter:blur(4px)}
+.htext h1 .rot .w.in{transform:translateY(105%) rotateX(-60deg);opacity:0;filter:blur(4px);transition:none}
+.htext p{margin:24px 0 32px;max-width:560px;font-size:19px;color:rgba(242,238,227,.78);text-align:left}
+.htext .btns{justify-content:flex-start}
+.strip{display:flex;gap:0;margin-top:30px;border-top:1px solid rgba(242,238,227,.14);max-width:560px}
+.strip div{flex:1;padding:16px 16px 0 0}
+.strip div+div{padding-left:16px;border-left:1px solid rgba(242,238,227,.14)}
+.strip b{display:block;font:800 26px var(--d);letter-spacing:-.03em}
+.strip span{font:500 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--mint)}
+.deck{position:relative;height:500px;perspective:1400px;transform-style:preserve-3d}
+.dk{position:absolute;left:8%;top:40px;width:80%;max-width:420px;height:400px;border-radius:30px;padding:30px;display:flex;flex-direction:column;
+  box-shadow:0 30px 70px rgba(0,0,0,.4);transition:transform .9s var(--ease),opacity .7s ease,filter .7s ease;will-change:transform;backface-visibility:hidden}
+.dk .top{display:flex;justify-content:space-between;font:600 11.5px var(--m);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.dk svg.ic{width:58px;height:58px;margin:26px 0 10px}
+.dk .cat{font:800 40px/1 var(--d);letter-spacing:-.04em}
+.dk .big{font:800 30px var(--d);letter-spacing:-.03em;margin-top:auto}
+.dk .sub{opacity:.78;font-size:15.5px;margin-top:4px}
+.dk .bars{display:flex;align-items:flex-end;gap:6px;height:44px;margin-top:18px}
+.dk .bars i{flex:1;border-radius:4px;background:currentColor;opacity:.18}
+.dk.c0{background:var(--mint);color:var(--night)}
+.dk.c1{background:var(--cream);color:var(--night)}
+.dk.c2{background:var(--gold);color:var(--night)}
+.dk.c3{background:#14614A;color:var(--cream);box-shadow:inset 0 0 0 1px rgba(242,238,227,.18),0 30px 70px rgba(0,0,0,.4)}
+.dk.gone{transform:translate3d(-120%,30px,60px) rotate(-16deg)!important;opacity:0!important}
+@media(max-width:900px){
+  .hgrid{grid-template-columns:1fr;min-height:0;gap:10px}
+  .hero.h2{padding:120px 0 60px}
+  .deck{height:360px;margin-top:10px}
+  .dk{left:6%;width:78%;height:290px;top:20px;padding:24px;border-radius:24px}
+  .dk svg.ic{width:44px;height:44px;margin:16px 0 6px}
+  .dk .cat{font-size:32px}.dk .big{font-size:24px}
+  .htext h1{font-size:clamp(40px,11.5vw,60px)}
+  .htext p{font-size:17px}
+  .strip b{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){.dk,.htext h1 .rot .w{transition:none}}
+
 /* ---------- Móvil: menos efectos ligados al scroll, nada que se tape ---------- */
 @media(max-width:760px){
   body{font-size:16px}
@@ -342,26 +388,28 @@ const JOSE = {url:'https://cal.com/jose-perales-asesor/9zfdea'};
 
 <main id="top">
 <!-- PORTADA -->
-<header class="hero" id="hero">
+<header class="hero h2" id="hero">
   <div class="grid" aria-hidden="true"></div>
-  <div class="chips" id="chips" aria-hidden="true">
-    <div class="chip k" style="left:6%;top:22%;--dl:.5s" data-p="-0.35"><b id="ceur">3,247 %</b><span>Euríbor hoy</span></div>
-    <div class="chip solid" style="right:7%;top:20%;--dl:.7s" data-p="-0.55"><b>2,30 %</b><span>Nuestra fija</span></div>
-    <div class="chip" style="left:9%;bottom:18%;--dl:.9s" data-p="-0.25"><b>128.000 €</b><span>Primer piso</span></div>
-    <div class="chip k" style="right:9%;bottom:20%;--dl:1.1s" data-p="-0.45"><b>90 %</b><span>Financiado</span></div>
-    <div class="chip" style="left:44%;top:12%;--dl:1.3s" data-p="-0.7"><b>0 cookies</b><span>Tus datos, tuyos</span></div>
-  </div>
-  <div class="c">
-    <div class="lab fx z on" style="--dl:.1s">Dos hermanos · Dos controllers</div>
-    <h1 style="margin-top:22px">
-      <span class="ln"><span class="fx l" style="--dl:.15s">Tus números,</span></span>
-      <span class="ln"><span class="fx r m" style="--dl:.3s">tu decisión.</span></span>
-    </h1>
-    <p class="fx u" style="--dl:.55s">Somos dos hermanos y los dos trabajamos como controllers financieros. Contamos con números reales cómo invertimos en inmobiliario, ETF, acciones y private equity, y hacemos herramientas gratis para que decidas con los tuyos.</p>
-    <div class="btns fx u" style="--dl:.7s">
-      <a class="btn p" href="/vivienda/">Abrir las calculadoras <span aria-hidden="true">→</span></a>
-      <a class="btn g" href="#historia">Nuestra historia</a>
+  <div class="wrap hgrid">
+    <div class="htext">
+      <div class="lab fx z" style="--dl:.05s">Dos hermanos · Dos controllers</div>
+      <h1>
+        <span class="ln"><span class="fx l" style="--dl:.12s">Invertimos en</span></span>
+        <span class="ln rot fx l" style="--dl:.24s" aria-live="polite"><span class="w" id="word">inmobiliario</span></span>
+        <span class="ln"><span class="fx l dim" style="--dl:.36s">con cabeza de controller.</span></span>
+      </h1>
+      <p class="fx u" style="--dl:.5s">Somos dos hermanos y los dos trabajamos como controllers financieros. Contamos con números reales lo que hacemos con nuestro dinero y creamos herramientas gratis para que decidas con los tuyos.</p>
+      <div class="btns fx u" style="--dl:.62s">
+        <a class="btn p" href="/vivienda/">Abrir las calculadoras <span aria-hidden="true">→</span></a>
+        <a class="btn g" href="#invertimos">En qué invertimos</a>
+      </div>
+      <div class="strip fx u" style="--dl:.75s">
+        <div><b id="ceur">3,247 %</b><span>Euríbor hoy</span></div>
+        <div><b>2,30 %</b><span>Nuestra fija</span></div>
+        <div><b>0</b><span>Cookies</span></div>
+      </div>
     </div>
+    <div class="deck fx z" style="--dl:.3s" id="deck" aria-hidden="true"></div>
   </div>
 </header>
 
@@ -482,6 +530,40 @@ $('joseurl').href=JOSE.url;
 /* Euríbor del día en la portada (lo lee de las calculadoras; si no puede, se queda el de la copia). */
 fetch('/vivienda/data.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null)
   .then(j=>{const e=j&&j.mercado&&j.mercado.eur;if(typeof e==='number')$('ceur').textContent=e.toLocaleString('es-ES',{minimumFractionDigits:3})+' %'}).catch(()=>{});
+
+
+/* Portada: baraja de tarjetas y palabra que rota a la vez */
+const DECK=[
+  {w:'inmobiliario',cat:'Inmobiliario',big:'128.000 €',sub:'Primer piso, alquilado por habitaciones',ic:'<path d="M6 22 24 8l18 14"/><path d="M11 19v21h26V19"/><path d="M20 40V29h8v11"/>',bars:[30,45,40,60,70,85]},
+  {w:'ETF',cat:'ETF',big:'Indexados',sub:'Bajo coste y a largo plazo',ic:'<path d="M6 38 18 24l8 8 16-18"/><path d="M32 14h10v10"/>',bars:[20,35,30,50,62,80]},
+  {w:'acciones',cat:'Acciones',big:'Empresas',sub:'Elegidas mirando sus números',ic:'<rect x="8" y="22" width="7" height="18" rx="1.5"/><rect x="20.5" y="12" width="7" height="28" rx="1.5"/><rect x="33" y="17" width="7" height="23" rx="1.5"/>',bars:[55,40,65,50,75,70]},
+  {w:'private equity',cat:'Private equity',big:'Desde dentro',sub:'Hacemos reporting de fondos de capital riesgo',ic:'<rect x="7" y="16" width="34" height="24" rx="3"/><path d="M17 16v-5h14v5M7 26h34"/>',bars:[25,30,45,55,70,90]},
+];
+(()=>{
+  const deck=$('deck'),word=$('word');if(!deck)return;
+  deck.innerHTML=DECK.map((d,i)=>`<article class="dk c${i}"><div class="top"><span>Cartera · Finanzas en Acción</span><span>0${i+1}/0${DECK.length}</span></div>
+    <svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${d.ic}</svg>
+    <div class="cat">${d.cat}</div><div class="big">${d.big}</div><div class="sub">${d.sub}</div>
+    <div class="bars">${d.bars.map(h=>`<i style="height:${h}%"></i>`).join('')}</div></article>`).join('');
+  const cards=[...deck.children];let order=cards.map((_,i)=>i),tx=0,ty=0;
+  const place=()=>order.forEach((ci,pos)=>{const c=cards[ci];if(c.classList.contains('gone'))return;
+    c.style.zIndex=10-pos;c.style.opacity=pos>2?0:1-pos*.12;c.style.filter=pos?`brightness(${1-pos*.12})`:'none';
+    c.style.transform=`translate3d(${pos*26}px,${-pos*22}px,${-pos*110}px) rotateY(${tx-6}deg) rotateX(${ty+4}deg) rotate(${pos*3}deg)`});
+  place();
+  addEventListener('pointermove',e=>{if(RM||MOV)return;tx=(e.clientX/innerWidth-.5)*14;ty=-(e.clientY/innerHeight-.5)*10;place()},{passive:true});
+  if(RM)return;
+  let k=0;
+  const pos=(c,i)=>{c.style.zIndex=10-i;c.style.opacity=i>2?0:1-i*.12;c.style.filter=i?`brightness(${1-i*.12})`:'none';
+    c.style.transform=`translate3d(${i*26}px,${-i*22}px,${-i*110}px) rotateY(${tx-6}deg) rotateX(${ty+4}deg) rotate(${i*3}deg)`};
+  const next=()=>{if(document.hidden)return;
+    const front=cards[order[0]],rest=order.slice(1);
+    front.classList.add('gone');rest.forEach((ci,i)=>pos(cards[ci],i));
+    k=(k+1)%DECK.length;word.classList.add('out');
+    setTimeout(()=>{word.textContent=DECK[k].w;word.classList.remove('out');word.classList.add('in');void word.offsetWidth;word.classList.remove('in')},380);
+    setTimeout(()=>{order=[...rest,order[0]];front.style.transition='none';front.classList.remove('gone');pos(front,order.length-1);void front.offsetWidth;front.style.transition=''},850);
+  };
+  setInterval(next,2800);
+})();
 
 /* Bandas */
 const B1=['Comprar para alquilar','Vivir de alquiler','Números reales','Con su fuente','Sin vender humo'];
