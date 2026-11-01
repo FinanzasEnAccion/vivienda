@@ -940,7 +940,11 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
   const num=t=>parseFloat(String(t).replace('%','').replace(',','.'));
   const pc=n=>n.toFixed(2).replace('.',',')+' %';
   const eur=n=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' €';
+  /* Si los datos tienen más de MH_DIAS días, la sección no se enseña: mejor nada que ofertas viejas. */
+  const MH_DIAS=10, sec=$('mejores');
+  const fresco=D=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(D&&D.actualizado||'');if(!m)return false;return (Date.now()-new Date(+m[1],+m[2]-1,+m[3]).getTime())/864e5<=MH_DIAS};
   function pinta(D){
+    sec.hidden=!fresco(D);if(sec.hidden)return;
     const ofs=(D.ofertas||[]).filter(o=>o&&o.tae&&isFinite(num(o.tae)));
     const best=['fija','mixta','variable'].map(t=>ofs.filter(o=>o.t===t).sort((a,b)=>num(a.tae)-num(b.tae))[0]).filter(Boolean);
     if(!best.length)return;
