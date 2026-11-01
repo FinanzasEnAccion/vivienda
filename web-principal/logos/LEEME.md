@@ -14,3 +14,7 @@ Logos oficiales de cada empresa, solo para identificar a quién enlazamos. Son m
 | crescenta.png | Imagen oficial que nos pasó Alejandro (recortada, con su fondo) |
 
 Falta indexa.png: mientras falte, la web enseña las iniciales.
+
+## bancos/ (tarjetas de «Las mejores hipotecas del mes»)
+
+openbank.svg, caixabank.svg, sabadell.png y unicaja.png salen de la web de cada banco; bbva.svg, santander.svg y myinvestor.png son los de arriba. Se busca por el nombre del banco (campo `b` de data.json): para añadir uno, pon el archivo aquí y su entrada en `BLOGO` del index.html. Sin logo, sale un distintivo con la inicial.

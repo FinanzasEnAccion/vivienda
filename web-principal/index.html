@@ -584,6 +584,15 @@ footer .wrap{flex-wrap:wrap}
 .nl-m.err{color:#FFD2C9!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media(max-width:820px){.nl{grid-template-columns:1fr;gap:20px}}
+
+.mhead{display:flex;align-items:center;gap:12px}
+.mo .rate b{white-space:nowrap}
+.mo .fuente{font:600 11px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-top:-6px}
+.mhead .pr{margin-top:2px}
+.mlogo{flex:none;height:48px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(30,43,38,.08);overflow:hidden}
+.mlogo.w{width:120px;padding:0 12px}.mlogo.w img{max-height:24px;max-width:96px}
+.mlogo.i{width:48px}.mlogo.i img{width:100%;height:100%;object-fit:contain;padding:6px}
+.mlogo.ini{width:48px;background:var(--acc);color:var(--cream);font:800 15px var(--d)}
 </style>
 </head>
 <body>
@@ -1059,6 +1068,10 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
   /* Si los datos tienen más de MH_DIAS días, la sección no se enseña: mejor nada que ofertas viejas. */
   const MH_DIAS=10, sec=$('mejores');
   const fresco=D=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(D&&D.actualizado||'');if(!m)return false;return (Date.now()-new Date(+m[1],+m[2]-1,+m[3]).getTime())/864e5<=MH_DIAS};
+  /* Logos de los bancos (oficiales). Si falta uno, sale el nombre en un distintivo. */
+  const BLOGO={'Openbank':['openbank.svg','w'],'CaixaBank':['caixabank.svg','w'],'BBVA':['bbva.svg','w'],'Banco Santander':['santander.svg','w'],'MyInvestor':['myinvestor.png','i'],'Banco Sabadell':['sabadell.png','i'],'Unicaja':['unicaja.png','i']};
+  const bLogo=b=>{const L=BLOGO[b];const ini=String(b).replace(/^Banco /,'').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+    return L?`<div class="mlogo ${L[1]==='w'?'w':'i'}"><img src="logos/bancos/${L[0]}" alt="${esc(b)}" onerror="this.parentNode.className='mlogo ini';this.parentNode.textContent='${ini}'"></div>`:`<div class="mlogo ini">${esc(ini)}</div>`};
   function pinta(D){
     sec.hidden=!fresco(D);if(sec.hidden)return;
     /* Solo ofertas comprobadas en los últimos 14 días (campo d, «dd/mm/aaaa») */
@@ -1073,8 +1086,8 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
       const req=[];if(o.ingMin)req.push(`Ingresos desde ${eur(o.ingMin)}/mes${o.ingMin2&&o.ingMin2!==o.ingMin?` (${eur(o.ingMin2)} con dos titulares)`:''}`);if(o.minImp)req.push(`Préstamo desde ${eur(o.minImp)}`);
       return `<article class="mo t-${o.t} fx ${['l','z','r'][i]}" style="--dl:${i*.1}s">
         <span class="ty">Mejor ${o.t}</span>
-        <div class="bk">${esc(o.b)}</div><div class="pr">${esc(o.p)}</div>
-        <div class="rate"><b>${esc(o.tae)}</b><span>TAE${o.taeF?' (según '+esc(String(o.taeF).split(',')[0])+')':''}</span></div>
+        <div class="mhead">${bLogo(o.b)}<div>${BLOGO[o.b]&&BLOGO[o.b][1]==='w'?'':`<div class="bk">${esc(o.b)}</div>`}<div class="pr">${esc(o.p)}</div></div></div>
+        <div class="rate"><b>${esc(o.tae)}</b><span>TAE</span></div>${o.taeF?`<div class="fuente">Dato de ${esc(String(o.taeF).split(',')[0])}</div>`:''}
         <div class="tin">${esc(tin)}</div>
         <ul><li>${esc(vinc)}</li>${req.map(r=>`<li>${esc(r)}</li>`).join('')}${o.pz?`<li>Hasta ${o.pz} años</li>`:''}</ul>
         ${o.f?`<a class="src" href="${esc(o.f)}" target="_blank" rel="noopener" data-ev="mejores/${esc(o.t)}">Ver la oferta en ${esc(o.b)} ↗</a>`:''}
