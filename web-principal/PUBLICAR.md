@@ -1,6 +1,6 @@
 # Publicar la web en somosfinanzasenaccion.es
 
-Prompt para una sesión de Claude en el ordenador de Alejandro, con Claude in Chrome
+Prompt para una sesión de Claude en vuestro ordenador, con Claude in Chrome
 (ya hay sesión iniciada en GitHub, DonDominio y Cloudflare).
 
 ```
