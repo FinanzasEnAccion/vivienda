@@ -5,8 +5,13 @@ from zoneinfo import ZoneInfo
 B='https://finanzasenaccion.goatcounter.com/api/v0'; MAD=ZoneInfo('Europe/Madrid'); UTC=dt.timezone.utc
 ahora=dt.datetime.now(UTC); hoy=ahora.date(); ini=hoy-dt.timedelta(days=29); fin=hoy+dt.timedelta(days=1)
 def get(path):
-    out=subprocess.run(['curl','-s','--max-time','30','-H','Accept: application/json',f'{B}{path}'],capture_output=True,text=True).stdout
-    return json.loads(out)
+    import time
+    for i in range(4):  # GoatCounter a veces responde vacío: reintenta
+        out=subprocess.run(['curl','-s','--max-time','30','-H','Accept: application/json',f'{B}{path}'],capture_output=True,text=True).stdout
+        try: return json.loads(out)
+        except ValueError:
+            if i==3: raise
+            time.sleep(2*(i+1))
 q=f'start={ini}&end={fin}'
 t=get(f'/stats/total?{q}')
 hits=[];more=True;excl=''
