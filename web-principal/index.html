@@ -287,7 +287,7 @@ footer a{color:var(--mint);font-weight:600}
 .dk.c3{background:#14614A;color:var(--cream);box-shadow:inset 0 0 0 1px rgba(30,43,38,.18),0 30px 70px rgba(0,0,0,.4)}
 .dk.gone{transform:translate3d(-120%,30px,60px) rotate(-16deg)!important;opacity:0!important}
 @media(max-width:900px){
-  .hgrid{grid-template-columns:1fr;min-height:0;gap:10px}
+  .hgrid{grid-template-columns:minmax(0,1fr);min-height:0;gap:10px}.htext{min-width:0}
   .hero.h2{padding:120px 0 60px}
   .deck{height:360px;margin-top:10px}
   .dk{left:6%;width:78%;height:290px;top:20px;padding:24px;border-radius:24px}
@@ -598,6 +598,20 @@ footer .wrap{flex-wrap:wrap}
 .mlogo.w{width:120px;padding:0 12px}.mlogo.w img{max-height:24px;max-width:96px}
 .mlogo.i{width:48px}.mlogo.i img{width:100%;height:100%;object-fit:contain;padding:6px}
 .mlogo.ini{width:48px;background:var(--acc);color:var(--cream);font:800 15px var(--d)}
+
+/* ---------- Accesos rápidos (móvil): que las promociones se vean sin bajar ---------- */
+.quick{display:none}
+.nav .pm{display:none}
+@media(max-width:900px){
+  .quick{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px}
+  .quick .q{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;font:600 14px var(--b,inherit);text-decoration:none;color:var(--ink);background:rgba(244,241,234,.8);box-shadow:inset 0 0 0 1px rgba(30,43,38,.14)}
+  .quick .q.hot{background:var(--acc);color:var(--cream);box-shadow:0 8px 20px rgba(47,107,87,.25)}
+  .quick .q svg{width:16px;height:16px}
+  .nav .pm{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:13.5px;padding:9px 12px;border-radius:999px;color:var(--acc);box-shadow:inset 0 0 0 1.5px var(--acc);margin-left:auto;margin-right:6px}
+  .nav .pm svg{width:15px;height:15px}
+}
+@media(max-width:900px){.nav .x{font-size:0;gap:0;padding:10px 12px}.nav .x svg{width:15px;height:15px}}
+@media(max-width:380px){.nav .pm span{display:none}.nav .pm{padding:9px}}
 </style>
 </head>
 <body>
@@ -680,6 +694,7 @@ const GC_CODE='finanzasenaccion';
   <a class="i" href="#nosotros">Quiénes somos</a>
   <a class="i" href="#historia">Historia</a>
   <a class="i" href="#uso" data-nav="uso">Promociones</a>
+  <a class="pm" href="#uso" data-ev="atajo/promos-menu" aria-label="Promociones"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg><span>Promos</span></a>
   <a class="x" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>Seguir</a>
 </nav>
 
@@ -700,6 +715,13 @@ const GC_CODE='finanzasenaccion';
         <a class="btn p" href="/vivienda/">Abrir las calculadoras <span aria-hidden="true">→</span></a>
         <a class="btn g" href="#invertimos">En qué invertimos</a>
       </div>
+      <nav class="quick fx u" style="--dl:.7s" aria-label="Ir directamente a">
+        <a class="q hot" href="#uso" data-ev="atajo/promociones"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg> Promociones con regalo</a>
+        <a class="q" href="#mejores" data-ev="atajo/hipotecas" id="qMejores">Mejores hipotecas</a>
+        <a class="q" href="#hipoteca" data-ev="atajo/jose">Hablar con un bróker</a>
+        <a class="q" href="#herramientas" data-ev="atajo/herramientas">Herramientas</a>
+        <a class="q" href="#newsletter" data-ev="atajo/newsletter">Newsletter</a>
+      </nav>
       <form class="mini-calc fx u" style="--dl:.75s" id="mc" autocomplete="off" onsubmit="return false">
         <label for="mcIng">¿Cuánto ganáis al mes, netos y entre todos?</label>
         <div class="mc-in"><input id="mcIng" inputmode="numeric" placeholder="2.500" aria-describedby="mcRes"><span>€/mes</span></div>
@@ -1084,7 +1106,7 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
   const bLogo=b=>{const L=BLOGO[b];const ini=String(b).replace(/^Banco /,'').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
     return L?`<div class="mlogo ${L[1]==='w'?'w':'i'}"><img src="logos/bancos/${L[0]}" alt="${esc(b)}" onerror="this.parentNode.className='mlogo ini';this.parentNode.textContent='${ini}'"></div>`:`<div class="mlogo ini">${esc(ini)}</div>`};
   function pinta(D){
-    sec.hidden=!fresco(D);if(sec.hidden)return;
+    sec.hidden=!fresco(D);{const q=document.getElementById('qMejores');if(q)q.hidden=sec.hidden}if(sec.hidden)return;
     /* Solo ofertas comprobadas en los últimos 14 días (campo d, «dd/mm/aaaa») */
     const reciente=o=>{const m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(o.d||'');return !!m&&(Date.now()-new Date(+m[3],+m[2]-1,+m[1]).getTime())/864e5<=14};
     const ofs=(D.ofertas||[]).filter(o=>o&&o.tae&&isFinite(num(o.tae))&&reciente(o));
