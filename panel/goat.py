@@ -89,5 +89,12 @@ doc={'visitas':sum(p['n'] for p in paginas),'clics':sum(e['n'] for e in eventos)
      'paises':[{'k':r.get('id') or r.get('name'),'n':r.get('count',0)} for r in lista('locations',8) if r.get('count')],
      'sistemas':[{'k':r.get('name') or r.get('id'),'n':r.get('count',0)} for r in lista('systems',6) if r.get('count')],
      'paginas':sorted(paginas,key=lambda x:-x['n'])[:20],'eventos':sorted(eventos,key=lambda x:-x['n'])[:80],'fuentes':fuentes,'jose':jose}
+# Calendario del año en curso (visitas + clics por día, hora UTC de GoatCounter) y mejores días
+ia=dt.date(hoy.year,1,1)
+try: ta=get(f'/stats/total?start={ia}&end={fin}')
+except Exception: ta={}
+anual={d['day']:d.get('daily',0) for d in ta.get('stats',[])}
+doc['anual']={'ano':hoy.year,'dias':[anual.get(str(ia+dt.timedelta(days=i)),0) for i in range((hoy-ia).days+1)]}
+doc['mejores']=[{'d':k,'n':v} for k,v in sorted(anual.items(),key=lambda x:-x[1]) if v][:5]
 json.dump(doc,open('/tmp/web.json','w'),ensure_ascii=False)
 print(json.dumps({k:doc[k] for k in ('visitas','clics','actualizado','horas','semana','origen','dispositivos','paises')},ensure_ascii=False))
