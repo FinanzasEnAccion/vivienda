@@ -34,7 +34,7 @@
 /* Concepto: la página se construye por bloques. Entran por los lados, desde el fondo hacia delante, y se apilan al bajar. */
 :root{
   --night:#DED8CA;--deep:#2F6B57;--deep-2:#2F6B57;--cream:#F4F1EA;--paper:#F4F1EA;
-  --mint:#8FC2AC;--mint-2:#CFE3D8;--gold:#9C8A66;--ink:#1E2B26;--soft:#4F5751;
+  --mint:#8FC2AC;--mint-2:#CFE3D8;--gold:#9C8A66;--ink:#1E2B26;--soft:#5E655F;
   --acc:#2F6B57;--card:#D1CABA;--card-2:#C4BCA9;--greige:#DED8CA;
   --d:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --b:"Instrument Sans","Segoe UI",system-ui,sans-serif;
@@ -162,7 +162,7 @@ a.blk:hover{box-shadow:0 2px 4px rgba(12,34,25,.08),0 30px 60px rgba(12,34,25,.1
 .card.pend{background:var(--deep-2)!important;color:var(--cream)!important;border:2px dashed rgba(30,43,38,.35)}
 .quote{margin-top:80px;text-align:center;font:800 clamp(36px,6vw,88px)/1 var(--d);letter-spacing:-.04em}
 .quote em{font-style:normal;color:var(--mint)}
-.quote small{display:block;margin-top:18px;font:500 13px var(--m);letter-spacing:.12em;text-transform:uppercase;color:rgba(30,43,38,.75)}
+.quote small{display:block;margin-top:18px;font:500 13px var(--m);letter-spacing:.12em;text-transform:uppercase;color:rgba(30,43,38,.6)}
 @media(max-width:760px){.card{grid-template-columns:1fr;gap:12px;padding:30px;top:90px;min-height:0}}
 
 /* Cifras */
@@ -207,11 +207,11 @@ a.blk:hover{box-shadow:0 2px 4px rgba(12,34,25,.08),0 30px 60px rgba(12,34,25,.1
 a.ch:hover{background:rgba(143,194,172,.14)}
 .ch .k{font:600 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--mint)}
 .ch b{display:block;font:800 22px var(--d);letter-spacing:-.02em;margin:10px 0 2px}
-.ch span{font-size:14px;color:rgba(30,43,38,.75)}
+.ch span{font-size:14px;color:rgba(30,43,38,.6)}
 .ch.pend{box-shadow:none;border:2px dashed rgba(30,43,38,.25);background:none}
 @media(max-width:900px){.chan{grid-template-columns:1fr 1fr}}
 
-footer{padding:30px 0 60px;color:rgba(30,43,38,.72);font-size:14px;border-top:1px solid rgba(30,43,38,.1)}
+footer{padding:30px 0 60px;color:rgba(30,43,38,.55);font-size:14px;border-top:1px solid rgba(30,43,38,.1)}
 footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 footer a{color:var(--mint);font-weight:600}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:10px}
@@ -623,48 +623,6 @@ footer .wrap{flex-wrap:wrap}
 }
 @keyframes mnIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.mnl{animation:none}}
-
-/* ---------- Mejoras 11/2026 ---------- */
-section[id],header[id]{scroll-margin-top:84px}
-/* Portada en móvil: la calculadora justo debajo del titular */
-@media(max-width:900px){
-  .htext{display:flex;flex-direction:column}
-  .htext .lab{order:1}.htext h1{order:2}.htext .mini-calc{order:3;margin-top:20px}.htext .btns{order:4;margin-top:16px}.htext .quick{order:5}.htext p{order:6;margin:22px 0 0}
-}
-/* Newsletter corta bajo José */
-.nl-mini{display:grid;grid-template-columns:1fr auto;gap:10px 12px;align-items:center;margin-top:18px;padding:20px 22px;border-radius:var(--r);background:#fff;box-shadow:0 12px 30px rgba(12,34,25,.07)}
-.nl-mini .nl-mt{grid-column:1/-1;font-size:15.5px;color:var(--ink)}
-.nl-mini input{min-width:0;padding:13px 16px;border-radius:999px;border:1.5px solid rgba(30,43,38,.18);font:inherit;background:var(--cream,#F4F1EA)}
-.nl-mini .nl-m{grid-column:1/-1;margin:0;font-size:13px;color:var(--soft)}
-@media(max-width:560px){.nl-mini{grid-template-columns:1fr}.nl-mini .btn{justify-content:center}}
-/* Historia: línea de tiempo compacta */
-.hl{list-style:none;margin:0;padding:0;position:relative;display:grid;gap:18px}
-.hl:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:rgba(30,43,38,.16)}
-.hl li{display:grid;grid-template-columns:1fr;gap:4px;align-items:start;position:relative;padding-left:32px}
-.hl li:after{content:"";position:absolute;left:0;top:5px;width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px var(--card,#F4F1EA)}
-.hl .yr{font:800 18px/1.2 var(--d);color:var(--acc);letter-spacing:-.02em;text-align:left}
-.hl h3{font-size:clamp(19px,2vw,23px);margin:0 0 4px;color:var(--ink)}
-.hl p{margin:0;color:var(--soft)!important;opacity:1;font-size:16px;max-width:680px}
-@media(min-width:901px){.hl{grid-template-columns:1fr 1fr;column-gap:48px}.hl:before{display:none}.hl li:after{display:none}.hl li{grid-template-columns:70px 1fr;gap:22px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.55)}}
-#historia .quote{margin-top:44px;font-size:clamp(30px,4.4vw,60px)}
-/* Cifras en una línea */
-@media(max-width:900px){.nums{grid-template-columns:repeat(3,1fr)!important;gap:8px}.num{padding:16px 10px;text-align:center}.num b{font-size:26px!important}.num span{font-size:12.5px;margin-top:6px;line-height:1.3}}
-/* Paneles plegables (móvil) */
-.plg-b{display:none}
-.plg-todo{display:none}
-@media(max-width:820px){
-  .plg-todo{display:flex;justify-content:center;margin:14px 0 0}
-  .plg-todo button{font:600 14px var(--b,inherit);padding:10px 18px;border-radius:999px;border:0;background:transparent;color:var(--acc);box-shadow:inset 0 0 0 1.5px var(--acc)}
-  section.plg{padding-top:10px!important;padding-bottom:10px!important}
-  section.plg .plg-b{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px;border:0;border-radius:20px;background:#fff;box-shadow:0 10px 26px rgba(12,34,25,.07);font:800 20px/1.2 var(--d);letter-spacing:-.02em;color:var(--ink);text-align:left}
-  section.plg .plg-b small{display:block;font:600 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
-  section.plg .plg-b svg{width:22px;height:22px;flex:none;color:var(--acc);transition:transform .25s}
-  section.plg.ab .plg-b svg{transform:rotate(180deg)}
-  section.plg.ab .plg-b{margin-bottom:22px}
-  section.plg:not(.ab) .wrap>:not(.plg-b){display:none!important}
-  section.plg .sh .lab,section.plg .sh h2{display:none}
-  section.plg .sh{margin-bottom:18px}
-}
 </style>
 </head>
 <body>
@@ -743,11 +701,10 @@ const GC_CODE='finanzasenaccion';
 <nav class="nav" aria-label="Secciones">
   <a class="mk" href="#top"><img src="../logo.png" alt="" width="30" height="30"><span class="mkt"><span class="brand">Finanzas en Acción</span><span class="where" id="where" aria-live="polite"></span></span><svg class="mnc" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg></a>
   <a class="i" href="#herramientas">Herramientas</a>
-  <a class="i" href="#mejores" id="navHip">Hipotecas</a>
   <a class="i" href="#invertimos">Invertimos</a>
   <a class="i" href="#nosotros">Quiénes somos</a>
+  <a class="i" href="#historia">Historia</a>
   <a class="i" href="#uso" data-nav="uso">Promociones</a>
-  <a class="i" href="#newsletter">Newsletter</a>
   <a class="x" href="https://x.com/BuscandolaLF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg>Seguir</a>
 </nav>
 <div class="mnl" id="mnList" hidden role="menu" aria-label="Ir a una sección"></div>
@@ -767,11 +724,13 @@ const GC_CODE='finanzasenaccion';
       <p class="fx u" style="--dl:.5s">Somos dos hermanos y los dos trabajamos como controllers financieros. Contamos con números reales lo que hacemos con nuestro dinero y creamos herramientas gratis para que decidas con los tuyos.</p>
       <div class="btns fx u" style="--dl:.62s">
         <a class="btn p" href="../">Abrir las calculadoras <span aria-hidden="true">→</span></a>
+        <a class="btn g" href="#invertimos">En qué invertimos</a>
       </div>
       <nav class="quick fx u" style="--dl:.7s" aria-label="Ir directamente a">
         <a class="q hot" href="#uso" data-ev="atajo/promociones"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg> Promociones con regalo</a>
         <a class="q" href="#mejores" data-ev="atajo/hipotecas" id="qMejores">Mejores hipotecas</a>
         <a class="q" href="#hipoteca" data-ev="atajo/jose">Hablar con un bróker</a>
+        <a class="q" href="#herramientas" data-ev="atajo/herramientas">Herramientas</a>
         <a class="q" href="#newsletter" data-ev="atajo/newsletter">Newsletter</a>
       </nav>
       <form class="mini-calc fx u" style="--dl:.75s" id="mc" autocomplete="off" onsubmit="return false">
@@ -812,9 +771,8 @@ const GC_CODE='finanzasenaccion';
     <div class="nums">
       <a class="num fx l" style="text-decoration:none" href="https://x.com/i/communities/1884593569224171756" target="_blank" rel="noopener"><b data-n="2000" data-pre="+">0</b><span>miembros en El Club de la Hipoteca ↗</span></a>
       <div class="num fx z" style="--dl:.2s"><b data-n="6">0</b><span>calculadoras gratis</span></div>
-      <div class="num fx r" style="--dl:.3s"><b>Gratis</b><span>y sin registro</span></div>
+      <div class="num fx r" style="--dl:.3s"><b data-n="0" data-suf=" €">0</b><span>lo que te cuesta usarlas</span></div>
     </div>
-    <div class="plg-todo"><button type="button" id="plgTodo" data-ev="panel/desplegar-todo">Desplegar todo</button></div>
   </div>
 </section>
 
@@ -840,13 +798,6 @@ const GC_CODE='finanzasenaccion';
       <p>José es el bróker que nos salvó la hipoteca el día antes de firmar. Revisa tu caso, negocia con los bancos y te revisa la FEIN antes de ir a notaría. Llévale el informe en PDF de las calculadoras.</p>
       <a class="btn d" id="joseurl" href="#" target="_blank" rel="noopener">Primer contacto gratis con José →</a>
     </div>
-    <form class="nl-f nl-mini fx u" data-nl novalidate>
-      <div class="nl-mt"><b>Las mejores hipotecas del mes, en tu correo.</b> La newsletter de los viernes, gratis.</div>
-      <label class="sr" for="nlEmail2">Tu correo</label>
-      <input id="nlEmail2" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.com" required>
-      <button class="btn p" type="submit" data-ev="newsletter/suscribir-jose">Suscribirme →</button>
-      <p class="nl-m" role="status">Te llevamos a Substack para confirmar. Sin spam.</p>
-    </form>
   </div>
 </section>
 
@@ -874,6 +825,15 @@ const GC_CODE='finanzasenaccion';
   </div>
 </section>
 
+<!-- HISTORIA -->
+<section class="story" id="historia">
+  <div class="wrap">
+    <div class="sh"><div><div class="lab fx l">Nuestra historia</div><h2 class="fx l" style="--dl:.08s">De cuadrar cuentas de empresas a cuadrar las nuestras.</h2></div></div>
+    <div class="stack" id="stack"></div>
+    <div class="quote fx z" id="cita"></div>
+  </div>
+</section>
+
 <!-- LO QUE USAMOS -->
 <section class="light" id="uso">
   <div class="wrap">
@@ -881,15 +841,6 @@ const GC_CODE='finanzasenaccion';
       <p class="fx r">Solo ponemos lo que usamos nosotros. Si te apuntas con nuestro enlace, normalmente ganamos los dos.</p></div>
     <div class="refs" id="refs"></div>
     <div class="note fx u"><b>Transparencia.</b> Son enlaces y códigos de referido: si te das de alta con ellos, podemos recibir una recompensa. Las condiciones de cada promoción las pone cada empresa y pueden cambiar: revísalas antes de darte de alta. No condiciona lo que recomendamos. Nada de esto es asesoramiento financiero ni una recomendación personalizada.</div>
-  </div>
-</section>
-
-<!-- HISTORIA -->
-<section class="story" id="historia">
-  <div class="wrap">
-    <div class="sh"><div><div class="lab fx l">Nuestra historia</div><h2 class="fx l" style="--dl:.08s">De cuadrar cuentas de empresas a cuadrar las nuestras.</h2></div></div>
-    <div class="stack" id="stack"></div>
-    <div class="quote fx z" id="cita"></div>
   </div>
 </section>
 
@@ -902,7 +853,7 @@ const GC_CODE='finanzasenaccion';
         <h2>Nuestros números, en tu correo.</h2>
         <p>Lo que hacemos con nuestro dinero, las mejores hipotecas del mes y las promociones que merecen la pena. Gratis, se lee en 5 minutos.</p>
       </div>
-      <form class="nl-f" id="nlForm" data-nl novalidate>
+      <form class="nl-f" id="nlForm" novalidate>
         <label for="nlEmail" class="sr">Tu correo</label>
         <input id="nlEmail" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.com" required>
         <button class="btn p" type="submit" data-ev="newsletter/suscribir">Suscribirme gratis →</button>
@@ -984,7 +935,7 @@ const DECK=[
 
 /* Dónde estoy */
 (()=>{
-  const SECS=[['herramientas','Herramientas'],['mejores','Mejores hipotecas'],['hipoteca','Hipoteca'],['invertimos','Invertimos'],['nosotros','Quiénes somos'],['uso','Promociones'],['historia','Nuestra historia'],['newsletter','Newsletter'],['canales','Síguenos']];
+  const SECS=[['herramientas','Herramientas'],['mejores','Mejores hipotecas'],['hipoteca','Hipoteca'],['invertimos','Invertimos'],['nosotros','Quiénes somos'],['historia','Nuestra historia'],['uso','Promociones'],['newsletter','Newsletter'],['canales','Síguenos']];
   const nav=document.querySelector('.nav'),where=$('where'),bar=$('prog');
   const links=[...document.querySelectorAll('.nav a.i')];
   let last='';
@@ -1012,27 +963,6 @@ const DECK=[
   mq.addEventListener&&mq.addEventListener('change',()=>{if(!mq.matches)cierra()});
 })();
 
-
-/* Paneles plegables en el móvil: el título abre y cierra. Promociones, herramientas, José y newsletter siempre abiertos. */
-(()=>{const PLG={mejores:'Mejores hipotecas',invertimos:'En qué invertimos',nosotros:'Quiénes somos',historia:'Nuestra historia',canales:'Síguenos'};
-  const mq=matchMedia('(max-width:820px)'),CH='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>';
-  const secs=Object.keys(PLG).map(id=>document.getElementById(id)).filter(Boolean);
-  const muestra=sec=>sec.querySelectorAll('.fx:not(.on)').forEach(el=>el.classList.add('on'));
-  const pon=(sec,ab)=>{sec.classList.toggle('ab',ab);const b=sec.querySelector('.plg-b');if(b)b.setAttribute('aria-expanded',ab);if(ab)muestra(sec);dispatchEvent(new Event('scroll'))};
-  secs.forEach(sec=>{const w=sec.querySelector('.wrap');if(!w)return;const t=sec.querySelector('h2');
-    const b=document.createElement('button');b.type='button';b.className='plg-b';b.setAttribute('aria-expanded','false');
-    b.innerHTML=`<span><small>${PLG[sec.id]}</small>${t?t.textContent:''}</span>${CH}`;w.prepend(b);
-    b.addEventListener('click',()=>{const ab=!sec.classList.contains('ab');pon(sec,ab);if(ab&&typeof track==='function')track('panel/abrir-'+sec.id);actTodo()})});
-  const todo=document.getElementById('plgTodo');
-  const actTodo=()=>{if(todo)todo.textContent=secs.every(s=>s.hidden||s.classList.contains('ab'))?'Plegar todo':'Desplegar todo'};
-  if(todo)todo.addEventListener('click',()=>{const abrir=todo.textContent.startsWith('Desplegar');secs.forEach(s=>pon(s,abrir));actTodo()});
-  const aplica=()=>{secs.forEach(s=>{s.classList.toggle('plg',mq.matches);if(!mq.matches)muestra(s)});actTodo()};
-  aplica();mq.addEventListener&&mq.addEventListener('change',aplica);
-  /* Un enlace o el menú a una sección plegada la abre */
-  const abreHash=h=>{const sec=h&&document.getElementById(h.slice(1));if(sec&&sec.classList.contains('plg')&&!sec.classList.contains('ab')){pon(sec,true);actTodo()}};
-  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a)abreHash(a.getAttribute('href'))},true);
-  addEventListener('hashchange',()=>abreHash(location.hash));if(location.hash)abreHash(location.hash);
-})();
 
 /* Analítica: eventos con data-ev y enlaces clave */
 const GCQ=[];
@@ -1081,11 +1011,11 @@ document.addEventListener('click',e=>{
 
 
 /* Newsletter: el correo se pasa a Substack, que pide la confirmación */
-document.querySelectorAll('form[data-nl]').forEach(f=>{const inp=f.querySelector('input[type=email]'),m=f.querySelector('.nl-m');f.addEventListener('submit',e=>{e.preventDefault();const em=inp.value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){m.textContent='Revisa el correo: parece que falta algo.';m.className='nl-m err';inp.focus();return}
+(()=>{const f=$('nlForm');if(!f)return;f.addEventListener('submit',e=>{e.preventDefault();const em=$('nlEmail').value.trim(),m=$('nlMsg');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){m.textContent='Revisa el correo: parece que falta algo.';m.className='nl-m err';$('nlEmail').focus();return}
   m.className='nl-m';m.textContent='Abriendo Substack para confirmar tu suscripción…';
   window.open(`${SUBSTACK}/subscribe?email=${encodeURIComponent(em)}&utm_source=web&utm_medium=formulario`,'_blank','noopener');
-  setTimeout(()=>{m.textContent='Listo: confirma en la pestaña de Substack y revisa tu correo.';},800)})});
+  setTimeout(()=>{m.textContent='Listo: confirma en la pestaña de Substack y revisa tu correo.';},800)})})();
 
 /* Bandas */
 const B1=['Comprar para alquilar','Vivir de alquiler','Números reales','Con su fuente','Sin vender humo'];
@@ -1114,8 +1044,11 @@ $('duo').innerHTML=NOSOTROS.filter(ver).map((n,i)=>`
   </article>`).join('');
 
 /* Historia */
-$('stack').innerHTML='<ol class="hl">'+HISTORIA.filter(ver).map((h,i)=>`
-  <li class="${MOV?'fx u':''}${h.pendiente?' pend':''}" style="--dl:${i*.06}s"><span class="yr">${esc(h.cuando)}</span><div>${h.pendiente?'<span class="pt">Por escribir</span> ':''}<h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></div></li>`).join('')+'</ol>';
+$('stack').innerHTML=HISTORIA.filter(ver).map((h,i)=>`
+  <article class="card${MOV?' fx z':''}${h.pendiente?' pend':''}" style="top:${110+i*14}px">
+    <div class="yr">${esc(h.cuando)}</div>
+    <div>${h.pendiente?'<span class="pt">Por escribir</span><br>':''}<h3>${esc(h.titulo)}</h3><p>${esc(h.texto)}</p></div>
+  </article>`).join('');
 const cita=CITA.texto.replace(/^«|»$/g,'').replace(/\.$/,'');
 const [c1,c2]=cita.split(',');
 $('cita').innerHTML=`${esc(c1)}${c2?`,<br><em>${esc(c2.trim())}.</em>`:''}<small>— ${esc(CITA.firma)}</small>`;
@@ -1196,7 +1129,7 @@ const MH0={"actualizado": "2026-10-15", "fecha": "15 de octubre de 2026", "ofert
   const bLogo=b=>{const L=BLOGO[b];const ini=String(b).replace(/^Banco /,'').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
     return L?`<div class="mlogo ${L[1]==='w'?'w':'i'}"><img src="../web-principal/logos/bancos/${L[0]}" alt="${esc(b)}" onerror="this.parentNode.className='mlogo ini';this.parentNode.textContent='${ini}'"></div>`:`<div class="mlogo ini">${esc(ini)}</div>`};
   function pinta(D){
-    sec.hidden=!fresco(D);{const q=document.getElementById('qMejores');if(q)q.hidden=sec.hidden;const h=document.getElementById('navHip');if(h&&sec.hidden)h.setAttribute('href','#hipoteca')}if(sec.hidden)return;
+    sec.hidden=!fresco(D);{const q=document.getElementById('qMejores');if(q)q.hidden=sec.hidden}if(sec.hidden)return;
     /* Solo ofertas comprobadas en los últimos 14 días (campo d, «dd/mm/aaaa») */
     const reciente=o=>{const m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(o.d||'');return !!m&&(Date.now()-new Date(+m[3],+m[2]-1,+m[1]).getTime())/864e5<=14};
     const ofs=(D.ofertas||[]).filter(o=>o&&o.tae&&isFinite(num(o.tae))&&reciente(o));
