@@ -41,7 +41,7 @@ tam={'phone':'Móvil','tablet':'Tablet','desktop':'Ordenador','desktophd':'Orden
 disp={}
 for r in lista('sizes',10): k=tam.get(r.get('id'),'Desconocido'); disp[k]=disp.get(k,0)+r.get('count',0)
 # Web o calculadora: por la página vista y, en los clics, por el nombre del evento
-WEBEV=('atajo','newsletter','contacto','calculadoras/','jose/','canal/','mini-calc','promo-','mejores/')
+WEBEV=('atajo','panel/','newsletter','contacto','calculadoras/','jose/','canal/','mini-calc','promo-','mejores/')
 def fuente(x):
     p=x['path']
     if not x.get('event'): return 'calc' if p.startswith('/vivienda') else 'web'
