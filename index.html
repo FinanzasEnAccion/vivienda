@@ -325,6 +325,9 @@ tr+tr td{border-top:1px solid var(--line)}
 .o-conf{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);align-items:end}
 .seg-ctl.sm button{padding:5px 2px;font-size:12px}
 .seg-ctl.sm{height:32px}
+.fin-otro{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:6px;font-size:12px;color:var(--muted)}
+.fin-otro input{width:58px;height:30px;padding:2px 6px;text-align:right;font-size:13px;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+html.m .fin-otro{font-size:14px}html.m .fin-otro input{height:38px;width:70px;font-size:16px}
 
 #p-bancos{grid-template-rows:auto minmax(0,1fr)}
 .mkt-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
@@ -1411,6 +1414,7 @@ function fillBound(skip){
   document.querySelectorAll('[data-inueva]').forEach(b=>b.classList.toggle('on',(b.dataset.inueva==='1')===!!S.i.nueva));
   document.querySelectorAll('#sMas [data-plazo]').forEach(b=>b.classList.toggle('on',+b.dataset.plazo===S.v.plazo));
   {const ef=S.v.ico&&icoInfo(S.v.precio).ok?100:ltvBanco();document.querySelectorAll('[data-fin]').forEach(b=>b.classList.toggle('on',+b.dataset.fin===ef));
+   document.querySelectorAll('[data-finpct]').forEach(i=>{if(document.activeElement!==i)i.value=[65,70,80,90,100].includes(ef)?'':String(ef).replace('.',',')});
    document.querySelectorAll('.fin-av').forEach(d=>{const w=ltvBanco()>80&&!(S.v.ico&&icoInfo(S.v.precio).ok);d.hidden=!w;if(w)d.innerHTML=`Más del 80 % solo lo dan algunos bancos a perfiles muy buenos (funcionarios, ingresos altos) o con el aval ICO. <a class="lnkbtn" data-cta="financiacion" href="https://cal.com/jose-perales-asesor/9zfdea" target="_blank" rel="noopener">Consúltalo con un bróker →</a>`})}
   document.querySelectorAll('[data-uso]').forEach(b=>b.classList.toggle('on',b.dataset.uso===(S.v.segunda?'segunda':S.v.primera?'primera':'cambio')));
   document.querySelectorAll('[data-ftipo]').forEach(b=>b.classList.toggle('on',b.dataset.ftipo===S.fein.tipo));document.querySelectorAll('#pro_fein .fvar').forEach(e=>e.hidden=S.fein.tipo==='fija');document.querySelectorAll('#pro_fein .fvar')[1]&&(document.querySelectorAll('#pro_fein .fvar')[0].hidden=S.fein.tipo!=='mixta');
@@ -1595,7 +1599,7 @@ const hipoteca=()=>S.v.precio*(1-entradaEf()/100);
 const ltvAuto=()=>S.v.segunda?LTV_SEG:80;
 const ltvBanco=()=>S.v.ltv>0?Math.min(100,S.v.ltv):ltvAuto();
 const ltvEf=()=>S.v.ico&&icoInfo(S.v.precio).ok?100:ltvBanco();
-function finChips(){const FINS=[65,70,80,90,100];return `<div class="uso-w fin-w"><div class="uso-l"><span>¿Cuánto te financia el banco?</span>${Q('finan')}</div><div class="seg-ctl sm uso" role="group" aria-label="Financiación">${FINS.map(v=>`<button data-fin="${v}">${v} %</button>`).join('')}</div><div class="fin-av" hidden></div></div>`}
+function finChips(){const FINS=[65,70,80,90,100];return `<div class="uso-w fin-w"><div class="uso-l"><span>¿Cuánto te financia el banco?</span>${Q('finan')}</div><div class="seg-ctl sm uso" role="group" aria-label="Financiación">${FINS.map(v=>`<button data-fin="${v}">${v} %</button>`).join('')}</div><label class="fin-otro">Otro <input type="text" inputmode="decimal" data-finpct autocomplete="off" aria-label="Otro porcentaje de financiación" placeholder="—"> %</label><div class="fin-av" hidden></div></div>`}
 /* Ingresos que cuenta el banco: nómina neta + la parte del alquiler que cobras que computa */
 const alqNeto=()=>Math.max(0,S.a.alqCobra||0)-Math.max(0,S.a.alqGastos||0);
 const alqB=()=>Math.max(0,alqNeto())*Math.max(0,Math.min(100,S.a.alqPct))/100;
@@ -3579,6 +3583,11 @@ async function shareModal(){const pub=!!shareLines().pub,pedir=!pub&&!SHM,con=!p
 /* Analizador PRO: vive en una página privada aparte. Aquí solo está la entrada: esta web es pública y no puede proteger nada por sí misma. */
 const PRO_URL='https://claude.ai/artifact/7aoWimTYVsgovVejci1fW7';
 $('btnPro').onclick=()=>{modal('Analizador de hipotecas PRO','<ul class="pro-lista"><li>Sube la oferta del banco en foto o PDF y compárala con otras.</li><li>Mira lo que pagarías de verdad al mes, contando seguros y productos.</li><li>Prueba cómo te queda si quitas un seguro o lo contratas por tu cuenta.</li></ul><p class="hint" style="margin:0 0 14px">Solo para usuarios PRO. Si tu cuenta no tiene acceso, la página no te dejará entrar. Lo que has escrito en estas calculadoras no se envía.</p><a class="btn solid pro-entrar" href="'+PRO_URL+'" target="_blank" rel="noopener noreferrer">Entrar</a>');track('pro-abrir',S.tab)};
+document.addEventListener('change',e=>{const i=e.target.closest&&e.target.closest('[data-finpct]');if(!i)return;
+  const t=i.value.trim();if(!t){S.v.ltv=0;S.v.entUnit='pct';S.v.entrada=100-ltvAuto();entSync();refresh();return}
+  const n=parseFloat(t.replace(',','.'));if(!(n>0&&n<=100)){i.blur();refresh();toast('Escribe un porcentaje entre 1 y 100');return}
+  const v=Math.round(n*10)/10;S.v.ltv=v===ltvAuto()?0:v;S.v.ico=v===100&&S.v.ico;S.v.entUnit='pct';S.v.entrada=100-v;entSync();i.blur();refresh();toast(`El banco te financia el ${String(v).replace('.',',')} %: entrada del ${String(Math.round((100-v)*10)/10).replace('.',',')} %`);track('financiacion','mano')});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest&&e.target.closest('[data-finpct]'))e.target.blur()});
 $('btnShare').title='Crear una imagen para compartir, con o sin tus importes';
 $('btnShare').onclick=async()=>{await shareModal();track('compartir-abrir',S.tab)};
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-shimp]');if(!b)return;SHM=b.dataset.shimp==='con'?'con':'sin';try{localStorage.setItem(SHK,SHM)}catch(x){}
@@ -3928,6 +3937,7 @@ window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,ho
 .mas-panel .hbtn svg,.mas-panel .xbtn svg{width:16px;height:16px;flex:none}
 .mas-panel .ml,.mas-panel .lg,.mas-panel .pdfw{display:inline!important}
 .mas-panel .xh{display:inline!important}
+[data-x="metodo"],.dmov:has([data-x="metodo"]){display:none!important}
 .mas-sep{height:1px;background:#2d5244;margin:4px 6px}
 .mas-flecha{font-size:10px;margin-left:5px}
 html.m .mas-panel{position:fixed;left:16px;right:16px;min-width:0}
