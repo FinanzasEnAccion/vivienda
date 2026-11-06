@@ -3915,5 +3915,48 @@ window.__FEA={S:()=>S,calc6,rentEq6,calc1,calc3,analyse,sim,impuesto,hipoteca,ho
 })();
 </script>
 
+<!-- Menú «Más» de la cabecera: agrupa los botones secundarios. -->
+<style>
+.mas-menu{position:relative;display:inline-flex}
+.mas-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:1000;min-width:220px;max-height:75vh;overflow:auto;background:#11291f;border:1px solid #2d5244;border-radius:14px;padding:6px;display:grid;gap:2px;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.mas-panel[hidden]{display:none}
+.mas-panel>*{margin:0}
+.mas-panel form{display:block}
+.mas-panel .hbtn,.mas-panel .xbtn{display:flex;align-items:center;gap:8px;width:100%;min-height:42px;padding:9px 12px;background:transparent;border:0;border-radius:9px;color:#eef5f1;font-size:14px;font-weight:600;text-align:left;text-decoration:none;white-space:nowrap}
+.mas-panel .hbtn[hidden]{display:none}
+.mas-panel .hbtn:hover,.mas-panel .xbtn:hover,.mas-panel .hbtn:focus-visible,.mas-panel .xbtn:focus-visible{background:#1a3329;color:#eef5f1}
+.mas-panel .hbtn svg,.mas-panel .xbtn svg{width:16px;height:16px;flex:none}
+.mas-panel .ml,.mas-panel .lg,.mas-panel .pdfw{display:inline!important}
+.mas-panel .xh{display:inline!important}
+.mas-sep{height:1px;background:#2d5244;margin:4px 6px}
+.mas-flecha{font-size:10px;margin-left:5px}
+html.m .mas-panel{position:fixed;left:16px;right:16px;min-width:0}
+@media (max-width:600px){.mas-panel{position:fixed;left:16px;right:16px;min-width:0}}
+html.m .pro-a{display:none}
+@media (max-width:600px){.pro-a{display:none}}
+</style><script>
+(function(){
+  var h=document.querySelector('.htools');if(!h)return;
+  var caja=document.createElement('div');caja.className='mas-menu';
+  var b=document.createElement('button');b.type='button';b.className='hbtn';b.id='btnMas';b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');b.innerHTML='Más<span class="mas-flecha" aria-hidden="true">▼</span>';
+  var p=document.createElement('div');p.className='mas-panel';p.id='masPanel';p.hidden=true;
+  caja.appendChild(b);caja.appendChild(p);h.appendChild(caja);
+  var pro=document.getElementById('btnPro');
+  if(pro&&pro.lastChild&&pro.lastChild.nodeType===3&&/Analizador PRO/.test(pro.lastChild.nodeValue)){pro.lastChild.remove();pro.insertAdjacentHTML('beforeend','<span class="pro-a">Analizador</span><span>PRO</span>')}
+  var poner=function(e){if(e)p.appendChild(e)};
+  ['btnPdf','btnPropio','btnMetodo','btnCasos','btnShare','btnCopy','btnReset'].forEach(function(id){poner(document.getElementById(id))});
+  var sep=document.createElement('div');sep.className='mas-sep';p.appendChild(sep);
+  poner(document.getElementById('btnMode'));
+  poner(h.querySelector('.webbtn'));
+  poner(h.querySelector('a.xbtn[href*="x.com"]'));
+  var x=p.querySelector('a.xbtn[href*="x.com"]');if(x&&!x.textContent.trim())x.insertAdjacentHTML('beforeend','<span>Síguenos en X</span>');
+  poner(h.querySelector('form[action="/salir"]'));
+  var cerrar=function(){p.hidden=true;b.setAttribute('aria-expanded','false')};
+  b.addEventListener('click',function(e){e.stopPropagation();p.hidden=!p.hidden;b.setAttribute('aria-expanded',String(!p.hidden));if(!p.hidden&&getComputedStyle(p).position==='fixed'){var r=b.getBoundingClientRect();p.style.top=(r.bottom+8)+'px';p.style.maxHeight='calc(100vh - '+(r.bottom+24)+'px)'}else{p.style.top='';p.style.maxHeight=''}});
+  p.addEventListener('click',function(e){if(e.target.closest('button,a'))setTimeout(cerrar,0)});
+  document.addEventListener('click',function(e){if(!caja.contains(e.target))cerrar()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!p.hidden){cerrar();b.focus()}});
+})();
+</script>
 </body>
 </html>
