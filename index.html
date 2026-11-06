@@ -411,6 +411,11 @@ tr+tr td{border-top:1px solid var(--line)}
 .hbtn.pdf{background:var(--mint);border-color:var(--mint);color:#0B3D2E}
 @media (hover:hover){.hbtn.pdf:hover{background:#9BE2BD;color:#0B3D2E}}
 .hbtn[disabled]{opacity:.6;cursor:progress}
+.hbtn.pro{display:inline-flex;align-items:center;gap:5px;border-color:#E7C98A;color:#F3DDAE}
+.hbtn.pro svg{width:12px;height:12px;flex:none}
+@media (hover:hover){.hbtn.pro:hover{border-color:#F3DDAE;color:#fff}}
+.pro-lista{margin:0 0 14px;padding-left:20px;display:grid;gap:6px}
+.pro-entrar{display:inline-block;text-decoration:none;padding:10px 18px;font-size:14px}
 .xbtn{padding:7px 12px}
 .tab{padding:10px 14px 11px}
 @media (max-width:1300px){.idtxt p{display:none}}
@@ -846,6 +851,7 @@ html.sencilla .qmode .seg-ctl,html.sencilla #qhint .lnkbtn{display:none}
     <div class="htools">
       <button class="hbtn modebtn" id="btnMode" title="Cambiar entre versión web y versión móvil"></button>
       <button class="hbtn pdf" id="btnPdf" hidden title="Descargar un informe en PDF con tus datos"><span class="pdfw">Informe </span>PDF</button>
+      <button class="hbtn pro" id="btnPro" title="Analizador de hipotecas: acceso PRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"/></svg>Analizador PRO</button>
       <div class="seg-ctl sm nivel" role="group" aria-label="Versión"><button data-nivel="sencilla" title="Lo justo para saber cuánto puedes comprar y qué pagarías">Estándar</button><button data-nivel="completa" title="Todo el detalle: comparar ofertas con seguros, invertir, cartera de pisos, revisar la FEIN">Profesional</button></div>
       <button class="hbtn adv" id="btnCasos" title="Guardar casos y compararlos">Mis casos</button>
       <button class="hbtn" id="btnShare" title="Crear una imagen para compartir, sin tus importes">Compartir</button>
@@ -3451,6 +3457,9 @@ async function shareModal(){const pub=!!shareLines().pub,pedir=!pub&&!SHM,con=!p
   modal('Compartir',`${pedir?`<p style="margin:0 0 10px">¿Con tus importes o sin ellos? La próxima vez me acuerdo.</p>${seg}`:`${seg}<p class="hint" style="margin:8px 0 10px">${pub?'Solo lleva datos públicos del mercado: nada tuyo.':con?'Lleva las cifras de la pestaña en la que estás.':'Solo la conclusión de la pestaña en la que estás, sin tus importes.'}</p>`}
     ${SHB?`<img src="${SHU}" alt="Imagen para compartir" style="width:100%;border-radius:12px;display:block;box-shadow:var(--shadow)">
     <div class="am-bar" style="margin-top:12px">${navigator.share?'<button class="btn solid" data-shdo="1">Compartir</button>':''}<button class="btn${navigator.share?'':' solid'}" data-shdl="1">Descargar imagen</button></div>`:''}`)}
+/* Analizador PRO: vive en una página privada aparte. Aquí solo está la entrada: esta web es pública y no puede proteger nada por sí misma. */
+const PRO_URL='https://claude.ai/artifact/7aoWimTYVsgovVejci1fW7';
+$('btnPro').onclick=()=>{modal('Analizador de hipotecas PRO','<ul class="pro-lista"><li>Sube la oferta del banco en foto o PDF y compárala con otras.</li><li>Mira lo que pagarías de verdad al mes, contando seguros y productos.</li><li>Prueba cómo te queda si quitas un seguro o lo contratas por tu cuenta.</li></ul><p class="hint" style="margin:0 0 14px">Solo para usuarios PRO. Si tu cuenta no tiene acceso, la página no te dejará entrar. Lo que has escrito en estas calculadoras no se envía.</p><a class="btn solid pro-entrar" href="'+PRO_URL+'" target="_blank" rel="noopener noreferrer">Entrar</a>');track('pro-abrir',S.tab)};
 $('btnShare').title='Crear una imagen para compartir, con o sin tus importes';
 $('btnShare').onclick=async()=>{await shareModal();track('compartir-abrir',S.tab)};
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-shimp]');if(!b)return;SHM=b.dataset.shimp==='con'?'con':'sin';try{localStorage.setItem(SHK,SHM)}catch(x){}
