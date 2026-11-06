@@ -3581,7 +3581,7 @@ async function shareModal(){const pub=!!shareLines().pub,pedir=!pub&&!SHM,con=!p
     ${SHB?`<img src="${SHU}" alt="Imagen para compartir" style="width:100%;border-radius:12px;display:block;box-shadow:var(--shadow)">
     <div class="am-bar" style="margin-top:12px">${navigator.share?'<button class="btn solid" data-shdo="1">Compartir</button>':''}<button class="btn${navigator.share?'':' solid'}" data-shdl="1">Descargar imagen</button></div>`:''}`)}
 /* Analizador PRO: vive en una página privada aparte. Aquí solo está la entrada: esta web es pública y no puede proteger nada por sí misma. */
-const PRO_URL='https://claude.ai/artifact/7aoWimTYVsgovVejci1fW7';
+const PRO_URL='https://finanzas-pro.alejandrovicentesanchez4.workers.dev/analizador/';
 $('btnPro').onclick=()=>{modal('Analizador de hipotecas PRO','<ul class="pro-lista"><li>Sube la oferta del banco en foto o PDF y compárala con otras.</li><li>Mira lo que pagarías de verdad al mes, contando seguros y productos.</li><li>Prueba cómo te queda si quitas un seguro o lo contratas por tu cuenta.</li></ul><p class="hint" style="margin:0 0 14px">Solo para usuarios PRO. Si tu cuenta no tiene acceso, la página no te dejará entrar. Lo que has escrito en estas calculadoras no se envía.</p><a class="btn solid pro-entrar" href="'+PRO_URL+'" target="_blank" rel="noopener noreferrer">Entrar</a>');track('pro-abrir',S.tab)};
 document.addEventListener('change',e=>{const i=e.target.closest&&e.target.closest('[data-finpct]');if(!i)return;
   const t=i.value.trim();if(!t){S.v.ltv=0;S.v.entUnit='pct';S.v.entrada=100-ltvAuto();entSync();refresh();return}
