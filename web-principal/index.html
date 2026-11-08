@@ -625,6 +625,62 @@ footer .wrap{flex-wrap:wrap}
 }
 @keyframes mnIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.mnl{animation:none}}
+
+/* ---------- Herramientas con capturas reales ---------- */
+.hx{display:grid;gap:22px}
+.hx-green{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center;border-radius:28px;padding:44px;background:var(--acc);color:var(--cream);overflow:hidden;box-shadow:0 30px 70px rgba(12,34,25,.18)}
+.hx-txt{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px;min-width:0}
+.hx-tag{align-self:flex-start;font:600 11.5px var(--m);text-transform:uppercase;letter-spacing:.1em;padding:6px 10px;border-radius:999px;background:var(--mint-2);color:var(--deep)}
+.hx-tag.pro{background:#FBEBC8;color:#7A5410}
+.hx-green h3{font-size:clamp(34px,3.8vw,56px);font-weight:800;line-height:1.02;letter-spacing:-.03em;margin:0;color:var(--cream)}
+.hx-green p{margin:0;font-size:18px;color:rgba(244,241,234,.92);max-width:460px}
+.hx-btns{display:flex;flex-wrap:wrap;gap:8px;max-width:480px}
+.hx-btns a{font-size:14px;font-weight:600;padding:9px 14px;border-radius:999px;text-decoration:none;color:var(--cream);background:rgba(244,241,234,.1);box-shadow:inset 0 0 0 1px rgba(244,241,234,.28);transition:background .2s}
+.hx-btns a:hover{background:rgba(244,241,234,.2)}
+.hx-go{margin-top:6px;font-weight:700;color:var(--mint-2);text-decoration:none}
+.hx-go:hover{text-decoration:underline}
+/* marco de móvil sencillo */
+.ph{position:relative;display:block;width:100%;padding:18px 7px 9px;border-radius:34px;background:#18231F;box-shadow:0 24px 50px rgba(8,25,18,.35),inset 0 0 0 1.5px rgba(255,255,255,.08);text-decoration:none}
+.ph-in{display:block;position:relative;aspect-ratio:390/760;border-radius:22px;overflow:hidden;background:#F4F6F3}
+.ph-in img{display:block;width:100%;height:auto}
+.ph:before{content:"";position:absolute;top:7px;left:50%;width:22%;height:5px;margin-left:-11%;border-radius:4px;background:rgba(255,255,255,.14)}
+.hx-phones{position:relative;height:520px;min-width:0}
+.hx-phones .ph{position:absolute;width:230px;transition:transform .35s var(--ease)}
+.hx-phones .p1{left:6%;top:30px;transform:rotate(-6deg);z-index:3}
+.hx-phones .p2{left:40%;top:0;transform:rotate(5deg);z-index:2}
+.hx-phones .p3{right:-6%;top:70px;transform:rotate(11deg);z-index:1;opacity:.92}
+.hx-phones .ph:hover{transform:rotate(0) translateY(-6px);z-index:4}
+.hx-car{display:none}
+/* tarjeta PRO */
+.hx-pro{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:36px;align-items:center;border-radius:28px;padding:40px 44px;background:#FFFDF8;box-shadow:0 18px 44px rgba(12,34,25,.10),0 0 0 1px rgba(30,43,38,.06)}
+.hx-pt{display:flex;flex-direction:column;gap:14px;min-width:0}
+.hx-pro h3{font-size:clamp(28px,2.8vw,40px);font-weight:800;letter-spacing:-.02em;margin:0;color:var(--ink)}
+.hx-pro p{margin:0;font-size:17px;color:var(--soft);max-width:440px}
+.hx-avisa{align-self:flex-start;margin-top:6px}
+.hx-pt small{font-size:13px;color:var(--soft)}
+/* portátil sencillo */
+.lap{position:relative;min-width:0}
+.lap-badge{position:absolute;z-index:2;top:-12px;right:18px;font:600 11px var(--m);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px;background:var(--ink);color:var(--cream)}
+.lap-scr{padding:10px 10px 12px;border-radius:16px 16px 4px 4px;background:#18231F;box-shadow:0 22px 50px rgba(12,34,25,.22)}
+.lap-scr img{display:block;width:100%;height:auto;border-radius:6px;background:#F4F6F3}
+.lap-base{height:14px;margin:0 -5%;border-radius:0 0 14px 14px;background:linear-gradient(#C9CCC8,#A9AEAA);box-shadow:0 10px 20px rgba(12,34,25,.15)}
+.lap-base:before{content:"";display:block;width:18%;height:5px;margin:0 auto;border-radius:0 0 6px 6px;background:rgba(0,0,0,.12)}
+@media(max-width:1100px){.hx-phones .ph{width:200px}.hx-phones{height:460px}}
+@media(max-width:900px){
+  .hx-green{grid-template-columns:minmax(0,1fr);padding:30px 22px 26px;gap:22px}
+  .hx-car{min-width:0}
+  .hx-phones{display:none}
+  .hx-car{display:block;margin:0 -22px}
+  .hx-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 22px 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .hx-track::-webkit-scrollbar{display:none}
+  .hx-track .ph{flex:0 0 min(68vw,270px);scroll-snap-align:center}
+  .hx-dots{display:flex;justify-content:center;gap:8px}
+  .hx-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(244,241,234,.35)}
+  .hx-dots button[aria-current="true"]{background:var(--cream);width:22px;border-radius:5px}
+  .hx-pro{grid-template-columns:minmax(0,1fr);padding:28px 22px;gap:26px}
+  .hx-pt{order:1}.lap{order:2}
+  .hx-avisa{align-self:stretch;justify-content:center;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -753,17 +809,52 @@ const GC_CODE='finanzasenaccion';
 <section class="light" id="herramientas">
   <div class="wrap">
     <div class="sh"><div><div class="lab fx l">Herramientas</div><h2 class="fx l" style="--dl:.08s">Gratis. Sin registro. Cada cifra, explicada.</h2></div>
-      <p class="fx r">Toca cualquier resultado y te enseña cómo está calculado y de dónde sale el dato. Lo que escribes no sale de tu navegador.</p></div>
-    <div class="blocks" id="blocks">
-      <a class="blk big fx z" href="/vivienda/">
-        <span class="tag">Disponible</span>
-        <h3>Calculadoras de vivienda</h3>
-        <p>Cuánto puedes comprar, qué te cobra hoy cada banco, si te compensa alquilar, cuánto rinde un piso y cuánto cambiará tu cuota.</p>
-        <div class="pills"><span>Mi presupuesto</span><span>Comprar o alquilar</span><span>Bancos hoy</span><span>Comparar ofertas</span><span>Invertir en un piso</span><span>Mi hipoteca</span></div>
-        <span class="go">Abrir las calculadoras →</span>
-        <svg class="ill" viewBox="0 0 200 200" aria-hidden="true"><rect x="40" y="70" width="120" height="110" rx="10" fill="#285C4B"/><path d="M20 84 100 22l80 62" fill="none" stroke="#CFE3D8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><rect x="62" y="98" width="30" height="30" rx="5" fill="#CFE3D8" opacity=".5"/><rect x="108" y="98" width="30" height="30" rx="5" fill="#9C8A66" opacity=".7"/><rect x="85" y="140" width="30" height="40" rx="5" fill="#F4F1EA" opacity=".25"/></svg>
-      </a>
+      <p class="fx r">Toca cualquier resultado y te enseña cómo está calculado y de dónde sale el dato. En las calculadoras gratis, lo que escribes no sale de tu navegador.</p></div>
+    <div class="hx">
+      <div class="hx-green fx z">
+        <div class="hx-txt">
+          <span class="hx-tag">Disponible</span>
+          <h3>Calculadoras de vivienda</h3>
+          <p>Cuánto te puedes permitir, si te renta alquilar y qué ofrece hoy cada banco.</p>
+          <div class="hx-btns">
+            <a data-hx="permitir" data-ev="herramientas/permitir" href="/vivienda/">Cuánto me puedo permitir</a>
+            <a data-hx="alquiler" data-ev="herramientas/alquiler" href="/vivienda/">Me renta alquilarla</a>
+            <a data-hx="bancos" data-ev="herramientas/bancos" href="/vivienda/">Bancos hoy</a>
+            <a data-hx="comprarAlquilar" data-ev="herramientas/comprar-o-alquilar" href="/vivienda/">Comprar o alquilar</a>
+            <a data-hx="broker" data-ev="herramientas/broker" href="/vivienda/" target="_blank" rel="noopener">Hablar con un bróker</a>
+          </div>
+          <a class="hx-go" data-hx="calculadoras" data-ev="herramientas/abrir-calculadoras" href="/vivienda/">Abrir las calculadoras →</a>
+        </div>
+        <div class="hx-phones" aria-label="Capturas de las calculadoras">
+          <a class="ph p3" data-hx="alquiler" data-ev="herramientas/captura-alquiler" href="/vivienda/"><span class="ph-in"><img src="capturas/app-me-renta-alquilarla.webp" width="390" height="760" alt="Pantalla de ¿Me renta alquilarla? con la rentabilidad neta arriba y la cascada de adónde va el alquiler cada mes" loading="lazy" decoding="async"></span></a>
+          <a class="ph p2" data-hx="entrada" data-ev="herramientas/captura-entrada" href="/vivienda/"><span class="ph-in"><img src="capturas/app-entrada.webp" width="390" height="760" alt="Pantalla de entrada de las calculadoras, con los accesos a «¿Cuánto me puedo permitir?» y «¿Me renta alquilarla?»" loading="lazy" decoding="async"></span></a>
+          <a class="ph p1" data-hx="permitir" data-ev="herramientas/captura-permitir" href="/vivienda/"><span class="ph-in"><img src="capturas/app-cuanto-me-puedo-permitir.webp" width="390" height="760" alt="Pantalla de ¿Cuánto me puedo permitir? con el termómetro en la zona cómoda: hasta 230.000 €" loading="lazy" decoding="async"></span></a>
+        </div>
+        <div class="hx-car">
+          <div class="hx-track" id="hxTrack">
+            <a class="ph " data-hx="entrada" data-ev="herramientas/captura-entrada" href="/vivienda/"><span class="ph-in"><img src="capturas/app-entrada.webp" width="390" height="760" alt="Pantalla de entrada de las calculadoras, con los accesos a «¿Cuánto me puedo permitir?» y «¿Me renta alquilarla?»" loading="lazy" decoding="async"></span></a>
+            <a class="ph " data-hx="permitir" data-ev="herramientas/captura-permitir" href="/vivienda/"><span class="ph-in"><img src="capturas/app-cuanto-me-puedo-permitir.webp" width="390" height="760" alt="Pantalla de ¿Cuánto me puedo permitir? con el termómetro en la zona cómoda: hasta 230.000 €" loading="lazy" decoding="async"></span></a>
+            <a class="ph " data-hx="alquiler" data-ev="herramientas/captura-alquiler" href="/vivienda/"><span class="ph-in"><img src="capturas/app-me-renta-alquilarla.webp" width="390" height="760" alt="Pantalla de ¿Me renta alquilarla? con la rentabilidad neta arriba y la cascada de adónde va el alquiler cada mes" loading="lazy" decoding="async"></span></a>
+          </div>
+          <div class="hx-dots" id="hxDots" role="tablist" aria-label="Capturas"><button type="button" aria-label="Captura 1" aria-current="true"></button><button type="button" aria-label="Captura 2"></button><button type="button" aria-label="Captura 3"></button></div>
+        </div>
+      </div>
+      <div class="hx-pro fx u">
+        <div class="hx-pt">
+          <span class="hx-tag pro">Próximamente · PRO</span>
+          <h3>Analizador de hipotecas</h3>
+          <p>Sube las ofertas de tus bancos y te diremos cuál te sale más barata, seguros incluidos. Lo estamos terminando.</p>
+          <a class="btn p hx-avisa" id="hxAvisa" data-ev="pro/avisame" href="https://finanzasenaccion.substack.com/subscribe?utm_source=web&amp;utm_medium=pro-avisame" target="_blank" rel="noopener">Avísame cuando esté</a>
+          <small>Te avisamos por la newsletter de los viernes</small>
+        </div>
+        <div class="lap" aria-hidden="false">
+          <span class="lap-badge">Vista previa</span>
+          <div class="lap-scr"><img src="capturas/pro-analizador-demo.webp" width="1232" height="635" alt="Vista previa del Analizador de hipotecas PRO comparando ofertas de ejemplo: la más barata, Banco Ejemplo Norte, marcada, con lo que pagas al mes seguros incluidos" loading="lazy" decoding="async"></div>
+          <div class="lap-base"></div>
+        </div>
+      </div>
     </div>
+    <div class="blocks" id="blocks"></div>
   </div>
 </section>
 
@@ -1024,6 +1115,25 @@ const B1=['Comprar para alquilar','Vivir de alquiler','Números reales','Con su 
 const B2=['Inmobiliario','ETF','Acciones','Private equity','Newsletter cada viernes','Finanzas en Acción'];
 const band=(a)=>{const s=a.map(t=>`<span>${t}</span><i>✦</i>`).join('');return s+s+s};
 $('b1').innerHTML=band(B1);$('b2').innerHTML=band(B2);
+
+/* Herramientas: adónde lleva cada botón y cada captura. UN SOLO SITIO para cambiarlo el día que se publique la app nueva.
+   A la izquierda, las calculadoras públicas actuales; en el comentario, la versión de pruebas (no pública todavía). */
+const HERRAMIENTAS_LINKS = {
+  calculadoras:    '/vivienda/',            // pruebas: 'https://finanzas-pro.alejandrovicentesanchez4.workers.dev/'
+  entrada:         '/vivienda/',            // pruebas: 'https://finanzas-pro.alejandrovicentesanchez4.workers.dev/'
+  permitir:        '/vivienda/#cuanto',     // pruebas: 'https://finanzas-pro.alejandrovicentesanchez4.workers.dev/#/permitir'
+  alquiler:        '/vivienda/#invertir',   // pruebas: 'https://finanzas-pro.alejandrovicentesanchez4.workers.dev/#/alquiler'
+  bancos:          '/vivienda/#bancos',     // pruebas: 'https://finanzas-pro.alejandrovicentesanchez4.workers.dev/#/bancos'
+  comprarAlquilar: '/vivienda/#alquilar',   // pruebas: 'https://finanzas-pro.alejandrovicentesanchez4.workers.dev/#/comprar-o-alquilar'
+  broker:          JOSE.url,                // la pantalla del bróker aún no existe en la app: enlace de reserva de José
+};
+document.querySelectorAll('[data-hx]').forEach(a=>{const u=HERRAMIENTAS_LINKS[a.dataset.hx];if(u)a.setAttribute('href',u);else a.hidden=true});
+$('hxAvisa')&&($('hxAvisa').href=`${SUBSTACK}/subscribe?utm_source=web&utm_medium=pro-avisame`);
+/* Carrusel del móvil: puntos que siguen al dedo */
+(()=>{const t=$('hxTrack'),d=$('hxDots');if(!t||!d)return;const bs=[...d.children];
+  const act=()=>{const w=t.firstElementChild.getBoundingClientRect().width+16;const i=Math.max(0,Math.min(bs.length-1,Math.round(t.scrollLeft/w)));bs.forEach((b,k)=>b.setAttribute('aria-current',k===i?'true':'false'))};
+  t.addEventListener('scroll',()=>requestAnimationFrame(act),{passive:true});
+  bs.forEach((b,k)=>b.addEventListener('click',()=>{const w=t.firstElementChild.getBoundingClientRect().width+16;t.scrollTo({left:k*w,behavior:'smooth'})}));act()})();
 
 /* Herramientas extra: entran alternando por la izquierda y la derecha */
 const EST={'En desarrollo':'dev','Próximamente':'soon'};
