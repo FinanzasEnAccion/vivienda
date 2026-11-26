@@ -635,8 +635,8 @@ footer .wrap{flex-wrap:wrap}
 .hx-btns{display:flex;flex-wrap:wrap;gap:8px;max-width:480px}
 .hx-btns a{font-size:14px;font-weight:600;padding:9px 14px;border-radius:999px;text-decoration:none;color:var(--cream);background:rgba(244,241,234,.1);box-shadow:inset 0 0 0 1px rgba(244,241,234,.28);transition:background .2s}
 .hx-btns a:hover{background:rgba(244,241,234,.2)}
-.hx-go{margin-top:6px;font-weight:700;color:var(--mint-2);text-decoration:none}
-.hx-go:hover{text-decoration:underline}
+.hx-go{align-self:flex-start;margin-top:8px;font-weight:700;font-size:16px;color:var(--deep);background:var(--cream);text-decoration:none;padding:13px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(8,25,18,.22)}
+.hx-go:hover{background:#fff}
 /* marco de móvil sencillo */
 .ph{position:relative;display:block;width:100%;padding:18px 7px 9px;border-radius:34px;background:#18231F;box-shadow:0 24px 50px rgba(8,25,18,.35),inset 0 0 0 1.5px rgba(255,255,255,.08);text-decoration:none}
 .ph-in{display:block;position:relative;aspect-ratio:390/844;border-radius:22px;overflow:hidden;background:#F4F6F3}
@@ -680,6 +680,7 @@ footer .wrap{flex-wrap:wrap}
   .hx-pro{grid-template-columns:minmax(0,1fr);padding:28px 22px;gap:26px}
   .hx-pt{order:1}.lap{order:2}
   .hx-avisa{align-self:stretch;justify-content:center;text-align:center}
+  .hx-go{align-self:stretch;text-align:center}
 }
 </style>
 </head>
@@ -823,15 +824,15 @@ const GC_CODE='finanzasenaccion';
             <a data-hx="comprarAlquilar" data-ev="herramientas/comprar-o-alquilar" href="/vivienda/">Comprar o alquilar</a>
             <a data-hx="broker" data-ev="herramientas/broker" href="/vivienda/" target="_blank" rel="noopener">Hablar con un bróker</a>
           </div>
-          <a class="hx-go" data-hx="calculadoras" data-ev="herramientas/abrir-calculadoras" href="/vivienda/">Abrir las calculadoras →</a>
+          <a class="hx-go" data-hx="calculadoras" data-ev="herramientas/abrir-calculadoras" href="/vivienda/">Usar gratis, sin registro <span aria-hidden="true">→</span></a>
         </div>
         <div class="hx-stage" aria-label="Capturas de las calculadoras">
           <a class="lap lap-dk st-lap" data-hx="bancos" data-ev="herramientas/captura-bancos" href="/vivienda/"><span class="lap-scr"><img src="../web-principal/capturas/app-bancos-hoy.webp" width="1600" height="1000" alt="Pantalla de Bancos hoy en el ordenador: tabla de hipotecas fijas, mixtas y variables con su TIN, TAE y la cuota de cada banco" loading="lazy" decoding="async"></span><span class="lap-base"></span></a>
-          <a class="ph st-ph" data-hx="permitir" data-ev="herramientas/captura-permitir" href="/vivienda/"><span class="ph-in"><img src="../web-principal/capturas/app-cuanto-me-puedo-permitir.webp" width="390" height="844" alt="Pantalla de ¿Cuánto me puedo permitir? en el móvil: medio reloj con las zonas cómoda, justa y no llega, y «Cómodo: hasta 198.000 €» con datos de ejemplo" loading="lazy" decoding="async"></span></a>
+          <a class="ph st-ph" data-hx="permitir" data-ev="herramientas/captura-permitir" href="/vivienda/"><span class="ph-in"><img src="../web-principal/capturas/app-cuanto-me-puedo-permitir.webp" width="390" height="844" alt="Pantalla de ¿Cuánto me puedo permitir? en el móvil: medio reloj con las zonas cómoda, justa y no llega, y «Cómodo: hasta 148.000 €» con datos de ejemplo" loading="lazy" decoding="async"></span></a>
         </div>
         <div class="hx-car">
           <div class="hx-track" id="hxTrack">
-            <a class="ph" data-hx="permitir" data-ev="herramientas/captura-permitir" href="/vivienda/"><span class="ph-in"><img src="../web-principal/capturas/app-cuanto-me-puedo-permitir.webp" width="390" height="844" alt="Pantalla de ¿Cuánto me puedo permitir? en el móvil: medio reloj con las zonas cómoda, justa y no llega, y «Cómodo: hasta 198.000 €» con datos de ejemplo" loading="lazy" decoding="async"></span></a>
+            <a class="ph" data-hx="permitir" data-ev="herramientas/captura-permitir" href="/vivienda/"><span class="ph-in"><img src="../web-principal/capturas/app-cuanto-me-puedo-permitir.webp" width="390" height="844" alt="Pantalla de ¿Cuánto me puedo permitir? en el móvil: medio reloj con las zonas cómoda, justa y no llega, y «Cómodo: hasta 148.000 €» con datos de ejemplo" loading="lazy" decoding="async"></span></a>
             <a class="ph" data-hx="alquiler" data-ev="herramientas/captura-alquiler" href="/vivienda/"><span class="ph-in"><img src="../web-principal/capturas/app-me-renta-alquilarla.webp" width="390" height="844" alt="Pantalla de ¿Me renta alquilarla? en el móvil: la cuenta de resultados del primer año, del alquiler al resultado neto" loading="lazy" decoding="async"></span></a>
             <a class="lap lap-dk car-lap" data-hx="bancos" data-ev="herramientas/captura-bancos" href="/vivienda/"><span class="lap-scr"><img src="../web-principal/capturas/app-bancos-hoy.webp" width="1600" height="1000" alt="Pantalla de Bancos hoy en el ordenador: tabla de hipotecas fijas, mixtas y variables con su TIN, TAE y la cuota de cada banco" loading="lazy" decoding="async"></span><span class="lap-base"></span></a>
           </div>
